@@ -1,0 +1,27 @@
+.f-dialog-connect-wallet {
+    .f-list-connect-wallet {
+        .f-list-item {
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            min-height: 70px;
+            padding: 0.75rem;
+            border: 1px solid white;
+            margin-bottom: 1rem;
+            img {
+                max-width: 40px;
+            }
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
+}
+
+.text-decoration-none {
+    text-decoration: none;
+}
+
+h1 {
+    color: #cba461;
+}

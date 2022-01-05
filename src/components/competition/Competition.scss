@@ -1,0 +1,38 @@
+// @import '~antd/dist/antd.dark.css';
+body {
+    background: #181C25 !important;
+}
+
+.ant-picker:hover,
+.ant-picker:active {
+    border-color: white;
+}
+
+.ant-picker {
+    width: 100%;
+    background: transparent !important;
+    border-radius: 8px !important;
+    padding: 16.5px 14px !important;
+    border-color: #637381;
+}
+
+.ant-picker-input>input::placeholder {
+    color: #637381 !important
+}
+
+.ant-picker-input>input {
+    color: #fff !important;
+    font-size: inherit;
+}
+
+.ant-picker-suffix {
+    color: #637381 !important;
+}
+
+.pl-md-0 {
+    padding-left: 0px !important;
+}
+
+.pr-md-0 {
+    padding-right: 0px !important;
+}
