@@ -50,6 +50,7 @@ function App() {
             </DashboardLayout>
           </Route>
           <Route path="/pub/multi/leaderboard/:id">
+            <Redirect to="/pub/multi/leaderboard/61d448bcb4918f09cb510ddf" />
             <DashboardLayout>
               <MultiTokenLeaderboardById />
             </DashboardLayout>
@@ -70,7 +71,7 @@ function App() {
             </DashboardLayout>
           </Route>
           <Route path="/">
-            <Redirect to="/pub/leaderboard/6185930b4454af30818cb26c" /> 
+            <Redirect to="/pub/leaderboard/6185930b4454af30818cb26c" />
           </Route>
           <Route path="*" >
             <Page404 />
@@ -89,26 +90,26 @@ const Loadable = (Component: any) => (props: any) => {
 
   return (
     <AuthLayout>
-    <Suspense
-      fallback={
-        <ClipLoader color='red' loading={true} size={150} />
-      }
-    >
-      <Component {...props} />
-    </Suspense>
+      <Suspense
+        fallback={
+          <ClipLoader color='red' loading={true} size={150} />
+        }
+      >
+        <Component {...props} />
+      </Suspense>
     </AuthLayout>
   );
 };
 
 const LeaderboardById = Loadable(lazy(() => import('./components/leaderboard/LeaderboardInformation')));
-const CreateLeaderboard = Loadable(lazy(() => import('./components/leaderboard/NewLeaderboard'))); 
+const CreateLeaderboard = Loadable(lazy(() => import('./components/leaderboard/NewLeaderboard')));
 const MultiTokenLeaderboardById = Loadable(lazy(() => import('./components/leaderboard-multitoken/index')));
 const LeaderboardManagement = Loadable(lazy(() => import('./components/leaderboard/LeaderboardManagement')));
 const CommunityRegister = Loadable(lazy(() => import('./components/authentication/community/register')));
 const CommunityEmailVerification = Loadable(lazy(() => import('./components/authentication/community/email-verification')));
 const CommunityResend = Loadable(lazy(() => import('./components/authentication/community/resend-email-verification')));
 const CommunityWalletAuthentication = Loadable(lazy(() => import('./components/authentication/community/wallet-authentication')));
-const CommunityLogin = Loadable(lazy(()=>import('./components/authentication/community/login')));
-const CreateCompetition = Loadable(lazy(()=>import('./components/competition/NewCompetition')));
+const CommunityLogin = Loadable(lazy(() => import('./components/authentication/community/login')));
+const CreateCompetition = Loadable(lazy(() => import('./components/competition/NewCompetition')));
 const Page404 = Loadable(lazy(() => import('./components/error/page404')));
 export default App;

@@ -43,7 +43,7 @@ function path(root, sublink) {
     },
     multiLeaderboard: {
       root: path(ROOTS_PUBLIC_USER, '/multi/leaderboard'),
-      detailLeaderBoardById: path(ROOTS_PUBLIC_USER, '/multi/leaderboard/61d448bcb4918f09cb510ddf'),
+      detailLeaderBoardById: path(ROOTS_PUBLIC_USER, '/multi/leaderboard/:id'),
     },
     competition:{
       root: path(ROOTS_PUBLIC_USER, '/competition'),

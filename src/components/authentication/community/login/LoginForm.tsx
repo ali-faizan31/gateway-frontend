@@ -38,14 +38,14 @@ const LoginForm = () => {
                 localStorage.setItem('me', JSON.stringify(user));
                 if (token) {
                     if (user.isEmailAuthenticated === true) {
-                        if (user.isWalletAddressAuthenticated === true) {
+                        // if (user.isWalletAddressAuthenticated === true) {
                             localStorage.setItem('token', token);
                             toast.success(response.data.status.message);
                             history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardById);
-                        } else {
-                            toast.error('Please connect and authenticate your wallet first!');
-                            history.push(PATH_AUTH.communityWalletAuthentication);
-                        }
+                        // } else {
+                        //     toast.error('Please connect and authenticate your wallet first!');
+                        //     history.push(PATH_AUTH.communityWalletAuthentication);
+                        // }
                     } else {
                         toast.error('Please verify your email first!');
                         history.push(PATH_AUTH.communityResendCode);

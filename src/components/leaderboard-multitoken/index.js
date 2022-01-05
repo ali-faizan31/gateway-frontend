@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import eitherConverter from "ether-converter"; 
+import eitherConverter from "ether-converter";
 import toast, { Toaster } from "react-hot-toast";
 import { FContainer } from "ferrum-design-system";
 import { useParams, useLocation } from "react-router-dom";
@@ -24,21 +24,32 @@ export default function MultiTokenLeaderboardIndex() {
   const [frmxUsdcValue, setFrmxUsdcValue] = useState(null);
 
   useEffect(() => {
-    if (isPublicUser) {
-      getPublicLeaderboard();
-    } else {
-      getLeaderboard();
+    if (id !== ":id") {
+      if (isPublicUser) {
+        getPublicLeaderboard();
+      } else {
+        getLeaderboard();
+      }
     }
-  }, []);
+  }, [id]);
 
-  const getFrmTokenUSDCValue = (chainId,fromToken,toToken,leaderboardData) => {
+  const getFrmTokenUSDCValue = (
+    chainId,
+    fromToken,
+    toToken,
+    leaderboardData
+  ) => {
     getTokenPriceFrom1Inch(chainId, fromToken, toToken)
       .then((res) => {
         if (res?.data) {
           const { toTokenAmount } = res.data;
           const convertedAmount = eitherConverter(toTokenAmount, "wei").ether;
           setFrmUsdcValue(convertedAmount);
-          getFrmxTokenUSDCValue(leaderboardData.frmxCabn.chainId, leaderboardData.frmxCabn.tokenContractAddress, tokenUSDCBSCMainnet);
+          getFrmxTokenUSDCValue(
+            leaderboardData.frmxCabn.chainId,
+            leaderboardData.frmxCabn.tokenContractAddress,
+            tokenUSDCBSCMainnet
+          );
         }
       })
       .catch((e) => {
@@ -59,7 +70,7 @@ export default function MultiTokenLeaderboardIndex() {
           setFrmxUsdcValue(convertedAmount);
         }
       })
-      .catch((e) => { 
+      .catch((e) => {
         if (e?.response?.data?.error_message) {
           toast.error(e.response.data.error_message);
         } else {
@@ -68,28 +79,39 @@ export default function MultiTokenLeaderboardIndex() {
       });
   };
 
-  const getPublicLeaderboard = () => {
+  const getPublicLeaderboard = () => { 
     getLeaderboardByIdForPublicUser(id)
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
-          const { leaderboard } = res.data.body; 
-          const cabn1 = res?.data?.body?.leaderboard?.leaderboardCurrencyAddressesByNetwork[0];
-          const cabn2 = res?.data?.body?.leaderboard?.leaderboardCurrencyAddressesByNetwork[1];
+          const { leaderboard } = res.data.body;
+          const cabn1 =
+            res?.data?.body?.leaderboard
+              ?.leaderboardCurrencyAddressesByNetwork[0];
+          const cabn2 =
+            res?.data?.body?.leaderboard
+              ?.leaderboardCurrencyAddressesByNetwork[1];
           const tempObj = {
             name: leaderboard?.name,
             exclusionWalletAddressList: leaderboard?.exclusionWalletAddressList,
             frmCabn: {
-              tokenContractAddress: cabn1?.currencyAddressesByNetwork?.tokenContractAddress,
+              tokenContractAddress:
+                cabn1?.currencyAddressesByNetwork?.tokenContractAddress,
               dexUrl: cabn1?.currencyAddressesByNetwork?.networkDex?.dex?.url,
               chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
             },
             frmxCabn: {
-              tokenContractAddress: cabn2?.currencyAddressesByNetwork?.tokenContractAddress,
+              tokenContractAddress:
+                cabn2?.currencyAddressesByNetwork?.tokenContractAddress,
               dexUrl: cabn2?.currencyAddressesByNetwork?.networkDex?.dex?.url,
               chainId: cabn2?.currencyAddressesByNetwork?.network?.chainId,
             },
-          }; 
-          getFrmTokenUSDCValue(tempObj.frmCabn.chainId, tempObj.frmCabn.tokenContractAddress, tokenUSDCBSCMainnet, tempObj);
+          };
+          getFrmTokenUSDCValue(
+            tempObj.frmCabn.chainId,
+            tempObj.frmCabn.tokenContractAddress,
+            tokenUSDCBSCMainnet,
+            tempObj
+          );
           setLeaderboardData(tempObj);
         }
       })
@@ -107,8 +129,10 @@ export default function MultiTokenLeaderboardIndex() {
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
           const { leaderboard } = res.data.body;
-          const cabn1 =  res?.data?.body?.leaderboardCurrencyAddressesByNetwork[0];
-          const cabn2 =  res?.data?.body?.leaderboardCurrencyAddressesByNetwork[1];
+          const cabn1 =
+            res?.data?.body?.leaderboardCurrencyAddressesByNetwork[0];
+          const cabn2 =
+            res?.data?.body?.leaderboardCurrencyAddressesByNetwork[1];
           const tempObj = {
             name: leaderboard?.name,
             exclusionWalletAddressList: leaderboard?.exclusionWalletAddressList,
@@ -139,9 +163,11 @@ export default function MultiTokenLeaderboardIndex() {
 
   return (
     <>
-      <div><Toaster/></div>
+      <div>
+        <Toaster />
+      </div>
       <FContainer type="fluid">
-        <FContainer> 
+        <FContainer>
           {frmUsdcValue && frmxUsdcValue && (
             <MultiTokenLeaderboardInformation
               leaderboardData={leaderboardData}

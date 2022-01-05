@@ -19,7 +19,7 @@ const DashboardSidebar = () => {
   const isPublicCompetition = pathname.includes('/pub/competition');
 
   useEffect(() => {
-    if (id) { 
+    if (id !== ":id") { 
       if (isPublicLeaderboard || isPublicMultiLeaderboard) {
         getPublicLeaderboard();
       }
@@ -29,7 +29,7 @@ const DashboardSidebar = () => {
     }
   }, [id])
 
-  const getPublicLeaderboard = () => {
+  const getPublicLeaderboard = () => { 
     getLeaderboardByIdForPublicUser(id)
       .then((res: any) => {
         if (res?.data?.body?.leaderboard) {
