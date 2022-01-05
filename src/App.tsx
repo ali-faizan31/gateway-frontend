@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { Switch, Route, useLocation } from 'react-router-dom';
+import { Switch, Route, useLocation, Redirect } from 'react-router-dom';
 import "./custom.scss";
 import DashboardLayout from './layouts/dashboard';
 import AuthLayout from './layouts/auth';
@@ -44,6 +44,11 @@ function App() {
               <LeaderboardById />
             </DashboardLayout>
           </Route>
+          <Route path="/dashboard/leaderboard/:id" >
+            <DashboardLayout>
+              <LeaderboardById />
+            </DashboardLayout>
+          </Route>
           <Route path="/pub/multi/leaderboard/:id">
             <DashboardLayout>
               <MultiTokenLeaderboardById />
@@ -53,6 +58,19 @@ function App() {
             <DashboardLayout>
               <LeaderboardManagement />
             </DashboardLayout>
+          </Route>
+          <Route path="/dashboard/leaderboard/create">
+            <DashboardLayout>
+              <CreateLeaderboard />
+            </DashboardLayout>
+          </Route>
+          <Route path="/dashboard/competition/create">
+            <DashboardLayout>
+              <CreateCompetition />
+            </DashboardLayout>
+          </Route>
+          <Route path="/">
+            <Redirect to="/pub/leaderboard/6185930b4454af30818cb26c" /> 
           </Route>
           <Route path="*" >
             <Page404 />
@@ -70,6 +88,7 @@ const Loadable = (Component: any) => (props: any) => {
   const isDashboard = pathname.includes('/dashboard');
 
   return (
+    <AuthLayout>
     <Suspense
       fallback={
         <ClipLoader color='red' loading={true} size={150} />
@@ -77,10 +96,12 @@ const Loadable = (Component: any) => (props: any) => {
     >
       <Component {...props} />
     </Suspense>
+    </AuthLayout>
   );
 };
 
 const LeaderboardById = Loadable(lazy(() => import('./components/leaderboard/LeaderboardInformation')));
+const CreateLeaderboard = Loadable(lazy(() => import('./components/leaderboard/NewLeaderboard'))); 
 const MultiTokenLeaderboardById = Loadable(lazy(() => import('./components/leaderboard-multitoken/index')));
 const LeaderboardManagement = Loadable(lazy(() => import('./components/leaderboard/LeaderboardManagement')));
 const CommunityRegister = Loadable(lazy(() => import('./components/authentication/community/register')));
@@ -88,5 +109,6 @@ const CommunityEmailVerification = Loadable(lazy(() => import('./components/auth
 const CommunityResend = Loadable(lazy(() => import('./components/authentication/community/resend-email-verification')));
 const CommunityWalletAuthentication = Loadable(lazy(() => import('./components/authentication/community/wallet-authentication')));
 const CommunityLogin = Loadable(lazy(()=>import('./components/authentication/community/login')));
+const CreateCompetition = Loadable(lazy(()=>import('./components/competition/NewCompetition')));
 const Page404 = Loadable(lazy(() => import('./components/error/page404')));
 export default App;

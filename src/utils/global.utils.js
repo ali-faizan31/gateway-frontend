@@ -30,11 +30,6 @@ export const mergeTwoArrays = (dataset1, dataset2) => {
     } else if (d2) {
       dataset1.push({ address: d2?.address, frmx: d2?.value });
     }
-  }
-  for (let d1 of dataset1) {
-    if (d1 && !map2.has(d1.address)) {
-      console.log(d1);
-    }
-  }
+  } 
   return dataset1;
 };

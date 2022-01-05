@@ -59,8 +59,7 @@ export default function MultiTokenLeaderboardIndex() {
           setFrmxUsdcValue(convertedAmount);
         }
       })
-      .catch((e) => {
-        console.log(e)
+      .catch((e) => { 
         if (e?.response?.data?.error_message) {
           toast.error(e.response.data.error_message);
         } else {
@@ -73,8 +72,7 @@ export default function MultiTokenLeaderboardIndex() {
     getLeaderboardByIdForPublicUser(id)
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
-          const { leaderboard } = res.data.body;
-          console.log(leaderboard)
+          const { leaderboard } = res.data.body; 
           const cabn1 = res?.data?.body?.leaderboard?.leaderboardCurrencyAddressesByNetwork[0];
           const cabn2 = res?.data?.body?.leaderboard?.leaderboardCurrencyAddressesByNetwork[1];
           const tempObj = {
@@ -90,8 +88,7 @@ export default function MultiTokenLeaderboardIndex() {
               dexUrl: cabn2?.currencyAddressesByNetwork?.networkDex?.dex?.url,
               chainId: cabn2?.currencyAddressesByNetwork?.network?.chainId,
             },
-          };
-          console.log(tempObj);
+          }; 
           getFrmTokenUSDCValue(tempObj.frmCabn.chainId, tempObj.frmCabn.tokenContractAddress, tokenUSDCBSCMainnet, tempObj);
           setLeaderboardData(tempObj);
         }
@@ -110,10 +107,8 @@ export default function MultiTokenLeaderboardIndex() {
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
           const { leaderboard } = res.data.body;
-          const cabn1 =
-            res?.data?.body?.leaderboardCurrencyAddressesByNetwork[0];
-          const cabn2 =
-            res?.data?.body?.leaderboardCurrencyAddressesByNetwork[1];
+          const cabn1 =  res?.data?.body?.leaderboardCurrencyAddressesByNetwork[0];
+          const cabn2 =  res?.data?.body?.leaderboardCurrencyAddressesByNetwork[1];
           const tempObj = {
             name: leaderboard?.name,
             exclusionWalletAddressList: leaderboard?.exclusionWalletAddressList,

@@ -5,7 +5,7 @@ import { FContainer, FCard, FCardTitle } from "ferrum-design-system";
 const index = () => {
   return (
     <FContainer type="fluid">
-      <FContainer width={1000}>
+      <FContainer width={700}>
         <FCard variant="primary">
           <FCardTitle>
             <h3>Please input your email! </h3>

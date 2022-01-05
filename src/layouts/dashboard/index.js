@@ -9,21 +9,7 @@ const DashboardLayout = ({children}) => {
         <DashboardSidebar />
         <FMain>
           <DashboardHeader />
-          {children}
-          {/*  <FList variant="info">
-                  <FListItem>
-                    <FItem align="left"> one</FItem>
-                    <FItem align="right"> 2nd</FItem> 
-                  </FListItem>
-                  <FListItem>
-                    <FItem align="left"> one</FItem>
-                    <FItem align="right"> 2nd</FItem> 
-                  </FListItem>
-                  <FListItem>
-                    <FItem align="left"> one</FItem>
-                    <FItem align="right"> 2nd</FItem> 
-                  </FListItem>
-                </FList>  */}
+          {children} 
         </FMain>
       </FLayout>
     )

@@ -19,8 +19,7 @@ const RegisterForm = () => {
   const [viewPassword, setViewPassword] = useState(false);
   const [viewConfirmPassword, setViewConfirmPassword] = useState(false);
 
-  const onSubmit = async (values: any) => {
-    console.log(values)
+  const onSubmit = async (values: any) => { 
     await communityMemberRegister(values)
       .then((response: any) => {
         const { user } = response.data.body;
@@ -69,26 +68,18 @@ const RegisterForm = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
     watch,
-  } = useForm({ defaultValues: initialValues });
+  } = useForm({ defaultValues: initialValues, resolver: yupResolver(registerSchema) });
 
   return (<>
     <Toaster />
     <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
       <FGrid size={2}>
-        <FGridItem alignX="center">
+        <FGridItem alignX="center" >
           <FInputTextField
             label="First name"
             name="firstName"
             placeholder="First Name"
-            register={register}
-            validations={{
-              required: {
-                value: true,
-                message: "First name is required",
-              },
-              minLength: { value: 3, message: validations.MIN_LENGTH("3") },
-              maxLength: { value: 50, message: validations.MAX_LENGTH("50") },
-            }}
+            register={register} 
             error={
               errors["firstName"]?.message ? errors["firstName"]?.message : ""
             }
@@ -99,15 +90,7 @@ const RegisterForm = () => {
             label="Last name"
             name="lastName"
             placeholder="Last name"
-            register={register}
-            validations={{
-              required: {
-                value: true,
-                message: "Last name is required",
-              },
-              minLength: { value: 3, message: validations.MIN_LENGTH("3") },
-              maxLength: { value: 50, message: validations.MAX_LENGTH("50") },
-            }}
+            register={register} 
             error={errors["lastName"]?.message ? errors["lastName"]?.message : ""}
           />
         </FGridItem>
@@ -119,19 +102,7 @@ const RegisterForm = () => {
             name="email"
             type="email"
             placeholder="Email"
-            register={register}
-            validations={{
-              required: {
-                value: true,
-                message: "Email is required",
-              },
-              minLength: { value: 3, message: validations.MIN_LENGTH("3") },
-              maxLength: { value: 50, message: validations.MAX_LENGTH("50") },
-              pattern: {
-                value: validations.EMAIL_REGEX,
-                message: "Invalid email format",
-              },
-            }}
+            register={register} 
             error={errors["email"]?.message ? errors["email"]?.message : ""}
           />
         </FGridItem>
@@ -147,20 +118,7 @@ const RegisterForm = () => {
             postfix={viewPassword ? <RiEyeLine /> : <RiEyeOffFill />}
             postfixAction={() => {
               setViewPassword(!viewPassword);
-            }}
-            validations={{
-              required: {
-                value: true,
-                message: "Password is required",
-              },
-              minLength: { value: 3, message: validations.MIN_LENGTH("3") },
-              maxLength: { value: 20, message: validations.MAX_LENGTH("20") },
-              pattern: {
-                value: validations.PASSWORD_REGEX,
-                message:
-                  "Password must be at least six characters long, Contain letters and numbers",
-              },
-            }}
+            }} 
             error={
               errors["password"]?.message ? errors["password"]?.message : ""
             }
@@ -176,20 +134,7 @@ const RegisterForm = () => {
             postfix={viewConfirmPassword ? <RiEyeLine /> : <RiEyeOffFill />}
             postfixAction={() => {
               setViewConfirmPassword(!viewConfirmPassword);
-            }}
-            validations={{
-              required: {
-                value: true,
-                message: "Confirm Password is required",
-              },
-              minLength: { value: 3, message: validations.MIN_LENGTH("3") },
-              maxLength: { value: 20, message: validations.MAX_LENGTH("20") },
-              pattern: {
-                value: validations.PASSWORD_REGEX,
-                message:
-                  "Password must be at least six characters long, Contain letters and numbers",
-              },
-            }}
+            }} 
             error={
               errors["confirmPassword"]?.message ? errors["confirmPassword"]?.message : ""
             }
@@ -202,21 +147,7 @@ const RegisterForm = () => {
             label="Telegram handle"
             name="telegramHandle"
             placeholder="Telegram handle including @"
-            register={register}
-            validations={{
-              required: {
-                value: true,
-                message: "Telegram handle is required. Include @ with your username.",
-              },
-              minLength: { value: 5, message: validations.MIN_LENGTH("5") },
-              maxLength: { value: 32, message: validations.MAX_LENGTH("32") },
-              pattern: {
-                value: validations.TELEGRAM_HANDLE_REGEX,
-                message:
-                  "Invalid Telegram Handle",
-              },
-
-            }}
+            register={register} 
             error={
               errors["telegramHandle"]?.message ? errors["telegramHandle"]?.message : ""
             }

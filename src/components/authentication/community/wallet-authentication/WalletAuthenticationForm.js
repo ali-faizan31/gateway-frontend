@@ -135,6 +135,7 @@ export function Web3AuthWrapper(props) {
       setWeb3(web3);
       setNetwork(network);
       setConnected(true);
+      props.setIsVerified(true);
       setAddress(address);
       console.log(address, "====");
     } catch (e) {
@@ -243,6 +244,7 @@ export function Web3AuthWrapper(props) {
       console.log(accounts);
       setAddress(accounts[0]);
       setConnected(false);
+      props.setIsVerified(false);
     });
     provider.on("chainChanged", async (chainId) => {
       const networkId = await web3.eth.net.getId();

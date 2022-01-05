@@ -1,86 +1,119 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FSider, FSiderItem, FSiderSubMenuItem } from "ferrum-design-system";
-import { FaCircle } from "react-icons/fa";
-import { publicLeaderboardConfig, sidebarConfig } from './SidebarConfig';
-import { useLocation } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
+import { useSelector, RootStateOrAny } from 'react-redux';
+import { publicLeaderboardConfig, sidebarConfig, publicMultiLeaderboardConfig } from './SidebarConfig';
+import { useLocation, useParams } from 'react-router-dom';
+import { getLeaderboardByIdForPublicUser } from "../../_apis/LeaderboardCrud";
+import { getCompetitionByIdForPublicUser } from "../../_apis/CompetitionCrud";
 
 
 const DashboardSidebar = () => {
+  const { id }: any = useParams();
   const { pathname } = useLocation();
-  const isPublicLeaderboard = pathname.includes('/pub/leaderboard');
+  const [sideConfig, setSideConfig]: any = useState([]);
+  const { competitionList } = useSelector((state: RootStateOrAny) => state.competition);
+  const { leaderboardList } = useSelector((state: RootStateOrAny) => state.leaderboard);
+  const isPublicLeaderboard = pathname.includes('/pub/leader');
   const isPublicMultiLeaderboard = pathname.includes('/pub/multi/leaderboard');
   const isPublicCompetition = pathname.includes('/pub/competition');
 
+  useEffect(() => {
+    if (id) { 
+      if (isPublicLeaderboard || isPublicMultiLeaderboard) {
+        getPublicLeaderboard();
+      }
+      if (isPublicCompetition) {
+        getPublicCompetition();
+      }
+    }
+  }, [id])
 
-  const renderContent = (items: any) => (
-    // isPublicLeaderboard ? "yes" : "no"
-    items.map((item: any) => (
-      // console.log(item, item.children) 
-      // const { title, path, icon,  children } = item;
+  const getPublicLeaderboard = () => {
+    getLeaderboardByIdForPublicUser(id)
+      .then((res: any) => {
+        if (res?.data?.body?.leaderboard) {
+          const { leaderboard } = res.data.body;
+          let mappedData = [];
+          if (isPublicMultiLeaderboard) {
+            mappedData = [
+              { title: leaderboard.name, _id: leaderboard._id, path: `/pub/multi/leaderboard/${leaderboard._id}` }
+            ];
+          } else {
+            mappedData = [
+              { title: leaderboard.name, _id: leaderboard._id, path: `/pub/leaderboard/${leaderboard._id}` }
+            ];
+          }
+          updatePublicLeaderboardConfig(mappedData);
+        }
+      })
+      .catch((e: any) => {
+        if (e.response) {
+          toast.error(e.response.data.status.message);
+        } else {
+          toast.error('Something went wrong. Try again later!');
+        }
+      });
+  };
+
+  const updatePublicLeaderboardConfig = (list: any) => {
+    if (isPublicMultiLeaderboard) {
+      setSideConfig([])
+      const np: any = [list[0]];
+      publicMultiLeaderboardConfig[0].children = np;
+      setSideConfig(publicMultiLeaderboardConfig)
+    } else if (isPublicLeaderboard) {
+      setSideConfig([])
+      let np: any = publicLeaderboardConfig[0].children;
+      np = [...np, list[0]];
+      publicLeaderboardConfig[0].children = np;
+      setSideConfig(publicLeaderboardConfig);
+    }
+  };
+
+  const getPublicCompetition = () => {
+    getCompetitionByIdForPublicUser(id)
+      .then((res: any) => {
+        if (res?.data?.body?.competition) {
+          const { competition } = res.data.body;
+          const { leaderboard } = res.data.body;
+          const mappedData = [
+            { title: competition.name, _id: competition._id, path: `/pub/competition/${competition._id}` }
+          ];
+          // updatePublicCompetitionConfig(mappedData);
+        }
+      })
+      .catch((e: any) => {
+        if (e.response) {
+          toast.error(e.response.data.status.message);
+        } else {
+          toast.error('Something went wrong. Try again later!');
+        }
+      });
+  };
+
+
+  const renderContent = (items: any) => { 
+    return items.map((item: any) => (
       <FSiderItem to={item.path} title={item.title} prefix={item.icon} key={item.path}>
-        {item.children && <FSiderSubMenuItem>
-          {item.children.map((subItem: any) => ( 
-            <FSiderItem to={subItem.path} title={subItem.title} prefix={subItem.icon} key={subItem.path}></FSiderItem>
-          ))}
-        </FSiderSubMenuItem>}
+        {item.children &&
+          <FSiderSubMenuItem>
+            {item.children.map((subItem: any) => (
+              <FSiderItem to={subItem.path} title={subItem.title} prefix={subItem.icon} key={subItem.path}></FSiderItem>
+            ))}
+          </FSiderSubMenuItem>
+        }
       </FSiderItem>
     ))
-  )
-
-  const renderTestContent = (items: any) => ( 
-    items.map((item: any) => (
-      // console.log(item, item.children) 
-      // const { title, path, icon,  children } = item;
-      <FSiderItem to={item.path} title={item.title} prefix={item.icon}>
-        {/* {item.children && <FSiderSubMenuItem>
-          {item.children.map((subItem: any) => {
-            const { title, path, icon } = subItem;
-            <FSiderItem to={path} title={title} prefix={icon}></FSiderItem>
-          })}
-        </FSiderSubMenuItem>} */}
-      </FSiderItem>
-    ))
-  )
-
-  const getSideMenuIcon = (name: any) => (
-    <img src={`/ferrum/${name}.png`} height="22px" width="22px" max-height="22px" max-width="22px" />
-  );
-
+  }
 
   return (
     <FSider>
-      {(isPublicLeaderboard && renderContent(publicLeaderboardConfig) ||
-        // (isPublicMultiLeaderboard && renderContent(publicMultiLeaderboardConfig) ||
-        // (isPublicCompetition && renderContent(publicCompetitionConfig) || (
-        renderContent(sidebarConfig))}
+      {(isPublicLeaderboard && renderContent(sideConfig) ||
+        (isPublicMultiLeaderboard && renderContent(sideConfig) ||
+          // (isPublicCompetition && renderContent(publicCompetitionConfig) || (
+          renderContent(sidebarConfig)))}
     </FSider>
-
-    //   <FSider>
-    //     <FSiderItem to="/swap" title="Leaderboard" prefix={getSideMenuIcon('leaderboard_active@2x')}>
-    //       <FSiderSubMenuItem>
-    //         <FSiderItem
-    //           to="/url-submenuitem"
-    //           title="Submenu Item"
-    //           // prefix={<FaCircle />}
-    //         />
-    //         <FSiderItem
-    //           to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb"
-    //           title="Multi"
-    //           // prefix={<FaCircle />}
-    //         />
-    //         <FSiderItem
-    //           to="/url-submenuitem"
-    //           title="Submenu Item"
-    //           // prefix={<FaCircle />}
-    //         />
-    //       </FSiderSubMenuItem>
-    //     </FSiderItem>
-    //     <FSiderItem
-    //       to="/transactions"
-    //       title="Competitions"
-    //       prefix={<FaCircle />}
-    //     />
-    // </FSider>
   )
 }
 

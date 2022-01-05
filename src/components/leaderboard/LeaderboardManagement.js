@@ -60,9 +60,8 @@ const LeaderboardManagement = () => {
     history.push(`${PATH_DASHBOARD.general.leaderboard}/${row._id}`);
   };
 
-  const openCreateLeaderboard = () => {
-    console.log(PATH_ADMIN.leaderboard.create)
-    history.push(PATH_ADMIN.leaderboard.create);
+  const openCreateLeaderboard = () => { 
+    history.push(PATH_DASHBOARD.general.createLeaderboard);
   };
 
   const actionFormatter = (params) => (
@@ -173,11 +172,11 @@ const LeaderboardManagement = () => {
       </div>
       <FContainer type="fluid">
         <FContainer>
-          <FGrid size={2}>
-            <FGridItem alignX="start">
-              <h1>Leaderboard Management</h1>
+          <FGrid size={2} className={"f-mt-1 f-mb-1"}>
+            <FGridItem>
+              <h1>Leaderboard Management</h1> 
             </FGridItem>
-            <FGridItem alignY="center">
+            <FGridItem alignX={"end"} alignY={"end"}>
               <FInputTextField
                 label="Search"
                 placeholder="Leaderboard name"
@@ -187,18 +186,12 @@ const LeaderboardManagement = () => {
                 onChange={(e) => setQuery(e.target.value)} 
               />
                <FButton
-                // type="button"
+                type="button"
+                className={"f-ml-1"}
                 onClick={openCreateLeaderboard}
                 title="Create Leaderboard"
               ></FButton>
-            </FGridItem>
-            {/* <FGridItem alignX="center" alignY="center" >
-              <FButton
-                // type="button"
-                onClick={openCreateLeaderboard}
-                title="Create Leaderboard"
-              ></FButton>
-            </FGridItem> */}
+            </FGridItem> 
           </FGrid>
           <FTable>
             <Datatable

@@ -1,10 +1,12 @@
 import React from 'react'
 import { FLayout, FContainer, FMain, ThemeBuilder, FHeader, FButton, FInputText, FItem, FSider, FSiderItem } from "ferrum-design-system";
 import { RiLogoutCircleRLine } from "react-icons/ri";
-import { useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
+import { PATH_AUTH } from '../../routes/paths';
 
 const DashboardHeader = () => {
   const { pathname } = useLocation();
+  const history = useHistory();
   const isMultiLeaderboard = pathname.includes('/pub/multi/leaderboard');
   const isPublic = pathname.includes('pub');
 
@@ -21,7 +23,7 @@ const DashboardHeader = () => {
   const handleLogout = () => {
     localStorage.removeItem("me");
     localStorage.removeItem("token");  
-    // navigate(PATH_AUTH.communityLogin);
+    history.push(PATH_AUTH.communityLogin);
   };
 
   return (

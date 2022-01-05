@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { FCard, FContainer, FInputTextField, FLayout, FMain, FGrid, FGridItem, FButton } from "ferrum-design-system";
 import { useHistory, Link } from "react-router-dom";
+import * as Yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { communityMemberResendVerifyCode } from "../../../../_apis/OnboardingCrud";
 import { PATH_AUTH } from "../../../../routes/paths";
 import * as validations from "../../../../utils/validations";
+import { ClipLoader } from "react-spinners";
 
 const ResendEmailVerificationForm = () => {
   const history = useHistory();
 
-  const onSubmit = (values: any) => {
-    console.log(values) 
-    // history.push(PATH_AUTH.communityVerify);
-    communityMemberResendVerifyCode(values)
+  const onSubmit = async (values: any) => { 
+    await communityMemberResendVerifyCode(values)
       .then((response: any) => { 
         toast.success(response?.data?.status?.message)
         history.push(PATH_AUTH.communityVerify);
@@ -31,14 +32,18 @@ const ResendEmailVerificationForm = () => {
     email: ''
   };
 
+  const verifyCodeSchema = Yup.object().shape({
+    email : Yup.string().required('Email is required').email('Email must be a valid email address')
+  });
+
 
   const {
     reset,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     watch,
-  } = useForm({ defaultValues: initialValues });
+  } = useForm({ defaultValues: initialValues, resolver: yupResolver(verifyCodeSchema) });
 
   return (<>
     <Toaster />
@@ -50,19 +55,7 @@ const ResendEmailVerificationForm = () => {
             name="email"
             type="email"
             placeholder="Email"
-            register={register}
-            validations={{
-              required: {
-                value: true,
-                message: "Email is required",
-              },
-              minLength: { value: 3, message: validations.MIN_LENGTH("3") },
-              maxLength: { value: 50, message: validations.MAX_LENGTH("50") },
-              pattern: {
-                value: validations.EMAIL_REGEX,
-                message: "Invalid email format",
-              },
-            }}
+            register={register} 
             error={
               errors["email"]?.message ? errors["email"]?.message : ""
             }
@@ -70,8 +63,8 @@ const ResendEmailVerificationForm = () => {
         </FGridItem>
       </FGrid>
       <FGrid>
-        <FGridItem alignX="center">
-          <FButton type="submit" title={"Submit"} onClick={handleSubmit(onSubmit)}></FButton>
+        <FGridItem alignX="center" className={"f-mt-1"}>
+          <FButton type="submit" title={"Submit"} postfix={ isSubmitting && <ClipLoader color="#fff" size={20}/>}></FButton>
         </FGridItem>
       </FGrid> 
     </form>

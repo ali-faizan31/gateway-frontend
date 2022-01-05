@@ -164,7 +164,7 @@ const MultiTokenLeaderboardInformation = ({
     let list = mergeTwoArrays(frmTokenHolderList, frmxTokenHolderList);
     list = arraySortByKeyDescending(list, "combinedValue");
     const frmLevelUpSwapUrl = `${leaderboard?.frmCabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.frmCabn?.tokenContractAddress}&exactField=output&exactAmount=`;
-    const frmxLevelUpSwapUrl = `${leaderboard?.frmxCabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.frmxCabn?.tokenContractAddress}&exactField=output&exactAmount=`;
+    const frmxLevelUpSwapUrl = `${leaderboard?.frmxCabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.frmxCabn?.tokenContractAddress}&exactField=output&exactAmount=`; 
 
     for (let i = 0; i < list.length; i += 1) {
       if (list[i].address) {
@@ -189,47 +189,23 @@ const MultiTokenLeaderboardInformation = ({
           ).toLocaleString("en-US");
         }
         if (i === 0) {
-          list[i].formattedLevelUpAmount = "You are the leader";
-          // list[i].levelUpUrl = levelUpSwapUrl;
+          list[i].formattedLevelUpAmount = 'You are the leader';
+          list[i].levelUpFRMUrl = frmLevelUpSwapUrl + "0";
+          list[i].levelUpFRMxUrl = frmxLevelUpSwapUrl + "0";
         } else {
-          list[i].combinedDiff = calculateLevelUpAmount(
-            list[i - 1].combinedValue,
-            list[i].combinedValue
-          );
-          const checkZeroDifference =
-            list[i - 1].combinedValue - list[i].combinedValue;
-          if (list[i].frmBalance) {
-            // if (checkZeroDifference === 0) {
-            //   list[i].frmLevelUp = 1;
-            //   list[i].levelUpFRMUrl = frmLevelUpSwapUrl + list[i].frmLevelUp;
-            //   list[i].formattedLevelUpAmount = `1 FRM`;
-            // } else {
-            list[i].frmLevelUp = forceRounding(
-              list[i].combinedDiff / frmUsdcValue,
-              2
-            );
+          list[i].combinedDiff = calculateLevelUpAmount(list[i - 1].combinedValue, list[i].combinedValue); 
+          if (list[i].frmBalance) { 
+            list[i].frmLevelUp = forceRounding(list[i].combinedDiff / frmUsdcValue, 2);
             list[i].levelUpFRMUrl = frmLevelUpSwapUrl + list[i].frmLevelUp;
-            list[i].formattedLevelUpAmount = `${list[i].frmLevelUp} FRM`;
-            // }
+            list[i].formattedLevelUpAmount = `${list[i].frmLevelUp} FRM`; 
           }
-          if (list[i].frmxBalance) {
-            // if (checkZeroDifference === 0) {
-            //   list[i].frmxLevelUp = 1;
-            //   list[i].levelUpFRMxUrl = frmLevelUpSwapUrl + list[i].frmLevelUp;
-            //   list[i].formattedLevelUpAmount = `$1 FRM`;
-            // } else {
-            list[i].frmxLevelUp = forceRounding(
-              list[i].combinedDiff / frmxUsdcValue,
-              2
-            );
+          if (list[i].frmxBalance) { 
+            list[i].frmxLevelUp = forceRounding(list[i].combinedDiff / frmxUsdcValue, 2);
             list[i].levelUpFRMxUrl = frmxLevelUpSwapUrl + list[i].frmxLevelUp;
-            list[i].formattedLevelUpAmount = `${list[i].frmxLevelUp} FRM`;
-            // }
+            list[i].formattedLevelUpAmount = `${list[i].frmxLevelUp} FRM`; 
           }
           if (list[i].frmxBalance && list[i].frmBalance) {
-            list[
-              i
-            ].formattedLevelUpAmount = `${list[i].frmLevelUp} FRM or ${list[i].frmxLevelUp} FRMx`;
+            list[i].formattedLevelUpAmount = `${list[i].frmLevelUp} FRM or ${list[i].frmxLevelUp} FRMx`;
           }
         }
       }
@@ -493,8 +469,14 @@ const MultiTokenLeaderboardInformation = ({
             initialSort={{ prop: "rank", isAscending: true }}
           />
         </FTable>
+      ) : isLoading ? (
+        <FContainer type="fluid">
+          <FContainer>Loading...</FContainer>
+        </FContainer>
       ) : (
-        "Loading..."
+        <FContainer type="fluid">
+          <FContainer>No Data found</FContainer>
+        </FContainer>
       )}
     </>
   );

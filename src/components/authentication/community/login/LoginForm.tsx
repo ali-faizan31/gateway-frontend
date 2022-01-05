@@ -28,12 +28,9 @@ const LoginForm = () => {
         handleSubmit,
         formState: { errors, isSubmitting },
         watch,
-    } = useForm({ defaultValues: initialValues });
+    } = useForm({ defaultValues: initialValues }); 
 
-    console.log(isSubmitting)
-
-    const onSubmit = async (values: any) => {
-        console.log(values) 
+    const onSubmit = async (values: any) => { 
         await communityMemberLogin(values)
             .then((response: any) => {
                 const { user } = response.data.body;

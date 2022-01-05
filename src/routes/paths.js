@@ -43,7 +43,7 @@ function path(root, sublink) {
     },
     multiLeaderboard: {
       root: path(ROOTS_PUBLIC_USER, '/multi/leaderboard'),
-      detailLeaderBoardById: path(ROOTS_PUBLIC_USER, '/multi/leaderboard:id'),
+      detailLeaderBoardById: path(ROOTS_PUBLIC_USER, '/multi/leaderboard/61d448bcb4918f09cb510ddf'),
     },
     competition:{
       root: path(ROOTS_PUBLIC_USER, '/competition'),
@@ -55,6 +55,7 @@ function path(root, sublink) {
     root: ROOTS_DASHBOARD,
     general: { 
       leaderboard: path(ROOTS_DASHBOARD, '/leaderboard'),
+      createLeaderboard: path(ROOTS_DASHBOARD, '/leaderboard/create'),
       competition: path(ROOTS_DASHBOARD, '/competition'), 
       leaderboardManagement: path(ROOTS_DASHBOARD, '/leaderboard/management'),
       detailLeaderBoardById: path(ROOTS_DASHBOARD, '/leaderboard:id'),

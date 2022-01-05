@@ -12,14 +12,19 @@ const ICONS = {
 
 export const publicLeaderboardConfig = [
     {
-        items: [
-            {
-                title: 'Leaderboard',
-                path: PATH_PUBLIC_USER.leaderboard.root,
-                icon: ICONS.leaderboard,
-                children: []
-            }
-        ]
+        title: 'Leaderboard',
+        path: PATH_PUBLIC_USER.leaderboard.root,
+        icon: ICONS.leaderboard,
+        children: []
+    }
+]
+
+export const publicMultiLeaderboardConfig = [
+    {
+        title: 'Leaderboard',
+        path: PATH_PUBLIC_USER.multiLeaderboard.root,
+        icon: ICONS.leaderboard,
+        children: []
     }
 ]
 
@@ -30,7 +35,7 @@ export const sidebarConfig = [
         icon: ICONS.leaderboard,
         children: [
             { title: 'Leaderboard Management', path: PATH_DASHBOARD.general.leaderboardManagement },
-            { tile: 'Create Leaderboard', path: PATH_ADMIN.leaderboard.create },
+            { title: 'Create Leaderboard', path: PATH_DASHBOARD.general.createLeaderboard },
         ]
     },
     {
