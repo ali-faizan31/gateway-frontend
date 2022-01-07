@@ -172,11 +172,11 @@ const LeaderboardManagement = () => {
       </div>
       <FContainer type="fluid">
         <FContainer>
-          <FGrid size={2} className={"f-mt-1 f-mb-1"}>
-            <FGridItem>
+          <FGrid className={"f-mt-1 f-mb-1"}>
+            <FGridItem size={[6,12,12]} alignX={"center"}>
               <h1>Leaderboard Management</h1> 
             </FGridItem>
-            <FGridItem alignX={"end"} alignY={"end"}>
+            <FGridItem alignX={"end"} alignY={"end"} size={[6,12,12]} display={"flex"}> 
               <FInputTextField
                 label="Search"
                 placeholder="Leaderboard name"

@@ -55,7 +55,7 @@ function App() {
               <MultiTokenLeaderboardById />
             </DashboardLayout>
           </Route>
-          <Route path="/dashboard/leaderboard/management">
+          <Route path="/dashboard/leaderboard/managements">
             <DashboardLayout>
               <LeaderboardManagement />
             </DashboardLayout>

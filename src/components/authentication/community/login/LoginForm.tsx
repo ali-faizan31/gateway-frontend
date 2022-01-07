@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FInputTextField, FGrid, FGridItem, FButton } from "ferrum-design-system";
+import { FInputTextField, FGrid, FGridItem, FButton, FItem} from "ferrum-design-system";
 import { useHistory } from "react-router-dom";
 import {
     RiEyeOffFill,
@@ -64,8 +64,8 @@ const LoginForm = () => {
     return (<>
         <Toaster />
         <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
-            <FGrid>
-                <FGridItem >
+            <FGrid className={"f-mt-1"}>
+                <FGridItem size={[12]}>
                     <FInputTextField
                         label="Email"
                         name="email"
@@ -90,7 +90,7 @@ const LoginForm = () => {
                 </FGridItem>
             </FGrid>
             <FGrid>
-                <FGridItem >
+                <FGridItem size={[12]} >
                     <FInputTextField
                         label="Password"
                         name="password"
@@ -121,11 +121,9 @@ const LoginForm = () => {
                     />
                 </FGridItem>
             </FGrid>
-            <FGrid>
-                <FGridItem alignX="center">
+            <FItem align="center" className={"w-100"} >
                     <FButton type="submit" title={"Login"} className={"f-mt-1"} postfix={ isSubmitting && <ClipLoader color="#fff" size={20}/>}></FButton>
-                </FGridItem>
-            </FGrid>
+                </FItem>
         </form>
     </>);
 };

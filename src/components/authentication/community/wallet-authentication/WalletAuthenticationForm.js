@@ -10,41 +10,8 @@ import toast, { Toaster } from "react-hot-toast";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { walletAuthenticationBackendURL } from "../../../../utils/const.utils";
 import { PATH_PUBLIC_USER } from "../../../../routes/paths";
-import { updateUser } from "../../../../_apis/OnboardingCrud";
-
-const FetchApi = async (req) => {
-  try {
-    const res = await fetch(walletAuthenticationBackendURL, {
-      method: "POST",
-      mode: "cors",
-      body: JSON.stringify(req),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const resText = await res.text();
-    if (Math.round(res.status / 100) === 2) {
-      return resText ? JSON.parse(resText) : undefined;
-    }
-    const error = resText;
-    try {
-      const jerror = JSON.parse(error);
-    } catch (e) {
-      console.log(
-        `Server returned an error when calling + ${req} ${JSON.stringify({
-          status: res.status,
-          statusText: res.statusText,
-          error,
-        })} ${new Error()}`
-      );
-      throw new Error(error);
-    }
-  } catch (e) {
-    console.log(`Error calling api with  + ${JSON.stringify(req)}, ${e}`);
-    throw e;
-  }
-};
-
+import { checkUniqueWalletAddress, saveAddressAndGenerateNonce, getIp, verifySignatureAndUpdateNonce } from "../../../../_apis/WalletAuthencation";
+ 
 export const web3AuthSlice = createSlice({
   name: "web3åAuthSlice",
   initialState: {
@@ -76,6 +43,7 @@ const checkSession = async () => {
   }
   return false
 }
+
 const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider,
@@ -137,7 +105,7 @@ export function Web3AuthWrapper(props) {
       setConnected(true);
       props.setIsVerified(true);
       setAddress(address);
-      console.log(address, "====");
+      console.log(address, network, "====");
     } catch (e) {
       toast.error(`Error Occured ${e}`);
       console.log(e, "error====");
@@ -152,9 +120,10 @@ export function Web3AuthWrapper(props) {
   };
 
   const validateUserAddr = async () => {
-    setLoading(true);
+    setLoading(true);  
+
     if (props.email && props.user && props.token) {
-      await dispatch(validateAddress({ web3, address, email: props.email }));
+      await dispatch(validateAddress({ web3, address, network, email: props.email, applicationUserToken: props.applicationUserToken, user: props.user }));
       await disconnectWeb3();
     } else {
       toast.error(`User not found!`);
@@ -162,71 +131,92 @@ export function Web3AuthWrapper(props) {
     setLoading(false);
   };
 
+  const isUserWalletAddressUnique = async (address, network, applicationUserToken) => {
+    try {
+      const res = await checkUniqueWalletAddress(`${address}8`, 56, applicationUserToken)
+      return res.data.body.isUnique;
+    } catch (e) {
+      console.log(e.response.data.status.message) 
+      throw (e?.response?.data?.status?.message)
+    }
+  }
+  
+  const saveUserWalletAddressAndGenerateNonce = async (userId, values, applicationUserToken) => {
+    console.log(userId, values, applicationUserToken);
+    try {
+      const res = await saveAddressAndGenerateNonce(userId, values, applicationUserToken)
+      return res?.data?.body?.address?.nonce;
+    } catch (e) {
+      console.log(e.response.data.status.message) 
+      throw (e?.response?.data?.status?.message)
+    }
+  }
+
+  const saveUserSignatureAndGenerateNonce = async (userId, values, applicationUserToken) => {
+     try {
+      const res = await verifySignatureAndUpdateNonce(userId, values, applicationUserToken)
+      return res?.data?.body;
+    } catch (e) {
+      console.log(e.response.data.status.message) 
+      throw (e?.response?.data?.status?.message)
+    }
+  }
+
   const validateAddress = createAsyncThunk("connect", async (payload) => {
     try {
       const session = await checkSession();
       console.log("session", session);
       if (session) {
         return;
-      }
-      const data = {
-        command: "authenticateAddress",
-        data: { address: payload.address, email: payload.email || "" },
-      };
-      const res = await FetchApi(data);
-      if (payload.web3) {
-        const connection = payload.web3;
-        const accounts = (await connection?.eth.getAccounts()) || "";
-        const from = accounts[0];
-        const msg = `0x${Buffer.from(
-          `This signature verifies that you are the authorized owner of the wallet. The signature authentication is required to ensure allocations are awarded to the correct wallet owner.${res.nonce}`,
-          "utf8"
-        ).toString("hex")}`;
+      } 
+            
+      const uniqueResponse = await isUserWalletAddressUnique(payload.address, payload.network, payload.applicationUserToken)
 
-        try {
-          await connection.currentProvider.sendAsync(
-            {
-              method: "personal_sign",
-              params: [
-                msg,
-                from,
-                "This signature verifies that you are the authorized owner of the wallet. The signature authentication is required to ensure allocations are awarded to the correct wallet owner.",
-              ],
-            },
-            async (err, result) => {
-              console.log(result);
-              if (result.result) {
-                const data = {
-                  command: "verifySignature",
-                  data: {
-                    signature: result.result,
-                    info: {
-                      nonce: res.nonce,
-                      address: from,
-                      email: payload.email || "test@gmail.com",
-                    },
-                  },
-                };
-                const response = await FetchApi(data);
-                console.log(response, "response=====");
-                if (response.user.nonce) {
-                  setUserData(response.user);
+      if ( uniqueResponse === true){
+        const ipResponse = await getIp();
+        const ipAddress = ipResponse?.data?.ip;
+        const data = { address: payload.address , ferrumNetworkIdentifier: payload.network, lastConnectedIpAddress: ipAddress};
+      
+         const nonceResponse = await saveUserWalletAddressAndGenerateNonce(payload.user._id, data, payload.applicationUserToken);
+         console.log("nonce", nonceResponse);
+
+         if (payload.web3) {
+          const connection = payload.web3;
+          const accounts = (await connection?.eth.getAccounts()) || "";
+          const from = accounts[0];
+          const msg = `0x${Buffer.from(
+            `This signature verifies that you are the authorized owner of the wallet. The signature authentication is required to ensure allocations are awarded to the correct wallet owner.${nonceResponse}. id: ${payload.network}`,
+            "utf8"
+          ).toString("hex")}`;
+
+          try {
+            await connection.currentProvider.sendAsync(
+              {
+                method: "personal_sign",
+                params: [
+                  msg,
+                  from,
+                  "This signature verifies that you are the authorized owner of the wallet. The signature authentication is required to ensure allocations are awarded to the correct wallet owner.",
+                ],
+              },
+              async (err, result) => {
+                console.log(result);
+                if (result.result) {
+                  const data = {signature: result.result,address: payload.address , ferrumNetworkIdentifier: payload.network, ipAddress: ipAddress }
+                  const saveResponse = await saveUserSignatureAndGenerateNonce(payload.user._id, data, payload.applicationUserToken); //catch error
+                  console.log(saveResponse); //move to dashboard if success
                 }
               }
-            }
-          );
-        } catch (e) {
-          console.log(
-            `Signature Verification failed, kindly ensure you are connected to right account ${e}`
-          );
-          toast.error(
-            `Signature Verification failed, kindly ensure you are connected to right account ${e}`
-          );
+            )
+          }  catch (e) { 
+            toast.error(`Signature Verification failed, kindly ensure you are connected to right account ${e}`);
+          }
         }
-      }
+      } else {
+        throw "Address not unique"
+      } 
     } catch (e) {
-      toast.error(`Error occured ${e}`);
-      console.log(e, "error occured");
+      toast.error(`Error occured ${e}`); 
     }
   });
 
@@ -257,37 +247,11 @@ export function Web3AuthWrapper(props) {
       setNetwork(chainId);
     });
   };
-
-  useEffect(() => {
-    if (userData.email) {
-      UpdateUserWithWalletAddress(userData);
-    }
-  }, [userData]);
-
-  const UpdateUserWithWalletAddress = (user) => {
-    user.isWalletAddressAuthenticated = true;
-    user.walletAddress = user?.address;
-    user.firstName = props?.user?.firstName;
-    user.lastName = props?.user?.lastName;
-    updateUser(user, props.token)
-      .then((response) => {
-        const { user } = response.data.body;
-        localStorage.setItem("me", JSON.stringify(user));
-        toast.success(response.data.status.message);
-        history.push(PATH_PUBLIC_USER.multiLeaderboard.root);
-      })
-      .catch((e) => {
-        console.log(e);
-        if (e.response) {
-          toast.error(e.response?.data?.status?.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
+ 
 
   return (
     <>
+    <Toaster/>
       <props.View
         connected={connected.toString()}
         network={network}

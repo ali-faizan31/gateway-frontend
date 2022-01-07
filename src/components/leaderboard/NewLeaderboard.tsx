@@ -78,7 +78,7 @@ export default function NewLeaderboard() {
         <FContainer>
           <h1> Create Leaderboard </h1>
           <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
-            <FGrid size={2}>
+            <FGrid >
               <FGridItem alignX="center">
                 <FInputTextField
                   label="Leaderboard Name"
@@ -100,7 +100,7 @@ export default function NewLeaderboard() {
                 />
               </FGridItem>
             </FGrid>
-            <FGrid className={"f-mt-1"} size={2}>
+            <FGrid className={"f-mt-1"} >
               <FGridItem alignX="center">
                 <FInputTextField
                   label="Network"

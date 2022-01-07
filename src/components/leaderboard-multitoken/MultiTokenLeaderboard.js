@@ -431,7 +431,7 @@ const MultiTokenLeaderboardInformation = ({
         style={{ display: "none" }}
       />
 
-      <FGrid size={2}>
+      <FGrid >
         <FGridItem alignX="start">
           <h1>{leaderboardData?.name}</h1>
         </FGridItem>

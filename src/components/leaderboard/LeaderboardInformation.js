@@ -529,11 +529,11 @@ const LeaderboardInformation = () => {
       />
       <FContainer type="fluid">
         <FContainer>
-          <FGrid size={2} className={"f-mt-1 f-mb-1"}>
-            <FGridItem>
+          <FGrid className={"f-mt-1 f-mb-1"}>
+            <FGridItem size={[6,12,12]} alignX={"center"}>
               <h1>{leaderboardData?.name || "Leaderboard"}</h1>
             </FGridItem>
-            <FGridItem alignX={"end"} alignY={"end"}>
+            <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[6,12,12]} >
               <FInputTextField
                 label="Search Wallet"
                 placeholder="0x000...0000"
@@ -550,7 +550,7 @@ const LeaderboardInformation = () => {
                   className={"f-ml-1"}
                   disabled={isLoading}
                   onClick={onExportClick}
-                  title={" Export to CSV"}
+                  title={" Export hto CSV"}
                 ></FButton>
               )}
             </FGridItem>

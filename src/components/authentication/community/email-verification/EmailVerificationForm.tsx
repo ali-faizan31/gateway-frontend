@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FCard, FContainer, FInputTextField, FLayout, FMain, FGrid, FGridItem, FButton } from "ferrum-design-system";
+import { FCard, FContainer, FInputTextField, FLayout, FItem, FGrid, FGridItem, FButton } from "ferrum-design-system";
 import { useHistory, Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
@@ -51,8 +51,8 @@ const EmailVerificationForm = (children: any) => {
   return (<>
     <Toaster />
     <form autoComplete="false" onSubmit={handleSubmit(onSubmit)}>
-      <FGrid size={1}>
-        <FGridItem alignX="center">
+      <FGrid >
+        <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
           <FInputTextField
             label="Email Verification Code"
             name="emailVerificationCode"
@@ -63,7 +63,7 @@ const EmailVerificationForm = (children: any) => {
               required: {
                 value: true,
                 message: "Email Verification Code is required",
-              }, 
+              },
             }}
             error={
               errors["emailVerificationCode"]?.message ? errors["emailVerificationCode"]?.message : ""
@@ -71,19 +71,15 @@ const EmailVerificationForm = (children: any) => {
           />
         </FGridItem>
       </FGrid>
-      <FGrid>
-        <FGridItem alignX="center">
-          <FButton type="submit" title={"Verify"} className={"f-mt-1"} postfix={ isSubmitting && <ClipLoader color="#fff" size={20}/>}></FButton>
-        </FGridItem>
-      </FGrid>
-      <FGrid>
-        <FGridItem alignX="center" className={"f-mt-1"}>
-          Don’t have a code? &nbsp;
-          <Link to={PATH_AUTH.communityResendCode}>
-            Resend code
-          </Link>
-        </FGridItem>
-      </FGrid>
+      <FItem align="center" className={"w-100"} >
+        <FButton type="submit" title={"Verify"} className={"f-mt-1"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
+      </FItem>
+      <FItem align={"center"} className={"f-mt-1 w-100"} >
+        Don’t have a code? &nbsp;
+        <Link to={PATH_AUTH.communityResendCode}>
+          Resend code
+        </Link>
+      </FItem>
     </form>
   </>);
 };

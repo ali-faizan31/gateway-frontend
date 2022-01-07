@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FCard, FContainer, FInputTextField, FLayout, FMain, FGrid, FGridItem, FButton } from "ferrum-design-system";
+import { FCard, FContainer, FInputTextField, FLayout, FItem, FGrid, FGridItem, FButton } from "ferrum-design-system";
 import { useHistory, Link } from "react-router-dom";
 import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -48,8 +48,8 @@ const ResendEmailVerificationForm = () => {
   return (<>
     <Toaster />
     <form autoComplete="false" onSubmit={handleSubmit(onSubmit)}>
-      <FGrid size={1}>
-        <FGridItem alignX="center">
+      <FGrid >
+      <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
           <FInputTextField
             label="Email"
             name="email"
@@ -62,11 +62,9 @@ const ResendEmailVerificationForm = () => {
           />
         </FGridItem>
       </FGrid>
-      <FGrid>
-        <FGridItem alignX="center" className={"f-mt-1"}>
+      <FItem align="center" className={"w-100 f-mt-1"} >
           <FButton type="submit" title={"Submit"} postfix={ isSubmitting && <ClipLoader color="#fff" size={20}/>}></FButton>
-        </FGridItem>
-      </FGrid> 
+         </FItem>
     </form>
   </>);
 };

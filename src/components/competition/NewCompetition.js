@@ -8,6 +8,8 @@ import {
   FGridItem,
   FButton,
   FContainer,
+  FSelect,
+  FDatepicker,
 } from "ferrum-design-system";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -29,7 +31,11 @@ export default function NewCompetition() {
   const [eventStartValue, setEventStartValue] = useState(null);
   const [eventEndValue, setEventEndValue] = useState(null);
   const [eventEndOpen, setEventEndOpen] = useState(false);
-  const [leaderboardList, setLeaderboardList] = useState([]);
+  const [selectedLeaderboard, setSelectedLeaderboard] = useState("");
+  const [leaderboardList, setLeaderboardList] = useState([
+    { _id: 1, value: "leader", network: "56", label: "he | gfghj | kjhgfxcv" },
+    { _id: 3, value: "leader", network: "56", label: "he kjhg } jhyh" },
+  ]);
 
   useEffect(() => {
     getLeaderboardListing();
@@ -40,18 +46,23 @@ export default function NewCompetition() {
     leaderboard: Yup.string().required("Leaderboard is required"),
     startBlock: Yup.string().required("Start block is required"),
     endBlock: Yup.string().required("End block is required"),
+    startDate: Yup.string().required("Start Date/Time is required"),
+    endDate: Yup.string().required("End Date/Time is required"),
   });
 
   const initialValues = {
     name: "",
     leaderboard: "",
     startBlock: "",
-    endBlock: ""
+    endBlock: "",
+    endDate: "",
+    startDate: ""
   };
 
   const {
     reset,
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
     watch,
@@ -61,24 +72,27 @@ export default function NewCompetition() {
   });
 
   const onSubmit = async (values) => {
+    console.log(values);
     values.startDate = moment(eventStartValue, "YYYY-MM-DD")
       .utc()
       .toISOString();
     values.endDate = moment(eventEndValue, "YYYY-MM-DD").utc().toISOString();
-    await addCompetition(values)
-      .then((response) => {
-        dispatch(getAllCompetitionsDispatch());
-        toast.success(response.data.status.message);
-        history.push(PATH_ADMIN.competition.management);
-      })
-      .catch((e) => {
-        if (e.response) {
-          toast.error(e.response.data.status.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
+    // await addCompetition(values)
+    //   .then((response) => {
+    //     dispatch(getAllCompetitionsDispatch());
+    //     toast.success(response.data.status.message);
+    //     history.push(PATH_ADMIN.competition.management);
+    //   })
+    //   .catch((e) => {
+    //     if (e.response) {
+    //       toast.error(e.response.data.status.message);
+    //     } else {
+    //       toast.error("Something went wrong. Try again later!");
+    //     }
+    //   });
   };
+
+  console.log('opt',selectedLeaderboard);
 
   const mapLeaderboardData = (leaderboards) => {
     if (leaderboards && leaderboards.length) {
@@ -86,6 +100,8 @@ export default function NewCompetition() {
         for (let i = 0; i < chainIdList.length; i += 1) {
           if (chainIdList[i].id === leaderboard.chainId) {
             leaderboard.network = chainIdList[i].label;
+            leaderboard.label = `${leaderboard.name} | ${leaderboard.network} | ${leaderboard.tokenContractAddress}`; 
+            leaderboard.value = leaderboard._id;
           }
         }
       });
@@ -115,49 +131,6 @@ export default function NewCompetition() {
     setFieldValue("endDate", date);
   };
 
-  const disabledEventStartDate = (startValue) => {
-    const endValue = eventEndValue;
-    if (!startValue || !endValue) {
-      return false;
-    }
-    return startValue.valueOf() > endValue.valueOf();
-  };
-
-  const disabledEventEndDate = (endValue) => {
-    const startValue = eventStartValue;
-    if (!endValue || !startValue) {
-      return false;
-    }
-    return endValue.valueOf() <= startValue.valueOf();
-  };
-
-  const onEventStartChange = (date) => {
-    setEventStartValue(date);
-  };
-
-  const onEventEndChange = (date) => {
-    setEventEndValue(date);
-  };
-
-  const handleEventStartOpenChange = (open) => {
-    if (!open) {
-      setEventEndOpen(true);
-    } else {
-      setTimeout(() =>
-        setTimeout(() => {
-          const inputs = document.getElementsByClassName("ant-calendar-input");
-          if (inputs.length > 0 && inputs[0]) {
-            inputs[0].blur();
-          }
-        })
-      );
-    }
-  };
-
-  const handleEventEndOpenChange = (open) => {
-    setEventEndOpen(open);
-  };
-
   const onCancel = () => {
     history.push(PATH_ADMIN.competition.management);
   };
@@ -172,12 +145,18 @@ export default function NewCompetition() {
           <h1>Create Competition </h1>
           <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
             <FGrid>
-              <FGridItem alignX="center" className={"f-mt-1"}>
-                <FInputTextField
+              <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+                <FSelect
                   label="Leaderboard"
                   name="leaderboard"
                   placeholder="Leaderboard"
+                  control={control}
+                  options={leaderboardList}
                   register={register}
+                  onChange={(e) => {
+                    console.log(e);
+                    setSelectedLeaderboard(e.target._id);
+                  }}
                   error={
                     errors["leaderboard"]?.message
                       ? errors["leaderboard"]?.message
@@ -185,15 +164,9 @@ export default function NewCompetition() {
                   }
                 />
               </FGridItem>
-            </FGrid>
-            {/* <option value="" />
-                        {leaderboardList.map((option) => (
-                          <option key={option._id} value={option._id}>
-                            {option?.name} | {option?.network} | {option?.tokenContractAddress}
-                          </option>
-                        ))} */}
+            </FGrid> 
             <FGrid>
-              <FGridItem alignX="center" className={"f-mt-1"}>
+              <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
                 <FInputTextField
                   label="Competition Name"
                   name="name"
@@ -201,52 +174,66 @@ export default function NewCompetition() {
                   register={register}
                   error={errors["name"]?.message ? errors["name"]?.message : ""}
                 />
+              </FGridItem> 
+            </FGrid>
+            <FGrid className={"f-mt-1"}>
+              <FGridItem alignX="center" size={[6, 12, 12]}>
+                <FInputTextField
+                  label="Start Date/Time in UTC"
+                  name="startDate"
+                  placeholder="Start Date/Time in UTC"
+                  register={register}
+                  error={
+                    errors["startDate"]?.message
+                      ? errors["startDate"]?.message
+                      : ""
+                  }
+                /> 
+              </FGridItem>
+              <FGridItem alignX="center" size={[6, 12, 12]}>
+                <FInputTextField
+                  label="End Date/Time in UTC"
+                  name="endDate"
+                  placeholder="End Date/Time in UTC"
+                  register={register}
+                  error={
+                    errors["endDate"]?.message
+                      ? errors["endDate"]?.message
+                      : ""
+                  }
+                /> 
               </FGridItem>
             </FGrid>
-            <FGrid className={"f-mt-1"} size={2}>
-              <FGridItem alignX="center">
-              <FInputTextField
+            <FGrid className={"f-mt-1"}>
+              <FGridItem alignX="center" size={[6, 12, 12]}>
+                <FInputTextField
                   label="Start Block"
                   name="startBlock"
                   placeholder="Start Block"
                   register={register}
-                  error={errors["startBlock"]?.message ? errors["startBlock"]?.message : ""}
-                />
-                {/* <DatePicker
-                  name="startDate"
-                  showTime
-                  required
-                  format="DD-MMM-YYYY HH:mm"
-                  value={eventStartValue}
-                  placeholder="Start Date/Time in UTC"
-                  onChange={onEventStartChange}
-                  onOpenChange={handleEventStartOpenChange}
-                  disabledDate={disabledEventStartDate}
-                /> */}
+                  error={
+                    errors["startBlock"]?.message
+                      ? errors["startBlock"]?.message
+                      : ""
+                  }
+                /> 
               </FGridItem>
-              <FGridItem alignX="center">
-              <FInputTextField
+              <FGridItem alignX="center" size={[6, 12, 12]}>
+                <FInputTextField
                   label="End Block"
                   name="endBlock"
                   placeholder="End Block"
                   register={register}
-                  error={errors["endBlock"]?.message ? errors["endBlock"]?.message : ""}
-                />
-                {/* <DatePicker
-                  name="endDate"
-                  showTime
-                  format="DD-MMM-YYYY HH:mm"
-                  value={eventEndValue}
-                  placeholder="End Date/Time in UTC"
-                  disabledDate={disabledEventEndDate}
-                  onChange={onEventEndChange}
-                  open={eventEndOpen}
-                  onOpenChange={handleEventEndOpenChange}
-                /> */}
+                  error={
+                    errors["endBlock"]?.message
+                      ? errors["endBlock"]?.message
+                      : ""
+                  }
+                /> 
               </FGridItem>
             </FGrid>
             <FGrid>
-              <FGridItem alignX="end" className={"f-mt-1"}>
+              <FGridItem alignX="end" dir={"row"} className={"f-mt-1"}>
                 <FButton
                   type="submit"
                   title={"Create Competition"}
