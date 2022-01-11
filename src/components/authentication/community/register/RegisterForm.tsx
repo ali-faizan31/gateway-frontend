@@ -74,7 +74,7 @@ const RegisterForm = () => {
     <Toaster />
     <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
       <FGrid>
-        <FGridItem size={[6, 12, 12]} alignX="center" >
+        <FGridItem size={[6, 12, 12]} alignX="center"  className={"f-mt-1"}>
           <FInputTextField
             label="First name"
             name="firstName"
@@ -85,7 +85,7 @@ const RegisterForm = () => {
             }
           />
         </FGridItem>
-        <FGridItem size={[6, 12, 12]}>
+        <FGridItem size={[6, 12, 12]}  className={"f-mt-1"}>
           <FInputTextField
             label="Last name"
             name="lastName"
@@ -95,8 +95,8 @@ const RegisterForm = () => {
           />
         </FGridItem>
       </FGrid>
-      <FGrid className={"f-mt-1"}>
-        <FGridItem alignX="center" size={[12]}>
+      <FGrid>
+        <FGridItem alignX="center" size={[12]}  className={"f-mt-1"}>
           <FInputTextField
             label="Email"
             name="email"
@@ -107,8 +107,8 @@ const RegisterForm = () => {
           />
         </FGridItem>
       </FGrid>
-      <FGrid className={"f-mt-1"}>
-        <FGridItem size={[6, 12, 12]}>
+      <FGrid>
+        <FGridItem size={[6, 12, 12]}  className={"f-mt-1"}>
           <FInputTextField
             label="Password"
             name="password"
@@ -124,7 +124,7 @@ const RegisterForm = () => {
             }
           />
         </FGridItem>
-        <FGridItem size={[6, 12, 12]}>
+        <FGridItem size={[6, 12, 12]}  className={"f-mt-1"}>
           <FInputTextField
             label="Confirm Password"
             name="confirmPassword"

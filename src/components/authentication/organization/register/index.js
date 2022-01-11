@@ -12,13 +12,11 @@ import {
 
 const index = () => {
   return (
-    <FContainer type="fluid">
-      <FContainer >
-        <FCard variant="primary">
+      <FContainer width={600}>
+        <FCard variant="primary"> 
           <RegisterForm />
         </FCard>
       </FContainer>
-    </FContainer>
   );
 };
 
