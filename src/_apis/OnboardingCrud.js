@@ -3,11 +3,11 @@ import {baseUrl } from '../utils/const.utils'
 
 const token = localStorage.getItem('token');
 
-export function login(values) {
+export function organizationAdminLogin(values) {
   return axios.post(`${baseUrl}/api/v1/admin/users/sign-in`, values);
 }
 
-export function register(values) {
+export function organizationAdminRegister(values) {
   return axios.post(`${baseUrl}/api/v1/admin/users/sign-up`, values);
 }
 
@@ -26,13 +26,4 @@ export function communityMemberEmailVerify(values) {
 export function communityMemberResendVerifyCode(values) {
   return axios.post(`${baseUrl}/api/v1/users/re-send/email/otp`, values);
 }
-
-export function updateUser(values, token) {
-  return axios.put(`${baseUrl}/api/v1/community-member/users/update/me`, values , {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Content-type': 'Application/json',
-      Authorization: `Bearer ${token}`
-    }
-  });
-}
+ 

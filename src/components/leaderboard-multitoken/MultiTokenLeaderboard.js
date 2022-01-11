@@ -454,7 +454,7 @@ const MultiTokenLeaderboardInformation = ({
               disabled={isLoading}
               onClick={onExportClick}
             >
-              Export to CSV
+              Export to CSVds
             </FButton>
           )}
         </FGridItem>

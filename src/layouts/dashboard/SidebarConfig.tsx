@@ -43,8 +43,8 @@ export const sidebarConfig = [
         path: PATH_DASHBOARD.general.competition,
         icon: ICONS.competition,
         children: [
-            { title: 'Competition Management', path: PATH_ADMIN.competition.management },
-            { title: 'Create Competition', path: PATH_ADMIN.competition.create }
+            { title: 'Competition Management', path: PATH_DASHBOARD.general.competitionManagement },
+            { title: 'Create Competition', path: PATH_DASHBOARD.general.createCompetition }
         ]
     }
 ] 

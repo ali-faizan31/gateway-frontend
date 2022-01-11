@@ -355,7 +355,7 @@ const CompetitionInformation = () => {
                 </Grid>
                 {!isPublicUser && (
                   <Button type="button" className="btn-create" disabled={isLoading} onClick={onExportClick}>
-                    Export to CSV
+                    Export to CSVs
                   </Button>
                 )}
               </Stack>

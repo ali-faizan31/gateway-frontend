@@ -13,10 +13,13 @@ function path(root, sublink) {
   export const PATH_AUTH = {
     root: ROOTS_AUTH,
     communityLogin: path(ROOTS_AUTH, '/login'),
-    orgLogin: path(ROOTS_AUTH, '/org/login'),
     loginUnprotected: path(ROOTS_AUTH, '/login-unprotected'),
     communityRegister: path(ROOTS_AUTH, '/register'),
+    orgLogin: path(ROOTS_AUTH, '/org/login'),
     orgRegister: path(ROOTS_AUTH, '/org/register'), 
+    orgVerify: path(ROOTS_AUTH, '/org/verify'),
+    orgResendCode: path(ROOTS_AUTH, '/org/resend-code'),
+    orgWalletAuthentication: path(ROOTS_AUTH, '/org/wallet-authentication'),
     resetPassword: path(ROOTS_AUTH, '/reset-password'),
     communityVerify: path(ROOTS_AUTH, '/verify'),
     communityResendCode: path(ROOTS_AUTH, '/resend-code'),
@@ -55,10 +58,12 @@ function path(root, sublink) {
     root: ROOTS_DASHBOARD,
     general: { 
       leaderboard: path(ROOTS_DASHBOARD, '/leaderboard'),
-      createLeaderboard: path(ROOTS_DASHBOARD, '/leaderboard/create'),
-      competition: path(ROOTS_DASHBOARD, '/competition'), 
+      createLeaderboard: path(ROOTS_DASHBOARD, '/leaderboard/create'), 
       leaderboardManagement: path(ROOTS_DASHBOARD, '/leaderboard/management'),
       detailLeaderBoardById: path(ROOTS_DASHBOARD, '/leaderboard:id'),
+      competition: path(ROOTS_DASHBOARD, '/competition'), 
+      createCompetition: path(ROOTS_DASHBOARD, '/competition/create'),
+      competitionManagement: path(ROOTS_DASHBOARD, '/competition/management'),
       detailCompetitionById: path(ROOTS_DASHBOARD, '/competition:id')
     }
   };

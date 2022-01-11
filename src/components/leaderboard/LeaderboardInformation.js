@@ -550,7 +550,7 @@ const LeaderboardInformation = () => {
                   className={"f-ml-1"}
                   disabled={isLoading}
                   onClick={onExportClick}
-                  title={" Export hto CSV"}
+                  title={" Export to CSVgg"}
                 ></FButton>
               )}
             </FGridItem>

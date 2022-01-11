@@ -39,9 +39,44 @@ function App() {
               <CommunityLogin />
             </AuthLayout>
           </Route>
+          <Route path="/auth/org/register">
+            <AuthLayout>
+              <OrganizationRegister />
+            </AuthLayout>
+          </Route>
+          <Route path="/auth/org/verify">
+            <AuthLayout>
+              <OrganizationEmailVerification />
+            </AuthLayout>
+          </Route>
+          <Route path="/auth/org/resend-code">
+            <AuthLayout>
+              <OrganizationResend />
+            </AuthLayout>
+          </Route>
+          <Route path="/auth/org/wallet-authentication">
+            <AuthLayout>
+              <OrganizationWalletAuthentication />
+            </AuthLayout>
+          </Route>
+          <Route path="/auth/org/login">
+            <AuthLayout>
+              <OrganizationLogin />
+            </AuthLayout>
+          </Route>
           <Route path="/pub/leaderboard/:id" >
             <DashboardLayout>
               <LeaderboardById />
+            </DashboardLayout>
+          </Route>
+          <Route path="/dashboard/leaderboard/management">
+            <DashboardLayout>
+              <LeaderboardManagement />
+            </DashboardLayout>
+          </Route>
+          <Route path="/dashboard/leaderboard/create">
+            <DashboardLayout>
+              <CreateLeaderboard />
             </DashboardLayout>
           </Route>
           <Route path="/dashboard/leaderboard/:id" >
@@ -55,29 +90,19 @@ function App() {
               <MultiTokenLeaderboardById />
             </DashboardLayout>
           </Route>
-          <Route path="/dashboard/leaderboard/managements">
-            <DashboardLayout>
-              <LeaderboardManagement />
-            </DashboardLayout>
-          </Route>
-          <Route path="/dashboard/leaderboard/create">
-            <DashboardLayout>
-              <CreateLeaderboard />
-            </DashboardLayout>
-          </Route>
+         
           <Route path="/dashboard/competition/create">
             <DashboardLayout>
               <CreateCompetition />
             </DashboardLayout>
           </Route>
-          <Route path="/">
+          <Route exact path="/">
             <Redirect to="/pub/leaderboard/6185930b4454af30818cb26c" />
           </Route>
           <Route path="*" >
             <Page404 />
           </Route>
-        </Switch>
-        {/* </DashboardLayout> */}
+        </Switch> 
       </GuestGuard>
     </>
   );
@@ -110,6 +135,11 @@ const CommunityEmailVerification = Loadable(lazy(() => import('./components/auth
 const CommunityResend = Loadable(lazy(() => import('./components/authentication/community/resend-email-verification')));
 const CommunityWalletAuthentication = Loadable(lazy(() => import('./components/authentication/community/wallet-authentication')));
 const CommunityLogin = Loadable(lazy(() => import('./components/authentication/community/login')));
+const OrganizationRegister = Loadable(lazy(() => import('./components/authentication/organization/register/index')));
+const OrganizationEmailVerification = Loadable(lazy(() => import('./components/authentication/organization/email-verification')));
+const OrganizationResend = Loadable(lazy(() => import('./components/authentication/organization/resend-email-verification')));
+const OrganizationWalletAuthentication = Loadable(lazy(() => import('./components/authentication/organization/wallet-authentication')));
+const OrganizationLogin = Loadable(lazy(() => import('./components/authentication/organization/login')));
 const CreateCompetition = Loadable(lazy(() => import('./components/competition/NewCompetition')));
 const Page404 = Loadable(lazy(() => import('./components/error/page404')));
 export default App;

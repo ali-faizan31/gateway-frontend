@@ -19,22 +19,26 @@ import { useHistory } from "react-router-dom";
 
 const LeaderboardManagement = () => {
   const limit = 10;
-  const history = useHistory()
+  const history = useHistory();
+  let token = localStorage.getItem('token');
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [offset, setOffset] = useState(0);
   const [leaderboardList, setLeaderboardList] = useState([]);
 
   useEffect(() => {
-    getLeaderboardListing();
-  }, [query]);
+    if(query || token){
+      getLeaderboardListing(token);
+    }
+  }, [query, token]);
 
-  const getLeaderboardListing = () => {
-    getAllLeaderboards(offset, limit)
+  const getLeaderboardListing = (token) => {
+    getAllLeaderboards(offset, limit, token)
       .then((res) => {
         if (query === "") {
           if (res?.data?.body?.leaderboards?.length) {
             const { leaderboards } = res.data.body;
+            console.log(leaderboards)
             setLeaderboardList(leaderboards);
           }
         } else if (query) {
@@ -119,12 +123,14 @@ const LeaderboardManagement = () => {
     <>
       <FButton
         prefix={<RiFileCopy2Fill />}
-        title="Copy" 
+        // title="Copy" 
+        className="f-mr-1"
         onClick={() => copyPublicUrl(params)}
       ></FButton>
       <FButton
         prefix={<RiMailOpenLine />}
         label="Open"
+        // title="Open"
         onClick={() => openPublicUrl(params)}
       ></FButton>
     </>
@@ -176,7 +182,7 @@ const LeaderboardManagement = () => {
             <FGridItem size={[6,12,12]} alignX={"center"}>
               <h1>Leaderboard Management</h1> 
             </FGridItem>
-            <FGridItem alignX={"end"} alignY={"end"} size={[6,12,12]} display={"flex"}> 
+            <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[6,12,12]} display={"flex"}> 
               <FInputTextField
                 label="Search"
                 placeholder="Leaderboard name"

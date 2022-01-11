@@ -9,7 +9,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { communityMemberRegister } from "../../../../_apis/OnboardingCrud";
+import { organizationAdminRegister } from "../../../../_apis/OnboardingCrud";
+import { uniqueOrganizationSiteName } from "../../../../_apis/OrganizationCrud";
 import { PATH_AUTH } from "../../../../routes/paths";
 import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -20,14 +21,16 @@ const RegisterForm = () => {
   const [viewConfirmPassword, setViewConfirmPassword] = useState(false);
 
   const onSubmit = async (values: any) => { 
-    await communityMemberRegister(values)
+    values.organizationSiteName = `${values.localSiteName}.ferrumnetwork.io`; 
+    console.log('values',values)
+    await organizationAdminRegister(values)
       .then((response: any) => {
         const { user } = response.data.body;
         const { token } = response.data.body;
         localStorage.setItem('me', JSON.stringify(user));
         localStorage.setItem('token', token);
         toast.success(response?.data?.status?.message)
-        history.push(PATH_AUTH.communityVerify);
+        history.push(PATH_AUTH.orgVerify);
       })
       .catch((e) => {
         if (e.response) {
@@ -36,7 +39,7 @@ const RegisterForm = () => {
           toast.error("Something went wrong. Try again later!");
         }
       })
-  };
+  }; 
 
   const initialValues = {
     firstName: '',
@@ -45,6 +48,11 @@ const RegisterForm = () => {
     password: '',
     confirmPassword: '',
     telegramHandle: '',
+    organizationName: '', 
+    walletAddress: '',
+    organizationSiteName: '',
+    organizationWebsiteUrl: '',
+    localSiteName: '' 
   };
 
   const registerSchema = Yup.object().shape({
@@ -60,19 +68,24 @@ const RegisterForm = () => {
       ),
     }),
     telegramHandle: Yup.string().required('Telegram handle is required. Include @ with your username.').matches(/^@[A-Za-z0-9_]{5,32}(\s+)?$/, "Please enter Valid Telegram Handle"),
+    organizationName: Yup.string().required('Organization name is required'),
+    organizationWebsiteUrl: Yup.string().required('Website URL is required'),
+    localSiteName: Yup.string().min(2, 'Too Short!').required('Site name is required')
   })
 
   const {
     reset,
     register,
+    getValues,
     handleSubmit,
     formState: { errors, isSubmitting },
     watch,
-  } = useForm({ defaultValues: initialValues, resolver: yupResolver(registerSchema) });
+  } = useForm({ defaultValues: initialValues, resolver: yupResolver(registerSchema) }); 
+
 
   return (<>
-    <Toaster />
-    <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
+    <Toaster />  
+     <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
       <FGrid>
         <FGridItem size={[6, 12, 12]} alignX="center" >
           <FInputTextField
@@ -142,7 +155,7 @@ const RegisterForm = () => {
         </FGridItem>
       </FGrid>
       <FGrid>
-        <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+        <FGridItem alignX="center" size={[6,12,12]} className={"f-mt-1"}>
           <FInputTextField
             label="Telegram handle"
             name="telegramHandle"
@@ -153,11 +166,49 @@ const RegisterForm = () => {
             }
           />
         </FGridItem>
+        <FGridItem alignX="center" size={[6,12,12]} className={"f-mt-1"}>
+          <FInputTextField
+            label="Organization Name"
+            name="organizationName"
+            placeholder="Organization Name"
+            register={register} 
+            error={
+              errors["organizationName"]?.message ? errors["organizationName"]?.message : ""
+            }
+          />
+        </FGridItem>
       </FGrid>
+      <FGrid>
+        <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+          <FInputTextField
+            label="Website"
+            name="organizationWebsiteUrl"
+            placeholder="Website"
+            register={register}
+            error={
+              errors["organizationWebsiteUrl"]?.message ? errors["organizationWebsiteUrl"]?.message : ""
+            }
+          />
+        </FGridItem>
+      </FGrid>
+      <FGrid>
+        <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+          <FInputTextField
+            label="Your site name"
+            name="localSiteName"
+            placeholder="Your site name"
+            register={register}
+            postfix={".ferrumnetwork.io"}
+            error={
+              errors["localSiteName"]?.message ? errors["localSiteName"]?.message : ""
+            }
+          />
+        </FGridItem>
+      </FGrid> 
       <FItem align="center" className={"w-100 f-mt-1"} >
           <FButton type="submit" title={"Register"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
         </FItem> 
-    </form>
+    </form>  
   </>);
 };
 
