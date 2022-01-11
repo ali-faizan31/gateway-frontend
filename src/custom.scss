@@ -25,3 +25,21 @@
 h1 {
     color: #cba461;
 }
+
+.f-input-group,
+.f-input-wrap,
+.f-input-control {
+    border-radius: 8px !important;
+    background: transparent !important;
+    color: white !important;
+    border-color: #495057 !important;
+}
+
+input:-webkit-autofill {
+    box-shadow: 0 0 0 100px #181C25 inset !important;
+    -webkit-text-fill-color: #fff;
+}
+
+.custom-input .f-input-group .f-input-wrap:focus-within {
+    border-radius: 8px !important;
+}

@@ -11,10 +11,10 @@ const AuthLayout = ({ children }) => {
             alignX={"center"}
             alignY={"center"}
             display={"block"}
-            style={{ background: "#eee", height: "100vh" }}
+            style={{ background: "#212b36", height: "100vh" }}
             >
             <FItem className={"w-100"} align={"center"}>
-              <h1>Some pic here</h1>
+            <h1>Welcome to Leaderboard</h1>
             </FItem>
             <FItem>
               <img

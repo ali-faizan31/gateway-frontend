@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FInputTextField, FGrid, FGridItem, FItem, FButton } from "ferrum-design-system";
+import {FContainer, FInputTextField, FGrid, FGridItem, FItem, FButton } from "ferrum-design-system";
 import { useHistory } from "react-router-dom";
 import {
   RiEyeOffFill,
@@ -12,7 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { communityMemberRegister } from "../../../../_apis/OnboardingCrud";
 import { PATH_AUTH } from "../../../../routes/paths";
 import * as validations from "../../../../utils/validations";
-import ClipLoader from "react-spinners/ClipLoader";
+import ClipLoader from "react-spinners/ClipLoader"; 
 
 const RegisterForm = () => {
   const history = useHistory();
@@ -72,6 +72,7 @@ const RegisterForm = () => {
 
   return (<>
     <Toaster />
+    <FContainer width={700}>
     <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
       <FGrid>
         <FGridItem size={[6, 12, 12]} alignX="center"  className={"f-mt-1"}>
@@ -89,6 +90,7 @@ const RegisterForm = () => {
           <FInputTextField
             label="Last name"
             name="lastName"
+            className={"custom-input"}
             placeholder="Last name"
             register={register} 
             error={errors["lastName"]?.message ? errors["lastName"]?.message : ""}
@@ -158,6 +160,7 @@ const RegisterForm = () => {
           <FButton type="submit" title={"Register"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
         </FItem> 
     </form>
+    </FContainer>
   </>);
 };
 

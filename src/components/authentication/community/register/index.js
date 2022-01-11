@@ -13,9 +13,12 @@ import {
 const index = () => {
   return (
     <><FContainer width={600}>
-    <FCard variant="primary"> 
+      <FItem className={"f-mb-2"}>
+     <h2> Let's Get Started</h2>
+     </FItem>
+    {/* <FCard variant="primary">  */}
         <RegisterForm />
-      </FCard>
+      {/* </FCard> */}
       </FContainer>
     </>
   );
