@@ -10,7 +10,7 @@ import toast, { Toaster } from "react-hot-toast";
 // @ts-ignore
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { walletAuthenticationBackendURL } from "../../../../utils/const.utils";
-import { PATH_PUBLIC_USER } from "../../../../routes/paths";
+import { PATH_DASHBOARD, PATH_PUBLIC_USER } from "../../../../routes/paths";
 import { checkUniqueWalletAddress, saveAddressAndGenerateNonce, getIp, verifySignatureAndUpdateNonce } from "../../../../_apis/WalletAuthencation";
  
 export const web3AuthSlice = createSlice({
@@ -124,8 +124,12 @@ export function Web3AuthWrapper(props) {
     setLoading(true);  
 
     if (props.email && props.user && props.token) {
-      await dispatch(validateAddress({ web3, address, network, email: props.email, applicationUserToken: props.applicationUserToken, user: props.user }));
-      await disconnectWeb3();
+      if(web3 && address && network && props.applicationUserToken){
+        await dispatch(validateAddress({ web3, address, network, email: props.email, applicationUserToken: props.applicationUserToken, user: props.user }));
+        await disconnectWeb3();
+      } else {
+        toast.error(`Error occured: Information not found. Try again later!`); 
+      }
     } else {
       toast.error(`User not found!`);
     }
@@ -134,7 +138,7 @@ export function Web3AuthWrapper(props) {
 
   const isUserWalletAddressUnique = async (address, network, applicationUserToken) => {
     try {
-      const res = await checkUniqueWalletAddress(`${address}8`, 56, applicationUserToken)
+      const res = await checkUniqueWalletAddress(address, network, applicationUserToken)
       return res.data.body.isUnique;
     } catch (e) {
       console.log(e.response.data.status.message) 
@@ -176,7 +180,7 @@ export function Web3AuthWrapper(props) {
       if ( uniqueResponse === true){
         const ipResponse = await getIp();
         const ipAddress = ipResponse?.data?.ip;
-        const data = { address: payload.address , ferrumNetworkIdentifier: payload.network, lastConnectedIpAddress: ipAddress};
+        const data = { address: payload.address , ferrumNetworkIdentifier: payload.network.toString(), lastConnectedIpAddress: ipAddress};
       
          const nonceResponse = await saveUserWalletAddressAndGenerateNonce(payload.user._id, data, payload.applicationUserToken);
          console.log("nonce", nonceResponse);
@@ -203,9 +207,13 @@ export function Web3AuthWrapper(props) {
               async (err, result) => {
                 console.log(result);
                 if (result.result) {
-                  const data = {signature: result.result,address: payload.address , ferrumNetworkIdentifier: payload.network, ipAddress: ipAddress }
-                  const saveResponse = await saveUserSignatureAndGenerateNonce(payload.user._id, data, payload.applicationUserToken); //catch error
-                  console.log(saveResponse); //move to dashboard if success
+                  const data = {signature: result.result,address: payload.address , ferrumNetworkIdentifier: payload.network.toString(), ipAddress: ipAddress }
+                  console.log('save data' , data);
+                  const saveResponse = await saveUserSignatureAndGenerateNonce(payload.user._id, data, payload.applicationUserToken);  
+                  if (saveResponse && saveResponse.address.nonce){
+                    console.log(saveResponse);
+                    history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardById);
+                  }  
                 }
               }
             )

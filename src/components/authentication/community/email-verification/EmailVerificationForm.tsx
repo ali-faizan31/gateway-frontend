@@ -78,7 +78,7 @@ const EmailVerificationForm = (children: any) => {
       </FGridItem>
       </FGrid>
       <FItem align={"center"} className={"f-mt-1 w-100"} >
-        Don’t have a code? &nbsp;
+        Don’t have a code?  
         <Link className="primary-color text-decoration-none " to={PATH_AUTH.communityResendCode}>
           Resend code
         </Link>

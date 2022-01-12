@@ -164,7 +164,7 @@ const MultiTokenLeaderboardInformation = ({
     let list = mergeTwoArrays(frmTokenHolderList, frmxTokenHolderList);
     list = arraySortByKeyDescending(list, "combinedValue");
     const frmLevelUpSwapUrl = `${leaderboard?.frmCabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.frmCabn?.tokenContractAddress}&exactField=output&exactAmount=`;
-    const frmxLevelUpSwapUrl = `${leaderboard?.frmxCabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.frmxCabn?.tokenContractAddress}&exactField=output&exactAmount=`; 
+    const frmxLevelUpSwapUrl = `${leaderboard?.frmxCabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.frmxCabn?.tokenContractAddress}&exactField=output&exactAmount=`;
 
     for (let i = 0; i < list.length; i += 1) {
       if (list[i].address) {
@@ -189,23 +189,34 @@ const MultiTokenLeaderboardInformation = ({
           ).toLocaleString("en-US");
         }
         if (i === 0) {
-          list[i].formattedLevelUpAmount = 'You are the leader';
+          list[i].formattedLevelUpAmount = "You are the leader";
           list[i].levelUpFRMUrl = frmLevelUpSwapUrl + "0";
           list[i].levelUpFRMxUrl = frmxLevelUpSwapUrl + "0";
         } else {
-          list[i].combinedDiff = calculateLevelUpAmount(list[i - 1].combinedValue, list[i].combinedValue); 
-          if (list[i].frmBalance) { 
-            list[i].frmLevelUp = forceRounding(list[i].combinedDiff / frmUsdcValue, 2);
+          list[i].combinedDiff = calculateLevelUpAmount(
+            list[i - 1].combinedValue,
+            list[i].combinedValue
+          );
+          if (list[i].frmBalance) {
+            list[i].frmLevelUp = forceRounding(
+              list[i].combinedDiff / frmUsdcValue,
+              2
+            );
             list[i].levelUpFRMUrl = frmLevelUpSwapUrl + list[i].frmLevelUp;
-            list[i].formattedLevelUpAmount = `${list[i].frmLevelUp} FRM`; 
+            list[i].formattedLevelUpAmount = `${list[i].frmLevelUp} FRM`;
           }
-          if (list[i].frmxBalance) { 
-            list[i].frmxLevelUp = forceRounding(list[i].combinedDiff / frmxUsdcValue, 2);
+          if (list[i].frmxBalance) {
+            list[i].frmxLevelUp = forceRounding(
+              list[i].combinedDiff / frmxUsdcValue,
+              2
+            );
             list[i].levelUpFRMxUrl = frmxLevelUpSwapUrl + list[i].frmxLevelUp;
-            list[i].formattedLevelUpAmount = `${list[i].frmxLevelUp} FRM`; 
+            list[i].formattedLevelUpAmount = `${list[i].frmxLevelUp} FRM`;
           }
           if (list[i].frmxBalance && list[i].frmBalance) {
-            list[i].formattedLevelUpAmount = `${list[i].frmLevelUp} FRM or ${list[i].frmxLevelUp} FRMx`;
+            list[
+              i
+            ].formattedLevelUpAmount = `${list[i].frmLevelUp} FRM or ${list[i].frmxLevelUp} FRMx`;
           }
         }
       }
@@ -331,55 +342,65 @@ const MultiTokenLeaderboardInformation = ({
   };
 
   const levelUpFRMFormatter = (params) => (
-    <a
-      href={params?.levelUpFRMUrl}
-      target="_blank"
-      rel="noreferrer"
-      disabled={!params.levelUpFRMUrl}
-      type="btn"
-      className="f-btn f-btn-primary text-decoration-none"
-    >
-      LEVEL UP
-    </a>
+    <div data-label="Get FRM">
+      <a
+        href={params?.levelUpFRMUrl}
+        target="_blank"
+        rel="noreferrer"
+        disabled={!params.levelUpFRMUrl}
+        type="btn"
+        className="f-btn f-btn-primary text-decoration-none"
+      >
+        LEVEL UP
+      </a>
+    </div>
   );
 
   const levelUpFRMxFormatter = (params) => (
-    <a
-      href={params.levelUpFRMxUrl}
-      target="_blank"
-      rel="noreferrer"
-      disabled={!params.levelUpFRMxUrl}
-      type="btn"
-      className="f-btn f-btn-primary text-decoration-none"
-    >
-      LEVEL UP
-    </a>
+    <div data-label="Get FRMx">
+      <a
+        href={params.levelUpFRMxUrl}
+        target="_blank"
+        rel="noreferrer"
+        disabled={!params.levelUpFRMxUrl}
+        type="btn"
+        className="f-btn f-btn-primary text-decoration-none"
+      >
+        LEVEL UP
+      </a>
+    </div>
   );
 
   const columns = [
     {
       prop: "rank",
       title: "Rank by USD",
+      cell: (params) => <div data-label="Rank">{params.rank}</div>,
     },
     {
       prop: "formattedAddress",
       title: "Wallet Address",
+      cell: (params) => <div data-label="Wallet Address">{params.formattedAddress}</div>,
     },
     {
       prop: "formattedCombinedValue",
       title: "Combined USD Value",
+      cell: (params) => <div data-label="Combined USD Value">{params.formattedCombinedValue}</div>,
     },
     {
       prop: "formattedFRMBalance",
       title: "FRM Balance",
+      cell: (params) => <div data-label="FRM Balance">{params.formattedFRMBalance}</div>,
     },
     {
       prop: "formattedFRMxBalance",
       title: "FRMx Balance",
+      cell: (params) => <div data-label="FRMx Balance">{params.formattedFRMxBalance}</div>,
     },
     {
       prop: "formattedLevelUpAmount",
       title: "Level Up Amount",
+      cell: (params) => <div data-label="Level Up Amount">{params.formattedLevelUpAmount}</div>,
     },
     {
       prop: "levelUpFRMUrl",
@@ -430,54 +451,61 @@ const MultiTokenLeaderboardInformation = ({
         ref={exportRef}
         style={{ display: "none" }}
       />
-
-      <FGrid >
-        <FGridItem alignX="start">
-          <h1>{leaderboardData?.name}</h1>
-        </FGridItem>
-        <FGridItem alignX="end">
-          <FInputTextField
-            label="Search Wallet"
-            placeholder="0x000...0000"
-            variant="outlined"
-            value={query}
-            type="search"
-            onChange={onQueryChange}
-            style={{ width: "100%" }}
-          />
-        </FGridItem>
-        <FGridItem alignX="center">
-          {!isPublicUser && (
-            <FButton
-              type="button"
-              className="btn-create"
-              disabled={isLoading}
-              onClick={onExportClick}
+      <FContainer type="fluid">
+        <FContainer>
+          <FGrid className={"f-mt-1 f-mb-1"}>
+            <FGridItem size={[6, 12, 12]} alignX="center">
+              <h1>{leaderboardData?.name  || "Leaderboard"}</h1>
+            </FGridItem>
+            <FGridItem
+              alignX="end"
+              alignY={"end"}
+              dir={"row"}
+              size={[6, 12, 12]}
             >
-              Export to CSVds
-            </FButton>
+              <FInputTextField
+                label="Search Wallet"
+                placeholder="0x000...0000"
+                variant="outlined"
+                value={query}
+                className="f-mt-1"
+                type="search"
+                onChange={onQueryChange}
+                style={{ width: "100%" }}
+              />
+              {!isPublicUser && (
+                <FButton
+                  type="button"
+                  className="btn-create"
+                  disabled={isLoading}
+                  onClick={onExportClick}
+                >
+                  Export to CSVds
+                </FButton>
+              )}
+            </FGridItem>
+          </FGrid>
+          {filteredTokenHolderList.length ? (
+            <FTable>
+              <Datatable
+                tableHeaders={columns}
+                tableBody={filteredTokenHolderList}
+                rowsPerPage={10}
+                tableClass="striped hover responsive"
+                initialSort={{ prop: "rank", isAscending: true }}
+              />
+            </FTable>
+          ) : isLoading ? (
+            <FContainer type="fluid">
+              <FContainer>Loading...</FContainer>
+            </FContainer>
+          ) : (
+            <FContainer type="fluid">
+              <FContainer>No Data found</FContainer>
+            </FContainer>
           )}
-        </FGridItem>
-      </FGrid>
-      {filteredTokenHolderList.length ? (
-        <FTable>
-          <Datatable
-            tableHeaders={columns}
-            tableBody={filteredTokenHolderList}
-            rowsPerPage={10}
-            tableClass="striped hover responsive"
-            initialSort={{ prop: "rank", isAscending: true }}
-          />
-        </FTable>
-      ) : isLoading ? (
-        <FContainer type="fluid">
-          <FContainer>Loading...</FContainer>
         </FContainer>
-      ) : (
-        <FContainer type="fluid">
-          <FContainer>No Data found</FContainer>
-        </FContainer>
-      )}
+      </FContainer>
     </>
   );
 };

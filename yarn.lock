@@ -2281,9 +2281,9 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
   integrity sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==
 
-"@types/ferrum-design-system@git+https://github.com/ferrumnet/ferrum-design-system.git", "ferrum-design-system@git+https://github.com/ferrumnet/ferrum-design-system.git":
+"@types/ferrum-design-system@git+https://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@github.com/ferrumnet/ferrum-design-system.git", "ferrum-design-system@git+https://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@github.com/ferrumnet/ferrum-design-system.git":
   version "1.0.0"
-  resolved "git+https://github.com/ferrumnet/ferrum-design-system.git#2b021e9ea8c3b2f391297b90dd8061b79546be75"
+  resolved "git+https://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@github.com/ferrumnet/ferrum-design-system.git#822e0b25608b92f4d93a30d1f2b3f782651e2cc4"
   dependencies:
     "@babel/cli" "^7.16.0"
     "@babel/core" "^7.16.0"

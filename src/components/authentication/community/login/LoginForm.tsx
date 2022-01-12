@@ -64,7 +64,7 @@ const LoginForm = () => {
     return (<>
         <Toaster />
         <FContainer width={700}>
-        <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
+        <form autoComplete="true"   onSubmit={handleSubmit(onSubmit)}>
             <FGrid className={"f-mt-1"}>
                 <FGridItem size={[12]}>
                     <FInputTextField

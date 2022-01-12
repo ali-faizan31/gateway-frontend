@@ -4,6 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useSelector, RootStateOrAny } from 'react-redux';
 import { publicLeaderboardConfig, sidebarConfig, publicMultiLeaderboardConfig } from './SidebarConfig';
 import { useLocation, useParams } from 'react-router-dom';
+import {RiCheckboxBlankCircleFill} from "react-icons/ri";
 import { getLeaderboardByIdForPublicUser } from "../../_apis/LeaderboardCrud";
 import { getCompetitionByIdForPublicUser } from "../../_apis/CompetitionCrud";
 
@@ -99,7 +100,7 @@ const DashboardSidebar = () => {
         {item.children &&
           <FSiderSubMenuItem>
             {item.children.map((subItem: any) => (
-              <FSiderItem to={subItem.path} title={subItem.title} prefix={subItem.icon} key={subItem.path}></FSiderItem>
+              <FSiderItem to={subItem.path} title={subItem.title} prefix={ <img src="/ferrum/bullet.png" height={"4px"}/>} key={subItem.path}></FSiderItem>
             ))}
           </FSiderSubMenuItem>
         }

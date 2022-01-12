@@ -1,13 +1,15 @@
 import React from "react";
 import LoginForm from "./LoginForm";
-import { FContainer, FCard, FCardTitle } from "ferrum-design-system";
+import { FContainer, FCard, FCardTitle, FItem } from "ferrum-design-system";
 
 const index = () => {
   return (
-    <FContainer width={600}>
+    <FContainer width={600}> 
+    <FItem >
       <h2 className="f-mb-2">Welcome to the Ferrum Network Gateway (BETA) </h2>
       <p className="grey-secondary"> Access presales, rewards and so much more through the Gateway. </p>
-      <LoginForm />
+      </FItem>
+      <LoginForm /> 
     </FContainer>
   );
 };
