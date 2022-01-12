@@ -455,7 +455,9 @@ const LeaderboardInformation = () => {
   };
 
   const levelUpFormatter = (params) => (
+    <div data-label="Get Token">
     <a
+      
       href={params.levelUpUrl}
       target="_blank"
       rel="noreferrer"
@@ -464,6 +466,7 @@ const LeaderboardInformation = () => {
     >
       LEVEL UP
     </a>
+    </div>
   );
 
   const csvHeaders = [
@@ -493,18 +496,22 @@ const LeaderboardInformation = () => {
     {
       prop: "rank",
       title: "Rank",
+      cell: (params)=><div data-label="Rank">{params.rank}</div>
     },
     {
       prop: "formattedAddress",
       title: "Wallet Address",
+      cell: (params)=><div data-label="Wallet Address">{params.formattedAddress}</div>
     },
     {
       prop: "formattedBalance",
       title: "Balance",
+      cell: (params)=><div data-label="Balance">{params.formattedBalance}</div>
     },
     {
       prop: "formattedLevelUpAmount",
       title: "Level Up Amount",
+      cell: (params)=><div data-label="Level Up Amount">{params.formattedLevelUpAmount}</div>
     },
     {
       prop: "levelUpUrl",
