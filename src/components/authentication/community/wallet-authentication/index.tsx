@@ -13,7 +13,7 @@ const Index = () => {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-   getAccessToken();
+    getAccessToken();
   }, [])
 
   const getAccessToken = () => {
@@ -32,31 +32,28 @@ const Index = () => {
       });
   }
 
-  const AuthenticationProp = (props: any) => <FButton postfix={ props.loading && <ClipLoader color="#fff" size={20} />}  disabled={props.loading} type="submit" {...props} title={props.text}></FButton>
+  const AuthenticationProp = (props: any) => <FButton postfix={props.loading && <ClipLoader color="#fff" size={20} />} disabled={props.loading} type="submit" {...props} title={props.text}></FButton>
 
 
   return (
-    <FContainer type="fluid">
-      <FContainer width={700}>
-        <FCard variant="primary">
-          {isVerified ? (
-            <>
-              <FCardTitle>
-                <h3>Wallet Connected!</h3>
-              </FCardTitle>
-              <h5>Now it's time to authenticate ownership of your Wallet. </h5>
-            </>
-          ) : (
-            <> <FCardTitle>
-              <h3> Connect Wallet! </h3>
-            </FCardTitle>
-              <h5> Please connect your wallet for the authentication process. </h5>
-            </>)}
-            <FItem align="center" className={"w-100 f-mt-1"} >
-              <Web3AuthWrapper View={AuthenticationProp} email={parsedUser?.email} user={parsedUser} token={token} setIsVerified={setIsVerified} applicationUserToken = {applicationUserToken} />
-             </FItem>
-        </FCard>
-      </FContainer>
+    <FContainer width={600}>
+      {isVerified ? (
+        <>
+          <h2 className="f-mb-2">Wallet Connected!</h2>
+          <p className="grey-secondary">Now it's time to authenticate ownership of your Wallet. </p>
+        </>
+      ) : (
+        <> <FCardTitle>
+          <h2 className="f-mb-2"> Connect Wallet! </h2>
+        </FCardTitle>
+          <p className="grey-secondary"> Please connect your wallet for the authentication process. </p>
+        </>)}
+      <FGrid >
+        <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+          <Web3AuthWrapper View={AuthenticationProp} email={parsedUser?.email} user={parsedUser} token={token} setIsVerified={setIsVerified} applicationUserToken={applicationUserToken} />
+        </FGridItem>
+      </FGrid>
+
     </FContainer>
   );
 };

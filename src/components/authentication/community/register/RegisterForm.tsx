@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {FContainer, FInputTextField, FGrid, FGridItem, FItem, FButton } from "ferrum-design-system";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import {
   RiEyeOffFill,
   RiEyeLine,
@@ -156,9 +156,17 @@ const RegisterForm = () => {
           />
         </FGridItem>
       </FGrid>
-      <FItem align="center" className={"w-100 f-mt-1"} >
-          <FButton type="submit" title={"Register"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
-        </FItem> 
+      <FGrid >
+        <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+           <FButton type="submit" title={"Register"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
+           </FGridItem>
+      </FGrid>
+      <FItem align={"center"} className={"f-mt-1 w-100"} >
+      Already have an account? 
+        <Link className="primary-color text-decoration-none " to={PATH_AUTH.communityLogin}>
+        Login
+        </Link>
+      </FItem>
     </form>
     </FContainer>
   </>);

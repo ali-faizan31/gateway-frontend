@@ -1,3 +1,4 @@
+$secondaryColor: #495057;
 .f-dialog-connect-wallet {
     .f-list-connect-wallet {
         .f-list-item {
@@ -22,6 +23,18 @@
     text-decoration: none;
 }
 
+.primary-color {
+    color: #cba461;
+}
+
+.grey-primary {
+    color: #495057;
+}
+
+.grey-secondary {
+    color: #919eab;
+}
+
 h1 {
     color: #cba461;
 }
@@ -42,4 +55,9 @@ input:-webkit-autofill {
 
 .custom-input .f-input-group .f-input-wrap:focus-within {
     border-radius: 8px !important;
+}
+
+.f-btn-primary {
+    border-radius: 8px !important;
+    font-weight: 700 !important;
 }

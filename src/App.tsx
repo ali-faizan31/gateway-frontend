@@ -18,7 +18,7 @@ const Loadable = (Component: any) => (props: any) => {
   return (
       <Suspense
         fallback={
-          <ClipLoader color='red' loading={true} size={150} />
+          <ClipLoader color="#cba461" loading={true} size={150} />
         }
       >
         <Component {...props} />

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { FInputTextField, FGrid, FGridItem, FButton, FItem} from "ferrum-design-system";
-import { useHistory } from "react-router-dom";
+import { FInputTextField, FGrid, FContainer, FGridItem, FButton, FItem} from "ferrum-design-system";
+import { useHistory, Link } from "react-router-dom";
 import {
     RiEyeOffFill,
     RiEyeLine,
@@ -63,6 +63,7 @@ const LoginForm = () => {
 
     return (<>
         <Toaster />
+        <FContainer width={700}>
         <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
             <FGrid className={"f-mt-1"}>
                 <FGridItem size={[12]}>
@@ -121,10 +122,19 @@ const LoginForm = () => {
                     />
                 </FGridItem>
             </FGrid>
-            <FItem align="center" className={"w-100"} >
-                    <FButton type="submit" title={"Login"} className={"f-mt-1"} postfix={ isSubmitting && <ClipLoader color="#fff" size={20}/>}></FButton>
-                </FItem>
+            <FGrid >
+        <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+           <FButton type="submit" title={"Login"} className={"f-mt-1"} postfix={ isSubmitting && <ClipLoader color="#fff" size={20}/>}></FButton>
+           </FGridItem>
+      </FGrid>
+      <FItem align={"center"} className={"f-mt-1 w-100"} >
+      Don’t have an account? 
+        <Link className="primary-color text-decoration-none " to={PATH_AUTH.communityRegister}>
+        Get started
+        </Link>
+      </FItem>
         </form>
+        </FContainer>
     </>);
 };
 

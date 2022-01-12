@@ -3,18 +3,13 @@ import ResendEmailVerificationForm from "./ResendEmailVerificationForm";
 import { FContainer, FCard, FCardTitle } from "ferrum-design-system";
 
 const index = () => {
-  return (
-    <FContainer type="fluid">
-      <FContainer width={700}>
-        <FCard variant="primary">
-          <FCardTitle>
-            <h3>Please input your email! </h3>
-          </FCardTitle>
-          <h5> We will email you confirmation code. </h5>
-          <ResendEmailVerificationForm />
-        </FCard>
-      </FContainer>
+  return (<>
+    <FContainer width={600}>
+      <h2 className="f-mb-2">Please input your email! </h2>
+      <p className="grey-secondary"> We will email you confirmation code. </p>
+      <ResendEmailVerificationForm />
     </FContainer>
+    </>
   );
 };
 

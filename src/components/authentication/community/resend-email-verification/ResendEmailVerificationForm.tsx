@@ -13,9 +13,9 @@ import { ClipLoader } from "react-spinners";
 const ResendEmailVerificationForm = () => {
   const history = useHistory();
 
-  const onSubmit = async (values: any) => { 
+  const onSubmit = async (values: any) => {
     await communityMemberResendVerifyCode(values)
-      .then((response: any) => { 
+      .then((response: any) => {
         toast.success(response?.data?.status?.message)
         history.push(PATH_AUTH.communityVerify);
       })
@@ -28,12 +28,12 @@ const ResendEmailVerificationForm = () => {
       })
   };
 
-  const initialValues = { 
+  const initialValues = {
     email: ''
   };
 
   const verifyCodeSchema = Yup.object().shape({
-    email : Yup.string().required('Email is required').email('Email must be a valid email address')
+    email: Yup.string().required('Email is required').email('Email must be a valid email address')
   });
 
 
@@ -47,25 +47,29 @@ const ResendEmailVerificationForm = () => {
 
   return (<>
     <Toaster />
-    <form autoComplete="false" onSubmit={handleSubmit(onSubmit)}>
-      <FGrid >
-      <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-          <FInputTextField
-            label="Email"
-            name="email"
-            type="email"
-            placeholder="Email"
-            register={register} 
-            error={
-              errors["email"]?.message ? errors["email"]?.message : ""
-            }
-          />
-        </FGridItem>
-      </FGrid>
-      <FItem align="center" className={"w-100 f-mt-1"} >
-          <FButton type="submit" title={"Submit"} postfix={ isSubmitting && <ClipLoader color="#fff" size={20}/>}></FButton>
-         </FItem>
-    </form>
+    <FContainer width={700}>
+      <form autoComplete="false" onSubmit={handleSubmit(onSubmit)}>
+        <FGrid >
+          <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+            <FInputTextField
+              label="Email"
+              name="email"
+              type="email"
+              placeholder="Email"
+              register={register}
+              error={
+                errors["email"]?.message ? errors["email"]?.message : ""
+              }
+            />
+          </FGridItem>
+        </FGrid>
+        <FGrid >
+          <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+            <FButton type="submit" title={"Submit"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
+          </FGridItem>
+        </FGrid>
+      </form>
+    </FContainer>
   </>);
 };
 

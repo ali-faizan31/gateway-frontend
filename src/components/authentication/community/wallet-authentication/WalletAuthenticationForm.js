@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import {FContainer } from "ferrum-design-system";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { verify } from 'jsonwebtoken';
 import { useHistory } from "react-router-dom";
@@ -251,6 +252,7 @@ export function Web3AuthWrapper(props) {
 
   return (
     <>
+     {/* <FContainer width={700}> */}
     <Toaster/>
       <props.View
         connected={connected.toString()}
@@ -259,6 +261,7 @@ export function Web3AuthWrapper(props) {
         loading={loading}
         text={connected ? "Validate Address" : "Connect Wallet to Validate"}
       />
+      {/* </FContainer> */}
     </>
   );
 }

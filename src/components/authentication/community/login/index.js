@@ -4,16 +4,10 @@ import { FContainer, FCard, FCardTitle } from "ferrum-design-system";
 
 const index = () => {
   return (
-    <FContainer type="fluid">
-      <FContainer width={700}>
-        <FCard variant="primary">
-          <FCardTitle >
-            <h3>Sign in to Leaderboard! </h3>
-          </FCardTitle>
-          <h5> Enter your details below. </h5>
-          <LoginForm />
-        </FCard>
-      </FContainer>
+    <FContainer width={600}>
+      <h2 className="f-mb-2">Welcome to the Ferrum Network Gateway (BETA) </h2>
+      <p className="grey-secondary"> Access presales, rewards and so much more through the Gateway. </p>
+      <LoginForm />
     </FContainer>
   );
 };

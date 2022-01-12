@@ -1,24 +1,18 @@
 import React from "react";
 import RegisterForm from "./RegisterForm";
 import {
-  FContainer,
-  FCard,
-  FLayout,
-  FMain,
-  FGrid,
-  FGridItem,
+  FContainer, 
   FItem,
 } from "ferrum-design-system";
 
 const index = () => {
   return (
-    <><FContainer width={600}>
-      <FItem className={"f-mb-2"}>
-     <h2> Let's Get Started</h2>
-     </FItem>
-    {/* <FCard variant="primary">  */}
+    <>
+      <FContainer width={600}>
+        <FItem className={"f-mb-2"}>
+          <h2> Let's Get Started</h2>
+        </FItem>
         <RegisterForm />
-      {/* </FCard> */}
       </FContainer>
     </>
   );
