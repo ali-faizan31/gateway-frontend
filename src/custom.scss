@@ -1,0 +1,91 @@
+$secondaryColor: #495057;
+.f-dialog-connect-wallet {
+    .f-list-connect-wallet {
+        .f-list-item {
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            min-height: 70px;
+            padding: 0.75rem;
+            border: 1px solid white;
+            margin-bottom: 1rem;
+            img {
+                max-width: 40px;
+            }
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
+}
+
+.text-decoration-none {
+    text-decoration: none;
+}
+
+.primary-color {
+    color: #cba461;
+}
+
+.grey-primary {
+    color: #495057;
+}
+
+.grey-secondary {
+    color: #919eab;
+}
+
+h1 {
+    color: #cba461;
+}
+
+.f-table table thead tr td {
+    color: #cba461;
+}
+
+.ftable,
+thead {
+    background: #161c24 !important;
+}
+
+.f-input-group,
+.f-input-wrap,
+.f-input-control {
+    border-radius: 8px !important;
+    background: transparent !important;
+    color: white !important;
+    border-color: #495057 !important;
+}
+
+input:-webkit-autofill {
+    box-shadow: 0 0 0 100px #181c25 inset !important;
+    -webkit-text-fill-color: #fff;
+}
+
+.custom-input .f-input-group .f-input-wrap:focus-within {
+    border-radius: 8px !important;
+}
+
+.f-btn-primary {
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+}
+
+.f-table {
+    .controlRow__root {
+        .ButtonGroup__root {
+            button:disabled {
+                background: #161c24 !important;
+                color: white !important;
+            }
+            button:not([disabled]):nth-last-child(-n + 7) {
+                background: #212b36 !important;
+                color: white !important;
+            }
+            .btn:hover,
+            .btn:active {
+                background-color: #cba461 !important;
+            }
+        }
+    }
+}
