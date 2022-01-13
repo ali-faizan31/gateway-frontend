@@ -130,10 +130,7 @@ const LeaderboardInformation = () => {
   };
 
   const getCovalenthqLimit = (leaderboard) => {
-    getCovalenthqResponse(
-      leaderboard?.cabn?.chainId,
-      leaderboard?.cabn?.tokenContractAddress
-    )
+    getCovalenthqResponse(leaderboard?.cabn?.chainId, leaderboard?.cabn?.tokenContractAddress)
       .then((res) => {
         if (
           res &&
@@ -148,8 +145,9 @@ const LeaderboardInformation = () => {
       })
       .catch((e) => {
         setIsLoading(false);
-        if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+        if (e?.response?.data?.error_message) {
+          console.log(e.response)
+          toast.error(e?.response?.data?.error_message);
         } else {
           toast.error("Something went wrong. Try again later!");
         }

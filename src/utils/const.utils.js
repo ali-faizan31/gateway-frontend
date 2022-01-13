@@ -1,5 +1,5 @@
-export const baseUrl = "https://api-leaderboard.dev.svcs.ferrumnetwork.io" // dev
-// export const baseUrl = 'https://staging-leaderboard.ferrum.network';  
+// export const baseUrl = "https://api-leaderboard.dev.svcs.ferrumnetwork.io" // dev
+export const baseUrl = 'https://api-leaderboard.stage.svcs.ferrumnetwork.io';  // staging
 export const apiKey = 'ckey_173b82c807954a8697b251305c5:'; 
 export const apiKeyForApplicationUser = "fa2beaea-ad94-4bf3-9a9b-20fd1ad3f273";
 export const tokenFRMBSCMainnet = '0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc';

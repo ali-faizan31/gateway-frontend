@@ -71,14 +71,21 @@ input:-webkit-autofill {
     font-weight: 700 !important;
 }
 
-.sub-menu-bullet {
-    width: 4px;
-    height: 4px;
-    display: flex;
-    border-radius: 50%;
-    align-items: center;
-    justify-content: center;
-    background-color: rgb(218, 180, 110);
-    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    transform: scale(2);
+.f-table {
+    .controlRow__root {
+        .ButtonGroup__root {
+            button:disabled {
+                background: #161c24 !important;
+                color: white !important;
+            }
+            button:not([disabled]):nth-last-child(-n + 7) {
+                background: #212b36 !important;
+                color: white !important;
+            }
+            .btn:hover,
+            .btn:active {
+                background-color: #cba461 !important;
+            }
+        }
+    }
 }

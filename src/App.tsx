@@ -119,7 +119,7 @@ function App() {
             </DashboardLayout>
           </Route>
           <Route path="/pub/multi/leaderboard/:id">
-            <Redirect to="/pub/multi/leaderboard/61d448bcb4918f09cb510ddf" />
+            <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" />
             <DashboardLayout>
               <MultiTokenLeaderboardById />
             </DashboardLayout>
@@ -131,7 +131,8 @@ function App() {
             </DashboardLayout>
           </Route>
           <Route exact path="/">
-            <Redirect to="/pub/leaderboard/6185930b4454af30818cb26c" />
+          <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" />
+            {/* <Redirect to="/pub/leaderboard/6185930b4454af30818cb26c" /> */}
           </Route>
           <Route path="*" >
             <Page404 />

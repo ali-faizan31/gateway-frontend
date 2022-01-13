@@ -27,7 +27,7 @@ const AuthLayout = ({ children }) => {
 
   console.log(width, height);
   useEffect(() => {
-    if (width < 400) {
+    if (width < 1200) {
       setShowPicture(false);
     } else{
       setShowPicture(true);
