@@ -417,9 +417,10 @@ const MultiTokenLeaderboardInformation = ({
   const csvHeaders = [
     { label: "Rank", key: "rank" },
     { label: "Wallet Address", key: "address" },
-    { label: "Balance", key: "formattedBalance" },
-    { label: "Level Up Amount", key: "formattedLevelUpAmount" },
-    { label: "Get Token", key: "levelUpUrl" },
+    { label: "Combined USD Value", key: "formattedCombinedValue" },
+    { label: "FRM Balance", key: "formattedFRMBalance" },
+    { label: "FRMx Balance", key: "formattedFRMxBalance" },
+    { label: "Level Up Amount", key: "formattedLevelUpAmount" }
   ];
 
   const onQueryChange = (e) => {
@@ -477,11 +478,11 @@ const MultiTokenLeaderboardInformation = ({
                 <FButton
                   type="button"
                   className="btn-create"
+                  className={"f-ml-1"}
                   disabled={isLoading}
                   onClick={onExportClick}
-                >
-                  Export to CSVds
-                </FButton>
+                  title={" Export to CSV"}
+                ></FButton>
               )}
             </FGridItem>
           </FGrid>

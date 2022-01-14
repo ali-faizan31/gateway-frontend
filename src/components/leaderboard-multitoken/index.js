@@ -124,15 +124,17 @@ export default function MultiTokenLeaderboardIndex() {
       });
   };
 
-  const getLeaderboard = () => {
+  const getLeaderboard = () => { 
     getLeaderboardById(id)
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
           const { leaderboard } = res.data.body;
           const cabn1 =
-            res?.data?.body?.leaderboardCurrencyAddressesByNetwork[0];
+            res?.data?.body?.leaderboard
+              ?.leaderboardCurrencyAddressesByNetwork[0];
           const cabn2 =
-            res?.data?.body?.leaderboardCurrencyAddressesByNetwork[1];
+            res?.data?.body?.leaderboard
+              ?.leaderboardCurrencyAddressesByNetwork[1];
           const tempObj = {
             name: leaderboard?.name,
             exclusionWalletAddressList: leaderboard?.exclusionWalletAddressList,
@@ -149,6 +151,12 @@ export default function MultiTokenLeaderboardIndex() {
               chainId: cabn2?.currencyAddressesByNetwork?.network?.chainId,
             },
           };
+          getFrmTokenUSDCValue(
+            tempObj.frmCabn.chainId,
+            tempObj.frmCabn.tokenContractAddress,
+            tokenUSDCBSCMainnet,
+            tempObj
+          ); 
           setLeaderboardData(tempObj);
         }
       })
