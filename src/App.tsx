@@ -31,7 +31,7 @@ const LeaderboardManagement = Loadable(lazy(() => import('./components/leaderboa
 const CommunityRegister = Loadable(lazy(() => import('./components/authentication/community/register')));
 const CommunityEmailVerification = Loadable(lazy(() => import('./components/authentication/community/email-verification')));
 const CommunityResend = Loadable(lazy(() => import('./components/authentication/community/resend-email-verification')));
-const CommunityWalletAuthentication = Loadable(lazy(() => import('./components/authentication/community/wallet-authentication')));
+const CommunityWalletAuthentication = Loadable(lazy(() => import('./components/authentication/community/wallet-authentication/index')));
 const CommunityLogin = Loadable(lazy(() => import('./components/authentication/community/login')));
 const OrganizationRegister = Loadable(lazy(() => import('./components/authentication/organization/register/index')));
 const OrganizationEmailVerification = Loadable(lazy(() => import('./components/authentication/organization/email-verification')));
