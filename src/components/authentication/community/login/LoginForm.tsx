@@ -41,7 +41,7 @@ const LoginForm = () => {
                         // if (user.isWalletAddressAuthenticated === true) {
                             localStorage.setItem('token', token);
                             toast.success(response.data.status.message);
-                            history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardById);
+                            history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardByProvidedId);
                         // } else {
                         //     toast.error('Please connect and authenticate your wallet first!');
                         //     history.push(PATH_AUTH.communityWalletAuthentication);

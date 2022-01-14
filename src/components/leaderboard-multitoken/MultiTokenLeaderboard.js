@@ -33,6 +33,8 @@ const MultiTokenLeaderboardInformation = ({
   const exportRef = useRef();
   const { pathname } = useLocation();
   const isPublicUser = pathname.includes("/pub");
+  const user = localStorage.getItem('me');
+  const parsedUser = user && JSON.parse(user); 
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isQueryChange, setIsQueryChange] = useState(false);
@@ -474,7 +476,7 @@ const MultiTokenLeaderboardInformation = ({
                 onChange={onQueryChange}
                 style={{ width: "100%" }}
               />
-              {!isPublicUser && (
+              {(!isPublicUser && parsedUser.role === "organizationAdmin") && (
                 <FButton
                   type="button"
                   className="btn-create"

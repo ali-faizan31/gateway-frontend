@@ -17,6 +17,7 @@ import {
 
 export default function MultiTokenLeaderboardIndex() {
   const { id } = useParams();
+  let token = localStorage.getItem('token');
   const { pathname } = useLocation();
   const isPublicUser = pathname.includes("/pub");
   const [leaderboardData, setLeaderboardData] = useState({});
@@ -24,14 +25,14 @@ export default function MultiTokenLeaderboardIndex() {
   const [frmxUsdcValue, setFrmxUsdcValue] = useState(null);
 
   useEffect(() => {
-    if (id !== ":id") {
+    if (id !== ":id" || token) {
       if (isPublicUser) {
         getPublicLeaderboard();
       } else {
         getLeaderboard();
       }
     }
-  }, [id]);
+  }, [id, token]);
 
   const getFrmTokenUSDCValue = (
     chainId,
@@ -80,7 +81,7 @@ export default function MultiTokenLeaderboardIndex() {
   };
 
   const getPublicLeaderboard = () => { 
-    getLeaderboardByIdForPublicUser(id)
+    getLeaderboardByIdForPublicUser(id, token)
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
           const { leaderboard } = res.data.body;
@@ -125,7 +126,7 @@ export default function MultiTokenLeaderboardIndex() {
   };
 
   const getLeaderboard = () => { 
-    getLeaderboardById(id)
+    getLeaderboardById(id, token)
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
           const { leaderboard } = res.data.body;
