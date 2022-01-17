@@ -6,14 +6,13 @@ const GuardedRoute = ({component: Component, layout: Layout, ...rest}) => {
   const isAuthenticated = localStorage.getItem('token') ;
   
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('token') ;
-    console.log(isAuthenticated)
+    const isAuthenticated = localStorage.getItem('token') ; 
     if(isAuthenticated){
       setAuth(true)
     }
   }, [])
 
-  console.log(auth)
+   
   return <Route
     {...rest}
     render={(props) =>

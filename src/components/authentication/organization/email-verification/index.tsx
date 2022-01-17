@@ -9,18 +9,16 @@ const index = () => {
   const parsedUser = user && JSON.parse(user); 
 
   return (
-    <FContainer type="fluid">
-      <FContainer width={700}>
-        <FCard variant="primary">
-          {parsedUser ? <><FCardTitle >
-            <h3>Please check your email! </h3>
-          </FCardTitle>
-            <h5>We have emailed a 6-digit confirmation code to <u>{parsedUser?.email}</u>, please enter the code in below box to verify your
-              email.</h5>
+    <FContainer width={600}>
+         
+          {parsedUser ? <> 
+            <h2 className="f-mb-2">Please check your email! </h2>
+          
+            <p className="grey-secondary">We have emailed a 6-digit confirmation code to <u>{parsedUser?.email}</u>, please enter the code in below box to verify your
+              email.</p>
 
             <EmailVerificationForm parsedUser={parsedUser} /> </> : "No User found"}
-        </FCard>
-      </FContainer>
+        
     </FContainer>
   );
 };

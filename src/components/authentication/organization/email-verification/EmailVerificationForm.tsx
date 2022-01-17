@@ -71,12 +71,14 @@ const EmailVerificationForm = (children: any) => {
           />
         </FGridItem>
       </FGrid>
-      <FItem align="center" className={"w-100"} >
+      <FGrid >
+        <FGridItem alignX="center" size={[12]} className={"f-mt-1"}> 
         <FButton type="submit" title={"Verify"} className={"f-mt-1"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
-      </FItem>
+        </FGridItem>
+      </FGrid>
       <FItem align={"center"} className={"f-mt-1 w-100"} >
         Don’t have a code? &nbsp;
-        <Link to={PATH_AUTH.orgResendCode}>
+        <Link className="primary-color text-decoration-none " to={PATH_AUTH.orgResendCode}>
           Resend code
         </Link>
       </FItem>
