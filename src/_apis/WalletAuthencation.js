@@ -11,9 +11,31 @@ export function getAccessTokenForApplicationUser() {
     },
   });
 }
-
+ 
 export function checkUniqueWalletAddress(address, ferrumNetworkIdentifier, applicationUserToken) {
   const url = `${baseUrl}/api/v1/application-user/addresses/is/unique?address=${address}&ferrumNetworkIdentifier=${ferrumNetworkIdentifier}`;
+  return axios.get(url, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "Application/json",
+      Authorization: `Bearer ${applicationUserToken}`,
+    },
+  });
+}
+
+export function checkUniqueWalletAddressAndAuthenticated(address, ferrumNetworkIdentifier, applicationUserToken) {
+  const url = `${baseUrl}/api/v1/application-user/addresses/is/unique/and/authenticated?address=${address}&ferrumNetworkIdentifier=${ferrumNetworkIdentifier}`;
+  return axios.get(url, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "Application/json",
+      Authorization: `Bearer ${applicationUserToken}`,
+    },
+  });
+}
+
+export function walletAddressAuthenticateCheckOnSignin(userId, address, ferrumNetworkIdentifier, applicationUserToken) {
+  const url = `${baseUrl}/api/v1/application-user/addresses/is/authenticated?address=${address}&userId=${userId}&ferrumNetworkIdentifier=${ferrumNetworkIdentifier}`;
   return axios.get(url, {
     headers: {
       "Access-Control-Allow-Origin": "*",

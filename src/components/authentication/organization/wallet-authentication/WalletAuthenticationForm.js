@@ -133,7 +133,7 @@ export function Web3AuthWrapper(props) {
 
   const isUserWalletAddressUnique = async (address, network, applicationUserToken) => {
     try {
-      const res = await checkUniqueWalletAddress(`${address}6`, network, applicationUserToken)
+      const res = await checkUniqueWalletAddress(`${address}`, network, applicationUserToken)
       return res.data.body.isUnique;
     } catch (e) {
       console.log(e.response.data.status.message) 
@@ -170,12 +170,12 @@ export function Web3AuthWrapper(props) {
         return;
       } 
             
-      const uniqueResponse = await isUserWalletAddressUnique(payload.address, payload.network, payload.applicationUserToken)
+      const uniqueResponse = await isUserWalletAddressUnique(payload.address, payload.networkpayload.network.toString(), payload.applicationUserToken)
 
       if ( uniqueResponse === true){
         const ipResponse = await getIp();
         const ipAddress = ipResponse?.data?.ip;
-        const data = { address: payload.address , ferrumNetworkIdentifier: payload.network, lastConnectedIpAddress: ipAddress};
+        const data = { address: payload.address , ferrumNetworkIdentifier: payload.network.toString(), lastConnectedIpAddress: ipAddress};
       
          const nonceResponse = await saveUserWalletAddressAndGenerateNonce(payload.user._id, data, payload.applicationUserToken);
          console.log("nonce", nonceResponse);
@@ -198,7 +198,7 @@ export function Web3AuthWrapper(props) {
               async (err, result) => {
                 console.log(result);
                 if (result.result) {
-                  const data = {signature: result.result,address: payload.address , ferrumNetworkIdentifier: payload.network, ipAddress: ipAddress }
+                  const data = {signature: result.result,address: payload.address , ferrumNetworkIdentifier: payload.network.toString(), ipAddress: ipAddress }
                   try {
                     const saveResponse = await saveUserSignatureAndGenerateNonce(payload.user._id, data, payload.applicationUserToken); 
                     console.log(saveResponse);  

@@ -16,7 +16,10 @@ export function getAllLeaderboards(offset, limit, paramToken = token) {
   });
 }
 
-export function getLeaderboardById(id) {
+export function getLeaderboardById(id, paramToken = token) {
+  if (paramToken) {
+    token = paramToken;
+  }
   return axios.get(`${baseUrl}/api/v1/admin/leaderboards/${id}`, {
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -58,7 +61,7 @@ export function getTokenHolderListByContractAddressAndChainID(chainId, tokenCont
   });
 }
 
-export function getLeaderboardByIdForPublicUser(id) {
+export function getLeaderboardByIdForPublicUser(id, token) {
   return axios.get(`${baseUrl}/api/v1/leaderboards/${id}`);
 }
 

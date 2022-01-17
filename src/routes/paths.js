@@ -47,6 +47,7 @@ function path(root, sublink) {
     multiLeaderboard: {
       root: path(ROOTS_PUBLIC_USER, '/multi/leaderboard'),
       detailLeaderBoardById: path(ROOTS_PUBLIC_USER, '/multi/leaderboard/:id'),
+      detailLeaderBoardByProvidedId: path(ROOTS_PUBLIC_USER, '/multi/leaderboard/61b6d48337f5125acbbfddeb'),
     },
     competition:{
       root: path(ROOTS_PUBLIC_USER, '/competition'),
@@ -64,7 +65,8 @@ function path(root, sublink) {
       competition: path(ROOTS_DASHBOARD, '/competition'), 
       createCompetition: path(ROOTS_DASHBOARD, '/competition/create'),
       competitionManagement: path(ROOTS_DASHBOARD, '/competition/management'),
-      detailCompetitionById: path(ROOTS_DASHBOARD, '/competition:id')
+      detailCompetitionById: path(ROOTS_DASHBOARD, '/competition:id'),
+      multiLeaderBoardByProvidedId: path(ROOTS_DASHBOARD, '/multi/leaderboard/61b6d48337f5125acbbfddeb'),
     }
   };
    
