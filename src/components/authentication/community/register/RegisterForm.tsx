@@ -51,7 +51,7 @@ const RegisterForm = () => {
     firstName: Yup.string().required('First name is required').min(2, 'Too Short!').max(50, 'Too Long!'),
     lastName: Yup.string().required('Last name is required').min(2, 'Too Short!').max(50, 'Too Long!'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().required('Password hehe is required'),
+    password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string().required("Confirm Password is required").when("password", {
       is: (val: any) => (val && val.length > 0 ? true : false),
       then: Yup.string().oneOf(

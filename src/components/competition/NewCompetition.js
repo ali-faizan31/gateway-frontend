@@ -43,7 +43,7 @@ export default function NewCompetition() {
 
   const newCompetitionSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
-    leaderboard: Yup.string().required("Leaderboard is required"),
+    leaderboard: Yup.object().required("Leaderboard is required"),
     startBlock: Yup.string().required("Start block is required"),
     endBlock: Yup.string().required("End block is required"),
     startDate: Yup.string().required("Start Date/Time is required"),
@@ -51,12 +51,12 @@ export default function NewCompetition() {
   });
 
   const initialValues = {
-    name: "",
-    leaderboard: "",
-    startBlock: "",
-    endBlock: "",
-    endDate: "",
-    startDate: ""
+    name: "test",
+    leaderboard: {label:"Select"},
+    startBlock: "12345",
+    endBlock: "67891",
+    endDate: "2022-01-13 11:00",
+    startDate: "2022-01-12 02:00"
   };
 
   const {
@@ -72,35 +72,36 @@ export default function NewCompetition() {
   });
 
   const onSubmit = async (values) => {
+    // 2022-01-07T11:57:00.000Z
+    values.startDate = moment(values.startDate, "YYYY-MM-DD hh:mm").toISOString();
+    values.endDate = moment(values.endDate, "YYYY-MM-DD hh:mm").toISOString();
+    values.leaderboard = values.leaderboard._id
     console.log(values);
-    values.startDate = moment(eventStartValue, "YYYY-MM-DD")
-      .utc()
-      .toISOString();
-    values.endDate = moment(eventEndValue, "YYYY-MM-DD").utc().toISOString();
-    // await addCompetition(values)
-    //   .then((response) => {
-    //     dispatch(getAllCompetitionsDispatch());
-    //     toast.success(response.data.status.message);
-    //     history.push(PATH_ADMIN.competition.management);
-    //   })
-    //   .catch((e) => {
-    //     if (e.response) {
-    //       toast.error(e.response.data.status.message);
-    //     } else {
-    //       toast.error("Something went wrong. Try again later!");
-    //     }
-    //   });
-  };
-
-  console.log('opt',selectedLeaderboard);
+    await addCompetition(values)
+      .then((response) => {
+        // dispatch(getAllCompetitionsDispatch());
+        toast.success(response.data.status.message);
+        history.push(PATH_DASHBOARD.general.competitionManagement);
+      })
+      .catch((e) => {
+        if (e.response) {
+          toast.error(e.response.data.status.message);
+        } else {
+          toast.error("Something went wrong. Try again later!");
+        }
+      });
+  }; 
 
   const mapLeaderboardData = (leaderboards) => {
     if (leaderboards && leaderboards.length) {
-      leaderboards.forEach((leaderboard) => {
+      leaderboards.forEach((leaderboard) => { 
         for (let i = 0; i < chainIdList.length; i += 1) {
-          if (chainIdList[i].id === leaderboard.chainId) {
+          if (chainIdList[i].id === leaderboard.chainId) { 
             leaderboard.network = chainIdList[i].label;
             leaderboard.label = `${leaderboard.name} | ${leaderboard.network} | ${leaderboard.tokenContractAddress}`; 
+            leaderboard.value = leaderboard._id;
+          } else {
+            leaderboard.label = `${leaderboard.name}`;
             leaderboard.value = leaderboard._id;
           }
         }
@@ -113,6 +114,7 @@ export default function NewCompetition() {
     getAllLeaderboards(0, 10)
       .then((res) => {
         if (res?.data?.body?.leaderboards?.length) {
+          console.log('le', res.data.body.leaderboards)
           mapLeaderboardData(res.data.body.leaderboards);
         }
       })
@@ -124,13 +126,7 @@ export default function NewCompetition() {
         }
       });
   };
-
-  const onDateChange = (date, setFieldValue) => {
-    // const newDate = moment(date);
-    // const newS = newDate.tz('UTC').format('dddd D MMMM, YYYY hh:mm a');
-    setFieldValue("endDate", date);
-  };
-
+ 
   const onCancel = () => {
     history.push(PATH_ADMIN.competition.management);
   };
@@ -153,10 +149,10 @@ export default function NewCompetition() {
                   control={control}
                   options={leaderboardList}
                   register={register}
-                  onChange={(e) => {
-                    console.log(e);
-                    setSelectedLeaderboard(e.target._id);
-                  }}
+                  // onChange={(e) => {
+                  //   console.log(e);
+                  //   setSelectedLeaderboard(e.target._id);
+                  // }}
                   error={
                     errors["leaderboard"]?.message
                       ? errors["leaderboard"]?.message
@@ -179,9 +175,9 @@ export default function NewCompetition() {
             <FGrid className={"f-mt-1"}>
               <FGridItem alignX="center" size={[6, 12, 12]}>
                 <FInputTextField
-                  label="Start Date/Time in UTC"
+                  label="Start Date/Time "
                   name="startDate"
-                  placeholder="Start Date/Time in UTC"
+                  placeholder="Start Date/Time "
                   register={register}
                   error={
                     errors["startDate"]?.message
@@ -192,9 +188,9 @@ export default function NewCompetition() {
               </FGridItem>
               <FGridItem alignX="center" size={[6, 12, 12]}>
                 <FInputTextField
-                  label="End Date/Time in UTC"
+                  label="End Date/Time "
                   name="endDate"
-                  placeholder="End Date/Time in UTC"
+                  placeholder="End Date/Time "
                   register={register}
                   error={
                     errors["endDate"]?.message

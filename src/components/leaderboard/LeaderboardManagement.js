@@ -70,11 +70,13 @@ const LeaderboardManagement = () => {
 
   const actionFormatter = (params) => (
       <>
+      <div data-label="Action"> 
         <FButton
           type="button" 
           onClick={() => onDetailClick(params)}
           title={"Details"}
         ></FButton>
+        </div>
       </>
   ); 
 
@@ -82,18 +84,20 @@ const LeaderboardManagement = () => {
     const { status } = params;
     return (
       <> 
+      <div data-label="Status"> 
             <FButton title={(status === "pending" && "Pending Review") ||
             (status === "clientAction" && "Needs Client Action") ||
             sentenceCase(status)}></FButton>
-        
+        </div>
       </>
     );
   };
 
   const networkFormatter = (params) => {
+    // <div data-label="Get Token"></div>
     for (let i = 0; i < chainIdList.length; i += 1) {
       if (chainIdList[i].id === params.chainId) {
-        return chainIdList[i].label;
+        return <div data-label="Network"> {chainIdList[i].label}</div>;
       }
     }
   };
@@ -121,6 +125,7 @@ const LeaderboardManagement = () => {
 
   const publicUrlActions = (params) => (
     <>
+    <div data-label="Public URL"> 
       <FButton
         prefix={<RiFileCopy2Fill />}
         // title="Copy" 
@@ -133,6 +138,7 @@ const LeaderboardManagement = () => {
         // title="Open"
         onClick={() => openPublicUrl(params)}
       ></FButton>
+      </div>
     </>
   );
 
@@ -140,6 +146,7 @@ const LeaderboardManagement = () => {
     {
       prop: "name",
       title: "Name", 
+      cell: (params)=><div data-label="Name">{params.name}</div>
     },
     {
       prop: "chainId",
@@ -148,11 +155,13 @@ const LeaderboardManagement = () => {
     },
     {
       prop: "tokenContractAddress",
-      title: "Contract Address" 
+      title: "Contract Address",
+      cell: (params)=><div data-label="Contract Address">{params.tokenContractAddress}</div>
     },
     {
       prop: "dexUrl",
-      title: "Dex Url" 
+      title: "Dex Url" ,
+      cell: (params)=><div data-label="Dex Url">{params.dexUrl}</div>
     },
     {
       prop: "status",

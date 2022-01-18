@@ -6,7 +6,7 @@ import AuthLayout from './layouts/auth';
 // guards 
 import GuardedRoute from './guards/GuardedRoute';
 import UnGuardedRoute from './guards/UnGuardedRoute'; 
-import ClipLoader from "react-spinners/ClipLoader"; 
+import ClipLoader from "react-spinners/ClipLoader";  
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -39,6 +39,8 @@ const OrganizationResend = Loadable(lazy(() => import('./components/authenticati
 const OrganizationWalletAuthentication = Loadable(lazy(() => import('./components/authentication/organization/wallet-authentication')));
 const OrganizationLogin = Loadable(lazy(() => import('./components/authentication/organization/login')));
 const CreateCompetition = Loadable(lazy(() => import('./components/competition/NewCompetition')));
+const CompetitionManagement =  Loadable(lazy(() => import('./components/competition/CompetitionManagement')));
+const CompetitionById =  Loadable(lazy(() => import('./components/competition/CompetitionInformation')));
 const Page404 = Loadable(lazy(() => import('./components/error/page404')));
 
 function App() {
@@ -63,13 +65,17 @@ function App() {
         <GuardedRoute path='/dashboard/leaderboard/management' component={LeaderboardManagement} auth={isAuthenticated}  layout={DashboardLayout}/>
         <GuardedRoute path='/dashboard/leaderboard/create' component={CreateLeaderboard} auth={isAuthenticated}  layout={DashboardLayout}/>
         <GuardedRoute path='/dashboard/competition/create' component={CreateCompetition} auth={isAuthenticated}  layout={DashboardLayout}/>
+        <GuardedRoute path='/dashboard/competition/management' component={CompetitionManagement} auth={isAuthenticated}  layout={DashboardLayout}/>
+        <GuardedRoute path='/dashboard/competition/:id' component={CompetitionById} auth={isAuthenticated}  layout={DashboardLayout}/>
         <GuardedRoute path='/dashboard/multi/leaderboard/:id' component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
         <GuardedRoute path='/dashboard/leaderboard/:id' component={LeaderboardById} auth={isAuthenticated}  layout={DashboardLayout}/>
+
         <Route path="*" component={Page404}></Route> 
       </Switch>  
     </>
   );
 }
   /* <Redirect to="/pub/leaderboard/6185930b4454af30818cb26c" /> */
+  //61e6b9f26bd9933bfcb70e63
 
 export default App;

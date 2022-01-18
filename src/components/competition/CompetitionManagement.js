@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
-// material
-import { Grid, Button, Stack, Container, TextField } from '@mui/material';
-import { useSnackbar } from 'notistack';
-import { useTheme } from '@mui/material/styles';
-import { sentenceCase } from 'change-case';
-import { useNavigate } from 'react-router-dom';
-import { DataGrid } from '@mui/x-data-grid';
+import { sentenceCase, paramCase } from "change-case"; 
+import toast, { Toaster } from "react-hot-toast";
+import {
+  FTable,
+  FContainer,
+  FButton,
+  FGrid,
+  FInputTextField,
+  FGridItem,
+} from "ferrum-design-system";
+import Datatable from "react-bs-datatable";
+import { useHistory } from "react-router-dom"; 
 import moment from 'moment';
-import useSettings from '../../../hooks/useSettings';
-import Page from '../../../components/Page'; 
-import { PATH_ADMIN, PATH_DASHBOARD } from '../../../routes/paths';
-import { getAllCompetitions } from '../../../_apis_/CompetitionCrud';
-import SvgIconStyle from '../../../components/SvgIconStyle';
-import Label from '../../../components/Label';
+import { PATH_ADMIN, PATH_DASHBOARD } from '../../routes/paths';
+import { getAllCompetitions } from '../../_apis/CompetitionCrud';
 
-const CompetitionManagement = () => {
-  const { themeStretch } = useSettings();
-  const theme = useTheme();
-  const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
+
+const CompetitionManagement = () => { 
+  const history = useHistory();
   const limit = 10;
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -30,21 +29,11 @@ const CompetitionManagement = () => {
   }, [query]);
 
   const statusFormatter = (params) => {
-    const { status } = params.row; 
+    const { status } = params; 
     return (
-      <>
-        <Label
-          variant="filled"
-          color={
-            (status === 'published' && 'success') ||
-            (status === 'pending' && 'warning') ||
-            (status === 'cancelled' && 'error') ||
-            (status === 'started' && 'default') ||
-            (status === 'completed' && 'secondary')
-          }
-        >
-          {sentenceCase(status)}
-        </Label>
+      <>   <div data-label="Status">  
+        <FButton title={sentenceCase(status)}></FButton> 
+        </div> 
       </>
     );
   };
@@ -53,43 +42,42 @@ const CompetitionManagement = () => {
     const wesehi = 10;
     return (
       <>
-        <Button type="button" className="btn-detail br-40" onClick={() => onDetailClick(params.row)}>
-          Details
-        </Button>
+      <div data-label="Action"> 
+        <FButton type="button" title={" Details"} onClick={() => onDetailClick(params.row)}></FButton>
+        </div>
       </>
     );
   };
 
   const dateFormatter = (params) => {
-    if (params.field === 'endDate') {
-      if (params?.row?.endDate) {
-        return moment(new Date(params.row.endDate)).format('DD-MMM-YYYY | HH:mm');
-      }
-    } else if (params.field === 'startDate') {
-      if (params?.row?.startDate) {
-        return moment(new Date(params.row.startDate)).format('DD-MMM-YYYY | HH:mm');
-      }
-    }
+    let date = '';
+    console.log(params)
+    return  <div data-label="Date"> </div> //need to find the called row
+    // if (params.field === 'endDate') {
+    //   if (params?.endDate) {
+    //     date = moment(new Date(param.endDate)).format('DD-MMM-YYYY | HH:mm');
+    //   }
+    // } else if (params.field === 'startDate') {
+    //   if (params?.startDate) {
+    //     date = moment(new Date(param.startDate)).format('DD-MMM-YYYY | HH:mm');
+    //   }
+    // }
   };
 
   const columns = [
-    { field: 'name', headerName: 'Name', headerClassName: 'table-header', width: 200 },
+    { prop: 'name', title: 'Name', cell: (params)=><div data-label="Name">{params.name}</div>},
     {
-      field: 'startDate',
-      headerName: 'Start Date',
-      headerClassName: 'table-header',
-      width: 250,
-      renderCell: dateFormatter
+      prop: 'startDate',
+      title: 'Start Date', 
+      cell: dateFormatter
     },
     {
-      field: 'endDate',
-      headerName: 'End Date',
-      headerClassName: 'table-header',
-      width: 250,
-      renderCell: dateFormatter
+      prop: 'endDate',
+      title: 'End Date', 
+      cell: dateFormatter
     },
-    { field: 'status', headerName: 'Status', headerClassName: 'table-header', width: 200, renderCell: statusFormatter },
-    { field: 'action', headerName: 'Action', headerClassName: 'table-header', width: 200, renderCell: actionFormatter } // valueGetter
+    { prop: 'status', title: 'Status', cell: statusFormatter },
+    { prop: 'action', title: 'Action', cell: actionFormatter }  
   ];
 
   const getCompetitionListing = () => {
@@ -110,37 +98,34 @@ const CompetitionManagement = () => {
       })
       .catch((e) => {
         if (e.response) {
-          enqueueSnackbar(e.response.data.status.message, {
-            variant: 'error'
-          });
+          toast.error(e.response.data.status.message);
         } else {
-          enqueueSnackbar('Something went wrong. Try again later!', {
-            variant: 'error'
-          });
+          toast.error('Something went wrong. Try again later!');
         }
       });
   };
 
   const onDetailClick = (row) => { 
-    navigate(`${PATH_DASHBOARD.general.competition}/${row._id}`);
+    history.push(`${PATH_DASHBOARD.general.competition}/${row._id}`);
   };
 
   const openCreateCompetition = () => {
-    navigate(PATH_ADMIN.competition.create);
+    history.push(PATH_ADMIN.competition.create);
   };
 
   return (
     <>
-      <Page title="Leaderboard">
-        <Container maxWidth={themeStretch ? false : 'xl'}>
-          <Grid container sx={{ marginTop: '60px' }}>
-            <Grid item xs={12} sm={4} lg={6} md={6} sx={{ textAlign: 'left' }}>
-              <h1 style={{ color: theme.palette.primary.main }}>Competition Management</h1>
-            </Grid>
-            <Grid item xs={12} sm={8} lg={6} md={6} sx={{ textAlign: 'rigth', justifyContent: 'flex-end' }}>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }} justifyContent="flex-end">
-                <Grid item xs={12} sm={8} lg={5} md={5}>
-                  <TextField
+     <div>
+        <Toaster />
+      </div>
+      <FContainer type="fluid">
+        <FContainer>
+          <FGrid className={"f-mt-1 f-mb-1"}>
+            <FGridItem size={[6,12,12]} alignX={"center"}>
+              <h1>Competition Management</h1> 
+            </FGridItem>
+            <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[6,12,12]} display={"flex"}> 
+              <FInputTextField
                     id="outlined-basic"
                     label="Search"
                     placeholder="Competition name"
@@ -149,29 +134,20 @@ const CompetitionManagement = () => {
                     type="search"
                     onChange={(e) => setQuery(e.target.value)}
                     style={{ width: '100%' }}
-                  />
-                </Grid>
-                <Button type="button" className="btn-create" onClick={openCreateCompetition}>
-                  Create Competition
-                </Button>
-              </Stack>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ marginTop: '40px' }} />
-          <div style={{ height: 300, width: '100%' }}>
-            <DataGrid
-              rows={competitionList}
-              columns={columns}
-              getRowId={(row) => row._id}
-              // pageSize={5}
-              rowsPerPageOptions={[]}
-              // checkboxSelection
-              disableColumnMenu
-              disableSelectionOnClick
+                  /> 
+                <FButton type="button" className="f-ml-1" onClick={openCreateCompetition} title="Create Competition"></FButton>
+                </FGridItem> 
+          </FGrid>
+          <FTable>
+            <Datatable
+              tableBody={competitionList}
+              tableHeaders={columns}
+              rowsPerPage={10}
+              tableClass="striped hover responsive"
             />
-          </div>
-        </Container>
-      </Page>
+          </FTable>
+        </FContainer>
+      </FContainer>
     </>
   );
 };
