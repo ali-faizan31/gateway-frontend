@@ -75,8 +75,7 @@ export default function NewCompetition() {
     // 2022-01-07T11:57:00.000Z
     values.startDate = moment(values.startDate, "YYYY-MM-DD hh:mm").toISOString();
     values.endDate = moment(values.endDate, "YYYY-MM-DD hh:mm").toISOString();
-    values.leaderboard = values.leaderboard._id
-    console.log(values);
+    values.leaderboard = values.leaderboard._id ;
     await addCompetition(values)
       .then((response) => {
         // dispatch(getAllCompetitionsDispatch());
@@ -94,16 +93,13 @@ export default function NewCompetition() {
 
   const mapLeaderboardData = (leaderboards) => {
     if (leaderboards && leaderboards.length) {
-      leaderboards.forEach((leaderboard) => { 
+      leaderboards.forEach((leaderboard) => {  
         for (let i = 0; i < chainIdList.length; i += 1) {
-          if (chainIdList[i].id === leaderboard.chainId) { 
-            leaderboard.network = chainIdList[i].label;
-            leaderboard.label = `${leaderboard.name} | ${leaderboard.network} | ${leaderboard.tokenContractAddress}`; 
-            leaderboard.value = leaderboard._id;
-          } else {
-            leaderboard.label = `${leaderboard.name}`;
-            leaderboard.value = leaderboard._id;
-          }
+          if (chainIdList[i].id === leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId) { 
+            leaderboard.network = chainIdList[i].label; 
+            leaderboard.label = `${leaderboard.name} | ${leaderboard.network} | ${leaderboard.leaderboardCurrencyAddressesByNetwork[0].currencyAddressesByNetwork.tokenContractAddress}`; 
+            leaderboard.value = leaderboard._id; 
+          }  
         }
       });
     }
@@ -113,9 +109,10 @@ export default function NewCompetition() {
   const getLeaderboardListing = () => {
     getAllLeaderboards(0, 10)
       .then((res) => {
-        if (res?.data?.body?.leaderboards?.length) {
-          console.log('le', res.data.body.leaderboards)
+        if (res?.data?.body?.leaderboards?.length) { 
           mapLeaderboardData(res.data.body.leaderboards);
+        } else {
+          setLeaderboardList([]);
         }
       })
       .catch((e) => {
@@ -128,7 +125,7 @@ export default function NewCompetition() {
   };
  
   const onCancel = () => {
-    history.push(PATH_ADMIN.competition.management);
+    history.push(PATH_DASHBOARD.general.competitionManagement);
   };
 
   return (

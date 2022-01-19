@@ -43,38 +43,40 @@ const CompetitionManagement = () => {
     return (
       <>
       <div data-label="Action"> 
-        <FButton type="button" title={" Details"} onClick={() => onDetailClick(params.row)}></FButton>
+        <FButton type="button" title={" Details"} onClick={() => onDetailClick(params)}></FButton>
         </div>
       </>
     );
   };
 
-  const dateFormatter = (params) => {
+  const startDateFormatter = (params) => {
     let date = '';
-    console.log(params)
-    return  <div data-label="Date"> </div> //need to find the called row
-    // if (params.field === 'endDate') {
-    //   if (params?.endDate) {
-    //     date = moment(new Date(param.endDate)).format('DD-MMM-YYYY | HH:mm');
-    //   }
-    // } else if (params.field === 'startDate') {
-    //   if (params?.startDate) {
-    //     date = moment(new Date(param.startDate)).format('DD-MMM-YYYY | HH:mm');
-    //   }
-    // }
+    if (params?.startDate) {
+          date = moment(new Date(params.startDate)).format('DD-MMM-YYYY | HH:mm');
+    } 
+    return  <div data-label="Start Date">{date}</div> 
   };
+
+  const endDateFormatter = (params) => {
+    let date = '';
+    if (params?.endDate) {
+          date = moment(new Date(params.endDate)).format('DD-MMM-YYYY | HH:mm');
+        } 
+    return  <div data-label="Date">{date} </div>
+  };
+
 
   const columns = [
     { prop: 'name', title: 'Name', cell: (params)=><div data-label="Name">{params.name}</div>},
     {
       prop: 'startDate',
       title: 'Start Date', 
-      cell: dateFormatter
+      cell: startDateFormatter
     },
     {
       prop: 'endDate',
       title: 'End Date', 
-      cell: dateFormatter
+      cell: endDateFormatter
     },
     { prop: 'status', title: 'Status', cell: statusFormatter },
     { prop: 'action', title: 'Action', cell: actionFormatter }  
@@ -105,12 +107,12 @@ const CompetitionManagement = () => {
       });
   };
 
-  const onDetailClick = (row) => { 
+  const onDetailClick = (row) => {  
     history.push(`${PATH_DASHBOARD.general.competition}/${row._id}`);
   };
 
   const openCreateCompetition = () => {
-    history.push(PATH_ADMIN.competition.create);
+    history.push(PATH_DASHBOARD.general.createCompetition);
   };
 
   return (
