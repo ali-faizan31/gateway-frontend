@@ -11,7 +11,7 @@ import toast, { Toaster } from "react-hot-toast";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { walletAuthenticationBackendURL } from "../../../../utils/const.utils";
 import { PATH_DASHBOARD, PATH_PUBLIC_USER } from "../../../../routes/paths";
-import { checkUniqueWalletAddress, saveAddressAndGenerateNonce, getIp, verifySignatureAndUpdateNonce } from "../../../../_apis/WalletAuthencation";
+import { checkUniqueWalletAddress, saveAddressAndGenerateNonce, getIp, verifySignatureAndUpdateNonce, checkUniqueWalletAddressAndAuthenticated } from "../../../../_apis/WalletAuthencation";
  
 export const web3AuthSlice = createSlice({
   name: "web3åAuthSlice",
@@ -108,8 +108,7 @@ export function Web3AuthWrapper(props) {
       setAddress(address);
       console.log(address, network, "====");
     } catch (e) {
-      toast.error(`Error Occured ${e}`);
-      console.log(e, "error====");
+      toast.error(`Error Occured ${e}`); 
     } finally {
       setLoading(false);
     }
@@ -123,7 +122,7 @@ export function Web3AuthWrapper(props) {
   const validateUserAddr = async () => {
     setLoading(true);  
 
-    if (props.email && props.user && props.token) {
+    if (props.email && props.user ) {
       if(web3 && address && network && props.applicationUserToken){
         await dispatch(validateAddress({ web3, address, network, email: props.email, applicationUserToken: props.applicationUserToken, user: props.user }));
         await disconnectWeb3();
@@ -136,23 +135,20 @@ export function Web3AuthWrapper(props) {
     setLoading(false);
   };
 
-  const isUserWalletAddressUnique = async (address, network, applicationUserToken) => {
+  const isUserWalletAddressUniqueAndAuthenticated = async (address, network, applicationUserToken) => {
     try {
-      const res = await checkUniqueWalletAddress(address, network, applicationUserToken)
+      const res = await checkUniqueWalletAddressAndAuthenticated(address, network, applicationUserToken)
       return res.data.body.isUnique;
-    } catch (e) {
-      console.log(e.response.data.status.message) 
+    } catch (e) { 
       throw (e?.response?.data?.status?.message)
     }
   }
   
-  const saveUserWalletAddressAndGenerateNonce = async (userId, values, applicationUserToken) => {
-    console.log(userId, values, applicationUserToken);
+  const saveUserWalletAddressAndGenerateNonce = async (userId, values, applicationUserToken) => { 
     try {
       const res = await saveAddressAndGenerateNonce(userId, values, applicationUserToken)
       return res?.data?.body?.address?.nonce;
-    } catch (e) {
-      console.log(e.response.data.status.message) 
+    } catch (e) { 
       throw (e?.response?.data?.status?.message)
     }
   }
@@ -161,21 +157,19 @@ export function Web3AuthWrapper(props) {
      try {
       const res = await verifySignatureAndUpdateNonce(userId, values, applicationUserToken)
       return res?.data?.body;
-    } catch (e) {
-      console.log(e.response.data.status.message) 
+    } catch (e) { 
       throw (e?.response?.data?.status?.message)
     }
   }
 
   const validateAddress = createAsyncThunk("connect", async (payload) => {
     try {
-      const session = await checkSession();
-      console.log("session", session);
+      const session = await checkSession(); 
       if (session) {
         return;
       } 
             
-      const uniqueResponse = await isUserWalletAddressUnique(payload.address, payload.network, payload.applicationUserToken)
+      const uniqueResponse = await isUserWalletAddressUniqueAndAuthenticated(payload.address, payload.network, payload.applicationUserToken)
 
       if ( uniqueResponse === true){
         const ipResponse = await getIp();
@@ -183,8 +177,7 @@ export function Web3AuthWrapper(props) {
         const data = { address: payload.address , ferrumNetworkIdentifier: payload.network.toString(), lastConnectedIpAddress: ipAddress};
       
          const nonceResponse = await saveUserWalletAddressAndGenerateNonce(payload.user._id, data, payload.applicationUserToken);
-         console.log("nonce", nonceResponse);
-
+         
          if (payload.web3) {
           const connection = payload.web3;
           const accounts = (await connection?.eth.getAccounts()) || "";
@@ -204,16 +197,17 @@ export function Web3AuthWrapper(props) {
                   "This signature verifies that you are the authorized owner of the wallet. The signature authentication is required to ensure allocations are awarded to the correct wallet owner.",
                 ],
               },
-              async (err, result) => {
-                console.log(result);
+              async (err, result) => { 
                 if (result.result) {
                   const data = {signature: result.result,address: payload.address , ferrumNetworkIdentifier: payload.network.toString(), ipAddress: ipAddress }
-                  console.log('save data' , data);
+                   try{
                   const saveResponse = await saveUserSignatureAndGenerateNonce(payload.user._id, data, payload.applicationUserToken);  
                   if (saveResponse && saveResponse.address.nonce){
-                    console.log(saveResponse);
                     history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardById);
                   }  
+                } catch (e) {
+                  toast.error(`Error occured ${e}`); 
+                }
                 }
               }
             )
@@ -234,21 +228,18 @@ export function Web3AuthWrapper(props) {
       return;
     }
     provider.on("close", () => disconnectWeb3());
-    provider.on("onConnect", async (accounts) => {
-      console.log(accounts, "pppp");
+    provider.on("onConnect", async (accounts) => { 
       setAddress(accounts[0]);
     });
 
-    provider.on("accountsChanged", async (accounts) => {
-      console.log(accounts);
+    provider.on("accountsChanged", async (accounts) => { 
       setAddress(accounts[0]);
       setConnected(false);
       props.setIsVerified(false);
     });
     provider.on("chainChanged", async (chainId) => {
       const networkId = await web3.eth.net.getId();
-      setNetwork(chainId);
-      console.log(networkId);
+      setNetwork(chainId); 
     });
 
     provider.on("networkChanged", async (networkId) => {

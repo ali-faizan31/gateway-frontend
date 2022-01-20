@@ -17,6 +17,7 @@ import {
 
 export default function MultiTokenLeaderboardIndex() {
   const { id } = useParams();
+  let token = localStorage.getItem('token');
   const { pathname } = useLocation();
   const isPublicUser = pathname.includes("/pub");
   const [leaderboardData, setLeaderboardData] = useState({});
@@ -24,14 +25,14 @@ export default function MultiTokenLeaderboardIndex() {
   const [frmxUsdcValue, setFrmxUsdcValue] = useState(null);
 
   useEffect(() => {
-    if (id !== ":id") {
+    if (id !== ":id" || token) {
       if (isPublicUser) {
         getPublicLeaderboard();
       } else {
         getLeaderboard();
       }
     }
-  }, [id]);
+  }, [id, token]);
 
   const getFrmTokenUSDCValue = (
     chainId,
@@ -80,7 +81,7 @@ export default function MultiTokenLeaderboardIndex() {
   };
 
   const getPublicLeaderboard = () => { 
-    getLeaderboardByIdForPublicUser(id)
+    getLeaderboardByIdForPublicUser(id, token)
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
           const { leaderboard } = res.data.body;
@@ -124,15 +125,17 @@ export default function MultiTokenLeaderboardIndex() {
       });
   };
 
-  const getLeaderboard = () => {
-    getLeaderboardById(id)
+  const getLeaderboard = () => { 
+    getLeaderboardById(id, token)
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
           const { leaderboard } = res.data.body;
           const cabn1 =
-            res?.data?.body?.leaderboardCurrencyAddressesByNetwork[0];
+            res?.data?.body?.leaderboard
+              ?.leaderboardCurrencyAddressesByNetwork[0];
           const cabn2 =
-            res?.data?.body?.leaderboardCurrencyAddressesByNetwork[1];
+            res?.data?.body?.leaderboard
+              ?.leaderboardCurrencyAddressesByNetwork[1];
           const tempObj = {
             name: leaderboard?.name,
             exclusionWalletAddressList: leaderboard?.exclusionWalletAddressList,
@@ -149,6 +152,12 @@ export default function MultiTokenLeaderboardIndex() {
               chainId: cabn2?.currencyAddressesByNetwork?.network?.chainId,
             },
           };
+          getFrmTokenUSDCValue(
+            tempObj.frmCabn.chainId,
+            tempObj.frmCabn.tokenContractAddress,
+            tokenUSDCBSCMainnet,
+            tempObj
+          ); 
           setLeaderboardData(tempObj);
         }
       })

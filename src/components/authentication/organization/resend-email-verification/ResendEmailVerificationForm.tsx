@@ -62,9 +62,11 @@ const ResendEmailVerificationForm = () => {
           />
         </FGridItem>
       </FGrid>
-      <FItem align="center" className={"w-100 f-mt-1"} >
-          <FButton type="submit" title={"Submit"} postfix={ isSubmitting && <ClipLoader color="#fff" size={20}/>}></FButton>
-         </FItem>
+      <FGrid >
+          <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+            <FButton type="submit" title={"Submit"} postfix={ isSubmitting && <ClipLoader color="#fff" size={20}/>}></FButton>
+            </FGridItem>
+        </FGrid>
     </form>
   </>);
 };

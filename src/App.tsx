@@ -3,12 +3,10 @@ import { Switch, Route, useLocation, Redirect } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import "./custom.scss";
 import AuthLayout from './layouts/auth';
-// guards
-import GuestGuard from './guards/GuestGuard';
-import AuthGuard from './guards/AuthGuard';
-import Router from './routes';
-import ClipLoader from "react-spinners/ClipLoader";
-import { FLayout, FMain } from 'ferrum-design-system';
+// guards 
+import GuardedRoute from './guards/GuardedRoute';
+import UnGuardedRoute from './guards/UnGuardedRoute'; 
+import ClipLoader from "react-spinners/ClipLoader"; 
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -33,7 +31,7 @@ const LeaderboardManagement = Loadable(lazy(() => import('./components/leaderboa
 const CommunityRegister = Loadable(lazy(() => import('./components/authentication/community/register')));
 const CommunityEmailVerification = Loadable(lazy(() => import('./components/authentication/community/email-verification')));
 const CommunityResend = Loadable(lazy(() => import('./components/authentication/community/resend-email-verification')));
-const CommunityWalletAuthentication = Loadable(lazy(() => import('./components/authentication/community/wallet-authentication')));
+const CommunityWalletAuthentication = Loadable(lazy(() => import('./components/authentication/community/wallet-authentication/index')));
 const CommunityLogin = Loadable(lazy(() => import('./components/authentication/community/login')));
 const OrganizationRegister = Loadable(lazy(() => import('./components/authentication/organization/register/index')));
 const OrganizationEmailVerification = Loadable(lazy(() => import('./components/authentication/organization/email-verification')));
@@ -44,104 +42,34 @@ const CreateCompetition = Loadable(lazy(() => import('./components/competition/N
 const Page404 = Loadable(lazy(() => import('./components/error/page404')));
 
 function App() {
+  const isAuthenticated = localStorage.getItem('token') ;
+
   return (
-    <>
-      <GuestGuard>
-        <Switch>
-          <Route path="/auth/register">
-            <AuthLayout>
-              <CommunityRegister />
-            </AuthLayout>
-          </Route>
-          <Route path="/auth/verify">
-            <AuthLayout>
-              <CommunityEmailVerification />
-            </AuthLayout>
-          </Route>
-          <Route path="/auth/resend-code">
-            <AuthLayout>
-              <CommunityResend />
-            </AuthLayout>
-          </Route>
-          <Route path="/auth/wallet-authentication">
-            <AuthLayout>
-              <CommunityWalletAuthentication />
-            </AuthLayout>
-          </Route>
-          <Route path="/auth/login">
-            <AuthLayout>
-              <CommunityLogin />
-            </AuthLayout>
-          </Route>
-          <Route path="/auth/org/register">
-            <AuthLayout>
-              <OrganizationRegister />
-            </AuthLayout>
-          </Route>
-          <Route path="/auth/org/verify">
-            <AuthLayout>
-              <OrganizationEmailVerification />
-            </AuthLayout>
-          </Route>
-          <Route path="/auth/org/resend-code">
-            <AuthLayout>
-              <OrganizationResend />
-            </AuthLayout>
-          </Route>
-          <Route path="/auth/org/wallet-authentication">
-            <AuthLayout>
-              <OrganizationWalletAuthentication />
-            </AuthLayout>
-          </Route>
-          <Route path="/auth/org/login">
-            <AuthLayout>
-              <OrganizationLogin />
-            </AuthLayout>
-          </Route>
-          <Route path="/pub/leaderboard/:id" >
-            <DashboardLayout>
-              <LeaderboardById />
-            </DashboardLayout>
-          </Route>
-          <Route path="/dashboard/leaderboard/management">
-            <DashboardLayout>
-              <LeaderboardManagement />
-            </DashboardLayout>
-          </Route>
-          <Route path="/dashboard/leaderboard/create">
-            <DashboardLayout>
-              <CreateLeaderboard />
-            </DashboardLayout>
-          </Route>
-          <Route path="/dashboard/leaderboard/:id" >
-            <DashboardLayout>
-              <LeaderboardById />
-            </DashboardLayout>
-          </Route>
-          <Route path="/pub/multi/leaderboard/:id">
-            <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" />
-            <DashboardLayout>
-              <MultiTokenLeaderboardById />
-            </DashboardLayout>
-          </Route>
-         
-          <Route path="/dashboard/competition/create">
-            <DashboardLayout>
-              <CreateCompetition />
-            </DashboardLayout>
-          </Route>
-          <Route exact path="/">
-          <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" />
-            {/* <Redirect to="/pub/leaderboard/6185930b4454af30818cb26c" /> */}
-          </Route>
-          <Route path="*" >
-            <Page404 />
-          </Route>
-        </Switch> 
-      </GuestGuard>
+    <> 
+      <Switch> 
+        <Route exact path="/" ><Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb"/></Route> 
+        <UnGuardedRoute path='/auth/login' component={CommunityLogin} auth={isAuthenticated} layout={AuthLayout}/>
+        <UnGuardedRoute path='/auth/register' component={CommunityRegister} auth={isAuthenticated} layout={AuthLayout}/>
+        <UnGuardedRoute path='/auth/verify' component={CommunityEmailVerification} auth={isAuthenticated} layout={AuthLayout}/>
+        <UnGuardedRoute path='/auth/resend-code' component={CommunityResend} auth={isAuthenticated} layout={AuthLayout}/>
+        <UnGuardedRoute path='/auth/wallet-authentication' component={CommunityWalletAuthentication} auth={isAuthenticated} layout={AuthLayout}/>
+        <UnGuardedRoute path='/auth/org/register' component={OrganizationRegister} auth={isAuthenticated} layout={AuthLayout}/>
+        <UnGuardedRoute path='/auth/org/verify' component={OrganizationEmailVerification} auth={isAuthenticated} layout={AuthLayout}/>
+        <UnGuardedRoute path='/auth/org/resend-code' component={OrganizationResend} auth={isAuthenticated} layout={AuthLayout}/>
+        <UnGuardedRoute path='/auth/org/wallet-authentication' component={OrganizationWalletAuthentication} auth={isAuthenticated} layout={AuthLayout}/>
+        <UnGuardedRoute path='/auth/org/login' component={OrganizationLogin} auth={isAuthenticated} layout={AuthLayout}/>
+        <UnGuardedRoute path='/pub/leaderboard/:id' component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
+        <UnGuardedRoute path='/pub/multi/leaderboard/:id' component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
+        <GuardedRoute path='/dashboard/leaderboard/management' component={LeaderboardManagement} auth={isAuthenticated}  layout={DashboardLayout}/>
+        <GuardedRoute path='/dashboard/leaderboard/create' component={CreateLeaderboard} auth={isAuthenticated}  layout={DashboardLayout}/>
+        <GuardedRoute path='/dashboard/competition/create' component={CreateCompetition} auth={isAuthenticated}  layout={DashboardLayout}/>
+        <GuardedRoute path='/dashboard/multi/leaderboard/:id' component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
+        <GuardedRoute path='/dashboard/leaderboard/:id' component={LeaderboardById} auth={isAuthenticated}  layout={DashboardLayout}/>
+        <Route path="*" component={Page404}></Route> 
+      </Switch>  
     </>
   );
 }
-
+  /* <Redirect to="/pub/leaderboard/6185930b4454af30818cb26c" /> */
 
 export default App;
