@@ -42,8 +42,8 @@ export default function NewCompetition() {
   const newCompetitionSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     leaderboard: Yup.object().required("Leaderboard is required"),
-    startBlock: Yup.string().required("Start block is required"),
-    endBlock: Yup.string().required("End block is required"),
+    startBlock: Yup.string(),
+    endBlock: Yup.string() ,
     startDate: Yup.string().required("Start Date/Time is required"),
     endDate: Yup.string().required("End Date/Time is required"),
   });
@@ -54,7 +54,8 @@ export default function NewCompetition() {
     startBlock: "12345",
     endBlock: "67891",
     endDate: "2022-01-13 11:00",
-    startDate: "2022-01-12 02:00"
+    startDate: "2022-01-12 02:00",
+    status: false
   };
 
   const {
@@ -70,10 +71,20 @@ export default function NewCompetition() {
   });
 
   const onSubmit = async (values) => {
-    // 2022-01-07T11:57:00.000Z
-    values.startDate = moment(values.startDate, "YYYY-MM-DD hh:mm").toISOString();
-    values.endDate = moment(values.endDate, "YYYY-MM-DD hh:mm").toISOString();
-    values.leaderboard = values.leaderboard._id ;
+    try{ 
+      values.leaderboard = values.leaderboard._id ;  
+      values.startDate = new Date(`${values.startDate} UTC`).toISOString(); 
+      values.endDate = new Date(`${values.endDate} UTC`).toISOString();
+      values.status === true ? values.status = "published" : values.status = "pending";  
+    } catch (e) {
+      toast.error(`Error: ${e}`)
+    }
+
+    if (!values.leaderboard){
+      toast.error("leaderboard is required");
+      return;
+    }
+   console.log(values);
     await addCompetition(values)
       .then((response) => {
         // dispatch(getAllCompetitionsDispatch());
@@ -170,9 +181,9 @@ export default function NewCompetition() {
             <FGrid className={"f-mt-1"}>
               <FGridItem alignX="center" size={[6, 12, 12]}>
                 <FInputTextField
-                  label="Start Date/Time "
+                  label="Start Date/Time in UTC"
                   name="startDate"
-                  placeholder="Start Date/Time "
+                  placeholder="Start Date/Time in UTC"
                   register={register}
                   error={
                     errors["startDate"]?.message
@@ -183,9 +194,9 @@ export default function NewCompetition() {
               </FGridItem>
               <FGridItem alignX="center" size={[6, 12, 12]}>
                 <FInputTextField
-                  label="End Date/Time "
+                  label="End Date/Time in UTC"
                   name="endDate"
-                  placeholder="End Date/Time "
+                  placeholder="End Date/Time in UTC"
                   register={register}
                   error={
                     errors["endDate"]?.message
@@ -225,12 +236,12 @@ export default function NewCompetition() {
             </FGrid>
             <FInputCheckbox
             display={"inline"}
-            label="Checkbox text here"
+            label="Publish Competition"
             className={"f-mt-2 f-mb-2"}
-            name={"checkbox"}
+            name={"status"}
             register={register}
             error={
-              errors["checkbox"]?.message ? errors["checkbox"]?.message : ""
+              errors["status"]?.message ? errors["status"]?.message : ""
             }
           /> 
             <FGrid>

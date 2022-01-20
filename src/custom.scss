@@ -44,6 +44,16 @@ $secondaryColor: #495057;
     font-size: 18px;
 }
 
+.custom-icon {
+    display: flex;
+    align-items: center;
+    margin-left: 2px;
+    cursor: pointer;
+    background-color: #dab46e;
+    padding: 3px 8px;
+    border-radius: 2.5px;
+}
+
 .grey-secondary {
     color: #919eab;
 }

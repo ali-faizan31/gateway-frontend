@@ -8,7 +8,9 @@ import {
   FGrid,
   FInputTextField,
   FGridItem,
+  FDialog
 } from "ferrum-design-system";
+import { RiFileCopy2Fill, RiMailOpenLine, RiEdit2Fill } from "react-icons/ri";
 import Datatable from "react-bs-datatable";
 import { useHistory } from "react-router-dom"; 
 import moment from 'moment';
@@ -23,6 +25,7 @@ const CompetitionManagement = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [offset, setOffset] = useState(0);
   const [competitionList, setCompetitionList] = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
 
   useEffect(() => {
     getCompetitionListing();
@@ -31,8 +34,14 @@ const CompetitionManagement = () => {
   const statusFormatter = (params) => {
     const { status } = params; 
     return (
-      <>   <div data-label="Status">  
+      <>   <div data-label="Status"  className='label-column'>  
         <FButton title={sentenceCase(status)}></FButton> 
+        {/* <p className='custom-icon'><RiEdit2Fill /></p> */}
+        <FButton
+        prefix={<RiEdit2Fill />} 
+        className="f-ml-1"
+        onClick={() => setShowDialog(true)}
+      ></FButton>
         </div> 
       </>
     );
@@ -43,27 +52,66 @@ const CompetitionManagement = () => {
     return (
       <>
       <div data-label="Action"> 
-        <FButton type="button" title={" Details"} onClick={() => onDetailClick(params)}></FButton>
+        <FButton type="button" title={" Details"} disabled={true} onClick={() => onDetailClick(params)}></FButton>
         </div>
       </>
     );
   };
 
   const startDateFormatter = (params) => {
-    let date = '';
+    let date = ''; 
     if (params?.startDate) {
-          date = moment(new Date(params.startDate)).format('DD-MMM-YYYY | HH:mm');
+      date = moment((params.startDate)).utc().format('YYYY-MM-DD | HH:mm');
     } 
     return  <div data-label="Start Date">{date}</div> 
   };
 
   const endDateFormatter = (params) => {
-    let date = '';
+    let date = ''; 
     if (params?.endDate) {
-          date = moment(new Date(params.endDate)).format('DD-MMM-YYYY | HH:mm');
-        } 
+       date = moment((params.endDate)).utc().format('YYYY-MM-DD | HH:mm');
+    }  
     return  <div data-label="Date">{date} </div>
   };
+
+  const copyPublicUrl = (row) => {
+    const publicUrl = `${window.location.origin}/pub/competition/${row._id}`;
+    const { clipboard } = navigator;
+
+    if (clipboard !== undefined && clipboard !== "undefined") {
+      navigator.clipboard.writeText(publicUrl).then(
+        () => {
+          toast.success("Copied!")
+        },
+        (err) => {
+          toast.error(err)
+        }
+      );
+    }
+  };
+
+  const openPublicUrl = (row) => {
+    const publicUrl = `${window.location.origin}/pub/competition/${row._id}`;
+    window.open(publicUrl, "_blank");
+  };
+
+  const publicUrlActions = (params) => (
+    <>
+    <div data-label="Public URL"> 
+      <FButton
+        prefix={<RiFileCopy2Fill />} 
+        className="f-mr-1"
+        onClick={() => copyPublicUrl(params)}
+      ></FButton>
+      <FButton
+        prefix={<RiMailOpenLine />}
+        label="Open" 
+        className={"f-mt--2"}
+        onClick={() => openPublicUrl(params)}
+      ></FButton>
+      </div>
+    </>
+  );
 
 
   const columns = [
@@ -79,7 +127,8 @@ const CompetitionManagement = () => {
       cell: endDateFormatter
     },
     { prop: 'status', title: 'Status', cell: statusFormatter },
-    { prop: 'action', title: 'Action', cell: actionFormatter }  
+    { prop: 'action', title: 'Action', cell: actionFormatter },
+    { prop: "publicUrl", title: "Public URL", cell: publicUrlActions},  
   ];
 
   const getCompetitionListing = () => {
@@ -149,6 +198,11 @@ const CompetitionManagement = () => {
             />
           </FTable>
         </FContainer>
+
+        <FDialog show={showDialog} size={"small"} className={"custom-label"} onHide={()=>setShowDialog(false)}>
+          jhgfg 
+          hvgb
+        </FDialog>
       </FContainer>
     </>
   );
