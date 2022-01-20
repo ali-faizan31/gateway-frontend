@@ -10,6 +10,7 @@ import {
   FContainer,
   FSelect,
   FDatepicker,
+  FInputCheckbox
 } from "ferrum-design-system";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -32,10 +33,7 @@ export default function NewCompetition() {
   const [eventEndValue, setEventEndValue] = useState(null);
   const [eventEndOpen, setEventEndOpen] = useState(false);
   const [selectedLeaderboard, setSelectedLeaderboard] = useState("");
-  const [leaderboardList, setLeaderboardList] = useState([
-    { _id: 1, value: "leader", network: "56", label: "he | gfghj | kjhgfxcv" },
-    { _id: 3, value: "leader", network: "56", label: "he kjhg } jhyh" },
-  ]);
+  const [leaderboardList, setLeaderboardList] = useState([]); 
 
   useEffect(() => {
     getLeaderboardListing();
@@ -225,6 +223,16 @@ export default function NewCompetition() {
                 /> 
               </FGridItem>
             </FGrid>
+            <FInputCheckbox
+            display={"inline"}
+            label="Checkbox text here"
+            className={"f-mt-2 f-mb-2"}
+            name={"checkbox"}
+            register={register}
+            error={
+              errors["checkbox"]?.message ? errors["checkbox"]?.message : ""
+            }
+          /> 
             <FGrid>
               <FGridItem alignX="end" dir={"row"} className={"f-mt-1"}>
                 <FButton

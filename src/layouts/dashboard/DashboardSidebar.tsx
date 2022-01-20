@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { FSider, FSiderItem, FSiderSubMenuItem } from "ferrum-design-system";
 import toast, { Toaster } from 'react-hot-toast';
 import { useSelector, RootStateOrAny } from 'react-redux';
-import { publicLeaderboardConfig, sidebarConfig, publicMultiLeaderboardConfig } from './SidebarConfig';
+import { publicLeaderboardConfig, sidebarConfig, publicMultiLeaderboardConfig, publicCompetitionConfig } from './SidebarConfig';
 import { useLocation, useParams } from 'react-router-dom';
 import {RiCheckboxBlankCircleFill} from "react-icons/ri";
-import { getLeaderboardByIdForPublicUser } from "../../_apis/LeaderboardCrud";
-import { getCompetitionByIdForPublicUser } from "../../_apis/CompetitionCrud";
+import { getLeaderboardByIdForPublicUser, getAllLeaderboards } from "../../_apis/LeaderboardCrud";
+import { getCompetitionByIdForPublicUser, getAllCompetitions } from "../../_apis/CompetitionCrud";
 
 
 const DashboardSidebar = () => {
@@ -15,18 +15,24 @@ const DashboardSidebar = () => {
   const [sideConfig, setSideConfig]: any = useState([]);
   const { competitionList } = useSelector((state: RootStateOrAny) => state.competition);
   const { leaderboardList } = useSelector((state: RootStateOrAny) => state.leaderboard);
+  const isPublic = pathname.includes('/pub');
   const isPublicLeaderboard = pathname.includes('/pub/leader');
   const isPublicMultiLeaderboard = pathname.includes('/pub/multi/leaderboard');
   const isPublicCompetition = pathname.includes('/pub/competition');
 
   useEffect(() => {
-    if (id !== ":id") { 
-      if (isPublicLeaderboard || isPublicMultiLeaderboard) {
-        getPublicLeaderboard();
-      }
-      if (isPublicCompetition) {
-        getPublicCompetition();
-      }
+    if (id !== ":id") {
+      if (isPublic){ 
+        if (isPublicLeaderboard || isPublicMultiLeaderboard) {
+          getPublicLeaderboard();
+        }
+        if (isPublicCompetition) {
+          getPublicCompetition();
+        }
+      } 
+      // else {
+      //   getSidebarItems();
+      // }
     }
   }, [id])
 
@@ -50,7 +56,7 @@ const DashboardSidebar = () => {
       })
       .catch((e: any) => {
         if (e.response) {
-          toast.error(e.response.data.status.message);
+          toast.error(e?.response?.data?.status?.message);
         } else {
           toast.error('Something went wrong. Try again later!');
         }
@@ -75,24 +81,59 @@ const DashboardSidebar = () => {
   const getPublicCompetition = () => {
     getCompetitionByIdForPublicUser(id)
       .then((res: any) => {
-        if (res?.data?.body?.competition) {
+        if (res?.data?.body?.competition) { 
           const { competition } = res.data.body;
-          const { leaderboard } = res.data.body;
           const mappedData = [
             { title: competition.name, _id: competition._id, path: `/pub/competition/${competition._id}` }
           ];
-          // updatePublicCompetitionConfig(mappedData);
+          updatePublicCompetitionConfig(mappedData);
         }
       })
       .catch((e: any) => {
         if (e.response) {
-          toast.error(e.response.data.status.message);
+          toast.error(e?.response?.data?.status?.message);
         } else {
           toast.error('Something went wrong. Try again later!');
         }
       });
   };
 
+  const updatePublicCompetitionConfig = (list: any) => { 
+    if (isPublicCompetition) {
+      setSideConfig([])
+      let np: any = publicCompetitionConfig[0].children;
+      np = [...np, list[0]];
+      publicCompetitionConfig[0].children = np;
+      setSideConfig(publicCompetitionConfig);
+    }
+  };
+
+  const getSidebarItems = async () => {
+    let leaderboardResponse = await getAllLeaderboards(0,0);
+    console.log(leaderboardResponse?.data?.body?.leaderboards);
+    await mapList(leaderboardResponse?.data?.body?.leaderboards, "leaderboard");
+    let competitionResponse = await getAllCompetitions(0,0);
+    await mapList(leaderboardResponse?.data?.body?.competitions, "competition");
+    console.log(leaderboardResponse, competitionResponse)
+  }
+
+  const mapList = async (list: any, component: any) => {
+    const mappedData: any = [];
+    console.log(list);
+    if (list.length) {
+      list.forEach((item: any) => {
+        const temp = {
+          title: item.name,
+          _id: item._id,
+          path: component === "leaderboard" ? `/dashboard/leaderboard/${item._id}` : `/dashboard/competition/${item._id}`
+        };
+        mappedData.push(temp);
+      });
+    }
+    console.log(mappedData);
+    // setLeaderboardList(mappedData);
+    await setSideConfig(mappedData);
+  };
 
   const renderContent = (items: any) => { 
     return items.map((item: any) => (
@@ -112,8 +153,8 @@ const DashboardSidebar = () => {
     <FSider>
       {(isPublicLeaderboard && renderContent(sideConfig) ||
         (isPublicMultiLeaderboard && renderContent(sideConfig) ||
-          // (isPublicCompetition && renderContent(publicCompetitionConfig) || (
-          renderContent(sidebarConfig)))}
+          (isPublicCompetition && renderContent(sideConfig) || (
+          renderContent(sidebarConfig)))))}
     </FSider>
   )
 }

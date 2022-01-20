@@ -60,19 +60,29 @@ const CompetitionInformation = () => {
 
   const getCompetition = () => {
     getCompetitionById(id)
-      .then((res) => {
-        if (res?.data?.body?.leaderboard) {
-          const { leaderboard } = res.data.body;
-          const { competition } = res.data.body;
+      .then((res) => { 
+        if (res?.data?.body?.competition) { 
+          const { leaderboard } = res.data.body.competition; 
+          const competition = res.data.body.competition; 
+          setCompetitionData(res.data.body.competition);
           setLeaderboardData(leaderboard);
-          setCompetitionData(competition);
-          getStartBlock(leaderboard);
+          console.log(leaderboard, res.data.body.competition)
+          let data = {
+            // tokenContractAddress: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress,
+            // chainId: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId,
+            // leaderboardDexUrl: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.networkDex?.dex?.url,
+            // leaderboardexclusionWalletAddressList: leaderboard.exclusionWalletAddressList,
+            // competitionName: competition?.name,
+            // competitionStartBlock: competition.startBlock,
+            // competitionEndBlock: competition.endBlock
+          }
+          getStartBlock(data); 
         } else {
           setIsLoading(false);
-          
         }
       })
       .catch((e) => {
+        setIsLoading(false);
         if (e.response) {
           toast.error(e?.response?.data?.status?.message);
         } else {
@@ -89,10 +99,21 @@ const CompetitionInformation = () => {
           const { competition } = res.data.body;
           setLeaderboardData(leaderboard);
           setCompetitionData(competition);
-          getStartBlock(leaderboard);
+          let data = {
+            tokenContractAddress: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress,
+            chainId: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId,
+            leaderboardDexUrl: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.networkDex?.dex?.url,
+            leaderboardexclusionWalletAddressList: leaderboard.exclusionWalletAddressList,
+            competitionName: competition?.name,
+            competitionStartBlock: competition.startBlock,
+            competitionEndBlock: competition.endBlock
+          }
+          console.log(leaderboard, competition, data);
+          getStartBlock(data);
         }
       })
       .catch((e) => {
+        setIsLoading(false);
         if (e.response) {
           if (e.response) {
             toast.error(e?.response?.data?.status?.message);
@@ -103,16 +124,17 @@ const CompetitionInformation = () => {
       });
   };
 
-  const getStartBlock = (leaderboard) => {
-    getStartBlockHolders(leaderboard?.chainId, leaderboard?.tokenContractAddress)
+  const getStartBlock = (data) => {
+    getStartBlockHolders(data.chainId, data.tokenContractAddress, data.competitionStartBlock)
       .then((res) => {
-        if (res?.data?.data?.items && res.data.data.items.length > 0) {
+        if (res?.data?.data?.items  ) {
           const { items } = res.data.data;
           setStartBlockList(items);
-          getEndBlock(leaderboard, items);
+          getEndBlock(data, items);
         }
       })
       .catch((e) => {
+        setIsLoading(false);
         if (e?.response?.data?.error_message) {
           toast.error(e.response.data.error_message);
         } else {
@@ -121,17 +143,18 @@ const CompetitionInformation = () => {
       });
   };
 
-  const getEndBlock = (leaderboard, startBlock) => {
-    getEndBlockHolders(leaderboard?.chainId, leaderboard?.tokenContractAddress)
+  const getEndBlock = (data, startBlock) => {
+    getEndBlockHolders(data.chainId, data.tokenContractAddress, data.competitionEndBlock)
       .then((res) => {
-        if (res?.data?.data?.items && res.data.data.items.length > 0) {
+        if (res?.data?.data?.items  ) {
           const { items } = res.data.data;
           setEndBlockList(items);
-          mapCompetitionData(items, startBlock, leaderboard);
+          mapCompetitionData(items, startBlock, data);
           setIsLoading(false);
         }
       })
       .catch((e) => {
+        setIsLoading(false);
         if (e?.response?.data?.error_message) {
           toast.error(e.response.data.error_message);
         } else {
@@ -155,14 +178,14 @@ const CompetitionInformation = () => {
     return result;
   };
 
-  const mapCompetitionData = (endBlock, startBlock, leaderboard) => {
+  const mapCompetitionData = (endBlock, startBlock, data) => {
     const filteredList = filterList(
       mapHoldersBalance(endBlock, startBlock).filter((x) => Object.keys(x).length > 0 && x),
-      leaderboard?.walletAddresses
+      data?.leaderboardexclusionWalletAddressList
     ); 
     const list = arraySortByKeyDescending(filteredList, 'growthRate');
 
-    const levelUpSwapUrl = `${leaderboard.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard.tokenContractAddress}&exactField=output&exactAmount=`;
+    const levelUpSwapUrl = `${data.leaderboardDexUrl}swap?inputCurrency=BNB&outputCurrency=${data.tokenContractAddress}&exactField=output&exactAmount=`;
 
     if (list && list.length > 0) {
       for (let i = 0; i < list.length; i += 1) {
@@ -220,7 +243,7 @@ const CompetitionInformation = () => {
           const diff =
             eitherConverter(sameEntry?.balance, 'wei').ether - eitherConverter(startValue?.balance, 'wei').ether;
           let color = 'white';
-          if (diff > 0) {
+          if (diff >= 0) {
             color = 'green';
           } else if (diff < 0) {
             color = 'red';
@@ -235,6 +258,7 @@ const CompetitionInformation = () => {
         return Object.keys(tempObj).length > 0 && tempObj;
       });
 
+    console.log('first');
     newWallets = onlyInLeft(endBlocks, startBlocks, false).filter((obj) => obj && obj);
     matchedWallets = inBoth(startBlocks, endBlocks).filter((obj) => obj && obj); 
     return [...newWallets, ...droppedWallets, ...matchedWallets];
@@ -242,19 +266,19 @@ const CompetitionInformation = () => {
 
   const levelUpFormatter = (params) => (
     <div data-label="Get Token">
-    <a href={params.row.levelUpUrl} target="_blank" rel="noreferrer" className="btn-level-up br-40">
+    <a href={params.levelUpUrl} target="_blank" rel="noreferrer" className="f-btn f-btn-primary text-decoration-none">
       LEVEL UP
     </a></div>
   );
 
   const growthReductionFormatter = (params) => {
-    const { status } = params.row;
-    return (
-      <>
-      <div data-label="Growth / Reduction">
-      {params.row.formattedGrowthRate} {status}
+    const { status } = params;
+    return ( 
+      <div data-label="Growth / Reduction" className='label-column'>
+       {params.formattedGrowthRate} 
+      <p className='custom-label' style={{background: params.color}}> {status} </p>
       </div>
-        {/* <div style={{ color: params.row.color }}>
+        /* <div style={{ color: params.row.color }}>
           {params.row.formattedGrowthRate} 
         </div>
         {params.row.status !== 'Matched' && (
@@ -265,8 +289,7 @@ const CompetitionInformation = () => {
           >
             {status}
           </Label>
-        )} */}
-      </>
+        )} */
     );
   };
 

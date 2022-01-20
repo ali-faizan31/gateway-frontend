@@ -45,7 +45,7 @@ export function getCompetitionByIdForPublicUser(id) {
   return axios.get(`${baseUrl}/api/v1/competitions/${id}`);
 }
 
-export function getStartBlockHolders(chainId, tokenContractAddress ) {
+export function getStartBlockHolders(chainId, tokenContractAddress, startBlockHeight ) {
   const url = `https://api.covalenthq.com/v1/${chainId}/tokens/${tokenContractAddress}/token_holders/?key=${apiKey}&block-height=${startBlockHeight}&page-size=9000`;
   return axios.get(url, {
     headers: {
@@ -56,7 +56,7 @@ export function getStartBlockHolders(chainId, tokenContractAddress ) {
   });
 }
 
-export function getEndBlockHolders(chainId, tokenContractAddress ) {
+export function getEndBlockHolders(chainId, tokenContractAddress, endBlockHeight ) {
   const url = `https://api.covalenthq.com/v1/${chainId}/tokens/${tokenContractAddress}/token_holders/?key=${apiKey}&block-height=${endBlockHeight}&page-size=8000`;
   return axios.get(url, {
     headers: {

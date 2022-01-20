@@ -31,6 +31,19 @@ $secondaryColor: #495057;
     color: #495057;
 }
 
+.label-column {
+    display: flex;
+    justify-content: space-between;
+}
+
+.custom-label {
+    background: red;
+    padding: 2px 3px;
+    border-radius: 2.5px;
+    color: black;
+    font-size: 18px;
+}
+
 .grey-secondary {
     color: #919eab;
 }

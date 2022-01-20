@@ -62,6 +62,7 @@ function App() {
         <UnGuardedRoute path='/auth/org/login' component={OrganizationLogin} auth={isAuthenticated} layout={AuthLayout}/>
         <UnGuardedRoute path='/pub/leaderboard/:id' component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
         <UnGuardedRoute path='/pub/multi/leaderboard/:id' component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
+        <UnGuardedRoute path='/pub/competition/:id' component={CompetitionById} auth={isAuthenticated}  layout={DashboardLayout}/>
         <GuardedRoute path='/dashboard/leaderboard/management' component={LeaderboardManagement} auth={isAuthenticated}  layout={DashboardLayout}/>
         <GuardedRoute path='/dashboard/leaderboard/create' component={CreateLeaderboard} auth={isAuthenticated}  layout={DashboardLayout}/>
         <GuardedRoute path='/dashboard/competition/create' component={CreateCompetition} auth={isAuthenticated}  layout={DashboardLayout}/>

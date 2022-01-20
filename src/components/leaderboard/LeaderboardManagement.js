@@ -94,12 +94,15 @@ const LeaderboardManagement = () => {
   };
 
   const networkFormatter = (params) => {
-    // <div data-label="Get Token"></div>
+    let network;
+    let chainId = params?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId;
+    console.log(params)
     for (let i = 0; i < chainIdList.length; i += 1) {
-      if (chainIdList[i].id === params.chainId) {
-        return <div data-label="Network"> {chainIdList[i].label}</div>;
-      }
+      if (chainIdList[i].id === chainId) {
+        network = chainIdList[i].label; 
+      } 
     }
+    return <div data-label="Network"> {network}</div>;
   };
 
   const copyPublicUrl = (row) => {
@@ -134,8 +137,8 @@ const LeaderboardManagement = () => {
       ></FButton>
       <FButton
         prefix={<RiMailOpenLine />}
-        label="Open"
-        // title="Open"
+        label="Open" 
+        className={"f-mt--2"}
         onClick={() => openPublicUrl(params)}
       ></FButton>
       </div>
@@ -156,12 +159,12 @@ const LeaderboardManagement = () => {
     {
       prop: "tokenContractAddress",
       title: "Contract Address",
-      cell: (params)=><div data-label="Contract Address">{params.tokenContractAddress}</div>
+      cell: (params)=><div data-label="Contract Address">{params?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress}</div>
     },
     {
       prop: "dexUrl",
       title: "Dex Url" ,
-      cell: (params)=><div data-label="Dex Url">{params.dexUrl}</div>
+      cell: (params)=><div data-label="Dex Url">{params?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.networkDex?.dex?.url}</div>
     },
     {
       prop: "status",
@@ -176,6 +179,9 @@ const LeaderboardManagement = () => {
     {
       prop: "publicUrl",
       title: "Public URL", 
+      // cellProps: {
+      //   style: {  width:"200px" } 
+      // },
       cell: publicUrlActions,
     },
   ];
