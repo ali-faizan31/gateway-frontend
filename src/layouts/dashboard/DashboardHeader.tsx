@@ -23,7 +23,7 @@ const DashboardHeader = () => {
   const handleLogout = () => {
     localStorage.removeItem("me");
     localStorage.removeItem("token");  
-    history.push(PATH_AUTH.communityLogin);
+    history.push(PATH_AUTH.orgLogin);
   };
 
   return (

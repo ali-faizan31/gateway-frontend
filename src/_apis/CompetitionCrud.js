@@ -28,6 +28,21 @@ export function getCompetitionById(id) {
   });
 }
 
+export function updateCompetitionStatusById(id, values) { 
+  return axios.put(`${baseUrl}/api/v1/admin/competitions/update/status/${id}`,
+   values,
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "Application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}
+
+
+
 export function addCompetition(values) { 
   return axios.post(`${baseUrl}/api/v1/admin/competitions/create`,
    values,

@@ -98,6 +98,29 @@ input:-webkit-autofill {
     font-weight: 700 !important;
 }
 
+.f-input-checkbox input[type="checkbox"]:not(:checked)+label::before {
+    background: transparent !important;
+}
+
+.f-input-select {
+    .f-select {
+        .f-select__menu {
+            background: #161c24 !important;
+            .f-select__menu-list {
+                .f-select__option {
+                    background: #212b36 !important;
+                }
+            }
+        }
+    }
+}
+
+.f-dialog .f-dialog-content {
+    background: #212b36 !important;
+}
+
+// #212b36 // sec
+// #161c24 // pri
 .f-table {
     .controlRow__root {
         .ButtonGroup__root {

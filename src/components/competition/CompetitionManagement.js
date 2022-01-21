@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { sentenceCase, paramCase } from "change-case"; 
 import toast, { Toaster } from "react-hot-toast";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import ClipLoader from "react-spinners/ClipLoader";
 import {
   FTable,
   FContainer,
@@ -8,14 +12,16 @@ import {
   FGrid,
   FInputTextField,
   FGridItem,
-  FDialog
+  FDialog,
+  FItem,
+  FInputRadio
 } from "ferrum-design-system";
 import { RiFileCopy2Fill, RiMailOpenLine, RiEdit2Fill } from "react-icons/ri";
 import Datatable from "react-bs-datatable";
 import { useHistory } from "react-router-dom"; 
 import moment from 'moment';
 import { PATH_ADMIN, PATH_DASHBOARD } from '../../routes/paths';
-import { getAllCompetitions } from '../../_apis/CompetitionCrud';
+import { getAllCompetitions, updateCompetitionStatusById } from '../../_apis/CompetitionCrud';
 
 
 const CompetitionManagement = () => { 
@@ -26,6 +32,8 @@ const CompetitionManagement = () => {
   const [offset, setOffset] = useState(0);
   const [competitionList, setCompetitionList] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
+  const [statusValue, setStatusValue] = useState("");
+  const [selectedCompetitionData,setSelectedCompetitionData] = useState({});
 
   useEffect(() => {
     getCompetitionListing();
@@ -40,12 +48,17 @@ const CompetitionManagement = () => {
         <FButton
         prefix={<RiEdit2Fill />} 
         className="f-ml-1"
-        onClick={() => setShowDialog(true)}
+        onClick={() => onEditStatusClick(params)}
       ></FButton>
         </div> 
       </>
     );
   };
+
+  const onEditStatusClick = (params) => {
+    setSelectedCompetitionData(params);
+    setShowDialog(true);
+  }
 
   const actionFormatter = (params) => {
     const wesehi = 10;
@@ -149,7 +162,7 @@ const CompetitionManagement = () => {
       })
       .catch((e) => {
         if (e.response) {
-          toast.error(e.response.data.status.message);
+          toast.error(e?.response?.data?.status?.message);
         } else {
           toast.error('Something went wrong. Try again later!');
         }
@@ -163,6 +176,52 @@ const CompetitionManagement = () => {
   const openCreateCompetition = () => {
     history.push(PATH_DASHBOARD.general.createCompetition);
   };
+
+  const initialValues = { 
+    status: "" 
+  };
+
+  const statusSchema = Yup.object().shape({ 
+    status: Yup.string().required("Status is required"),
+  });
+
+  const {
+    reset,
+    register,
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    watch,
+  } = useForm({
+    defaultValues: initialValues,
+    resolver: yupResolver(statusSchema),
+  });
+
+  const onSubmit = (values) => {
+    if (typeof values.status === 'string'){ 
+      values.status = statusValue; 
+      updateCompetitionStatusById(selectedCompetitionData._id, values)
+      .then((res) => { 
+        setShowDialog(false);
+        reset();
+        getCompetitionListing();
+      })
+      .catch((e) => {
+        console.log(e)
+        setShowDialog(false);
+        if (e.response) {
+          toast.error(e?.response?.data?.status?.message);
+        } else {
+          toast.error(`Something went wrong. Try again later! ${e}`);
+        }
+      });
+    }
+  }
+
+const onCancel = () => {
+  reset();
+  setShowDialog(false);
+}
 
   return (
     <>
@@ -197,13 +256,90 @@ const CompetitionManagement = () => {
               tableClass="striped hover responsive"
             />
           </FTable>
-        </FContainer>
+        </FContainer> 
 
-        <FDialog show={showDialog} size={"small"} className={"custom-label"} onHide={()=>setShowDialog(false)}>
-          jhgfg 
-          hvgb
-        </FDialog>
-      </FContainer>
+        <FDialog
+          show={showDialog}
+          size={"medium"}   
+          onHide={onCancel}
+          title={"Update Competition Status"}
+          className="connect-wallet-dialog w-50">
+
+          <FItem className={"f-mt-2"}>
+            Select Status of Competition
+          </FItem>
+          <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+            <FInputRadio
+              display={"inline"}
+              label="Pending"
+              id={"pending"}
+              name={"status"}
+              className={"f-mt-2 f-mb-2"}
+              register={register} 
+              onChange={(e)=>setStatusValue(e.target.id)}
+              error={errors["status"]?.message ? errors["status"]?.message : ""}
+            />
+            <FInputRadio
+              display={"inline"}
+              label="Publish"
+              id={"published"}
+              name={"status"}
+              className={"f-mt-2 f-mb-2"} 
+              register={register}
+              onChange={(e)=>setStatusValue(e.target.id)}
+              error={errors["status"]?.message ? errors["status"]?.message : ""}
+            />
+             <FInputRadio
+              display={"inline"}
+              label="Start"
+              id={"started"}
+              name={"status"}
+              className={"f-mt-2 f-mb-2"} 
+              register={register}
+              onChange={(e)=>setStatusValue(e.target.id)}
+              error={errors["status"]?.message ? errors["status"]?.message : ""}
+            />
+             <FInputRadio
+              display={"inline"}
+              label="Complete"
+              id={"completed"}
+              name={"status"}
+              className={"f-mt-2 f-mb-2"} 
+              register={register}
+              onChange={(e)=>setStatusValue(e.target.id)}
+              error={errors["status"]?.message ? errors["status"]?.message : ""}
+            />
+             <FInputRadio
+              display={"inline"}
+              label="Cancel"
+              id={"cancelled"}
+              name={"status"}
+              className={"f-mt-2 f-mb-2"} 
+              register={register}
+              onChange={(e)=>setStatusValue(e.target.id)}
+              error={errors["status"]?.message ? errors["status"]?.message : ""}
+            />
+              <FGrid>
+              <FGridItem alignX="end" dir={"row"} className={"f-mt-1"}>
+                <FButton
+                  type="submit"
+                  title={"Update Status"}
+                  onClick={onSubmit}
+                  postfix={
+                    isSubmitting && <ClipLoader color="#fff" size={20} />
+                  }
+                ></FButton>
+                <FButton
+                  type="button" 
+                  className={"f-ml-1"}
+                  title={"Cancel"}
+                  onClick={onCancel}
+                ></FButton>
+              </FGridItem>
+            </FGrid>
+          </form> 
+      </FDialog>
+    </FContainer>
     </>
   );
 };

@@ -49,12 +49,12 @@ export default function NewCompetition() {
   });
 
   const initialValues = {
-    name: "test",
+    name: "",
     leaderboard: {label:"Select"},
-    startBlock: "12345",
-    endBlock: "67891",
-    endDate: "2022-01-13 11:00",
-    startDate: "2022-01-12 02:00",
+    startBlock: "",
+    endBlock: "",
+    endDate: "2022-01-17 12:00",
+    startDate: "2022-01-10 12:00",
     status: false
   };
 

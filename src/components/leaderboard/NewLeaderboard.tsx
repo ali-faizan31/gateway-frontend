@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from "react-hook-form";
-import { FInputTextField, FGrid, FGridItem, FButton, FContainer } from "ferrum-design-system";
+import { FInputTextField, FGrid, FGridItem, FButton, FContainer, FInputCheckbox } from "ferrum-design-system";
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import toast, { Toaster } from "react-hot-toast";
@@ -20,25 +20,23 @@ export default function NewLeaderboard() {
   const [leaderboardInfo, setLeaderboardInfo] = useState({});
 
   const newLeaderboardScehma = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    tokenContractAddress: Yup.string().required('Contract Address is required'),
-    chainId: Yup.string().required('Network is required'),
-    dexUrl: Yup.string().required('Dex Url is required'),
-    walletAddresses: Yup.string().required('Team Wallet Addresses are required')
+    name: Yup.string().required('Name is required'), 
+    currencyAddressesByNetwork: Yup.string().required("Currency is required")
   });
 
   const onCancel = () => {
     history.push(PATH_DASHBOARD.general.leaderboardManagement);
   };
 
-  const getWalletAddressesArray = (list: any) => list.split(',');
+  const getArrayFromString = (list: any) => {
+    console.log(list)
+    return list.length ? list.split(',') : list
+  }; 
 
   const initialValues = {
-    name: '',
-    tokenContractAddress: '',
-    chainId: '',
-    walletAddresses: '',
-    dexUrl: '',
+    name: '', 
+    exclusionWalletAddressList: '',
+    currencyAddressesByNetwork: '',
     isPublished: false
   }
 
@@ -52,7 +50,8 @@ export default function NewLeaderboard() {
 
 
   const onSubmit = async (values: any) => {
-    values.walletAddresses = getWalletAddressesArray(values.walletAddresses);
+    values.exclusionWalletAddressList = getArrayFromString(values.exclusionWalletAddressList);
+    values.currencyAddressesByNetwork = getArrayFromString(values.currencyAddressesByNetwork);
     await addLeaderboard(values)
       .then((response) => {
         dispatch(getAllLeaderboardsDispatch());
@@ -79,7 +78,7 @@ export default function NewLeaderboard() {
           <h1> Create Leaderboard </h1>
           <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
             <FGrid >
-              <FGridItem alignX="center">
+              <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
                 <FInputTextField
                   label="Leaderboard Name"
                   name="name"
@@ -89,54 +88,46 @@ export default function NewLeaderboard() {
                     errors["name"]?.message ? errors["name"]?.message : ""
                   }
                 />
-              </FGridItem>
-              <FGridItem >
-                <FInputTextField
-                  label="Token Contract Address"
-                  name="tokenContractAddress"
-                  placeholder="Token Contract Address"
-                  register={register}
-                  error={errors["tokenContractAddress"]?.message ? errors["tokenContractAddress"]?.message : ""}
-                />
-              </FGridItem>
-            </FGrid>
-            <FGrid className={"f-mt-1"} >
-              <FGridItem alignX="center">
-                <FInputTextField
-                  label="Network"
-                  name="chainId"
-                  placeholder="Network"
-                  register={register}
-                  error={errors["chainId"]?.message ? errors["chainId"]?.message : ""}
-                />
-              </FGridItem>
-              <FGridItem alignX="center">
-                <FInputTextField
-                  label="Dex URL"
-                  name="dexUrl"
-                  placeholder="Dex URL"
-                  register={register}
-                  error={
-                    errors["dexUrl"]?.message ? errors["dexUrl"]?.message : ""
-                  }
-                />
-              </FGridItem>
-            </FGrid>
+              </FGridItem> 
+            </FGrid> 
             <FGrid>
-              <FGridItem alignX="center" className={"f-mt-1"}>
+              <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
                 <FInputTextField
                   label="Team Wallet Addresses"
-                  name="walletAddresses"
+                  name="exclusionWalletAddressList"
                   placeholder="walletAddress1,walletAddress2,walletAddress3"
                   register={register}
                   error={
-                    errors["walletAddresses"]?.message ? errors["walletAddresses"]?.message : ""
+                    errors["exclusionWalletAddressList"]?.message ? errors["exclusionWalletAddressList"]?.message : ""
                   }
                 />
               </FGridItem>
             </FGrid>
             <FGrid>
-              <FGridItem alignX="end" className={"f-mt-1"}>
+              <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+                <FInputTextField
+                  label="Currency"
+                  name="currencyAddressesByNetwork"
+                  placeholder="currencyAddress1,currencyAddress2"
+                  register={register}
+                  error={
+                    errors["currencyAddressesByNetwork"]?.message ? errors["currencyAddressesByNetwork"]?.message : ""
+                  }
+                />
+              </FGridItem>
+            </FGrid>
+            <FInputCheckbox
+            display={"inline"}
+            label="Publish Leaderboard"
+            className={"f-mt-2 f-mb-2"}
+            name={"isPublished"}
+            register={register}
+            error={
+              errors["isPublished"]?.message ? errors["isPublished"]?.message : ""
+            }
+          /> 
+            <FGrid>
+              <FGridItem alignX="end"  dir={"row"} className={"f-mt-1"}>
                 <FButton type="submit" title={"Create leaderboard"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
                 <FButton type="button" onClick={onCancel} className={"f-ml-1"} title={"Cancel"}></FButton>
               </FGridItem>
