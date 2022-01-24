@@ -203,7 +203,7 @@ export function Web3AuthWrapper(props) {
                    try{
                   const saveResponse = await saveUserSignatureAndGenerateNonce(payload.user._id, data, payload.applicationUserToken);  
                   if (saveResponse && saveResponse.address.nonce){
-                    history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardById);
+                    history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardByProvidedId);
                   }  
                 } catch (e) {
                   toast.error(`Error occured ${e}`); 
