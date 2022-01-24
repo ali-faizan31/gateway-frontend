@@ -32,6 +32,7 @@ const MultiTokenLeaderboardInformation = ({
 }) => {
   const exportRef = useRef();
   const { pathname } = useLocation();
+  let token = localStorage.getItem('token');
   const isPublicUser = pathname.includes("/pub");
   const user = localStorage.getItem('me');
   const parsedUser = user && JSON.parse(user); 
@@ -67,7 +68,8 @@ const MultiTokenLeaderboardInformation = ({
   const getCovalenthqLimit = (leaderboard) => {
     getCovalenthqResponse(
       leaderboard?.frmCabn?.chainId,
-      leaderboard?.frmCabn?.tokenContractAddress
+      leaderboard?.frmCabn?.tokenContractAddress,
+      token
     )
       .then((res) => {
         if (
@@ -95,7 +97,8 @@ const MultiTokenLeaderboardInformation = ({
     getTokenHolderListByContractAddressAndChainID(
       leaderboard?.frmCabn?.chainId,
       leaderboard?.frmCabn?.tokenContractAddress,
-      limit
+      limit,
+      token
     )
       .then((res) => {
         if (
@@ -128,7 +131,8 @@ const MultiTokenLeaderboardInformation = ({
     getTokenHolderListByContractAddressAndChainID(
       leaderboard?.frmxCabn?.chainId,
       leaderboard?.frmxCabn?.tokenContractAddress,
-      limit
+      limit,
+      token
     )
       .then((res) => {
         if (

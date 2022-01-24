@@ -10,6 +10,7 @@ import {
   FContainer,
   FSelect,
   FDatepicker,
+  FInputCheckbox
 } from "ferrum-design-system";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -28,14 +29,8 @@ import { chainIdList } from "../leaderboard/LeaderboardHelper";
 export default function NewCompetition() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [eventStartValue, setEventStartValue] = useState(null);
-  const [eventEndValue, setEventEndValue] = useState(null);
-  const [eventEndOpen, setEventEndOpen] = useState(false);
-  const [selectedLeaderboard, setSelectedLeaderboard] = useState("");
-  const [leaderboardList, setLeaderboardList] = useState([
-    { _id: 1, value: "leader", network: "56", label: "he | gfghj | kjhgfxcv" },
-    { _id: 3, value: "leader", network: "56", label: "he kjhg } jhyh" },
-  ]);
+  let token = localStorage.getItem('token');
+  const [leaderboardList, setLeaderboardList] = useState([]); 
 
   useEffect(() => {
     getLeaderboardListing();
@@ -43,20 +38,21 @@ export default function NewCompetition() {
 
   const newCompetitionSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
-    leaderboard: Yup.string().required("Leaderboard is required"),
-    startBlock: Yup.string().required("Start block is required"),
-    endBlock: Yup.string().required("End block is required"),
+    leaderboard: Yup.object().required("Leaderboard is required"),
+    startBlock: Yup.string(),
+    endBlock: Yup.string() ,
     startDate: Yup.string().required("Start Date/Time is required"),
     endDate: Yup.string().required("End Date/Time is required"),
   });
 
   const initialValues = {
     name: "",
-    leaderboard: "",
+    leaderboard: {label:"Select"},
     startBlock: "",
     endBlock: "",
-    endDate: "",
-    startDate: ""
+    endDate: "2022-01-17 12:00",
+    startDate: "2022-01-10 12:00",
+    status: false
   };
 
   const {
@@ -72,37 +68,44 @@ export default function NewCompetition() {
   });
 
   const onSubmit = async (values) => {
-    console.log(values);
-    values.startDate = moment(eventStartValue, "YYYY-MM-DD")
-      .utc()
-      .toISOString();
-    values.endDate = moment(eventEndValue, "YYYY-MM-DD").utc().toISOString();
-    // await addCompetition(values)
-    //   .then((response) => {
-    //     dispatch(getAllCompetitionsDispatch());
-    //     toast.success(response.data.status.message);
-    //     history.push(PATH_ADMIN.competition.management);
-    //   })
-    //   .catch((e) => {
-    //     if (e.response) {
-    //       toast.error(e.response.data.status.message);
-    //     } else {
-    //       toast.error("Something went wrong. Try again later!");
-    //     }
-    //   });
-  };
+    try{ 
+      values.leaderboard = values.leaderboard._id ;  
+      values.startDate = new Date(`${values.startDate} UTC`).toISOString(); 
+      values.endDate = new Date(`${values.endDate} UTC`).toISOString();
+      values.status === true ? values.status = "published" : values.status = "pending";  
+    } catch (e) {
+      toast.error(`Error: ${e}`)
+    }
 
-  console.log('opt',selectedLeaderboard);
+    if (!values.leaderboard){
+      toast.error("leaderboard is required");
+      return;
+    }
+   console.log(values);
+    await addCompetition(values, token)
+      .then((response) => {
+        // dispatch(getAllCompetitionsDispatch());
+        toast.success(response.data.status.message);
+        history.push(PATH_DASHBOARD.general.competitionManagement);
+      })
+      .catch((e) => {
+        if (e.response) {
+          toast.error(e.response.data.status.message);
+        } else {
+          toast.error("Something went wrong. Try again later!");
+        }
+      });
+  }; 
 
   const mapLeaderboardData = (leaderboards) => {
     if (leaderboards && leaderboards.length) {
-      leaderboards.forEach((leaderboard) => {
+      leaderboards.forEach((leaderboard) => {  
         for (let i = 0; i < chainIdList.length; i += 1) {
-          if (chainIdList[i].id === leaderboard.chainId) {
-            leaderboard.network = chainIdList[i].label;
-            leaderboard.label = `${leaderboard.name} | ${leaderboard.network} | ${leaderboard.tokenContractAddress}`; 
-            leaderboard.value = leaderboard._id;
-          }
+          if (chainIdList[i].id === leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId) { 
+            leaderboard.network = chainIdList[i].label; 
+            leaderboard.label = `${leaderboard.name} | ${leaderboard.network} | ${leaderboard.leaderboardCurrencyAddressesByNetwork[0].currencyAddressesByNetwork.tokenContractAddress}`; 
+            leaderboard.value = leaderboard._id; 
+          }  
         }
       });
     }
@@ -110,10 +113,12 @@ export default function NewCompetition() {
   };
 
   const getLeaderboardListing = () => {
-    getAllLeaderboards(0, 10)
+    getAllLeaderboards(0, 10, token)
       .then((res) => {
-        if (res?.data?.body?.leaderboards?.length) {
+        if (res?.data?.body?.leaderboards?.length) { 
           mapLeaderboardData(res.data.body.leaderboards);
+        } else {
+          setLeaderboardList([]);
         }
       })
       .catch((e) => {
@@ -124,15 +129,9 @@ export default function NewCompetition() {
         }
       });
   };
-
-  const onDateChange = (date, setFieldValue) => {
-    // const newDate = moment(date);
-    // const newS = newDate.tz('UTC').format('dddd D MMMM, YYYY hh:mm a');
-    setFieldValue("endDate", date);
-  };
-
+ 
   const onCancel = () => {
-    history.push(PATH_ADMIN.competition.management);
+    history.push(PATH_DASHBOARD.general.competitionManagement);
   };
 
   return (
@@ -153,10 +152,10 @@ export default function NewCompetition() {
                   control={control}
                   options={leaderboardList}
                   register={register}
-                  onChange={(e) => {
-                    console.log(e);
-                    setSelectedLeaderboard(e.target._id);
-                  }}
+                  // onChange={(e) => {
+                  //   console.log(e);
+                  //   setSelectedLeaderboard(e.target._id);
+                  // }}
                   error={
                     errors["leaderboard"]?.message
                       ? errors["leaderboard"]?.message
@@ -232,6 +231,16 @@ export default function NewCompetition() {
                 /> 
               </FGridItem>
             </FGrid>
+            <FInputCheckbox
+            display={"inline"}
+            label="Publish Competition"
+            className={"f-mt-2 f-mb-2"}
+            name={"status"}
+            register={register}
+            error={
+              errors["status"]?.message ? errors["status"]?.message : ""
+            }
+          /> 
             <FGrid>
               <FGridItem alignX="end" dir={"row"} className={"f-mt-1"}>
                 <FButton

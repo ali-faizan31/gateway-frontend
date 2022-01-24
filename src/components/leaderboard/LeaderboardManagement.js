@@ -3,6 +3,10 @@ import React, { useEffect, useState } from "react";
 import { sentenceCase, paramCase } from "change-case";
 import { PATH_ADMIN, PATH_DASHBOARD } from "../../routes/paths";
 import toast, { Toaster } from "react-hot-toast";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import ClipLoader from "react-spinners/ClipLoader";
 import {
   FTable,
   FContainer,
@@ -10,10 +14,13 @@ import {
   FGrid,
   FInputTextField,
   FGridItem,
+  FDialog,
+  FItem,
+  FInputRadio
 } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
-import { RiFileCopy2Fill, RiMailOpenLine } from "react-icons/ri";
-import { getAllLeaderboards } from "../../_apis/LeaderboardCrud";
+import { RiFileCopy2Fill, RiMailOpenLine, RiEdit2Fill } from "react-icons/ri";
+import { getAllLeaderboards, updateLeaderboardStatusById } from "../../_apis/LeaderboardCrud";
 import { chainIdList } from "./LeaderboardHelper";
 import { useHistory } from "react-router-dom";
 
@@ -25,14 +32,17 @@ const LeaderboardManagement = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [offset, setOffset] = useState(0);
   const [leaderboardList, setLeaderboardList] = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
+  const [statusValue, setStatusValue] = useState("");
+  const [selectedLeaderboardData,setSelectedLeaderboardData] = useState({});
 
   useEffect(() => {
     if(query || token){
-      getLeaderboardListing(token);
+      getLeaderboardListing();
     }
   }, [query, token]);
 
-  const getLeaderboardListing = (token) => {
+  const getLeaderboardListing = () => {
     getAllLeaderboards(offset, limit, token)
       .then((res) => {
         if (query === "") {
@@ -70,11 +80,13 @@ const LeaderboardManagement = () => {
 
   const actionFormatter = (params) => (
       <>
+      <div data-label="Action"> 
         <FButton
           type="button" 
           onClick={() => onDetailClick(params)}
           title={"Details"}
         ></FButton>
+        </div>
       </>
   ); 
 
@@ -82,20 +94,81 @@ const LeaderboardManagement = () => {
     const { status } = params;
     return (
       <> 
+      <div data-label="Status"  className='label-column'> 
             <FButton title={(status === "pending" && "Pending Review") ||
             (status === "clientAction" && "Needs Client Action") ||
             sentenceCase(status)}></FButton>
-        
+            <FButton
+        prefix={<RiEdit2Fill />} 
+        className="f-ml-1"
+        onClick={() => onEditStatusClick(params)}
+      ></FButton>
+        </div>
       </>
     );
   };
 
-  const networkFormatter = (params) => {
-    for (let i = 0; i < chainIdList.length; i += 1) {
-      if (chainIdList[i].id === params.chainId) {
-        return chainIdList[i].label;
-      }
+  const onEditStatusClick = (params) => {
+    setSelectedLeaderboardData(params);
+    setShowDialog(true);
+  }
+
+  const onCancel = () => {
+    reset();
+    setShowDialog(false);
+  }
+
+  const initialValues = { 
+    status: "" 
+  };
+
+  const statusSchema = Yup.object().shape({ 
+    status: Yup.string().required("Status is required"),
+  });
+
+  const {
+    reset,
+    register,
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    watch,
+  } = useForm({
+    defaultValues: initialValues,
+    resolver: yupResolver(statusSchema),
+  });
+
+  const onSubmit = (values) => {
+    if (typeof values.status === 'string'){ 
+      values.status = statusValue; 
+      updateLeaderboardStatusById(selectedLeaderboardData._id, values, token)
+      .then((res) => { 
+        setShowDialog(false);
+        reset();
+        getLeaderboardListing();
+      })
+      .catch((e) => {
+        console.log(e)
+        setShowDialog(false);
+        if (e.response) {
+          toast.error(e?.response?.data?.status?.message);
+        } else {
+          toast.error(`Something went wrong. Try again later! ${e}`);
+        }
+      });
     }
+  }
+
+  const networkFormatter = (params) => {
+    let network;
+    let chainId = params?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId;
+    console.log(params)
+    for (let i = 0; i < chainIdList.length; i += 1) {
+      if (chainIdList[i].id === chainId) {
+        network = chainIdList[i].label; 
+      } 
+    }
+    return <div data-label="Network"> {network}</div>;
   };
 
   const copyPublicUrl = (row) => {
@@ -121,6 +194,7 @@ const LeaderboardManagement = () => {
 
   const publicUrlActions = (params) => (
     <>
+    <div data-label="Public URL"> 
       <FButton
         prefix={<RiFileCopy2Fill />}
         // title="Copy" 
@@ -129,10 +203,11 @@ const LeaderboardManagement = () => {
       ></FButton>
       <FButton
         prefix={<RiMailOpenLine />}
-        label="Open"
-        // title="Open"
+        label="Open" 
+        className={"f-mt--2"}
         onClick={() => openPublicUrl(params)}
       ></FButton>
+      </div>
     </>
   );
 
@@ -140,6 +215,7 @@ const LeaderboardManagement = () => {
     {
       prop: "name",
       title: "Name", 
+      cell: (params)=><div data-label="Name">{params.name}</div>
     },
     {
       prop: "chainId",
@@ -148,11 +224,13 @@ const LeaderboardManagement = () => {
     },
     {
       prop: "tokenContractAddress",
-      title: "Contract Address" 
+      title: "Contract Address",
+      cell: (params)=><div data-label="Contract Address">{params?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress}</div>
     },
     {
       prop: "dexUrl",
-      title: "Dex Url" 
+      title: "Dex Url" ,
+      cell: (params)=><div data-label="Dex Url">{params?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.networkDex?.dex?.url}</div>
     },
     {
       prop: "status",
@@ -167,6 +245,9 @@ const LeaderboardManagement = () => {
     {
       prop: "publicUrl",
       title: "Public URL", 
+      // cellProps: {
+      //   style: {  width:"200px" } 
+      // },
       cell: publicUrlActions,
     },
   ];
@@ -208,6 +289,88 @@ const LeaderboardManagement = () => {
             />
           </FTable>
         </FContainer>
+
+        <FDialog
+          show={showDialog}
+          size={"medium"}   
+          onHide={onCancel}
+          title={"Update Leaderboard Status"}
+          className="connect-wallet-dialog w-50">
+
+          <FItem className={"f-mt-2"}>
+            Select Status of Leaderboard
+          </FItem>
+          <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}> 
+            <FInputRadio
+              display={"inline"}
+              label="Pending Review"
+              id={"pending"}
+              name={"status"}
+              className={"f-mt-2 f-mb-2"}
+              register={register} 
+              onChange={(e)=>setStatusValue(e.target.id)}
+              error={errors["status"]?.message ? errors["status"]?.message : ""}
+            />
+            <FInputRadio
+              display={"inline"}
+              label="Approve"
+              id={"approved"}
+              name={"status"}
+              className={"f-mt-2 f-mb-2"} 
+              register={register}
+              onChange={(e)=>setStatusValue(e.target.id)}
+              error={errors["status"]?.message ? errors["status"]?.message : ""}
+            />
+             <FInputRadio
+              display={"inline"}
+              label="Needs Client Action"
+              id={"clientAction"}
+              name={"status"}
+              className={"f-mt-2 f-mb-2"} 
+              register={register}
+              onChange={(e)=>setStatusValue(e.target.id)}
+              error={errors["status"]?.message ? errors["status"]?.message : ""}
+            />
+             <FInputRadio
+              display={"inline"}
+              label="Hold"
+              id={"hold"}
+              name={"status"}
+              className={"f-mt-2 f-mb-2"} 
+              register={register}
+              onChange={(e)=>setStatusValue(e.target.id)}
+              error={errors["status"]?.message ? errors["status"]?.message : ""}
+            />
+             <FInputRadio
+              display={"inline"}
+              label="Cancel"
+              id={"cancelled"}
+              name={"status"}
+              className={"f-mt-2 f-mb-2"} 
+              register={register}
+              onChange={(e)=>setStatusValue(e.target.id)}
+              error={errors["status"]?.message ? errors["status"]?.message : ""}
+            />
+              <FGrid>
+              <FGridItem alignX="end" dir={"row"} className={"f-mt-1"}>
+                <FButton
+                  type="submit"
+                  title={"Update Status"}
+                  onClick={onSubmit}
+                  postfix={
+                    isSubmitting && <ClipLoader color="#fff" size={20} />
+                  }
+                ></FButton>
+                <FButton
+                  type="button" 
+                  className={"f-ml-1"}
+                  title={"Cancel"}
+                  onClick={onCancel}
+                ></FButton>
+              </FGridItem>
+            </FGrid>
+          </form> 
+      </FDialog>
       </FContainer>
     </>
   );

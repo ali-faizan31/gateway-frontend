@@ -1,14 +1,7 @@
 import axios from 'axios';
-import {baseUrl,apiKey} from '../utils/const.utils'
- 
-let token = localStorage.getItem('token');
-const startBlockHeight = '12531865';
-const endBlockHeight = '12587580';
+import {baseUrl,apiKey} from '../utils/const.utils';
 
-export function getAllCompetitions(offset, limit, paramToken = token) {
-  if(paramToken){
-    token = paramToken
-  }
+export function getAllCompetitions(offset, limit, token) { 
   return axios.get(`${baseUrl}/api/v1/admin/competitions/list?offset=${offset}&limit=${limit}`, {
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -18,7 +11,7 @@ export function getAllCompetitions(offset, limit, paramToken = token) {
   });
 }
 
-export function getCompetitionById(id) {
+export function getCompetitionById(id, token) {
   return axios.get(`${baseUrl}/api/v1/admin/competitions/${id}`, {
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -28,7 +21,22 @@ export function getCompetitionById(id) {
   });
 }
 
-export function addCompetition(values) { 
+export function updateCompetitionStatusById(id, values, token) { 
+  return axios.put(`${baseUrl}/api/v1/admin/competitions/update/status/${id}`,
+   values,
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "Application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}
+
+
+
+export function addCompetition(values, token) { 
   return axios.post(`${baseUrl}/api/v1/admin/competitions/create`,
    values,
     {
@@ -41,11 +49,11 @@ export function addCompetition(values) {
   );
 }
 
-export function getCompetitionByIdForPublicUser(id) {
+export function getCompetitionByIdForPublicUser(id, token) {
   return axios.get(`${baseUrl}/api/v1/competitions/${id}`);
 }
 
-export function getStartBlockHolders(chainId, tokenContractAddress ) {
+export function getStartBlockHolders(chainId, tokenContractAddress, startBlockHeight, token ) {
   const url = `https://api.covalenthq.com/v1/${chainId}/tokens/${tokenContractAddress}/token_holders/?key=${apiKey}&block-height=${startBlockHeight}&page-size=9000`;
   return axios.get(url, {
     headers: {
@@ -56,7 +64,7 @@ export function getStartBlockHolders(chainId, tokenContractAddress ) {
   });
 }
 
-export function getEndBlockHolders(chainId, tokenContractAddress ) {
+export function getEndBlockHolders(chainId, tokenContractAddress, endBlockHeight, token ) {
   const url = `https://api.covalenthq.com/v1/${chainId}/tokens/${tokenContractAddress}/token_holders/?key=${apiKey}&block-height=${endBlockHeight}&page-size=8000`;
   return axios.get(url, {
     headers: {

@@ -10,6 +10,15 @@ const ICONS = {
     competition: getSideMenuIcon('competition_active@2x'),
 };
 
+export const publicCompetitionConfig = [
+    {
+        title: 'Competition',
+        path: PATH_PUBLIC_USER.competition.root,
+        icon: ICONS.competition,
+        children: []
+    }
+]
+
 export const publicLeaderboardConfig = [
     {
         title: 'Leaderboard',
@@ -34,8 +43,8 @@ export const sidebarConfig = [
         path: PATH_DASHBOARD.general.leaderboard,
         icon: ICONS.leaderboard,
         children: [
-            { title: 'Leaderboard Management', path: PATH_DASHBOARD.general.leaderboardManagement },
             { title: 'Create Leaderboard', path: PATH_DASHBOARD.general.createLeaderboard },
+            { title: 'Leaderboard Management', path: PATH_DASHBOARD.general.leaderboardManagement },
         ]
     },
     {
@@ -43,8 +52,8 @@ export const sidebarConfig = [
         path: PATH_DASHBOARD.general.competition,
         icon: ICONS.competition,
         children: [
-            { title: 'Competition Management', path: PATH_DASHBOARD.general.competitionManagement },
-            { title: 'Create Competition', path: PATH_DASHBOARD.general.createCompetition }
+           { title: 'Create Competition', path: PATH_DASHBOARD.general.createCompetition },
+           { title: 'Competition Management', path: PATH_DASHBOARD.general.competitionManagement },
         ]
     }
 ] 
