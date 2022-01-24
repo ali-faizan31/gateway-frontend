@@ -138,7 +138,7 @@ const CompetitionManagement = () => {
   ];
 
   const getCompetitionListing = () => {
-    getAllCompetitions(offset, limit)
+    getAllCompetitions(offset, limit, token)
       .then((res) => {
         if (query === '') {
           if (res?.data?.body?.competitions?.length) {

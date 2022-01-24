@@ -38,11 +38,11 @@ const LeaderboardManagement = () => {
 
   useEffect(() => {
     if(query || token){
-      getLeaderboardListing(token);
+      getLeaderboardListing();
     }
   }, [query, token]);
 
-  const getLeaderboardListing = (token) => {
+  const getLeaderboardListing = () => {
     getAllLeaderboards(offset, limit, token)
       .then((res) => {
         if (query === "") {
