@@ -1,12 +1,7 @@
 import axios from 'axios';
-import { baseUrl, apiKey } from '../utils/const.utils'; 
+import { baseUrl, apiKey } from '../utils/const.utils';  
 
-let token = localStorage.getItem('token');
-
-export function getAllLeaderboards(offset, limit, paramToken = token) {
-  if (paramToken) {
-    token = paramToken;
-  }
+export function getAllLeaderboards(offset, limit, token) { 
   return axios.get(`${baseUrl}/api/v1/admin/leaderboards/list?offset=${offset}&limit=${limit}`, {
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -16,7 +11,21 @@ export function getAllLeaderboards(offset, limit, paramToken = token) {
   });
 }
 
-export function getLeaderboardById(id) {
+export function updateLeaderboardStatusById(id, values, token) { 
+  return axios.put(`${baseUrl}/api/v1/admin/leaderboards/update/status/${id}`,
+   values,
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "Application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}
+
+
+export function getLeaderboardById(id, token) { 
   return axios.get(`${baseUrl}/api/v1/admin/leaderboards/${id}`, {
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -26,7 +35,7 @@ export function getLeaderboardById(id) {
   });
 }
 
-export function addLeaderboard(values) {
+export function addLeaderboard(values, token) {
   return axios.post(`${baseUrl}/api/v1/admin/leaderboards/create`, values, {
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -36,7 +45,7 @@ export function addLeaderboard(values) {
   });
 }
 
-export function getCovalenthqResponse(chainId, tokenContractAddress) {
+export function getCovalenthqResponse(chainId, tokenContractAddress, token) {
   const url = `https://api.covalenthq.com/v1/${chainId}/tokens/${tokenContractAddress}/token_holders/?key=${apiKey}&page-size=1`;
   return axios.get(url, {
     headers: {
@@ -47,7 +56,7 @@ export function getCovalenthqResponse(chainId, tokenContractAddress) {
   });
 }
  
-export function getTokenHolderListByContractAddressAndChainID(chainId, tokenContractAddress,limit) {
+export function getTokenHolderListByContractAddressAndChainID(chainId, tokenContractAddress,limit, token) {
   const url = `https://api.covalenthq.com/v1/${chainId}/tokens/${tokenContractAddress}/token_holders/?key=${apiKey}&page-size=15000&`;
   return axios.get(url, {
     headers: {
@@ -58,7 +67,7 @@ export function getTokenHolderListByContractAddressAndChainID(chainId, tokenCont
   });
 }
 
-export function getLeaderboardByIdForPublicUser(id) {
+export function getLeaderboardByIdForPublicUser(id, token) {
   return axios.get(`${baseUrl}/api/v1/leaderboards/${id}`);
 }
 

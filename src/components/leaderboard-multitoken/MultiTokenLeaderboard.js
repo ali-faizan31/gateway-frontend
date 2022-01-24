@@ -32,7 +32,10 @@ const MultiTokenLeaderboardInformation = ({
 }) => {
   const exportRef = useRef();
   const { pathname } = useLocation();
+  let token = localStorage.getItem('token');
   const isPublicUser = pathname.includes("/pub");
+  const user = localStorage.getItem('me');
+  const parsedUser = user && JSON.parse(user); 
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isQueryChange, setIsQueryChange] = useState(false);
@@ -65,7 +68,8 @@ const MultiTokenLeaderboardInformation = ({
   const getCovalenthqLimit = (leaderboard) => {
     getCovalenthqResponse(
       leaderboard?.frmCabn?.chainId,
-      leaderboard?.frmCabn?.tokenContractAddress
+      leaderboard?.frmCabn?.tokenContractAddress,
+      token
     )
       .then((res) => {
         if (
@@ -93,7 +97,8 @@ const MultiTokenLeaderboardInformation = ({
     getTokenHolderListByContractAddressAndChainID(
       leaderboard?.frmCabn?.chainId,
       leaderboard?.frmCabn?.tokenContractAddress,
-      limit
+      limit,
+      token
     )
       .then((res) => {
         if (
@@ -126,7 +131,8 @@ const MultiTokenLeaderboardInformation = ({
     getTokenHolderListByContractAddressAndChainID(
       leaderboard?.frmxCabn?.chainId,
       leaderboard?.frmxCabn?.tokenContractAddress,
-      limit
+      limit,
+      token
     )
       .then((res) => {
         if (
@@ -417,9 +423,10 @@ const MultiTokenLeaderboardInformation = ({
   const csvHeaders = [
     { label: "Rank", key: "rank" },
     { label: "Wallet Address", key: "address" },
-    { label: "Balance", key: "formattedBalance" },
-    { label: "Level Up Amount", key: "formattedLevelUpAmount" },
-    { label: "Get Token", key: "levelUpUrl" },
+    { label: "Combined USD Value", key: "formattedCombinedValue" },
+    { label: "FRM Balance", key: "formattedFRMBalance" },
+    { label: "FRMx Balance", key: "formattedFRMxBalance" },
+    { label: "Level Up Amount", key: "formattedLevelUpAmount" }
   ];
 
   const onQueryChange = (e) => {
@@ -473,15 +480,15 @@ const MultiTokenLeaderboardInformation = ({
                 onChange={onQueryChange}
                 style={{ width: "100%" }}
               />
-              {!isPublicUser && (
+              {(!isPublicUser && parsedUser.role === "organizationAdmin") && (
                 <FButton
                   type="button"
                   className="btn-create"
+                  className={"f-ml-1"}
                   disabled={isLoading}
                   onClick={onExportClick}
-                >
-                  Export to CSVds
-                </FButton>
+                  title={" Export to CSV"}
+                ></FButton>
               )}
             </FGridItem>
           </FGrid>

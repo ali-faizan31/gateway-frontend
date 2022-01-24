@@ -1,30 +1,33 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Container, Grid, TextField, Stack, Button } from '@mui/material';
-import { useSnackbar } from 'notistack';
-import { useParams, useLocation } from 'react-router-dom';
-import { DataGrid } from '@mui/x-data-grid';
-import { useTheme } from '@mui/material/styles';
+import toast, { Toaster } from "react-hot-toast";
+import {
+  FTable,
+  FContainer,
+  FButton,
+  FGrid,
+  FInputTextField,
+  FGridItem,
+} from "ferrum-design-system";
+import Datatable from "react-bs-datatable";
+import { useParams, useLocation } from "react-router-dom";
 import { CSVLink } from 'react-csv';
 import moment from 'moment';
 import eitherConverter from 'ether-converter';
-import Page from '../../../components/Page';
-import Label from '../../../components/Label';
-import useSettings from '../../../hooks/useSettings'; 
+
+//  
 import {
   getCompetitionById,
   getCompetitionByIdForPublicUser,
   getStartBlockHolders,
   getEndBlockHolders
-} from '../../../_apis_/CompetitionCrud';
-import { arraySortByKeyDescending } from '../../../utils/globals.utils';
+} from '../../_apis/CompetitionCrud';
+import { arraySortByKeyDescending } from '../../utils/global.utils';
 import { filterList } from '../leaderboard/LeaderboardHelper';
 
 const CompetitionInformation = () => {
   const { id } = useParams();
-  const exportRef = useRef();
-  const theme = useTheme();
-  const { themeStretch } = useSettings();
-  const { enqueueSnackbar } = useSnackbar();
+  const exportRef = useRef(); 
+  let token = localStorage.getItem('token');
   const { pathname } = useLocation();
   const isPublicUser = pathname.includes('/pub');
   const [query, setQuery] = useState('');
@@ -57,95 +60,107 @@ const CompetitionInformation = () => {
   }, [query]);
 
   const getCompetition = () => {
-    getCompetitionByIdForPublicUser(id)
-      .then((res) => {
-        if (res?.data?.body?.leaderboard) {
-          const { leaderboard } = res.data.body;
-          const { competition } = res.data.body;
+    getCompetitionById(id, token)
+      .then((res) => { 
+        if (res?.data?.body?.competition) { 
+          const { leaderboard } = res.data.body.competition; 
+          const competition = res.data.body.competition; 
+          setCompetitionData(res.data.body.competition);
           setLeaderboardData(leaderboard);
-          setCompetitionData(competition);
-          getStartBlock(leaderboard);
+          console.log(leaderboard, res.data.body.competition)
+          let data = {
+            // tokenContractAddress: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress,
+            // chainId: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId,
+            // leaderboardDexUrl: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.networkDex?.dex?.url,
+            // leaderboardexclusionWalletAddressList: leaderboard.exclusionWalletAddressList,
+            // competitionName: competition?.name,
+            // competitionStartBlock: competition.startBlock,
+            // competitionEndBlock: competition.endBlock
+          }
+          getStartBlock(data); 
+        } else {
+          setIsLoading(false);
         }
       })
       .catch((e) => {
+        setIsLoading(false);
         if (e.response) {
-          enqueueSnackbar(e.response.data.status.message, {
-            variant: 'error'
-          });
+          toast.error(e?.response?.data?.status?.message);
         } else {
-          enqueueSnackbar('Something went wrong. Try again later!', {
-            variant: 'error'
-          });
+          toast.error('Something went wrong. Try again later!');
         }
       });
   };
 
   const getPublicCompetition = () => {
-    getCompetitionByIdForPublicUser(id)
+    getCompetitionByIdForPublicUser(id, token)
       .then((res) => {
         if (res?.data?.body?.competition) {
           const { leaderboard } = res.data.body;
           const { competition } = res.data.body;
           setLeaderboardData(leaderboard);
           setCompetitionData(competition);
-          getStartBlock(leaderboard);
+          let data = {
+            tokenContractAddress: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress,
+            chainId: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId,
+            leaderboardDexUrl: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.networkDex?.dex?.url,
+            leaderboardexclusionWalletAddressList: leaderboard.exclusionWalletAddressList,
+            competitionName: competition?.name,
+            competitionStartBlock: competition.startBlock,
+            competitionEndBlock: competition.endBlock
+          }
+          console.log(leaderboard, competition, data);
+          getStartBlock(data);
         }
       })
       .catch((e) => {
+        setIsLoading(false);
         if (e.response) {
-          enqueueSnackbar(e.response.data.status.message, {
-            variant: 'error'
-          });
-        } else {
-          enqueueSnackbar('Something went wrong. Try again later!', {
-            variant: 'error'
-          });
+          if (e.response) {
+            toast.error(e?.response?.data?.status?.message);
+          } else {
+            toast.error('Something went wrong. Try again later!');
+          }
         }
       });
   };
 
-  const getStartBlock = (leaderboard) => {
-    getStartBlockHolders(leaderboard?.chainId, leaderboard?.tokenContractAddress)
+  const getStartBlock = (data) => {
+    getStartBlockHolders(data.chainId, data.tokenContractAddress, data.competitionStartBlock, token)
       .then((res) => {
-        if (res?.data?.data?.items && res.data.data.items.length > 0) {
+        if (res?.data?.data?.items  ) {
           const { items } = res.data.data;
           setStartBlockList(items);
-          getEndBlock(leaderboard, items);
+          getEndBlock(data, items);
         }
       })
       .catch((e) => {
+        setIsLoading(false);
         if (e?.response?.data?.error_message) {
-          enqueueSnackbar(e.response.data.error_message, {
-            variant: 'error'
-          });
+          toast.error(e.response.data.error_message);
         } else {
-          enqueueSnackbar('Something went wrong. Try again later!', {
-            variant: 'error'
-          });
-        }
+          toast.error('Something went wrong. Try again later!');
+        } 
       });
   };
 
-  const getEndBlock = (leaderboard, startBlock) => {
-    getEndBlockHolders(leaderboard?.chainId, leaderboard?.tokenContractAddress)
+  const getEndBlock = (data, startBlock) => {
+    getEndBlockHolders(data.chainId, data.tokenContractAddress, data.competitionEndBlock, token)
       .then((res) => {
-        if (res?.data?.data?.items && res.data.data.items.length > 0) {
+        if (res?.data?.data?.items  ) {
           const { items } = res.data.data;
           setEndBlockList(items);
-          mapCompetitionData(items, startBlock, leaderboard);
+          mapCompetitionData(items, startBlock, data);
           setIsLoading(false);
         }
       })
       .catch((e) => {
+        setIsLoading(false);
         if (e?.response?.data?.error_message) {
-          enqueueSnackbar(e.response.data.error_message, {
-            variant: 'error'
-          });
+          toast.error(e.response.data.error_message);
         } else {
-          enqueueSnackbar('Something went wrong. Try again later!', {
-            variant: 'error'
-          });
-        }
+          toast.error('Something went wrong. Try again later!');
+        } 
       });
   };
 
@@ -164,14 +179,14 @@ const CompetitionInformation = () => {
     return result;
   };
 
-  const mapCompetitionData = (endBlock, startBlock, leaderboard) => {
+  const mapCompetitionData = (endBlock, startBlock, data) => {
     const filteredList = filterList(
       mapHoldersBalance(endBlock, startBlock).filter((x) => Object.keys(x).length > 0 && x),
-      leaderboard?.walletAddresses
+      data?.leaderboardexclusionWalletAddressList
     ); 
     const list = arraySortByKeyDescending(filteredList, 'growthRate');
 
-    const levelUpSwapUrl = `${leaderboard.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard.tokenContractAddress}&exactField=output&exactAmount=`;
+    const levelUpSwapUrl = `${data.leaderboardDexUrl}swap?inputCurrency=BNB&outputCurrency=${data.tokenContractAddress}&exactField=output&exactAmount=`;
 
     if (list && list.length > 0) {
       for (let i = 0; i < list.length; i += 1) {
@@ -229,7 +244,7 @@ const CompetitionInformation = () => {
           const diff =
             eitherConverter(sameEntry?.balance, 'wei').ether - eitherConverter(startValue?.balance, 'wei').ether;
           let color = 'white';
-          if (diff > 0) {
+          if (diff >= 0) {
             color = 'green';
           } else if (diff < 0) {
             color = 'red';
@@ -244,24 +259,28 @@ const CompetitionInformation = () => {
         return Object.keys(tempObj).length > 0 && tempObj;
       });
 
+    console.log('first');
     newWallets = onlyInLeft(endBlocks, startBlocks, false).filter((obj) => obj && obj);
     matchedWallets = inBoth(startBlocks, endBlocks).filter((obj) => obj && obj); 
     return [...newWallets, ...droppedWallets, ...matchedWallets];
   };
 
   const levelUpFormatter = (params) => (
-    <a href={params.row.levelUpUrl} target="_blank" rel="noreferrer" className="btn-level-up br-40">
+    <div data-label="Get Token">
+    <a href={params.levelUpUrl} target="_blank" rel="noreferrer" className="f-btn f-btn-primary text-decoration-none">
       LEVEL UP
-    </a>
+    </a></div>
   );
 
   const growthReductionFormatter = (params) => {
-    const { status } = params.row;
-    return (
-      <>
-        <div style={{ color: params.row.color }}>
-          {params.row.formattedGrowthRate}
-          {/* {params.row.status !=='same' && <small  >{params.row.status}</small>}  */}
+    const { status } = params;
+    return ( 
+      <div data-label="Growth / Reduction" className='label-column'>
+       {params.formattedGrowthRate} 
+      <p className='custom-label' style={{background: params.color}}> {status} </p>
+      </div>
+        /* <div style={{ color: params.row.color }}>
+          {params.row.formattedGrowthRate} 
         </div>
         {params.row.status !== 'Matched' && (
           <Label
@@ -271,30 +290,24 @@ const CompetitionInformation = () => {
           >
             {status}
           </Label>
-        )}
-      </>
+        )} */
     );
   };
 
   const columns = [
-    { field: 'rank', headerName: 'Rank', headerClassName: 'table-header', width: 150 },
-    { field: 'formattedAddress', headerName: 'Wallet Address', headerClassName: 'table-header', width: 200 },
-    { field: 'formattedBalance', headerName: 'Balance', headerClassName: 'table-header', width: 200 },
+    { prop: 'rank', title: 'Rank', cell: (params)=><div data-label="Rank">{params.rank}</div> },
+    { prop: 'formattedAddress', title: 'Wallet Address', cell: (params)=><div data-label="Wallet Address">{params.formattedAddress}</div> },
+    { prop: 'formattedBalance', title: 'Balance', cell: (params)=><div data-label="Balance">{params.formattedBalance}</div>  },
     {
-      field: 'formattedGrowthRate',
-      headerName: 'Growth / Reduction',
-      headerClassName: 'table-header',
-      width: 200,
-      cellClassName: 'MuiDataGrid-cell-Growth',
-      renderCell: growthReductionFormatter
+      prop: 'formattedGrowthRate',
+      title: 'Growth / Reduction', 
+      cell: growthReductionFormatter
     },
-    { field: 'formattedLevelUpAmount', headerName: 'Level Up Amount', headerClassName: 'table-header', width: 200 },
+    { prop: 'formattedLevelUpAmount', title: 'Level Up Amount', cell: (params)=><div data-label="Level Up Amount">{params.formattedLevelUpAmount}</div>  },
     {
-      field: 'levelUpUrl',
-      headerName: 'Get Token',
-      headerClassName: 'table-header',
-      width: 200,
-      renderCell: levelUpFormatter
+      prop: 'levelUpUrl',
+      title: 'Get Token', 
+      cell: levelUpFormatter
     }
   ];
 
@@ -325,6 +338,9 @@ const CompetitionInformation = () => {
 
   return (
     <>
+     <div>
+        <Toaster />
+      </div>
     <CSVLink
         data={filteredTokenHolderList}
         headers={csvHeaders}
@@ -332,51 +348,48 @@ const CompetitionInformation = () => {
         ref={exportRef}
         style={{ display: 'none' }}
       />
-
-      <Page title="Leaderboard">
-        <Container maxWidth={themeStretch ? false : 'xl'}>
-          <Grid container sx={{ marginTop: '60px' }}>
-            <Grid item xs={12} sm={4} lg={6} md={6} sx={{ textAlign: 'left' }}>
-              <h1 style={{ color: theme.palette.primary.main }}>{competitionData.name}</h1>
-            </Grid>
-            <Grid item xs={12} sm={8} lg={6} md={6} sx={{ textAlign: 'rigth', justifyContent: 'flex-end' }}>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }} justifyContent="flex-end">
-                <Grid item xs={12} sm={8} lg={5} md={5}>
-                  <TextField
-                    id="outlined-basic"
+ <FContainer type="fluid">
+        <FContainer>
+          <FGrid className={"f-mt-1 f-mb-1"}>
+            <FGridItem size={[6,12,12]} alignX={"center"}> 
+       <h1>{competitionData?.name || "Competition"}</h1>
+       </FGridItem>
+            <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[6,12,12]} >
+               <FInputTextField 
                     label="Search Wallet"
-                    placeholder="0x000...0000"
-                    variant="outlined"
+                    placeholder="0x000...0000" 
                     value={query}
                     type="search"
                     onChange={onQueryChange}
                     style={{ width: '100%' }}
                   />
-                </Grid>
+                 
                 {!isPublicUser && (
-                  <Button type="button" className="btn-create" disabled={isLoading} onClick={onExportClick}>
-                    Export to CSVs
-                  </Button>
+                <FButton type="button" className="btn-create f-ml-1" disabled={isLoading} onClick={onExportClick} title={" Export to CSV"}></FButton>
                 )}
-              </Stack>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ marginTop: '40px' }} />
-          {isLoading && <ProgressBar />}
-          <div style={{ height: '90vh', width: '100%' }}>
-            <DataGrid
-              rows={filteredTokenHolderList}
-              columns={columns}
-              getRowId={(row) => row.rank}
-              pageSize={100}
-              rowsPerPageOptions={[]}
-              // checkboxSelection
-              disableColumnMenu
-              disableSelectionOnClick
-            />
-          </div>
-        </Container>
-      </Page>
+                </FGridItem>
+          </FGrid>  
+          {filteredTokenHolderList.length ? (
+            <FTable>
+              <Datatable
+                tableHeaders={columns}
+                tableBody={filteredTokenHolderList}
+                rowsPerPage={10}
+                tableClass="striped hover responsive"
+                initialSort={{ prop: "rank", isAscending: true }}
+              />
+            </FTable>
+          ) : isLoading ? (
+            <FContainer type="fluid">
+              <FContainer>Loading...</FContainer>
+            </FContainer>
+          ) : (
+            <FContainer type="fluid">
+              <FContainer>No Data found</FContainer>
+            </FContainer>
+          )} 
+           </FContainer>
+      </FContainer>
     </>
   );
 };

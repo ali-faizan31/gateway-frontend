@@ -31,6 +31,29 @@ $secondaryColor: #495057;
     color: #495057;
 }
 
+.label-column {
+    display: flex;
+    justify-content: space-between;
+}
+
+.custom-label {
+    background: red;
+    padding: 2px 3px;
+    border-radius: 2.5px;
+    color: black;
+    font-size: 18px;
+}
+
+.custom-icon {
+    display: flex;
+    align-items: center;
+    margin-left: 2px;
+    cursor: pointer;
+    background-color: #dab46e;
+    padding: 3px 8px;
+    border-radius: 2.5px;
+}
+
 .grey-secondary {
     color: #919eab;
 }
@@ -57,6 +80,10 @@ thead {
     border-color: #495057 !important;
 }
 
+.f-select__single-value {
+    color: white !important;
+}
+
 input:-webkit-autofill {
     box-shadow: 0 0 0 100px #181c25 inset !important;
     -webkit-text-fill-color: #fff;
@@ -71,6 +98,29 @@ input:-webkit-autofill {
     font-weight: 700 !important;
 }
 
+.f-input-checkbox input[type="checkbox"]:not(:checked)+label::before {
+    background: transparent !important;
+}
+
+.f-input-select {
+    .f-select {
+        .f-select__menu {
+            background: #161c24 !important;
+            .f-select__menu-list {
+                .f-select__option {
+                    background: #212b36 !important;
+                }
+            }
+        }
+    }
+}
+
+.f-dialog .f-dialog-content {
+    background: #212b36 !important;
+}
+
+// #212b36 // sec
+// #161c24 // pri
 .f-table {
     .controlRow__root {
         .ButtonGroup__root {

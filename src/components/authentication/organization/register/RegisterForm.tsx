@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FInputTextField, FGrid, FGridItem, FItem, FButton, FContainer } from "ferrum-design-system";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import {
   RiEyeOffFill,
   RiEyeLine,
@@ -59,7 +59,7 @@ const RegisterForm = () => {
     firstName: Yup.string().required('First name is required').min(2, 'Too Short!').max(50, 'Too Long!'),
     lastName: Yup.string().required('Last name is required').min(2, 'Too Short!').max(50, 'Too Long!'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().required('Password hehe is required'),
+    password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string().required("Confirm Password is required").when("password", {
       is: (val: any) => (val && val.length > 0 ? true : false),
       then: Yup.string().oneOf(
@@ -199,16 +199,28 @@ const RegisterForm = () => {
             name="localSiteName"
             placeholder="Your site name"
             register={register}
-            postfix={".ferrumnetwork.io"}
+            postfix={
+              <small className="text-primary f-pl--5 f-pr--5">
+                .ferrumnetwork.io
+              </small>
+            }
             error={
               errors["localSiteName"]?.message ? errors["localSiteName"]?.message : ""
             }
           />
         </FGridItem>
       </FGrid> 
-      <FItem align="center" className={"w-100 f-mt-1"} >
-          <FButton type="submit" title={"Register"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
-        </FItem> 
+        <FGrid >
+        <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+           <FButton type="submit" title={"Register"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
+           </FGridItem>
+      </FGrid>
+      <FItem align={"center"} className={"f-mt-1 w-100"} >
+      Already have an account? 
+        <Link className="primary-color text-decoration-none " to={PATH_AUTH.orgLogin}>
+        Login
+        </Link>
+      </FItem>
     </form>  
     </FContainer>
   </>);
