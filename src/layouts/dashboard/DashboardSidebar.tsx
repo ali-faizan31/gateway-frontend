@@ -12,6 +12,7 @@ import { getCompetitionByIdForPublicUser, getAllCompetitions } from "../../_apis
 const DashboardSidebar = () => {
   const { id }: any = useParams();
   const { pathname } = useLocation();
+  let token = localStorage.getItem('token');
   const [sideConfig, setSideConfig]: any = useState([]);
   const { competitionList } = useSelector((state: RootStateOrAny) => state.competition);
   const { leaderboardList } = useSelector((state: RootStateOrAny) => state.leaderboard);
@@ -79,7 +80,7 @@ const DashboardSidebar = () => {
   };
 
   const getPublicCompetition = () => {
-    getCompetitionByIdForPublicUser(id)
+    getCompetitionByIdForPublicUser(id, token)
       .then((res: any) => {
         if (res?.data?.body?.competition) { 
           const { competition } = res.data.body;
@@ -109,7 +110,7 @@ const DashboardSidebar = () => {
   };
 
   const getSidebarItems = async () => {
-    let leaderboardResponse = await getAllLeaderboards(0,0);
+    let leaderboardResponse = await getAllLeaderboards(0,0, token);
     console.log(leaderboardResponse?.data?.body?.leaderboards);
     await mapList(leaderboardResponse?.data?.body?.leaderboards, "leaderboard");
     let competitionResponse = await getAllCompetitions(0,0);

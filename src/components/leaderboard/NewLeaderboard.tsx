@@ -16,6 +16,7 @@ import { chainIdList, dexUrlList } from './LeaderboardHelper';
 export default function NewLeaderboard() {
   const dispatch = useDispatch();
   const history = useHistory();
+  let token = localStorage.getItem('token');
   const [isLeaderboardPresent, setIsLeaderboardPresent] = useState(false);
   const [leaderboardInfo, setLeaderboardInfo] = useState({});
 
@@ -52,9 +53,9 @@ export default function NewLeaderboard() {
   const onSubmit = async (values: any) => {
     values.exclusionWalletAddressList = getArrayFromString(values.exclusionWalletAddressList);
     values.currencyAddressesByNetwork = getArrayFromString(values.currencyAddressesByNetwork);
-    await addLeaderboard(values)
+    await addLeaderboard(values, token)
       .then((response) => {
-        dispatch(getAllLeaderboardsDispatch());
+        // dispatch(getAllLeaderboardsDispatch());
         toast.success(response.data.status.message);
         history.push(PATH_DASHBOARD.general.leaderboardManagement);
       })

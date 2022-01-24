@@ -27,6 +27,7 @@ import { filterList } from '../leaderboard/LeaderboardHelper';
 const CompetitionInformation = () => {
   const { id } = useParams();
   const exportRef = useRef(); 
+  let token = localStorage.getItem('token');
   const { pathname } = useLocation();
   const isPublicUser = pathname.includes('/pub');
   const [query, setQuery] = useState('');
@@ -59,7 +60,7 @@ const CompetitionInformation = () => {
   }, [query]);
 
   const getCompetition = () => {
-    getCompetitionById(id)
+    getCompetitionById(id, token)
       .then((res) => { 
         if (res?.data?.body?.competition) { 
           const { leaderboard } = res.data.body.competition; 
@@ -92,7 +93,7 @@ const CompetitionInformation = () => {
   };
 
   const getPublicCompetition = () => {
-    getCompetitionByIdForPublicUser(id)
+    getCompetitionByIdForPublicUser(id, token)
       .then((res) => {
         if (res?.data?.body?.competition) {
           const { leaderboard } = res.data.body;
@@ -125,7 +126,7 @@ const CompetitionInformation = () => {
   };
 
   const getStartBlock = (data) => {
-    getStartBlockHolders(data.chainId, data.tokenContractAddress, data.competitionStartBlock)
+    getStartBlockHolders(data.chainId, data.tokenContractAddress, data.competitionStartBlock, token)
       .then((res) => {
         if (res?.data?.data?.items  ) {
           const { items } = res.data.data;
@@ -144,7 +145,7 @@ const CompetitionInformation = () => {
   };
 
   const getEndBlock = (data, startBlock) => {
-    getEndBlockHolders(data.chainId, data.tokenContractAddress, data.competitionEndBlock)
+    getEndBlockHolders(data.chainId, data.tokenContractAddress, data.competitionEndBlock, token)
       .then((res) => {
         if (res?.data?.data?.items  ) {
           const { items } = res.data.data;

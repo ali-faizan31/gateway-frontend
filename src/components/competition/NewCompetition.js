@@ -29,10 +29,7 @@ import { chainIdList } from "../leaderboard/LeaderboardHelper";
 export default function NewCompetition() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [eventStartValue, setEventStartValue] = useState(null);
-  const [eventEndValue, setEventEndValue] = useState(null);
-  const [eventEndOpen, setEventEndOpen] = useState(false);
-  const [selectedLeaderboard, setSelectedLeaderboard] = useState("");
+  let token = localStorage.getItem('token');
   const [leaderboardList, setLeaderboardList] = useState([]); 
 
   useEffect(() => {
@@ -85,7 +82,7 @@ export default function NewCompetition() {
       return;
     }
    console.log(values);
-    await addCompetition(values)
+    await addCompetition(values, token)
       .then((response) => {
         // dispatch(getAllCompetitionsDispatch());
         toast.success(response.data.status.message);
@@ -116,7 +113,7 @@ export default function NewCompetition() {
   };
 
   const getLeaderboardListing = () => {
-    getAllLeaderboards(0, 10)
+    getAllLeaderboards(0, 10, token)
       .then((res) => {
         if (res?.data?.body?.leaderboards?.length) { 
           mapLeaderboardData(res.data.body.leaderboards);

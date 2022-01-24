@@ -27,6 +27,7 @@ import { getAllCompetitions, updateCompetitionStatusById } from '../../_apis/Com
 const CompetitionManagement = () => { 
   const history = useHistory();
   const limit = 10;
+  let token = localStorage.getItem('token');
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -129,16 +130,8 @@ const CompetitionManagement = () => {
 
   const columns = [
     { prop: 'name', title: 'Name', cell: (params)=><div data-label="Name">{params.name}</div>},
-    {
-      prop: 'startDate',
-      title: 'Start Date', 
-      cell: startDateFormatter
-    },
-    {
-      prop: 'endDate',
-      title: 'End Date', 
-      cell: endDateFormatter
-    },
+    { prop: 'startDate', title: 'Start Date', cell: startDateFormatter },
+    { prop: 'endDate', title: 'End Date', cell: endDateFormatter  },
     { prop: 'status', title: 'Status', cell: statusFormatter },
     { prop: 'action', title: 'Action', cell: actionFormatter },
     { prop: "publicUrl", title: "Public URL", cell: publicUrlActions},  
@@ -200,7 +193,7 @@ const CompetitionManagement = () => {
   const onSubmit = (values) => {
     if (typeof values.status === 'string'){ 
       values.status = statusValue; 
-      updateCompetitionStatusById(selectedCompetitionData._id, values)
+      updateCompetitionStatusById(selectedCompetitionData._id, values, token)
       .then((res) => { 
         setShowDialog(false);
         reset();

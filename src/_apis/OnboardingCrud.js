@@ -1,7 +1,5 @@
 import axios from 'axios';
-import {baseUrl } from '../utils/const.utils'
-
-const token = localStorage.getItem('token');
+import {baseUrl } from '../utils/const.utils' 
 
 export function organizationAdminLogin(values) {
   return axios.post(`${baseUrl}/api/v1/admin/users/sign-in`, values);

@@ -29,6 +29,7 @@ const LeaderboardInformation = () => {
   const { id } = useParams();
   const exportRef = useRef();
   const { pathname } = useLocation();
+  let token = localStorage.getItem('token');
   const isPublicUser = pathname.includes("/pub");
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -98,7 +99,7 @@ const LeaderboardInformation = () => {
   };
 
   const getLeaderboard = () => {
-    getLeaderboardById(id)
+    getLeaderboardById(id, token)
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
           const { leaderboard } = res.data.body;
@@ -130,7 +131,7 @@ const LeaderboardInformation = () => {
   };
 
   const getCovalenthqLimit = (leaderboard) => {
-    getCovalenthqResponse(leaderboard?.cabn?.chainId, leaderboard?.cabn?.tokenContractAddress)
+    getCovalenthqResponse(leaderboard?.cabn?.chainId, leaderboard?.cabn?.tokenContractAddress, token)
       .then((res) => {
         if (
           res &&
@@ -158,7 +159,8 @@ const LeaderboardInformation = () => {
     getTokenHolderListByContractAddressAndChainID(
       leaderboard?.cabn?.chainId,
       leaderboard?.cabn?.tokenContractAddress,
-      limit
+      limit,
+      token
     )
       .then((res) => {
         if (
