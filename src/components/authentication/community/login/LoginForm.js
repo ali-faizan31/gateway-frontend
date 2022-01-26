@@ -160,12 +160,7 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
                   required: {
                     value: true,
                     message: "Password is required",
-                  },
-                  minLength: { value: 3, message: validations.MIN_LENGTH("3") },
-                  maxLength: {
-                    value: 20,
-                    message: validations.MAX_LENGTH("20"),
-                  },
+                  } 
                   // pattern: {
                   //     value: validations.PASSWORD_REGEX,
                   //     message:
