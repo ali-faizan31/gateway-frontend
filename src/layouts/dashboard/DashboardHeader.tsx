@@ -23,22 +23,14 @@ const DashboardHeader = () => {
   };
 
   return (
-    <FHeader showLogo={false}>
-      {showLogoutButton() ? <FItem align="right">
+    <FHeader showLogo={false}> 
+      <FItem align="right">
         <FButton
           title="Logout"
           postfix={<RiLogoutCircleRLine />}
           onClick={handleLogout}
         ></FButton>
-      </FItem> :
-        <FItem align="right"> 
-          <Link
-            className="primary-color text-decoration-none "
-            to={PATH_AUTH.communityLogin}
-          >
-            Login
-          </Link>
-        </FItem>}
+      </FItem>   
     </FHeader>
   )
 }
