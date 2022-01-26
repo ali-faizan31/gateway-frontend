@@ -94,7 +94,7 @@ const LeaderboardManagement = () => {
     const { status } = params;
     return (
       <> 
-      <div data-label="Status"  className='label-column'> 
+      <div data-label="Status"  className='justify-content-space-between'> 
             <FButton title={(status === "pending" && "Pending Review") ||
             (status === "clientAction" && "Needs Client Action") ||
             sentenceCase(status)}></FButton>

@@ -43,7 +43,7 @@ const CompetitionManagement = () => {
   const statusFormatter = (params) => {
     const { status } = params; 
     return (
-      <>   <div data-label="Status"  className='label-column'>  
+      <>   <div data-label="Status"  className='justify-content-space-between'>  
         <FButton title={sentenceCase(status)}></FButton> 
         {/* <p className='custom-icon'><RiEdit2Fill /></p> */}
         <FButton

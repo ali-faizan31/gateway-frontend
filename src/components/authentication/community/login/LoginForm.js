@@ -160,12 +160,7 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
                   required: {
                     value: true,
                     message: "Password is required",
-                  },
-                  minLength: { value: 3, message: validations.MIN_LENGTH("3") },
-                  maxLength: {
-                    value: 20,
-                    message: validations.MAX_LENGTH("20"),
-                  },
+                  } 
                   // pattern: {
                   //     value: validations.PASSWORD_REGEX,
                   //     message:
@@ -178,6 +173,17 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
               />
             </FGridItem>
           </FGrid>
+          {/* <FItem align={"center"} className={"f-mt-1 w-100"}>
+            Don’t have an account? */}
+            <div className={"f-mt-1 w-100 justify-content-end"}>
+              <Link
+              className="primary-color text-decoration-none"
+              to={PATH_AUTH.forgotPassword}
+            >
+             Forgot Password?
+            </Link>
+            </div>
+          {/* </FItem> */}
           <FGrid>
             <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
               <FButton
