@@ -51,7 +51,7 @@ const AuthLayout = ({ children }) => {
             </h1>
           </FItem>
           <FItem>
-            <img src={"/ferrum/LOGIN2-removebg-preview (1).png"} alt="" width={"100%"} />
+            <img src={"/ferrum/L-04-Trans.png"} alt="" width={"100%"} />
           </FItem>
         </FGridItem>
         <FGridItem size={[8, 12, 12]} className="f-p-2" alignX={"center"} alignY={"center"}>
