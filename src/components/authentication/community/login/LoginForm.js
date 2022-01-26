@@ -178,6 +178,17 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
               />
             </FGridItem>
           </FGrid>
+          {/* <FItem align={"center"} className={"f-mt-1 w-100"}>
+            Don’t have an account? */}
+            <div className={"f-mt-1 w-100 justify-content-end"}>
+              <Link
+              className="primary-color text-decoration-none"
+              to={PATH_AUTH.forgotPassword}
+            >
+             Forgot Password?
+            </Link>
+            </div>
+          {/* </FItem> */}
           <FGrid>
             <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
               <FButton
