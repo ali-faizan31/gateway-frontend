@@ -31,9 +31,14 @@ $secondaryColor: #495057;
     color: #495057;
 }
 
-.label-column {
+.justify-content-space-between {
     display: flex;
     justify-content: space-between;
+}
+
+.justify-content-end {
+    display: flex;
+    justify-content: end;
 }
 
 .custom-label {

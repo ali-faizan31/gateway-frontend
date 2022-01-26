@@ -42,6 +42,8 @@ const CreateCompetition = Loadable(lazy(() => import('./components/competition/N
 const CompetitionManagement =  Loadable(lazy(() => import('./components/competition/CompetitionManagement')));
 const CompetitionById =  Loadable(lazy(() => import('./components/competition/CompetitionInformation')));
 const Page404 = Loadable(lazy(() => import('./components/error/page404')));
+const ForgotPassword = Loadable(lazy(() => import('./components/authentication/common/forgot-password/index')));
+const ResetPassword = Loadable(lazy(() => import('./components/authentication/common/reset-password/index')));
 
 function App() {
   const isAuthenticated = localStorage.getItem('token') ;
@@ -50,6 +52,8 @@ function App() {
     <> 
       <Switch> 
         <Route exact path="/" ><Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb"/></Route> 
+        <UnGuardedRoute path='/auth/forgot-password' component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout}/>
+        <UnGuardedRoute path='/auth/reset-password/:token' component={ResetPassword} auth={isAuthenticated} layout={AuthLayout}/>
         <UnGuardedRoute path='/auth/login' component={CommunityLogin} auth={isAuthenticated} layout={AuthLayout}/>
         <UnGuardedRoute path='/auth/register' component={CommunityRegister} auth={isAuthenticated} layout={AuthLayout}/>
         <UnGuardedRoute path='/auth/verify' component={CommunityEmailVerification} auth={isAuthenticated} layout={AuthLayout}/>

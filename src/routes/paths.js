@@ -23,7 +23,9 @@ function path(root, sublink) {
     resetPassword: path(ROOTS_AUTH, '/reset-password'),
     communityVerify: path(ROOTS_AUTH, '/verify'),
     communityResendCode: path(ROOTS_AUTH, '/resend-code'),
-    communityWalletAuthentication: path(ROOTS_AUTH, '/wallet-authentication')
+    communityWalletAuthentication: path(ROOTS_AUTH, '/wallet-authentication'),
+    forgotPassword: path(ROOTS_AUTH, '/forgot-password'),
+    resetPassword: path(ROOTS_AUTH, '/reset-password/:token'),
   };
   
   export const PATH_ADMIN = {

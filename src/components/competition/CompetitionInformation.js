@@ -275,7 +275,7 @@ const CompetitionInformation = () => {
   const growthReductionFormatter = (params) => {
     const { status } = params;
     return ( 
-      <div data-label="Growth / Reduction" className='label-column'>
+      <div data-label="Growth / Reduction" className="justify-content-space-between">
        {params.formattedGrowthRate} 
       <p className='custom-label' style={{background: params.color}}> {status} </p>
       </div>
