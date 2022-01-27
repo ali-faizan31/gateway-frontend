@@ -20,6 +20,7 @@ import {
   getCovalenthqResponse,
   getTokenHolderListByContractAddressAndChainID,
   getStakingBalanceByCABN,
+  getTokenHolderlistByContractAddressBSC
 } from "../../_apis/LeaderboardCrud";
 import { arraySortByKeyDescending } from "../../utils/global.utils";
 import { stakingContractAddressListFOMO } from "../../utils/const.utils";
@@ -37,9 +38,7 @@ const LeaderboardInformation = () => {
   const [leaderboardData, setLeaderboardData] = useState({});
   const [tokenHolderList, setTokenHolderList] = useState([]);
   const [filteredTokenHolderList, setFilteredTokenHolderList] = useState([]);
-  const [LeaderboardTokenHolderList, setLeaderboardTokenHolderList] = useState(
-    []
-  );
+  const [LeaderboardTokenHolderList, setLeaderboardTokenHolderList] = useState([]);
   const [stakingTokenHolderList, setStakingTokenHolderList] = useState([]);
   const [stakingCount, setStakingCount] = useState(0);
 
@@ -84,7 +83,7 @@ const LeaderboardInformation = () => {
               chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
             },
           };
-          getCovalenthqLimit(tempObj);
+          getTokenHolderlist(tempObj);
           setLeaderboardData(tempObj);
         }
       })
@@ -116,7 +115,7 @@ const LeaderboardInformation = () => {
               chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
             },
           };
-          getCovalenthqLimit(tempObj);
+          getTokenHolderlist(tempObj);
           setLeaderboardData(tempObj);
         }
       })
@@ -130,91 +129,34 @@ const LeaderboardInformation = () => {
       });
   };
 
-  const getCovalenthqLimit = (leaderboard) => {
-    getCovalenthqResponse(leaderboard?.cabn?.chainId, leaderboard?.cabn?.tokenContractAddress, token)
-      .then((res) => {
-        if (
-          res &&
-          res.data &&
-          res.data.data &&
-          res.data.data.pagination &&
-          res.data.data.pagination.total_count >= 0
-        ) {
-          const limit = res.data.data.pagination.total_count + 100;
-          getTokenHolderlist(leaderboard, limit);
-        }
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (e?.response?.data?.error_message) {
-          console.log(e.response)
-          toast.error(e?.response?.data?.error_message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
-
-  const getTokenHolderlist = (leaderboard, limit) => {
-    getTokenHolderListByContractAddressAndChainID(
-      leaderboard?.cabn?.chainId,
-      leaderboard?.cabn?.tokenContractAddress,
-      limit,
-      token
-    )
-      .then((res) => {
-        if (
-          res &&
-          res.data &&
-          res.data.data &&
-          res.data.data.items &&
-          res.data.data.items.length > 0
-        ) {
-          const filteredList = filterList(
-            res?.data?.data?.items,
-            leaderboard?.exclusionWalletAddressList
-          );
-          res.data.data.items = filteredList;
-          const { items } = res.data.data;
-          setLeaderboardTokenHolderList(items);
-          let count = 0;
-          getDynamicStakingBalances(leaderboard, items, count);
-        }
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (e?.response?.data?.error_message) {
-          toast.error(e?.response?.data?.error_message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
-
-  const getDynamicStakingBalances = (
-    leaderboard,
-    leaderboardHoldersList,
-    count
-  ) => {
+  const getTokenHolderlist = (leaderboard) => {
+    getTokenHolderlistByContractAddressBSC(leaderboard.cabn.tokenContractAddress)
+    .then((res)=>{
+      console.log(res.data.result);
+      const filteredList = filterList(res.data.result, leaderboard?.exclusionWalletAddressList);
+      console.log(filteredList)
+      setLeaderboardTokenHolderList(filteredList);
+      if(leaderboard.cabn.tokenContractAddress === "0x484215873a674f9af73367a8f94c2c591e997521"){ //fomo //staking
+        let count = 0;
+        getDynamicStakingBalances(leaderboard, filteredList, count);
+      } else { 
+        mapTokenHolderData(filteredList, [], leaderboard)
+      }
+    })
+    .catch((e)=>{
+        toast.error(`Error occured: ${e}`)
+    })
+  }
+ 
+  const getDynamicStakingBalances = (leaderboard, leaderboardHoldersList, count) => {
     if (count < stakingContractAddressListFOMO.length) {
-      getStakingBalanceLimit(
-        leaderboard,
-        stakingContractAddressListFOMO[count],
-        count,
-        leaderboardHoldersList
-      );
+      getStakingBalanceLimit(leaderboard, stakingContractAddressListFOMO[count], count, leaderboardHoldersList );
     } else {
-      getUniqueStakingAddressListAndMapData(
-        leaderboardHoldersList,
-        leaderboard
-      );
+      getUniqueStakingAddressListAndMapData(leaderboardHoldersList,leaderboard);
     }
   };
 
-  const getUniqueStakingAddressListAndMapData = (
-    LeaderboardTokenHolderList,
-    leaderboardData
-  ) => {
+  const getUniqueStakingAddressListAndMapData = (LeaderboardTokenHolderList, leaderboardData) => {
     const uniqueStakingList = [];
     finalstakingList.forEach((i) => {
       const id = i.from_address;
@@ -233,11 +175,7 @@ const LeaderboardInformation = () => {
     Object.keys(uniqueStakingList).forEach((key) => {
       stakingMergedList.push(uniqueStakingList[key]);
     });
-    mapTokenHolderData(
-      LeaderboardTokenHolderList,
-      stakingMergedList,
-      leaderboardData
-    );
+    mapTokenHolderData( LeaderboardTokenHolderList, stakingMergedList, leaderboardData);
   };
 
   const getStakingBalanceLimit = (
@@ -323,30 +261,26 @@ const LeaderboardInformation = () => {
       });
   };
 
-  const mapTokenHolderData = (
-    leaderboardHoldersList,
-    stakingHoldersList,
-    leaderboard
-  ) => {
-    const mergedList = filterList(
-      mapHoldersBalances(leaderboardHoldersList, stakingHoldersList),
-      leaderboard.exclusionWalletAddressList
-    );
+  const mapTokenHolderData = (leaderboardHoldersList, stakingHoldersList, leaderboard) => {
+    let mergedList = [];
+    if(stakingHoldersList.length > 0){ //fomo
+      mergedList = filterList( mapHoldersBalances(leaderboardHoldersList, stakingHoldersList), leaderboard.exclusionWalletAddressList);
+    } else { 
+      mergedList = getFormattedBalanceHoldersList(leaderboardHoldersList);
+    } 
+
     const list = arraySortByKeyDescending(mergedList, "balance");
+    console.log(list, 'sorted');
 
     const levelUpSwapUrl = `${leaderboard?.cabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`;
     for (let i = 0; i < list.length; i += 1) {
-      if (list[i].address) {
-        list[i].rank = i + 1;
-
-        list[i].formattedAddress = `${list[i].address.substr(0, 6)}...${list[
+      if (list[i].TokenHolderAddress) {
+        list[i].rank = i + 1; 
+        list[i].formattedAddress = `${list[i].TokenHolderAddress.substr(0, 6)}...${list[
           i
-        ].address.substr(list[i].address.length - 4)}`;
+        ].TokenHolderAddress.substr(list[i].TokenHolderAddress.length - 4)}`;
 
-        list[i].formattedBalance = TruncateWithoutRounding(
-          list[i].balance,
-          2
-        ).toLocaleString("en-US");
+        list[i].formattedBalance = TruncateWithoutRounding(list[i].balance, 2).toLocaleString("en-US");
 
         if (i === 0) {
           list[i].formattedLevelUpAmount = "You are the leader";
@@ -365,6 +299,13 @@ const LeaderboardInformation = () => {
     setTokenHolderList(list);
     setFilteredTokenHolderList(list);
   };
+
+const getFormattedBalanceHoldersList = (list) => {
+  list.forEach((holder)=>{
+    holder.balance = Number(eitherConverter(holder.TokenHolderQuantity, 'wei').ether);
+  })
+  return list;
+}
 
   const mapHoldersBalances = (leaderboardHoldersList, stakingHoldersList) => {
     const leaderboardWallets = [];

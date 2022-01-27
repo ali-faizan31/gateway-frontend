@@ -10,3 +10,4 @@ export const tokenFRMxBSCMainnet = '0x8523518001ad5d24b2A04e8729743C0643A316c0';
 export const tokenUSDCBSCMainnet = '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d'; 
 export const stakingContractAddressListFOMO = ["0x90Bdee77ed081777C12b216f968db706f071b589", "0x3e6b25a764d43ac75dd1d108ffa10eea9f42acbf", "0x6c034b217287b64cb6c6970c1e556045843ee479"];
 export const walletAuthenticationBackendURL = "https://alemytxku6.execute-api.us-east-2.amazonaws.com/default/wallet-auth-backend"
+export const BSC_api_key = "QFQI7J6GMJXYJW6T5GYNGNNFCWI41S21JI";
