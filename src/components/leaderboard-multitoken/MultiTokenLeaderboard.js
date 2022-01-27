@@ -8,6 +8,8 @@ import {
   FGrid,
   FInputTextField,
   FGridItem,
+  FDialog,
+  FItem
 } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
 import { useLocation } from "react-router-dom";
@@ -18,6 +20,7 @@ import {
   getCovalenthqResponse,
   getTokenHolderListByContractAddressAndChainID,
 } from "../../_apis/LeaderboardCrud";
+import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 import { filterList } from "../leaderboard/LeaderboardHelper";
 import {
   tokenFRMxBSCMainnet,
@@ -25,11 +28,7 @@ import {
 } from "../../utils/const.utils";
 import { arraySortByKeyDescending } from "../../utils/global.utils";
 
-const MultiTokenLeaderboardInformation = ({
-  frmUsdcValue,
-  frmxUsdcValue,
-  leaderboardData,
-}) => {
+const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboardData}) => {
   const exportRef = useRef();
   const { pathname } = useLocation();
   let token = localStorage.getItem('token');
@@ -41,10 +40,10 @@ const MultiTokenLeaderboardInformation = ({
   const [isQueryChange, setIsQueryChange] = useState(false);
   const [tokenHolderList, setTokenHolderList] = useState([]);
   const [filteredTokenHolderList, setFilteredTokenHolderList] = useState([]);
+  const [showExportModal, setShowExportModal] = useState(false);
 
   useEffect(() => {
-    if (
-      leaderboardData &&
+    if ( leaderboardData &&
       leaderboardData.frmCabn &&
       leaderboardData.frmCabn.chainId !== undefined
     ) {
@@ -423,6 +422,7 @@ const MultiTokenLeaderboardInformation = ({
   const csvHeaders = [
     { label: "Rank", key: "rank" },
     { label: "Wallet Address", key: "address" },
+    { label: "Email", key: "email" },
     { label: "Combined USD Value", key: "formattedCombinedValue" },
     { label: "FRM Balance", key: "formattedFRMBalance" },
     { label: "FRMx Balance", key: "formattedFRMxBalance" },
@@ -438,10 +438,30 @@ const MultiTokenLeaderboardInformation = ({
     }
   };
 
+  const getUsersAndMapData = async () => {
+    try{
+      let res = await getAllRoleBasedUsers("communityMember", true, 0, 10, false, token);
+      let userList = res.data.body.users; 
+      filteredTokenHolderList.forEach((holder) => {
+        userList.forEach((user) => { 
+              if (user.addresses.find((x) => x.address === holder.address)) {
+                console.log(user, holder);
+                holder.email = user.email 
+            };
+          });
+        }) 
+      setShowExportModal(false);
+      setTimeout(() => {
+        exportRef?.current?.link?.click();
+      }, 3000);
+    } catch (e) {
+        toast.error(`Error occured: ${e?.response?.data?.status?.message}`)
+    }
+  }
+
   const onExportClick = () => {
-    setTimeout(() => {
-      exportRef?.current?.link?.click();
-    }, 3000);
+    setShowExportModal(true);
+    getUsersAndMapData(); 
   };
 
   return (
@@ -513,6 +533,19 @@ const MultiTokenLeaderboardInformation = ({
           )}
         </FContainer>
       </FContainer>
+
+      <FDialog
+          show={showExportModal}
+          size={"medium"}   
+          onHide={()=>setShowExportModal(false)}
+          title={"Export"}
+          className="connect-wallet-dialog w-50">
+
+          <FItem className={"f-mt-2 f-mb-2"}>
+            Loading Export Data
+          </FItem> 
+          Please wait ...
+      </FDialog>
     </>
   );
 };
