@@ -19,6 +19,7 @@ import moment from "moment";
 import {
   getCovalenthqResponse,
   getTokenHolderListByContractAddressAndChainID,
+  getTokenHolderlistByContractAddressBSC
 } from "../../_apis/LeaderboardCrud";
 import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 import { filterList } from "../leaderboard/LeaderboardHelper";
@@ -48,7 +49,7 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
       leaderboardData.frmCabn.chainId !== undefined
     ) {
       setIsLoading(true);
-      getCovalenthqLimit(leaderboardData);
+      getTokensHolderList(leaderboardData);
     }
   }, [leaderboardData]);
 
@@ -64,108 +65,21 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
     }
   }, [query]);
 
-  const getCovalenthqLimit = (leaderboard) => {
-    getCovalenthqResponse(
-      leaderboard?.frmCabn?.chainId,
-      leaderboard?.frmCabn?.tokenContractAddress,
-      token
-    )
-      .then((res) => {
-        if (
-          res &&
-          res.data &&
-          res.data.data &&
-          res.data.data.pagination &&
-          res.data.data.pagination.total_count >= 0
-        ) {
-          const limit = res.data.data.pagination.total_count + 100;
-          getFRMTokenHolderlist(leaderboard, limit);
-        }
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (e?.response?.data?.error_message) {
-          toast.error(`${e?.response?.data?.error_message} Page Limit Check`);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
 
-  const getFRMTokenHolderlist = (leaderboard, limit) => {
-    getTokenHolderListByContractAddressAndChainID(
-      leaderboard?.frmCabn?.chainId,
-      leaderboard?.frmCabn?.tokenContractAddress,
-      limit,
-      token
-    )
-      .then((res) => {
-        if (
-          res &&
-          res.data &&
-          res.data.data &&
-          res.data.data.items &&
-          res.data.data.items.length > 0
-        ) {
-          const filteredList = filterList(
-            res?.data?.data?.items,
-            leaderboard?.exclusionWalletAddressList
-          );
-          res.data.data.items = filteredList;
-          const { items } = res.data.data;
-          getFRMxTokenHolderlist(leaderboard, limit, items);
-        }
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (e?.response?.data?.error_message) {
-          toast.error(`${e.response.data.error_message} FRM list`);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
-
-  const getFRMxTokenHolderlist = (leaderboard, limit, frmTokenHolderList) => {
-    getTokenHolderListByContractAddressAndChainID(
-      leaderboard?.frmxCabn?.chainId,
-      leaderboard?.frmxCabn?.tokenContractAddress,
-      limit,
-      token
-    )
-      .then((res) => {
-        if (
-          res &&
-          res.data &&
-          res.data.data &&
-          res.data.data.items &&
-          res.data.data.items.length > 0
-        ) {
-          const filteredList = filterList(
-            res?.data?.data?.items,
-            leaderboard?.exclusionWalletAddressList
-          );
-          res.data.data.items = filteredList;
-          const { items } = res.data.data;
-          mapTokenHolderData(items, frmTokenHolderList, leaderboard);
-          setIsLoading(false);
-        }
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (e?.response?.data?.error_message) {
-          toast.error(`${e.response.data.error_message} FRMx list`);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
-
-  const mapTokenHolderData = (
-    frmxTokenHolderList,
-    frmTokenHolderList,
-    leaderboard
-  ) => {
+  const getTokensHolderList = async (leaderboard) => {
+    try{
+      let res = await getTokenHolderlistByContractAddressBSC(leaderboard?.frmCabn?.tokenContractAddress);
+      let FRMHoldersList = filterList(res?.data?.result, leaderboard?.exclusionWalletAddressList);
+      let resp = await getTokenHolderlistByContractAddressBSC(leaderboard?.frmxCabn?.tokenContractAddress);
+      let FRMxHoldersList = filterList(resp?.data?.result, leaderboard?.exclusionWalletAddressList); 
+      mapTokenHolderData(FRMxHoldersList, FRMHoldersList, leaderboard);
+      setIsLoading(false);
+    } catch (e) {
+      toast.error(`Error occured: ${e}`)
+    }
+  }  
+ 
+  const mapTokenHolderData = (frmxTokenHolderList, frmTokenHolderList, leaderboard) => {
     let list = mergeTwoArrays(frmTokenHolderList, frmxTokenHolderList);
     list = arraySortByKeyDescending(list, "combinedValue");
     const frmLevelUpSwapUrl = `${leaderboard?.frmCabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.frmCabn?.tokenContractAddress}&exactField=output&exactAmount=`;
@@ -239,14 +153,14 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
     const onlyInLeft = (frmxList, frmList) =>
       frmxList.map((frmx) => {
         const sameEntry = frmList.filter(
-          (frm) => frmx.address === frm.address
+          (frm) => frmx.TokenHolderAddress === frm.TokenHolderAddress
         )[0];
         let tempObj = {};
         if (!sameEntry || undefined) {
-          const etherBalance = eitherConverter(frmx?.balance, "wei").ether;
+          const etherBalance = eitherConverter(frmx?.TokenHolderQuantity, "wei").ether;
           const combinedValue = etherBalance * frmxUsdcValue;
           tempObj = {
-            address: frmx?.address,
+            address: frmx?.TokenHolderAddress,
             frmxBalance: etherBalance,
             frmBalance: "0",
             combinedValue,
@@ -259,19 +173,19 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
     const inBoth = (frmList, frmxList) =>
       frmList.map((frm) => {
         const sameEntry = frmxList.filter(
-          (frmx) => frm.address === frmx.address
+          (frmx) => frm.TokenHolderAddress === frmx.TokenHolderAddress
         )[0];
         let tempObj = {};
         if (sameEntry) {
-          const frmEtherBalance = eitherConverter(frm?.balance, "wei").ether;
+          const frmEtherBalance = eitherConverter(frm?.TokenHolderQuantity, "wei").ether;
           const frmxEtherBalance = eitherConverter(
-            sameEntry?.balance,
+            sameEntry?.TokenHolderQuantity,
             "wei"
           ).ether;
           const combinedValue =
             frmEtherBalance * frmUsdcValue + frmxEtherBalance * frmxUsdcValue;
           tempObj = {
-            address: frm?.address,
+            address: frm?.TokenHolderAddress,
             frmBalance: frmEtherBalance,
             frmxBalance: frmxEtherBalance,
             combinedValue,
@@ -279,10 +193,10 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
           }; // both
         } else {
           let temp = {};
-          const etherBalance = eitherConverter(frm?.balance, "wei").ether;
+          const etherBalance = eitherConverter(frm?.TokenHolderQuantity, "wei").ether;
           const combinedValue = etherBalance * frmUsdcValue;
           temp = {
-            address: frm?.address,
+            address: frm?.TokenHolderAddress,
             frmBalance: etherBalance,
             frmxBalance: "0",
             combinedValue,

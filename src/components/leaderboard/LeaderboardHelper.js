@@ -17,19 +17,9 @@ export const chainIdList = [
     { url: 'https://quickswap.exchange/#/', label: 'https://quickswap.exchange/#/' }
   ];
 
-  export const filterList = (items, addressList) => { 
-    const array1 = ['1', '7', '9', '10'];
-    const array2 = [
-      { id: '1', path: 'b' },
-      { id: '2', path: 'cb' },
-      { id: '3', path: 'b' },
-      { id: '4', path: 'cb' },
-      { id: '5', path: 'b' },
-      { id: '6', path: 'cb' }
-    ]; 
-  
+  export const filterList = (items, addressList) => {  
     if (items && items.length > 0 && addressList && addressList.length > 0) { 
-      const filteredList =  items.filter((element2) => addressList.map((element1) => element1).indexOf(element2.address) === -1);  
+      const filteredList =  items.filter((element2) => addressList.map((element1) => element1).indexOf(element2.TokenHolderAddress) === -1);  
       return filteredList;
     }  
   };
