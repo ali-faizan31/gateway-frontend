@@ -55,9 +55,9 @@ const LeaderboardInformation = () => {
 
   useEffect(() => {
     if (isQueryChange) {
-      if (tokenHolderList) {
+      if (tokenHolderList) { 
         const tempData = tokenHolderList.map(
-          (x) => x.address.toLowerCase().includes(query.toLowerCase()) && x
+          (x) => x.TokenHolderAddress.toLowerCase().includes(query.toLowerCase()) && x
         );
         setFilteredTokenHolderList(tempData.filter((x) => x && x));
         setIsQueryChange(false);
