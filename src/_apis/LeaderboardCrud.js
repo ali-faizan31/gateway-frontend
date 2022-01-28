@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseUrl, apiKey } from '../utils/const.utils';  
+import { baseUrl, apiKey, BSC_api_key } from '../utils/const.utils';  
 
 export function getAllLeaderboards(offset, limit, token) { 
   return axios.get(`${baseUrl}/api/v1/admin/leaderboards/list?offset=${offset}&limit=${limit}`, {
@@ -82,4 +82,8 @@ export function getStakingBalanceByCABN(chainId, tokenContractAddress, stakingCo
   url = `https://api.covalenthq.com/v1/${chainId}/address/${stakingContractAddress}/transfers_v2/?quote-currency=USD&format=JSON&contract-address=${tokenContractAddress}&key=${apiKey}&page-size=5000&match={"transfers":{"$elemmatch":{"to_address":${stakingContractAddress}}}}`;
   }
   return axios.get(url);
+}
+
+export function getTokenHolderlistByContractAddressBSC(tokenContractAddress){
+  return axios.get(`https://api.bscscan.com/api?module=token&action=tokenholderlist&contractaddress=${tokenContractAddress}&apikey=${BSC_api_key}`);
 }

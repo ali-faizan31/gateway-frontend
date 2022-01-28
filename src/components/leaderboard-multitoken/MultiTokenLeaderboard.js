@@ -8,6 +8,8 @@ import {
   FGrid,
   FInputTextField,
   FGridItem,
+  FDialog,
+  FItem
 } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
 import { useLocation } from "react-router-dom";
@@ -17,7 +19,9 @@ import moment from "moment";
 import {
   getCovalenthqResponse,
   getTokenHolderListByContractAddressAndChainID,
+  getTokenHolderlistByContractAddressBSC
 } from "../../_apis/LeaderboardCrud";
+import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 import { filterList } from "../leaderboard/LeaderboardHelper";
 import {
   tokenFRMxBSCMainnet,
@@ -25,11 +29,7 @@ import {
 } from "../../utils/const.utils";
 import { arraySortByKeyDescending } from "../../utils/global.utils";
 
-const MultiTokenLeaderboardInformation = ({
-  frmUsdcValue,
-  frmxUsdcValue,
-  leaderboardData,
-}) => {
+const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboardData}) => {
   const exportRef = useRef();
   const { pathname } = useLocation();
   let token = localStorage.getItem('token');
@@ -41,15 +41,15 @@ const MultiTokenLeaderboardInformation = ({
   const [isQueryChange, setIsQueryChange] = useState(false);
   const [tokenHolderList, setTokenHolderList] = useState([]);
   const [filteredTokenHolderList, setFilteredTokenHolderList] = useState([]);
+  const [showExportModal, setShowExportModal] = useState(false);
 
   useEffect(() => {
-    if (
-      leaderboardData &&
+    if ( leaderboardData &&
       leaderboardData.frmCabn &&
       leaderboardData.frmCabn.chainId !== undefined
     ) {
       setIsLoading(true);
-      getCovalenthqLimit(leaderboardData);
+      getTokensHolderList(leaderboardData);
     }
   }, [leaderboardData]);
 
@@ -65,108 +65,21 @@ const MultiTokenLeaderboardInformation = ({
     }
   }, [query]);
 
-  const getCovalenthqLimit = (leaderboard) => {
-    getCovalenthqResponse(
-      leaderboard?.frmCabn?.chainId,
-      leaderboard?.frmCabn?.tokenContractAddress,
-      token
-    )
-      .then((res) => {
-        if (
-          res &&
-          res.data &&
-          res.data.data &&
-          res.data.data.pagination &&
-          res.data.data.pagination.total_count >= 0
-        ) {
-          const limit = res.data.data.pagination.total_count + 100;
-          getFRMTokenHolderlist(leaderboard, limit);
-        }
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (e?.response?.data?.error_message) {
-          toast.error(`${e?.response?.data?.error_message} Page Limit Check`);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
 
-  const getFRMTokenHolderlist = (leaderboard, limit) => {
-    getTokenHolderListByContractAddressAndChainID(
-      leaderboard?.frmCabn?.chainId,
-      leaderboard?.frmCabn?.tokenContractAddress,
-      limit,
-      token
-    )
-      .then((res) => {
-        if (
-          res &&
-          res.data &&
-          res.data.data &&
-          res.data.data.items &&
-          res.data.data.items.length > 0
-        ) {
-          const filteredList = filterList(
-            res?.data?.data?.items,
-            leaderboard?.exclusionWalletAddressList
-          );
-          res.data.data.items = filteredList;
-          const { items } = res.data.data;
-          getFRMxTokenHolderlist(leaderboard, limit, items);
-        }
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (e?.response?.data?.error_message) {
-          toast.error(`${e.response.data.error_message} FRM list`);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
-
-  const getFRMxTokenHolderlist = (leaderboard, limit, frmTokenHolderList) => {
-    getTokenHolderListByContractAddressAndChainID(
-      leaderboard?.frmxCabn?.chainId,
-      leaderboard?.frmxCabn?.tokenContractAddress,
-      limit,
-      token
-    )
-      .then((res) => {
-        if (
-          res &&
-          res.data &&
-          res.data.data &&
-          res.data.data.items &&
-          res.data.data.items.length > 0
-        ) {
-          const filteredList = filterList(
-            res?.data?.data?.items,
-            leaderboard?.exclusionWalletAddressList
-          );
-          res.data.data.items = filteredList;
-          const { items } = res.data.data;
-          mapTokenHolderData(items, frmTokenHolderList, leaderboard);
-          setIsLoading(false);
-        }
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (e?.response?.data?.error_message) {
-          toast.error(`${e.response.data.error_message} FRMx list`);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
-
-  const mapTokenHolderData = (
-    frmxTokenHolderList,
-    frmTokenHolderList,
-    leaderboard
-  ) => {
+  const getTokensHolderList = async (leaderboard) => {
+    try{
+      let res = await getTokenHolderlistByContractAddressBSC(leaderboard?.frmCabn?.tokenContractAddress);
+      let FRMHoldersList = filterList(res?.data?.result, leaderboard?.exclusionWalletAddressList);
+      let resp = await getTokenHolderlistByContractAddressBSC(leaderboard?.frmxCabn?.tokenContractAddress);
+      let FRMxHoldersList = filterList(resp?.data?.result, leaderboard?.exclusionWalletAddressList); 
+      mapTokenHolderData(FRMxHoldersList, FRMHoldersList, leaderboard);
+      setIsLoading(false);
+    } catch (e) {
+      toast.error(`Error occured: ${e}`)
+    }
+  }  
+ 
+  const mapTokenHolderData = (frmxTokenHolderList, frmTokenHolderList, leaderboard) => {
     let list = mergeTwoArrays(frmTokenHolderList, frmxTokenHolderList);
     list = arraySortByKeyDescending(list, "combinedValue");
     const frmLevelUpSwapUrl = `${leaderboard?.frmCabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.frmCabn?.tokenContractAddress}&exactField=output&exactAmount=`;
@@ -240,14 +153,14 @@ const MultiTokenLeaderboardInformation = ({
     const onlyInLeft = (frmxList, frmList) =>
       frmxList.map((frmx) => {
         const sameEntry = frmList.filter(
-          (frm) => frmx.address === frm.address
+          (frm) => frmx.TokenHolderAddress === frm.TokenHolderAddress
         )[0];
         let tempObj = {};
         if (!sameEntry || undefined) {
-          const etherBalance = eitherConverter(frmx?.balance, "wei").ether;
+          const etherBalance = eitherConverter(frmx?.TokenHolderQuantity, "wei").ether;
           const combinedValue = etherBalance * frmxUsdcValue;
           tempObj = {
-            address: frmx?.address,
+            address: frmx?.TokenHolderAddress,
             frmxBalance: etherBalance,
             frmBalance: "0",
             combinedValue,
@@ -260,19 +173,19 @@ const MultiTokenLeaderboardInformation = ({
     const inBoth = (frmList, frmxList) =>
       frmList.map((frm) => {
         const sameEntry = frmxList.filter(
-          (frmx) => frm.address === frmx.address
+          (frmx) => frm.TokenHolderAddress === frmx.TokenHolderAddress
         )[0];
         let tempObj = {};
         if (sameEntry) {
-          const frmEtherBalance = eitherConverter(frm?.balance, "wei").ether;
+          const frmEtherBalance = eitherConverter(frm?.TokenHolderQuantity, "wei").ether;
           const frmxEtherBalance = eitherConverter(
-            sameEntry?.balance,
+            sameEntry?.TokenHolderQuantity,
             "wei"
           ).ether;
           const combinedValue =
             frmEtherBalance * frmUsdcValue + frmxEtherBalance * frmxUsdcValue;
           tempObj = {
-            address: frm?.address,
+            address: frm?.TokenHolderAddress,
             frmBalance: frmEtherBalance,
             frmxBalance: frmxEtherBalance,
             combinedValue,
@@ -280,10 +193,10 @@ const MultiTokenLeaderboardInformation = ({
           }; // both
         } else {
           let temp = {};
-          const etherBalance = eitherConverter(frm?.balance, "wei").ether;
+          const etherBalance = eitherConverter(frm?.TokenHolderQuantity, "wei").ether;
           const combinedValue = etherBalance * frmUsdcValue;
           temp = {
-            address: frm?.address,
+            address: frm?.TokenHolderAddress,
             frmBalance: etherBalance,
             frmxBalance: "0",
             combinedValue,
@@ -423,6 +336,7 @@ const MultiTokenLeaderboardInformation = ({
   const csvHeaders = [
     { label: "Rank", key: "rank" },
     { label: "Wallet Address", key: "address" },
+    { label: "Email", key: "email" },
     { label: "Combined USD Value", key: "formattedCombinedValue" },
     { label: "FRM Balance", key: "formattedFRMBalance" },
     { label: "FRMx Balance", key: "formattedFRMxBalance" },
@@ -438,10 +352,30 @@ const MultiTokenLeaderboardInformation = ({
     }
   };
 
+  const getUsersAndMapData = async () => {
+    try{
+      let res = await getAllRoleBasedUsers("communityMember", true, 0, 10, false, token);
+      let userList = res.data.body.users; 
+      filteredTokenHolderList.forEach((holder) => {
+        userList.forEach((user) => { 
+              if (user.addresses.find((x) => x.address === holder.address)) {
+                console.log(user, holder);
+                holder.email = user.email 
+            };
+          });
+        }) 
+      setShowExportModal(false);
+      setTimeout(() => {
+        exportRef?.current?.link?.click();
+      }, 3000);
+    } catch (e) {
+        toast.error(`Error occured: ${e?.response?.data?.status?.message}`)
+    }
+  }
+
   const onExportClick = () => {
-    setTimeout(() => {
-      exportRef?.current?.link?.click();
-    }, 3000);
+    setShowExportModal(true);
+    getUsersAndMapData(); 
   };
 
   return (
@@ -513,6 +447,19 @@ const MultiTokenLeaderboardInformation = ({
           )}
         </FContainer>
       </FContainer>
+
+      <FDialog
+          show={showExportModal}
+          size={"medium"}   
+          onHide={()=>setShowExportModal(false)}
+          title={"Export"}
+          className="connect-wallet-dialog w-50">
+
+          <FItem className={"f-mt-2 f-mb-2"}>
+            Loading Export Data
+          </FItem> 
+          Please wait ...
+      </FDialog>
     </>
   );
 };
