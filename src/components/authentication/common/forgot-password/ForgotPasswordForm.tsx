@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FCard, FContainer, FInputTextField, FLayout, FItem, FGrid, FGridItem, FButton } from "ferrum-design-system";
+import { FCard, FContainer, FInputText, FLayout, FItem, FGrid, FGridItem, FButton } from "ferrum-design-system";
 import { useHistory, Link } from "react-router-dom";
 import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -54,7 +54,7 @@ const ForgotPasswordForm = () => {
             <form autoComplete="false" onSubmit={handleSubmit(onSubmit)}>
                 <FGrid >
                     <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-                        <FInputTextField
+                        <FInputText
                             label="Email"
                             name="email"
                             type="email"
@@ -72,11 +72,8 @@ const ForgotPasswordForm = () => {
                         />
                     </FGridItem>
                 </FGrid>
-                <FGrid >
-                    <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-                        <FButton type="submit" title={"Submit"} className={"f-mt-1 "} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
-                    </FGridItem>
-                </FGrid>
+                 <FButton type="submit" title={"Submit"} className={"w-100 f-mt-1"}  postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
+                   
             </form>
         </FContainer>
     </>);

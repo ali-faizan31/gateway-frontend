@@ -12,7 +12,7 @@ import {
   FContainer,
   FButton,
   FGrid,
-  FInputTextField,
+  FInputText,
   FGridItem,
   FDialog,
   FItem,
@@ -260,11 +260,11 @@ const LeaderboardManagement = () => {
       <FContainer type="fluid">
         <FContainer>
           <FGrid className={"f-mt-1 f-mb-1"}>
-            <FGridItem size={[6,12,12]} alignX={"center"}>
+            <FGridItem size={[6,12,12]} alignX="start" alignY={"end"}>
               <h1>Leaderboard Management</h1> 
             </FGridItem>
             <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[6,12,12]} display={"flex"}> 
-              <FInputTextField
+              <FInputText
                 label="Search"
                 placeholder="Leaderboard name"
                 variant="outlined"

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import {format,parseISO} from 'date-fns';
 import { useForm } from "react-hook-form";
 import {
-  FInputTextField,
+  FInputText,
   FGrid,
   FGridItem,
   FButton,
@@ -30,7 +31,11 @@ export default function NewCompetition() {
   const dispatch = useDispatch();
   const history = useHistory();
   let token = localStorage.getItem('token');
-  const [leaderboardList, setLeaderboardList] = useState([]); 
+  const [leaderboardList, setLeaderboardList] = useState([]);  
+
+  var now = new Date();
+  var now_utc = new Date().toISOString();
+  console.log(now,now_utc);
 
   useEffect(() => {
     getLeaderboardListing();
@@ -166,7 +171,7 @@ export default function NewCompetition() {
             </FGrid> 
             <FGrid>
               <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-                <FInputTextField
+                <FInputText
                   label="Competition Name"
                   name="name"
                   placeholder="Competition Name"
@@ -175,11 +180,12 @@ export default function NewCompetition() {
                 />
               </FGridItem> 
             </FGrid>
-            <FGrid className={"f-mt-1"}>
+            <FGrid>
               <FGridItem alignX="center" size={[6, 12, 12]}>
-                <FInputTextField
+                <FInputText
                   label="Start Date/Time in UTC"
                   name="startDate"
+                  className={"f-mt-1"}
                   placeholder="Start Date/Time in UTC"
                   register={register}
                   error={
@@ -188,11 +194,23 @@ export default function NewCompetition() {
                       : ""
                   }
                 /> 
+                {/* <FDatepicker
+                  className={"f-mt-1"}
+                  label={"Datepicker"}
+                  name={"startDate"} 
+                  showTimeSelect={true} 
+                  register={register}
+                  control={control}
+                  error={
+                    errors["startDate"]?.message ? errors["startDate"]?.message : ""
+                  }
+                /> */}
               </FGridItem>
               <FGridItem alignX="center" size={[6, 12, 12]}>
-                <FInputTextField
+                <FInputText
                   label="End Date/Time in UTC"
                   name="endDate"
+                  className={"f-mt-1"}
                   placeholder="End Date/Time in UTC"
                   register={register}
                   error={
@@ -203,9 +221,9 @@ export default function NewCompetition() {
                 /> 
               </FGridItem>
             </FGrid>
-            <FGrid className={"f-mt-1"}>
-              <FGridItem alignX="center" size={[6, 12, 12]}>
-                <FInputTextField
+            <FGrid>
+              <FGridItem alignX="center" className={"f-mt-1"} size={[6, 12, 12]}>
+                <FInputText
                   label="Start Block"
                   name="startBlock"
                   placeholder="Start Block"
@@ -217,8 +235,8 @@ export default function NewCompetition() {
                   }
                 /> 
               </FGridItem>
-              <FGridItem alignX="center" size={[6, 12, 12]}>
-                <FInputTextField
+              <FGridItem alignX="center" className={"f-mt-1"} size={[6, 12, 12]}>
+                <FInputText
                   label="End Block"
                   name="endBlock"
                   placeholder="End Block"

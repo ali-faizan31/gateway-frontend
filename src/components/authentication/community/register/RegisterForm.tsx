@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {FContainer, FInputTextField, FGrid, FGridItem, FItem, FButton } from "ferrum-design-system";
+import {FContainer, FInputText, FGrid, FGridItem, FItem, FButton } from "ferrum-design-system";
 import { useHistory, Link } from "react-router-dom";
 import {
   RiEyeOffFill,
@@ -76,7 +76,7 @@ const RegisterForm = () => {
     <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
       <FGrid>
         <FGridItem size={[6, 12, 12]} alignX="center"  className={"f-mt-1"}>
-          <FInputTextField
+          <FInputText
             label="First name"
             name="firstName"
             placeholder="First Name"
@@ -87,7 +87,7 @@ const RegisterForm = () => {
           />
         </FGridItem>
         <FGridItem size={[6, 12, 12]}  className={"f-mt-1"}>
-          <FInputTextField
+          <FInputText
             label="Last name"
             name="lastName"
             className={"custom-input"}
@@ -99,7 +99,7 @@ const RegisterForm = () => {
       </FGrid>
       <FGrid>
         <FGridItem alignX="center" size={[12]}  className={"f-mt-1"}>
-          <FInputTextField
+          <FInputText
             label="Email"
             name="email"
             type="email"
@@ -111,7 +111,7 @@ const RegisterForm = () => {
       </FGrid>
       <FGrid>
         <FGridItem size={[6, 12, 12]}  className={"f-mt-1"}>
-          <FInputTextField
+          <FInputText
             label="Password"
             name="password"
             type={!viewPassword ? "password" : "text"}
@@ -127,7 +127,7 @@ const RegisterForm = () => {
           />
         </FGridItem>
         <FGridItem size={[6, 12, 12]}  className={"f-mt-1"}>
-          <FInputTextField
+          <FInputText
             label="Confirm Password"
             name="confirmPassword"
             type={!viewConfirmPassword ? "password" : "text"}
@@ -145,7 +145,7 @@ const RegisterForm = () => {
       </FGrid>
       <FGrid>
         <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-          <FInputTextField
+          <FInputText
             label="Telegram handle"
             name="telegramHandle"
             placeholder="Telegram handle including @"
@@ -155,12 +155,10 @@ const RegisterForm = () => {
             }
           />
         </FGridItem>
-      </FGrid>
-      <FGrid >
-        <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-           <FButton type="submit" title={"Register"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
-           </FGridItem>
-      </FGrid>
+      </FGrid> 
+      
+      <FButton type="submit" className={"w-100 f-mt-1"} title={"Register"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
+            
       <FItem align={"center"} className={"f-mt-1 w-100"} >
       Already have an account? 
         <Link className="primary-color text-decoration-none " to={PATH_AUTH.communityLogin}>

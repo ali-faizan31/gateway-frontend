@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FCard, FContainer, FInputTextField, FLayout, FItem, FGrid, FGridItem, FButton } from "ferrum-design-system";
+import { FCard, FContainer, FInputText, FLayout, FItem, FGrid, FGridItem, FButton } from "ferrum-design-system";
 import { useHistory, Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
@@ -54,7 +54,7 @@ const EmailVerificationForm = (children: any) => {
     <form autoComplete="false" onSubmit={handleSubmit(onSubmit)}>
       <FGrid >
         <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-          <FInputTextField
+          <FInputText
             label="Email Verification Code"
             name="emailVerificationCode"
             type="Number"
@@ -71,13 +71,10 @@ const EmailVerificationForm = (children: any) => {
             }
           />
         </FGridItem>
-      </FGrid>
-      <FGrid >
-        <FGridItem alignX="center" size={[12]} className={"f-mt-1"}> 
-        <FButton type="submit" title={"Verify"} className={"f-mt-1 "} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
-      </FGridItem>
-      </FGrid>
-      <FItem align={"center"} className={"f-mt-1 w-100"} >
+      </FGrid> 
+      <FButton type="submit" title={"Verify"} className={"w-100 f-mt-1"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
+       
+       <FItem align={"center"} className={"f-mt-1 w-100"} >
         Don’t have a code?  
         <Link className="primary-color text-decoration-none " to={PATH_AUTH.communityResendCode}>
           Resend code
