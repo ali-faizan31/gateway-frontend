@@ -267,7 +267,7 @@ const LeaderboardInformation = () => {
 
     const onlyInLeft = (stakingList, leaderboardList) =>
       stakingList.map((stakingValue) => {
-        const sameEntry = leaderboardList.filter((leaderboardValue) => stakingValue.from  === leaderboardValue.address)[0];
+        const sameEntry = leaderboardList.filter((leaderboardValue) => stakingValue.from  === leaderboardValue.TokenHolderAddress)[0];
         let tempObj = {}; 
         if (!sameEntry || undefined) { 
           tempObj = {
@@ -371,9 +371,9 @@ const LeaderboardInformation = () => {
       cell: (params)=><div data-label="Rank">{params.rank}</div>
     },
     {
-      prop: "formattedAddress",
+      prop: "address",
       title: "Wallet Address",
-      cell: (params)=><div data-label="Wallet Address">{params.formattedAddress}</div>
+      cell: (params)=><div data-label="Wallet Address">{params.address}</div>
     },
     {
       prop: "formattedBalance",
@@ -419,6 +419,7 @@ const LeaderboardInformation = () => {
                 variant="outlined"
                 value={query}
                 type="search"
+                className={"f-mt-1"}
                 onChange={onQueryChange}
                 style={{ width: "100%" }}
               />

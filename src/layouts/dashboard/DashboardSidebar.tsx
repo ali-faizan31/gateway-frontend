@@ -70,8 +70,7 @@ const DashboardSidebar = () => {
       });
   };
 
-  const updatePublicLeaderboardConfig = (list: any) => {
-    console.log(list);
+  const updatePublicLeaderboardConfig = (list: any) => { 
     setSideConfig([{title: 'Leaderboard', path: PATH_DASHBOARD.general.competition}]);
     if (isPublicMultiLeaderboard) {
       setSideConfig([])
