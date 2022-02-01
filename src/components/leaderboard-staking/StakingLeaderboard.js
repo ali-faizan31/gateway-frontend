@@ -145,7 +145,7 @@ const LeaderboardInformation = () => {
     if (count < stakingContractAddressListFOMO.length) {
       getStakingBalances(leaderboard, stakingContractAddressListFOMO[count], count, leaderboardHoldersList);
     } else {
-        getUniqueAddressListAndMapData(finalstakingList, true, leaderboardHoldersList, leaderboard); 
+      mapTokenHolderData( leaderboardHoldersList, leaderboard) ;  
     }
   };
 
@@ -155,9 +155,8 @@ const LeaderboardInformation = () => {
         if (res && res.data && res.data.result) {
           if (res.data.result.length > 0) {
             const { result } = res.data;
-            const data = getStakedAndWithdrawlData(result, stakingContractaddress); 
-            finalstakingList = [...finalstakingList, ...data.stakedArray];
-            finalWithdrawlList = [...finalWithdrawlList, ...data.withdrawlArray]
+            const data = getStakedMinusWithdrawlBalance(result, stakingContractaddress); 
+            finalstakingList = [...finalstakingList, ...data]; 
             count = count + 1;
             getDynamicStakingBalances(leaderboard, leaderboardHoldersList, count );
           } else {
@@ -167,7 +166,7 @@ const LeaderboardInformation = () => {
         }
       })
       .catch((e) => {
-        setIsLoading(false);
+        setIsLoading(false); 
         if (e?.response?.data?.message) {
           toast.error(`Error occured: ${e.response.data.message}`);
         } else {
@@ -176,9 +175,10 @@ const LeaderboardInformation = () => {
       });
     };
 
-    const getStakedAndWithdrawlData = (stakinglist, stakingAddress) => {
+    const getStakedMinusWithdrawlBalance = (stakinglist, stakingAddress) => {
         let stakedArray = []; 
-        let withdrawlArray = [];
+        let withdrawlArray = []; 
+
         stakinglist.forEach((transfer)=>{
             if (transfer.to.toLowerCase() === stakingAddress.toLowerCase()){  //staked
                 stakedArray.push(transfer)
@@ -186,19 +186,30 @@ const LeaderboardInformation = () => {
                 withdrawlArray.push(transfer);
             }
         })
+ 
+        stakedArray =  getUniqueAddressList(stakedArray, true);
+        withdrawlArray =  getUniqueAddressList(withdrawlArray, false); 
 
-        let data = {
-            stakedArray: stakedArray,
-            withdrawlArray: withdrawlArray
-        };
-        return data;
+        const totalStakedBalanceList = stakedArray.map((stakedItem) => {
+          const withdrawltem = withdrawlArray.filter((withdrawlItem) => stakedItem.from === withdrawlItem.to)[0]; 
+          let tempObj = {};  
+          if (withdrawltem && Object.keys(withdrawltem).length > 0) { 
+
+            const difference = stakedItem.value -  withdrawltem.value; 
+            stakedItem.value = difference; 
+            return stakedItem;
+          }  
+          return stakedItem  ;
+        }); 
+         
+        return totalStakedBalanceList;
     }
 
   
-  const getUniqueAddressListAndMapData = (list, stakingAndMapData, LeaderboardTokenHolderList, leaderboardData) => {
+  const getUniqueAddressList = (list, isStaked) => {
     const uniqueList = [];  
     list.forEach((i) => {  
-      const id = stakingAndMapData ? i.from : i.to; 
+      const id = isStaked ? i.from : i.to; 
       i.points = Number(eitherConverter(i.value, "wei").ether);
       i.value = Number(eitherConverter(i.value, "wei").ether);
 
@@ -212,18 +223,14 @@ const LeaderboardInformation = () => {
     Object.keys(uniqueList).forEach((key) => {
       updatedList.push(uniqueList[key]);
     }); 
-    
-    if (stakingAndMapData) {
-        mapTokenHolderData( LeaderboardTokenHolderList, updatedList, leaderboardData) 
-    } else {
-        return updatedList;
-    }
+     
+    return updatedList;
   };
  
 
-  const mapTokenHolderData = (leaderboardHoldersList, stakingHoldersList, leaderboard) => { 
-    const uniqueWithdrawalList = getUniqueAddressListAndMapData(finalWithdrawlList, false);
-    const finalList = getTokenHoldersFinalBalances(mapHoldersBalances(leaderboardHoldersList, stakingHoldersList), uniqueWithdrawalList);
+  const mapTokenHolderData = (leaderboardHoldersList, leaderboard) => {  
+
+    const finalList = mapHoldersBalances(leaderboardHoldersList, finalstakingList);
     const filteredList = filterList(finalList, leaderboard.exclusionWalletAddressList)  
     const list = arraySortByKeyDescending(filteredList, "balance"); 
 
@@ -261,8 +268,7 @@ const LeaderboardInformation = () => {
     const onlyInLeft = (stakingList, leaderboardList) =>
       stakingList.map((stakingValue) => {
         const sameEntry = leaderboardList.filter((leaderboardValue) => stakingValue.from  === leaderboardValue.address)[0];
-        let tempObj = {};
-        const initialSum = 0;
+        let tempObj = {}; 
         if (!sameEntry || undefined) { 
           tempObj = {
             address: stakingValue.from ,
@@ -301,79 +307,7 @@ const LeaderboardInformation = () => {
 
     return [...stakingWallets, ...leaderboardWallets, ...matchedWallets];
   };
-
-  const getTokenHoldersFinalBalances = (holderList, withdrawlList) => { 
-    let updatedBalanceList = []; 
-    let i = 1;
-
-    holderList.forEach((holder)=>{
-        withdrawlList.forEach((withdrawl)=>{
-            let tempObj = {}; 
-            if(holder.address === withdrawl.to){ 
-                tempObj = {
-                    address: holder.address,
-                    balance: holder.balance - withdrawl.value,
-                    status: "withdrawl",
-                };
-                updatedBalanceList.push(tempObj)
-            } else {
-                tempObj = {
-                    address: holder.address,
-                    balance: holder.balance,
-                    status: "withdrawl",
-                };
-                updatedBalanceList.push(tempObj)
-            }
-        })
-    })
-
-    // holderList.map((leaderboardValue) => {
-    //   const withdrawltem = withdrawlList.filter((withdrawValue) => leaderboardValue.address === withdrawValue.to)[0]; 
-    // //   console.log(leaderboardValue, withdrawltem);
-    //   if( withdrawltem){
-    //       i++;
-    //       console.log(leaderboardValue, 'withdraw', i, withdrawltem, withdrawlList);
-    //   }
-    //   let tempObj = {}; 
-    //   console.log(withdrawltem);
-    //   if (withdrawltem) { 
-    //     const difference = leaderboardValue.balance -  withdrawltem.value; 
-    //     tempObj = {
-    //       address: withdrawltem.from,
-    //       balance: difference,
-    //       status: "withdrawl",
-    //     }; 
-    //   } else { 
-    //     let temp = {};
-    //     temp = {
-    //       status: "leaderboard",
-    //       balance: leaderboardValue.balance,
-    //       address: leaderboardValue.address,
-    //     }; 
-    //     updatedBalanceList.push(Object.keys(temp).length > 0 && tempObj); 
-    //   }
-    //   updatedBalanceList.push(Object.keys(tempObj).length > 0 && tempObj);
-    // });
-
-
-    // for (let i = 0; i < holderList.length; i++){
-    //     for (let j = 0; j < withdrawlList.length; j++){
-    //         if(holderList[i].address === withdrawlList[j].to){
-    //             const combinedSum = holderList[i].balance - withdrawlList[j].value; 
-    //             let tempObj = {
-    //             address: holderList[i].address,
-    //             balance: combinedSum,
-    //             status: "Matched",
-    //             };
-    //             updatedBalanceList.push(tempObj);
-    //         } else {
-    //             updatedBalanceList.push(holderList[i]);
-    //         }
-    //     }
-    // }
-    console.log(updatedBalanceList);
-    return updatedBalanceList
-  }
+ 
 
   const TruncateWithoutRounding = (value, decimals) => {
     const parts = value.toString().split(".");
