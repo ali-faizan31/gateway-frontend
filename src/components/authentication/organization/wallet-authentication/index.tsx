@@ -32,7 +32,7 @@ const Index = () => {
       });
   }
 
-  const AuthenticationProp = (props: any) => <FButton postfix={ props.loading && <ClipLoader color="#fff" size={20} />}  disabled={props.loading} type="submit" {...props} title={props.text}></FButton>
+  const AuthenticationProp = (props: any) => <FButton postfix={ props.loading && <ClipLoader color="#fff" size={20} />}  className={"w-100 f-mt-1"} disabled={props.loading} type="submit" {...props} title={props.text}></FButton>
 
 
   return ( 
@@ -48,13 +48,9 @@ const Index = () => {
               <h2 className="f-mb-2"> Connect Wallet! </h2>
               </FCardTitle>
               <p className="grey-secondary"> Please connect your wallet for the authentication process. </p>
-            </>)}
-            <FGrid >
-        <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
+            </>)} 
            <Web3AuthWrapper View={AuthenticationProp} email={parsedUser?.email} user={parsedUser} token={token} setIsVerified={setIsVerified} applicationUserToken = {applicationUserToken} />
-           </FGridItem>
-      </FGrid>
-
+           
     </FContainer>
   );
 };

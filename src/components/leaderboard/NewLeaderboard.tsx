@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from "react-hook-form";
-import { FInputTextField, FGrid, FGridItem, FButton, FContainer, FInputCheckbox } from "ferrum-design-system";
+import { FInputText, FGrid, FGridItem, FButton, FContainer, FInputCheckbox } from "ferrum-design-system";
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import toast, { Toaster } from "react-hot-toast";
@@ -80,7 +80,7 @@ export default function NewLeaderboard() {
           <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
             <FGrid >
               <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-                <FInputTextField
+                <FInputText
                   label="Leaderboard Name"
                   name="name"
                   placeholder="Leaderboard Name"
@@ -93,7 +93,7 @@ export default function NewLeaderboard() {
             </FGrid> 
             <FGrid>
               <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-                <FInputTextField
+                <FInputText
                   label="Team Wallet Addresses"
                   name="exclusionWalletAddressList"
                   placeholder="walletAddress1,walletAddress2,walletAddress3"
@@ -106,7 +106,7 @@ export default function NewLeaderboard() {
             </FGrid>
             <FGrid>
               <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-                <FInputTextField
+                <FInputText
                   label="Currency"
                   name="currencyAddressesByNetwork"
                   placeholder="currencyAddress1,currencyAddress2"

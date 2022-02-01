@@ -6,7 +6,7 @@ import {
   FContainer,
   FButton,
   FGrid,
-  FInputTextField,
+  FInputText,
   FGridItem,
 } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
@@ -478,11 +478,11 @@ const getFormattedBalanceHoldersList = (list) => {
       <FContainer type="fluid">
         <FContainer>
           <FGrid className={"f-mt-1 f-mb-1"}>
-            <FGridItem size={[6,12,12]} alignX={"center"}>
+            <FGridItem size={[6,12,12]} alignX="start" alignY={"end"}>
               <h1>{leaderboardData?.name || "Leaderboard"}</h1>
             </FGridItem>
             <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[6,12,12]} >
-              <FInputTextField
+              <FInputText
                 label="Search Wallet"
                 placeholder="0x000...0000"
                 variant="outlined"

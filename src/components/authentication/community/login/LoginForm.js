@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
-  FInputTextField,
+  FInputText,
   FGrid,
   FContainer,
   FGridItem,
@@ -117,7 +117,7 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
         <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
           <FGrid className={"f-mt-1"}>
             <FGridItem size={[12]}>
-              <FInputTextField
+              <FInputText
                 label="Email"
                 name="email"
                 type="email"
@@ -145,7 +145,7 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
           </FGrid>
           <FGrid>
             <FGridItem size={[12]}>
-              <FInputTextField
+              <FInputText
                 label="Password"
                 name="password"
                 className={"f-mt-1"}
@@ -184,16 +184,13 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
             </Link>
             </div>
           {/* </FItem> */}
-          <FGrid>
-            <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-              <FButton
+          <FButton
                 type="submit"
                 title={"Login"}
-                className={"f-mt-1"}
+                className={"w-100 f-mt-1"}
                 postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}
               ></FButton>
-            </FGridItem>
-          </FGrid>
+            
           <FItem align={"center"} className={"f-mt-1 w-100"}>
             Don’t have an account?
             <Link

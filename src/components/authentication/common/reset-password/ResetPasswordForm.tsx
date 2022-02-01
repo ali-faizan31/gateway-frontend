@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FCard, FContainer, FInputTextField, FLayout, FItem, FGrid, FGridItem, FButton } from "ferrum-design-system";
+import { FCard, FContainer, FInputText, FLayout, FItem, FGrid, FGridItem, FButton } from "ferrum-design-system";
 import { useHistory, Link, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -64,7 +64,7 @@ console.log(e);
       <form autoComplete="true" onSubmit={handleSubmit(onSubmit)}>
         <FGrid>
           <FGridItem size={[12]} className={"f-mt-1"}>
-            <FInputTextField
+            <FInputText
               label="Password"
               name="newPassword"
               type={!viewPassword ? "password" : "text"}
@@ -82,7 +82,7 @@ console.log(e);
         </FGrid>
         <FGrid>
           <FGridItem size={[12]} className={"f-mt-1"}>
-            <FInputTextField
+            <FInputText
               label="Confirm Password"
               name="confirmPassword"
               type={!viewConfirmPassword ? "password" : "text"}
@@ -98,11 +98,8 @@ console.log(e);
             />
           </FGridItem>
         </FGrid>
-        <FGrid >
-          <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-            <FButton type="submit" title={"Reset Password"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
-          </FGridItem>
-        </FGrid>
+         <FButton type="submit" className={"w-100 f-mt-1"} title={"Reset Password"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
+           
       </form>
     </FContainer>
   </>

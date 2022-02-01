@@ -7,6 +7,8 @@ import AuthLayout from './layouts/auth';
 import GuardedRoute from './guards/GuardedRoute';
 import UnGuardedRoute from './guards/UnGuardedRoute'; 
 import ClipLoader from "react-spinners/ClipLoader";  
+import moment from 'moment-timezone';
+
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -47,6 +49,7 @@ const ResetPassword = Loadable(lazy(() => import('./components/authentication/co
 
 function App() {
   const isAuthenticated = localStorage.getItem('token') ;
+  moment.tz.setDefault("UTC"); 
 
   return (
     <> 
