@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FInputTextField, FGrid, FGridItem, FButton, FItem} from "ferrum-design-system";
+import { FInputText, FGrid, FGridItem, FButton, FItem} from "ferrum-design-system";
 import { useHistory, Link } from "react-router-dom";
 import {
     RiEyeOffFill,
@@ -117,7 +117,7 @@ const LoginForm = () => {
         <form autoComplete="true" onSubmit={handleSubmit((values)=>onSubmit(values))}>
             <FGrid className={"f-mt-1"}>
                 <FGridItem size={[12]}>
-                    <FInputTextField
+                    <FInputText
                         label="Email"
                         name="email"
                         type="email"
@@ -142,7 +142,7 @@ const LoginForm = () => {
             </FGrid>
             <FGrid>
                 <FGridItem size={[12]} >
-                    <FInputTextField
+                    <FInputText
                         label="Password"
                         name="password"
                         className={"f-mt-1"}
@@ -157,14 +157,7 @@ const LoginForm = () => {
                             required: {
                                 value: true,
                                 message: "Password is required",
-                            },
-                            minLength: { value: 3, message: validations.MIN_LENGTH("3") },
-                            maxLength: { value: 20, message: validations.MAX_LENGTH("20") },
-                            // pattern: {
-                            //     value: validations.PASSWORD_REGEX,
-                            //     message:
-                            //         "Password must be at least six characters long, Contain letters and numbers",
-                            // },
+                            } 
                         }}
                         error={
                             errors["password"]?.message ? errors["password"]?.message : ""
@@ -172,17 +165,13 @@ const LoginForm = () => {
                     />
                 </FGridItem>
             </FGrid> 
-                <FGrid>
-            <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
-              <FButton
+            <FButton
                 type="submit"
                 title={"Login"}
-                className={"f-mt-1"}
+                className={"w-100 f-mt-1"} 
                 postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}
               ></FButton>
-            </FGridItem>
-          </FGrid>
-          <FItem align={"center"} className={"f-mt-1 w-100"}>
+              <FItem align={"center"} className={"f-mt-1 w-100"}>
             Don’t have an account?
             <Link
               className="primary-color text-decoration-none "

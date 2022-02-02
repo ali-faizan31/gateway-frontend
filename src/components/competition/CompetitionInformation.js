@@ -5,7 +5,7 @@ import {
   FContainer,
   FButton,
   FGrid,
-  FInputTextField,
+  FInputText,
   FGridItem,
 } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
@@ -275,7 +275,7 @@ const CompetitionInformation = () => {
   const growthReductionFormatter = (params) => {
     const { status } = params;
     return ( 
-      <div data-label="Growth / Reduction" className='label-column'>
+      <div data-label="Growth / Reduction" className="justify-content-space-between">
        {params.formattedGrowthRate} 
       <p className='custom-label' style={{background: params.color}}> {status} </p>
       </div>
@@ -351,11 +351,11 @@ const CompetitionInformation = () => {
  <FContainer type="fluid">
         <FContainer>
           <FGrid className={"f-mt-1 f-mb-1"}>
-            <FGridItem size={[6,12,12]} alignX={"center"}> 
+            <FGridItem size={[6,12,12]}  alignX="start" alignY={"end"}> 
        <h1>{competitionData?.name || "Competition"}</h1>
        </FGridItem>
             <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[6,12,12]} >
-               <FInputTextField 
+               <FInputText 
                     label="Search Wallet"
                     placeholder="0x000...0000" 
                     value={query}

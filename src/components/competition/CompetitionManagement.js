@@ -10,7 +10,7 @@ import {
   FContainer,
   FButton,
   FGrid,
-  FInputTextField,
+  FInputText,
   FGridItem,
   FDialog,
   FItem,
@@ -43,7 +43,7 @@ const CompetitionManagement = () => {
   const statusFormatter = (params) => {
     const { status } = params; 
     return (
-      <>   <div data-label="Status"  className='label-column'>  
+      <>   <div data-label="Status"  className='justify-content-space-between'>  
         <FButton title={sentenceCase(status)}></FButton> 
         {/* <p className='custom-icon'><RiEdit2Fill /></p> */}
         <FButton
@@ -66,7 +66,7 @@ const CompetitionManagement = () => {
     return (
       <>
       <div data-label="Action"> 
-        <FButton type="button" title={" Details"} disabled={true} onClick={() => onDetailClick(params)}></FButton>
+        <FButton type="button" title={" Details"} onClick={() => onDetailClick(params)}></FButton>
         </div>
       </>
     );
@@ -224,11 +224,11 @@ const onCancel = () => {
       <FContainer type="fluid">
         <FContainer>
           <FGrid className={"f-mt-1 f-mb-1"}>
-            <FGridItem size={[6,12,12]} alignX={"center"}>
+            <FGridItem size={[6,12,12]}  alignX="start" alignY={"end"}>
               <h1>Competition Management</h1> 
             </FGridItem>
             <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[6,12,12]} display={"flex"}> 
-              <FInputTextField
+              <FInputText
                     id="outlined-basic"
                     label="Search"
                     placeholder="Competition name"

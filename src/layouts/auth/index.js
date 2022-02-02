@@ -38,6 +38,7 @@ const AuthLayout = ({ children }) => {
       <FGrid layout={"grid"}>
         <FGridItem
           size={[4, 12, 12]}
+          dir={"column"}
           display={!showPicture && "none"}
           alignX={"center"}
           alignY={"center"}
@@ -51,7 +52,7 @@ const AuthLayout = ({ children }) => {
             </h1>
           </FItem>
           <FItem>
-            <img src={"/ferrum/L-04-Trans.png"} alt="" width={"100%"} />
+            <img src={"/ferrum/Gateway.png"} alt="" width={"100%"} />
           </FItem>
         </FGridItem>
         <FGridItem size={[8, 12, 12]} className="f-p-2" alignX={"center"} alignY={"center"}>

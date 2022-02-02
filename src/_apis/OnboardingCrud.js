@@ -25,3 +25,20 @@ export function communityMemberResendVerifyCode(values) {
   return axios.post(`${baseUrl}/api/v1/users/re-send/email/otp`, values);
 }
  
+export function sendForgotPasswordLink(values) {
+  return axios.post(`${baseUrl}/api/v1/users/forgot-password`, values);
+}
+
+export function authenticateForgotPasswordLink(values) {
+  return axios.post(`${baseUrl}/api/v1/users/forgot-password/authenticate/link`, values);
+}
+
+export function resetPassword(values, token) { 
+  return axios.put(`${baseUrl}/api/v1/users/reset-password`, values, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Content-type': 'Application/json',
+      Authorization: `Bearer ${token}`
+    }
+  }); 
+}

@@ -17,14 +17,12 @@ import moment from "moment";
 import {
   getLeaderboardById,
   getLeaderboardByIdForPublicUser,
-  getCovalenthqResponse,
-  getTokenHolderListByContractAddressAndChainID,
-  getStakingBalanceByCABN,
+  getStakingBalancesByCABNBSC,
   getTokenHolderlistByContractAddressBSC
 } from "../../_apis/LeaderboardCrud";
 import { arraySortByKeyDescending } from "../../utils/global.utils";
 import { stakingContractAddressListFOMO } from "../../utils/const.utils";
-import { filterList } from "./LeaderboardHelper";
+import { filterList } from "../leaderboard/LeaderboardHelper";
 
 const LeaderboardInformation = () => {
   const { id } = useParams();
@@ -43,6 +41,7 @@ const LeaderboardInformation = () => {
   const [stakingCount, setStakingCount] = useState(0);
 
   let finalstakingList = [];
+  let finalWithdrawlList = [];
 
   useEffect(() => {
     setIsLoading(true);
@@ -57,7 +56,7 @@ const LeaderboardInformation = () => {
     if (isQueryChange) {
       if (tokenHolderList) { 
         const tempData = tokenHolderList.map(
-          (x) => x.TokenHolderAddress.toLowerCase().includes(query.toLowerCase()) && x
+          (x) => x.address.toLowerCase().includes(query.toLowerCase()) && x
         );
         setFilteredTokenHolderList(tempData.filter((x) => x && x));
         setIsQueryChange(false);
@@ -131,203 +130,149 @@ const LeaderboardInformation = () => {
 
   const getTokenHolderlist = (leaderboard) => {
     getTokenHolderlistByContractAddressBSC(leaderboard.cabn.tokenContractAddress)
-    .then((res)=>{
-      console.log(res.data.result);
-      const filteredList = filterList(res.data.result, leaderboard?.exclusionWalletAddressList);
-      console.log(filteredList)
-      setLeaderboardTokenHolderList(filteredList);
-      if(leaderboard.cabn.tokenContractAddress === "0x484215873a674f9af73367a8f94c2c591e997521"){ //fomo //staking
-        let count = 0;
-        getDynamicStakingBalances(leaderboard, filteredList, count);
-      } else { 
-        mapTokenHolderData(filteredList, [], leaderboard)
-      }
+    .then((res)=>{ 
+        const filteredList = filterList(res.data.result, leaderboard?.exclusionWalletAddressList); 
+        setLeaderboardTokenHolderList(filteredList); 
+        let count = 0; 
+        getDynamicStakingBalances(leaderboard, filteredList, count); 
     })
     .catch((e)=>{
         toast.error(`Error occured: ${e}`)
     })
   }
  
-  const getDynamicStakingBalances = (leaderboard, leaderboardHoldersList, count) => {
+  const getDynamicStakingBalances = async (leaderboard, leaderboardHoldersList, count) => {
     if (count < stakingContractAddressListFOMO.length) {
-      getStakingBalanceLimit(leaderboard, stakingContractAddressListFOMO[count], count, leaderboardHoldersList );
+      getStakingBalances(leaderboard, stakingContractAddressListFOMO[count], count, leaderboardHoldersList);
     } else {
-      getUniqueStakingAddressListAndMapData(leaderboardHoldersList,leaderboard);
+      mapTokenHolderData( leaderboardHoldersList, leaderboard) ;  
     }
   };
 
-  const getUniqueStakingAddressListAndMapData = (LeaderboardTokenHolderList, leaderboardData) => {
-    const uniqueStakingList = [];
-    finalstakingList.forEach((i) => {
-      const id = i.from_address;
-      i.points = Number(eitherConverter(i.transfers[0].delta, "wei").ether);
-      i.transfers[0].delta = Number(
-        eitherConverter(i.transfers[0].delta, "wei").ether
-      );
-
-      if (!uniqueStakingList[id]) {
-        return (uniqueStakingList[id] = i);
-      }
-      return (uniqueStakingList[id].transfers[0].delta += i.points);
-    });
-
-    const stakingMergedList = [];
-    Object.keys(uniqueStakingList).forEach((key) => {
-      stakingMergedList.push(uniqueStakingList[key]);
-    });
-    mapTokenHolderData( LeaderboardTokenHolderList, stakingMergedList, leaderboardData);
-  };
-
-  const getStakingBalanceLimit = (
-    leaderboard,
-    stakingContractaddress,
-    count,
-    leaderboardHoldersList
-  ) => {
-    getStakingBalanceByCABN(
-      leaderboard?.cabn?.chainId,
-      leaderboard?.cabn?.tokenContractAddress,
-      stakingContractaddress
-    )
+  const getStakingBalances = (leaderboard, stakingContractaddress, count, leaderboardHoldersList ) => {
+    getStakingBalancesByCABNBSC(leaderboard?.cabn?.tokenContractAddress, stakingContractaddress)
       .then((res) => {
-        if (
-          res &&
-          res.data &&
-          res.data.data &&
-          res.data.data.pagination &&
-          res.data.data.pagination.total_count >= 0
-        ) {
-          const limit = res.data.data.pagination.total_count + 100;
-          getStakingBalanceByCurrencyAddressByNetwork(
-            leaderboard,
-            stakingContractaddress,
-            count,
-            leaderboardHoldersList,
-            limit
-          );
-        }
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (e?.response?.data?.error_message) {
-          toast.error(e?.response?.data?.error_message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
-
-  const getStakingBalanceByCurrencyAddressByNetwork = (
-    leaderboard,
-    stakingContractaddress,
-    count,
-    leaderboardHoldersList,
-    limit
-  ) => {
-    getStakingBalanceByCABN(
-      leaderboard?.cabn?.chainId,
-      leaderboard?.cabn?.tokenContractAddress,
-      stakingContractaddress,
-      limit
-    )
-      .then((res) => {
-        if (res && res.data && res.data.data && res.data.data.items) {
-          if (res.data.data.items.length > 0) {
-            const { items } = res.data.data;
-            finalstakingList = [...finalstakingList, ...items];
+        if (res && res.data && res.data.result) {
+          if (res.data.result.length > 0) {
+            const { result } = res.data;
+            const data = getStakedMinusWithdrawlBalance(result, stakingContractaddress); 
+            finalstakingList = [...finalstakingList, ...data]; 
             count = count + 1;
-            getDynamicStakingBalances(
-              leaderboard,
-              leaderboardHoldersList,
-              count
-            );
+            getDynamicStakingBalances(leaderboard, leaderboardHoldersList, count );
           } else {
             count = count + 1;
-            getDynamicStakingBalances(
-              leaderboard,
-              leaderboardHoldersList,
-              count
-            );
+            getDynamicStakingBalances(leaderboard, leaderboardHoldersList, count );
           }
         }
       })
       .catch((e) => {
-        setIsLoading(false);
-        if (e?.response?.data?.error_message) {
-          toast.error(e?.response?.data?.error_message);
+        setIsLoading(false); 
+        if (e?.response?.data?.message) {
+          toast.error(`Error occured: ${e.response.data.message}`);
         } else {
           toast.error("Something went wrong. Try again later!");
         }
       });
+    };
+
+    const getStakedMinusWithdrawlBalance = (stakinglist, stakingAddress) => {
+        let stakedArray = []; 
+        let withdrawlArray = []; 
+
+        stakinglist.forEach((transfer)=>{
+            if (transfer.to.toLowerCase() === stakingAddress.toLowerCase()){  //staked
+                stakedArray.push(transfer)
+            } else if (transfer.from.toLowerCase() === stakingAddress.toLowerCase()){ // withdrawls
+                withdrawlArray.push(transfer);
+            }
+        })
+ 
+        stakedArray =  getUniqueAddressList(stakedArray, true);
+        withdrawlArray =  getUniqueAddressList(withdrawlArray, false); 
+
+        const totalStakedBalanceList = stakedArray.map((stakedItem) => {
+          const withdrawltem = withdrawlArray.filter((withdrawlItem) => stakedItem.from === withdrawlItem.to)[0]; 
+          let tempObj = {};  
+          if (withdrawltem && Object.keys(withdrawltem).length > 0) { 
+
+            const difference = stakedItem.value -  withdrawltem.value; 
+            stakedItem.value = difference; 
+            return stakedItem;
+          }  
+          return stakedItem  ;
+        }); 
+         
+        return totalStakedBalanceList;
+    }
+
+  
+  const getUniqueAddressList = (list, isStaked) => {
+    const uniqueList = [];  
+    list.forEach((i) => {  
+      const id = isStaked ? i.from : i.to; 
+      i.points = Number(eitherConverter(i.value, "wei").ether);
+      i.value = Number(eitherConverter(i.value, "wei").ether);
+
+      if (!uniqueList[id]) {
+        return (uniqueList[id] = i);
+      }
+      return (uniqueList[id].value += i.points);
+    });
+
+    const updatedList = [];
+    Object.keys(uniqueList).forEach((key) => {
+      updatedList.push(uniqueList[key]);
+    }); 
+     
+    return updatedList;
   };
+ 
 
-  const mapTokenHolderData = (leaderboardHoldersList, stakingHoldersList, leaderboard) => {
-    let mergedList = [];
-    if(stakingHoldersList.length > 0){ //fomo
-      mergedList = filterList( mapHoldersBalances(leaderboardHoldersList, stakingHoldersList), leaderboard.exclusionWalletAddressList);
-    } else { 
-      mergedList = getFormattedBalanceHoldersList(leaderboardHoldersList);
-    } 
+  const mapTokenHolderData = (leaderboardHoldersList, leaderboard) => {  
 
-    const list = arraySortByKeyDescending(mergedList, "balance");
-    console.log(list, 'sorted');
+    const finalList = mapHoldersBalances(leaderboardHoldersList, finalstakingList);
+    const filteredList = filterList(finalList, leaderboard.exclusionWalletAddressList)  
+    const list = arraySortByKeyDescending(filteredList, "balance"); 
 
     const levelUpSwapUrl = `${leaderboard?.cabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`;
-    for (let i = 0; i < list.length; i += 1) {
-      if (list[i].TokenHolderAddress) {
+    for (let i = 0; i < list.length; i += 1) { 
         list[i].rank = i + 1; 
-        list[i].formattedAddress = `${list[i].TokenHolderAddress.substr(0, 6)}...${list[
-          i
-        ].TokenHolderAddress.substr(list[i].TokenHolderAddress.length - 4)}`;
+        list[i].formattedAddress = `${list[i].address.substr(0, 6)}...${list[
+            i
+        ].address.substr(list[i].address.length - 4)}`;
 
         list[i].formattedBalance = TruncateWithoutRounding(list[i].balance, 2).toLocaleString("en-US");
 
         if (i === 0) {
-          list[i].formattedLevelUpAmount = "You are the leader";
-          list[i].levelUpUrl = levelUpSwapUrl;
+            list[i].formattedLevelUpAmount = "You are the leader";
+            list[i].levelUpUrl = levelUpSwapUrl;
         } else {
-          list[i].formattedLevelUpAmount = TruncateWithoutRounding(
+            list[i].formattedLevelUpAmount = TruncateWithoutRounding(
             calculateLevelUpAmount(list[i - 1].balance, list[i].balance),
             2
-          ).toLocaleString("en-US");
-          list[i].levelUpUrl = levelUpSwapUrl + list[i].formattedLevelUpAmount;
+            ).toLocaleString("en-US");
+            list[i].levelUpUrl = levelUpSwapUrl + list[i].formattedLevelUpAmount;
         }
-      }
     }
 
     setIsLoading(false);
     setTokenHolderList(list);
     setFilteredTokenHolderList(list);
-  };
+  }; 
 
-const getFormattedBalanceHoldersList = (list) => {
-  list.forEach((holder)=>{
-    holder.balance = Number(eitherConverter(holder.TokenHolderQuantity, 'wei').ether);
-  })
-  return list;
-}
-
-  const mapHoldersBalances = (leaderboardHoldersList, stakingHoldersList) => {
+  const mapHoldersBalances = (leaderboardHoldersList, stakingHoldersList) => { 
     const leaderboardWallets = [];
     let stakingWallets = [];
     let matchedWallets = [];
 
     const onlyInLeft = (stakingList, leaderboardList) =>
       stakingList.map((stakingValue) => {
-        const sameEntry = leaderboardList.filter(
-          (leaderboardValue) =>
-            stakingValue.from_address === leaderboardValue.address
-        )[0];
-        let tempObj = {};
-        const initialSum = 0;
-        if (!sameEntry || undefined) {
-          // const sum = stakingValue.transfers.reduce(
-          //   (previousValue, currentValue) => previousValue + Number(eitherConverter(currentValue.delta, 'wei').ether),
-          //   initialSum
-          // );
+        const sameEntry = leaderboardList.filter((leaderboardValue) => stakingValue.from  === leaderboardValue.TokenHolderAddress)[0];
+        let tempObj = {}; 
+        if (!sameEntry || undefined) { 
           tempObj = {
-            address: stakingValue.from_address,
-            balance: stakingValue.transfers[0].delta,
+            address: stakingValue.from ,
+            balance: stakingValue.value,
             status: "staking",
           };
         }
@@ -336,22 +281,12 @@ const getFormattedBalanceHoldersList = (list) => {
 
     const inBoth = (leaderboardList, stakingList) =>
       leaderboardList.map((leaderboardValue) => {
-        const sameEntry = stakingList.filter(
-          (stakingValue) =>
-            leaderboardValue.address === stakingValue.from_address
-        )[0];
-        let tempObj = {};
-        const initialSum = 0;
-        if (sameEntry) {
-          // const sum = sameEntry.transfers.reduce(
-          //   (previousValue, currentValue) => previousValue + Number(eitherConverter(currentValue.delta, 'wei').ether),
-          //   initialSum
-          // );
-          const combinedSum =
-            sameEntry.transfers[0].delta +
-            Number(eitherConverter(leaderboardValue.balance, "wei").ether); // of both list
+        const sameEntry = stakingList.filter((stakingValue) => leaderboardValue.TokenHolderAddress === stakingValue.from)[0];
+        let tempObj = {}; 
+        if (sameEntry) { 
+          const combinedSum = sameEntry.value + Number(eitherConverter(leaderboardValue.TokenHolderQuantity, "wei").ether); // of both list
           tempObj = {
-            address: sameEntry.from_address,
+            address: sameEntry.from,
             balance: combinedSum,
             status: "Matched",
           }; // both
@@ -359,24 +294,20 @@ const getFormattedBalanceHoldersList = (list) => {
           let temp = {};
           temp = {
             status: "leaderboard",
-            balance: eitherConverter(leaderboardValue.balance, "wei").ether,
-            address: leaderboardValue.address,
+            balance: eitherConverter(leaderboardValue.TokenHolderQuantity, "wei").ether,
+            address: leaderboardValue.TokenHolderAddress,
           };
           leaderboardWallets.push(temp); // leaderboard
         }
         return Object.keys(tempObj).length > 0 && tempObj;
       });
 
-    stakingWallets = onlyInLeft(
-      stakingHoldersList,
-      leaderboardHoldersList
-    ).filter((obj) => obj && obj);
-    matchedWallets = inBoth(leaderboardHoldersList, stakingHoldersList).filter(
-      (obj) => obj && obj
-    );
+    stakingWallets = onlyInLeft(stakingHoldersList,  leaderboardHoldersList).filter((obj) => obj && obj);
+    matchedWallets = inBoth(leaderboardHoldersList, stakingHoldersList).filter((obj) => obj && obj); 
 
     return [...stakingWallets, ...leaderboardWallets, ...matchedWallets];
   };
+ 
 
   const TruncateWithoutRounding = (value, decimals) => {
     const parts = value.toString().split(".");
@@ -440,9 +371,9 @@ const getFormattedBalanceHoldersList = (list) => {
       cell: (params)=><div data-label="Rank">{params.rank}</div>
     },
     {
-      prop: "formattedAddress",
+      prop: "address",
       title: "Wallet Address",
-      cell: (params)=><div data-label="Wallet Address">{params.formattedAddress}</div>
+      cell: (params)=><div data-label="Wallet Address">{params.address}</div>
     },
     {
       prop: "formattedBalance",
@@ -479,7 +410,7 @@ const getFormattedBalanceHoldersList = (list) => {
         <FContainer>
           <FGrid className={"f-mt-1 f-mb-1"}>
             <FGridItem size={[6,12,12]} alignX="start" alignY={"end"}>
-              <h1>{leaderboardData?.name || "Leaderboard"}</h1>
+              <h1>{leaderboardData?.name  || "Leaderboard"}</h1>
             </FGridItem>
             <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[6,12,12]} >
               <FInputText
@@ -488,6 +419,7 @@ const getFormattedBalanceHoldersList = (list) => {
                 variant="outlined"
                 value={query}
                 type="search"
+                className={"f-mt-1"}
                 onChange={onQueryChange}
                 style={{ width: "100%" }}
               />

@@ -31,9 +31,14 @@ $secondaryColor: #495057;
     color: #495057;
 }
 
-.label-column {
+.justify-content-space-between {
     display: flex;
     justify-content: space-between;
+}
+
+.justify-content-end {
+    display: flex;
+    justify-content: end;
 }
 
 .custom-label {
@@ -113,6 +118,14 @@ input:-webkit-autofill {
             }
         }
     }
+}
+
+aside.open .f-sider-item.has-child.f-sider-item {
+    border: none !important;
+}
+
+aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
+    background: #212b36 !important;
 }
 
 .f-dialog .f-dialog-content {
