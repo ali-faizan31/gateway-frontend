@@ -4,7 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useSelector, RootStateOrAny } from 'react-redux';
 import { publicLeaderboardConfig, sidebarConfig, publicMultiLeaderboardConfig, publicCompetitionConfig } from './SidebarConfig';
 import { useLocation, useParams } from 'react-router-dom';
-import {RiCheckboxBlankCircleFill} from "react-icons/ri";
+import { PATH_PUBLIC_USER, PATH_ADMIN, PATH_DASHBOARD } from "../../routes/paths";
 import { getLeaderboardByIdForPublicUser, getAllLeaderboards } from "../../_apis/LeaderboardCrud";
 import { getCompetitionByIdForPublicUser, getAllCompetitions } from "../../_apis/CompetitionCrud";
 
@@ -18,13 +18,14 @@ const DashboardSidebar = () => {
   const { leaderboardList } = useSelector((state: RootStateOrAny) => state.leaderboard);
   const isPublic = pathname.includes('/pub');
   const isPublicLeaderboard = pathname.includes('/pub/leader');
+  const isStakingLeaderboard = pathname.includes('/staking');
   const isPublicMultiLeaderboard = pathname.includes('/pub/multi/leaderboard');
   const isPublicCompetition = pathname.includes('/pub/competition');
 
   useEffect(() => {
     if (id !== ":id") {
       if (isPublic){ 
-        if (isPublicLeaderboard || isPublicMultiLeaderboard) {
+        if (isStakingLeaderboard || isPublicLeaderboard || isPublicMultiLeaderboard) {
           getPublicLeaderboard();
         }
         if (isPublicCompetition) {
@@ -41,13 +42,18 @@ const DashboardSidebar = () => {
     getLeaderboardByIdForPublicUser(id)
       .then((res: any) => {
         if (res?.data?.body?.leaderboard) {
-          const { leaderboard } = res.data.body;
+          const { leaderboard } = res.data.body; 
           let mappedData = [];
           if (isPublicMultiLeaderboard) {
             mappedData = [
               { title: leaderboard.name, _id: leaderboard._id, path: `/pub/multi/leaderboard/${leaderboard._id}` }
             ];
-          } else {
+          }  else if ( isStakingLeaderboard ) {
+            mappedData = [
+              { title: leaderboard.name, _id: leaderboard._id, path: `/pub/staking/leaderboard/${leaderboard._id}` }
+            ];
+          } 
+          else {
             mappedData = [
               { title: leaderboard.name, _id: leaderboard._id, path: `/pub/leaderboard/${leaderboard._id}` }
             ];
@@ -64,13 +70,14 @@ const DashboardSidebar = () => {
       });
   };
 
-  const updatePublicLeaderboardConfig = (list: any) => {
+  const updatePublicLeaderboardConfig = (list: any) => { 
+    setSideConfig([{title: 'Leaderboard', path: PATH_DASHBOARD.general.competition}]);
     if (isPublicMultiLeaderboard) {
       setSideConfig([])
       const np: any = [list[0]];
       publicMultiLeaderboardConfig[0].children = np;
       setSideConfig(publicMultiLeaderboardConfig)
-    } else if (isPublicLeaderboard) {
+    } else if (isPublicLeaderboard || isStakingLeaderboard ) {
       setSideConfig([])
       let np: any = publicLeaderboardConfig[0].children;
       np = [...np, list[0]];
@@ -99,7 +106,8 @@ const DashboardSidebar = () => {
       });
   };
 
-  const updatePublicCompetitionConfig = (list: any) => { 
+  const updatePublicCompetitionConfig = (list: any) => {
+    setSideConfig([{title: 'Competition', path: PATH_DASHBOARD.general.competition}]); 
     if (isPublicCompetition) {
       setSideConfig([])
       let np: any = publicCompetitionConfig[0].children;
@@ -152,10 +160,8 @@ const DashboardSidebar = () => {
 
   return (
     <FSider>
-      {(isPublicLeaderboard && renderContent(sideConfig) ||
-        (isPublicMultiLeaderboard && renderContent(sideConfig) ||
-          (isPublicCompetition && renderContent(sideConfig) || (
-          renderContent(sidebarConfig)))))}
+      {(isPublicLeaderboard || isStakingLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig) 
+        || renderContent(sidebarConfig)}
     </FSider>
   )
 }
