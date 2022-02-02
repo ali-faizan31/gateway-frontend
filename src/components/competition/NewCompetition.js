@@ -31,11 +31,7 @@ export default function NewCompetition() {
   const dispatch = useDispatch();
   const history = useHistory();
   let token = localStorage.getItem('token');
-  const [leaderboardList, setLeaderboardList] = useState([]);  
-
-  var now = new Date();
-  var now_utc = new Date().toISOString();
-  console.log(now,now_utc);
+  const [leaderboardList, setLeaderboardList] = useState([]);   
 
   useEffect(() => {
     getLeaderboardListing();
@@ -55,8 +51,8 @@ export default function NewCompetition() {
     leaderboard: {label:"Select"},
     startBlock: "",
     endBlock: "",
-    endDate: "2022-01-17 12:00",
-    startDate: "2022-01-10 12:00",
+    endDate: "",
+    startDate: "",
     status: false
   };
 
@@ -81,6 +77,8 @@ export default function NewCompetition() {
     } catch (e) {
       toast.error(`Error: ${e}`)
     }
+
+    console.log(values);
 
     if (!values.leaderboard){
       toast.error("leaderboard is required");
@@ -108,7 +106,7 @@ export default function NewCompetition() {
         for (let i = 0; i < chainIdList.length; i += 1) {
           if (chainIdList[i].id === leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId) { 
             leaderboard.network = chainIdList[i].label; 
-            leaderboard.label = `${leaderboard.name} | ${leaderboard.network} | ${leaderboard.leaderboardCurrencyAddressesByNetwork[0].currencyAddressesByNetwork.tokenContractAddress}`; 
+            leaderboard.label = `${leaderboard?.name} | ${leaderboard?.network} | ${leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress}`; 
             leaderboard.value = leaderboard._id; 
           }  
         }
@@ -182,7 +180,7 @@ export default function NewCompetition() {
             </FGrid>
             <FGrid>
               <FGridItem alignX="center" size={[6, 12, 12]}>
-                <FInputText
+                {/* <FInputText
                   label="Start Date/Time in UTC"
                   name="startDate"
                   className={"f-mt-1"}
@@ -193,21 +191,34 @@ export default function NewCompetition() {
                       ? errors["startDate"]?.message
                       : ""
                   }
-                /> 
-                {/* <FDatepicker
+                />  */}
+                <FDatepicker
                   className={"f-mt-1"}
-                  label={"Datepicker"}
+                  label={"Start Date/Time in UTC"}
                   name={"startDate"} 
+                  placeholder={"MM/DD/YYYY hh:mm"}
                   showTimeSelect={true} 
                   register={register}
                   control={control}
                   error={
                     errors["startDate"]?.message ? errors["startDate"]?.message : ""
                   }
-                /> */}
+                />
               </FGridItem>
               <FGridItem alignX="center" size={[6, 12, 12]}>
-                <FInputText
+              <FDatepicker
+                  className={"f-mt-1"}
+                  label={"End Date/Time in UTC"}
+                  name={"endDate"} 
+                  showTimeSelect={true} 
+                  placeholder={"MM/DD/YYYY hh:mm"}
+                  register={register}
+                  control={control}
+                  error={
+                    errors["endDate"]?.message ? errors["endDate"]?.message : ""
+                  }
+                />
+                {/* <FInputText
                   label="End Date/Time in UTC"
                   name="endDate"
                   className={"f-mt-1"}
@@ -218,7 +229,7 @@ export default function NewCompetition() {
                       ? errors["endDate"]?.message
                       : ""
                   }
-                /> 
+                />  */}
               </FGridItem>
             </FGrid>
             <FGrid>

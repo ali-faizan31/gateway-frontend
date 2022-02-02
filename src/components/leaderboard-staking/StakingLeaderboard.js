@@ -371,9 +371,9 @@ const LeaderboardInformation = () => {
       cell: (params)=><div data-label="Rank">{params.rank}</div>
     },
     {
-      prop: "address",
+      prop: "formattedAddress",
       title: "Wallet Address",
-      cell: (params)=><div data-label="Wallet Address">{params.address}</div>
+      cell: (params)=><div data-label="Wallet Address">{params.formattedAddress}</div>
     },
     {
       prop: "formattedBalance",
