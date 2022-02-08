@@ -130,6 +130,10 @@ aside.open .f-sider-item.has-child.f-sider-item {
     border: none !important;
 }
 
+aside.sider-expanded .f-sider-item.has-child.f-sider-item {
+    border: none !important;
+}
+
 aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
     background: #212b36 !important;
 }

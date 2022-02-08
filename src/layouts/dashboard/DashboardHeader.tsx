@@ -3,11 +3,19 @@ import { FLayout, FContainer, FMain, ThemeBuilder, FHeader, FButton, FInputText,
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { useHistory, useLocation, Link } from 'react-router-dom';
 import { PATH_AUTH } from '../../routes/paths';
+import { MetaMaskConnector } from "../../container-components";
+import { ConnectWalletDialog }  from "../../utils/connect-wallet/ConnectWalletDialog";
+import { useSelector } from 'react-redux';
+import { RootState } from "../../redux/rootReducer";
+
 
 const DashboardHeader = () => {
   const { pathname } = useLocation();
   const history = useHistory(); 
   const isPublic = pathname.includes('pub');
+  const { isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet } = useSelector((state: RootState) => state.walletConnector);
+
+  console.log(isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet);
 
   const showLogoutButton = () => { 
     if (isPublic) {
@@ -29,8 +37,12 @@ const DashboardHeader = () => {
           title="Logout"
           postfix={<RiLogoutCircleRLine />}
           onClick={handleLogout}
-        ></FButton>
-      </FItem>   
+        ></FButton>   
+        <MetaMaskConnector.WalletConnector
+            WalletConnectView={FButton}
+            WalletConnectModal={ConnectWalletDialog}
+          />
+      </FItem>
     </FHeader>
   )
 }

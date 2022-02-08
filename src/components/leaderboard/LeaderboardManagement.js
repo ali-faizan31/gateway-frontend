@@ -253,10 +253,8 @@ const LeaderboardManagement = () => {
   ];
 
   return (
-    <>
-      <div>
-        <Toaster />
-      </div>
+    <> 
+        <Toaster /> 
       <FContainer type="fluid">
         <FContainer>
           <FGrid className={"f-mt-1 f-mb-1"}>

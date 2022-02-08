@@ -171,10 +171,8 @@ export default function MultiTokenLeaderboardIndex() {
   };
 
   return (
-    <>
-      <div>
-        <Toaster />
-      </div>
+    <> 
+        <Toaster /> 
       <FContainer type="fluid">
         <FContainer>
           {frmUsdcValue && frmxUsdcValue && (

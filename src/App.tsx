@@ -8,6 +8,7 @@ import GuardedRoute from './guards/GuardedRoute';
 import UnGuardedRoute from './guards/UnGuardedRoute'; 
 import ClipLoader from "react-spinners/ClipLoader";  
 import moment from 'moment-timezone';
+import { WalletApplicationWrapper } from "./container-components";
 
 
 const Loadable = (Component: any) => (props: any) => {
@@ -53,39 +54,39 @@ function App() {
   moment.tz.setDefault("UTC"); 
 
   return (
-    <> 
-      <Switch> 
-        <Route exact path="/" ><Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb"/></Route> 
-        <UnGuardedRoute path='/auth/forgot-password' component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout}/>
-        <UnGuardedRoute path='/auth/reset-password/:token' component={ResetPassword} auth={isAuthenticated} layout={AuthLayout}/>
-        <UnGuardedRoute path='/auth/login' component={CommunityLogin} auth={isAuthenticated} layout={AuthLayout}/>
-        <UnGuardedRoute path='/auth/register' component={CommunityRegister} auth={isAuthenticated} layout={AuthLayout}/>
-        <UnGuardedRoute path='/auth/verify' component={CommunityEmailVerification} auth={isAuthenticated} layout={AuthLayout}/>
-        <UnGuardedRoute path='/auth/resend-code' component={CommunityResend} auth={isAuthenticated} layout={AuthLayout}/>
-        <UnGuardedRoute path='/auth/wallet-authentication' component={CommunityWalletAuthentication} auth={isAuthenticated} layout={AuthLayout}/>
-        <UnGuardedRoute path='/auth/org/register' component={OrganizationRegister} auth={isAuthenticated} layout={AuthLayout}/>
-        <UnGuardedRoute path='/auth/org/verify' component={OrganizationEmailVerification} auth={isAuthenticated} layout={AuthLayout}/>
-        <UnGuardedRoute path='/auth/org/resend-code' component={OrganizationResend} auth={isAuthenticated} layout={AuthLayout}/>
-        <UnGuardedRoute path='/auth/org/wallet-authentication' component={OrganizationWalletAuthentication} auth={isAuthenticated} layout={AuthLayout}/>
-        <UnGuardedRoute path='/auth/org/login' component={OrganizationLogin} auth={isAuthenticated} layout={AuthLayout}/>
-        <UnGuardedRoute path='/pub/leaderboard/:id' component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
-        <UnGuardedRoute path='/pub/multi/leaderboard/:id' component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
-        <UnGuardedRoute path='/pub/competition/:id' component={CompetitionById} auth={isAuthenticated}  layout={DashboardLayout}/>
-        <UnGuardedRoute path='/pub/staking/leaderboard/:id' component={StakingLeaderboard} auth={isAuthenticated}  layout={DashboardLayout}/>
-        <GuardedRoute path='/dashboard/leaderboard/management' component={LeaderboardManagement} auth={isAuthenticated}  layout={DashboardLayout}/>
-        <GuardedRoute path='/dashboard/leaderboard/create' component={CreateLeaderboard} auth={isAuthenticated}  layout={DashboardLayout}/>
-        <GuardedRoute path='/dashboard/competition/create' component={CreateCompetition} auth={isAuthenticated}  layout={DashboardLayout}/>
-        <GuardedRoute path='/dashboard/competition/management' component={CompetitionManagement} auth={isAuthenticated}  layout={DashboardLayout}/>
-        <GuardedRoute path='/dashboard/competition/:id' component={CompetitionById} auth={isAuthenticated}  layout={DashboardLayout}/>
-        <GuardedRoute path='/dashboard/multi/leaderboard/:id' component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
-        <GuardedRoute path='/dashboard/leaderboard/:id' component={LeaderboardById} auth={isAuthenticated}  layout={DashboardLayout}/>
-        
-        <Route path="*" component={Page404}></Route> 
-      </Switch>  
-    </>
+    <WalletApplicationWrapper.ApplicationWrapper>
+      <> 
+        <Switch> 
+          <Route exact path="/" ><Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb"/></Route> 
+          <UnGuardedRoute path='/auth/forgot-password' component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/reset-password/:token' component={ResetPassword} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/login' component={CommunityLogin} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/register' component={CommunityRegister} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/verify' component={CommunityEmailVerification} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/resend-code' component={CommunityResend} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/wallet-authentication' component={CommunityWalletAuthentication} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/org/register' component={OrganizationRegister} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/org/verify' component={OrganizationEmailVerification} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/org/resend-code' component={OrganizationResend} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/org/wallet-authentication' component={OrganizationWalletAuthentication} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/org/login' component={OrganizationLogin} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/pub/leaderboard/:id' component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
+          <UnGuardedRoute path='/pub/multi/leaderboard/:id' component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
+          <UnGuardedRoute path='/pub/competition/:id' component={CompetitionById} auth={isAuthenticated}  layout={DashboardLayout}/>
+          <UnGuardedRoute path='/pub/staking/leaderboard/:id' component={StakingLeaderboard} auth={isAuthenticated}  layout={DashboardLayout}/>
+          <GuardedRoute path='/dashboard/leaderboard/management' component={LeaderboardManagement} auth={isAuthenticated}  layout={DashboardLayout}/>
+          <GuardedRoute path='/dashboard/leaderboard/create' component={CreateLeaderboard} auth={isAuthenticated}  layout={DashboardLayout}/>
+          <GuardedRoute path='/dashboard/competition/create' component={CreateCompetition} auth={isAuthenticated}  layout={DashboardLayout}/>
+          <GuardedRoute path='/dashboard/competition/management' component={CompetitionManagement} auth={isAuthenticated}  layout={DashboardLayout}/>
+          <GuardedRoute path='/dashboard/competition/:id' component={CompetitionById} auth={isAuthenticated}  layout={DashboardLayout}/>
+          <GuardedRoute path='/dashboard/multi/leaderboard/:id' component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
+          <GuardedRoute path='/dashboard/leaderboard/:id' component={LeaderboardById} auth={isAuthenticated}  layout={DashboardLayout}/>
+          
+          <Route path="*" component={Page404}></Route> 
+        </Switch>  
+      </>
+    </WalletApplicationWrapper.ApplicationWrapper>
   );
 }
-  /* <Redirect to="/pub/leaderboard/6185930b4454af30818cb26c" /> */
-  //61e6b9f26bd9933bfcb70e63
-
+   
 export default App;

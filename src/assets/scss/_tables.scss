@@ -1,0 +1,26 @@
+@import "./variables";
+
+.table-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column-reverse;
+  table {
+    background: white;
+    thead {
+      tr {
+        td {
+          font-weight: bold;
+        }
+      }
+    }
+    tbody {
+      tr {
+        td {
+        }
+        &:nth-child(even) {
+          // background: lighten($themePrimaryColor, 77.5);
+        }
+      }
+    }
+  }
+}

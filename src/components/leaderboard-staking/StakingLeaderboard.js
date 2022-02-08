@@ -393,10 +393,8 @@ const LeaderboardInformation = () => {
   ];
 
   return (
-    <>
-      <div>
-        <Toaster />
-      </div>
+    <> 
+        <Toaster /> 
       <CSVLink
         data={filteredTokenHolderList}
         headers={csvHeaders}

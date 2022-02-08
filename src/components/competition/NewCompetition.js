@@ -138,10 +138,8 @@ export default function NewCompetition() {
   };
 
   return (
-    <>
-      <div>
-        <Toaster />
-      </div>
+    <> 
+        <Toaster /> 
       <FContainer type="fluid">
         <FContainer>
           <h1>Create Competition </h1>
