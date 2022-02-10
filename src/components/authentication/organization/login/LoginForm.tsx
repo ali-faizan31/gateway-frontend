@@ -76,7 +76,7 @@ const LoginForm = () => {
                 history.push(PATH_DASHBOARD.general.leaderboardManagement)
             } else {
                 toast.error("Please connect and authenticate your wallet first!");
-                history.push(PATH_AUTH.orgWalletAuthentication);
+                history.push(PATH_AUTH.walletAuthentication);
             } 
          }catch (e){
             toast.error(`Error Occured ${e}`); 
@@ -99,7 +99,7 @@ const LoginForm = () => {
                         checkWalletAddress(user, token, response, walletInformation);
                      } else {
                         toast.error('Please verify your email first!');
-                        history.push(PATH_AUTH.orgResendCode);
+                        history.push(PATH_AUTH.emailResendCode);
                     }
                 }
             })

@@ -2,7 +2,7 @@ import React from "react";
 import EmailVerificationForm from "./EmailVerificationForm";
 import { FContainer, FCard, FCardTitle } from "ferrum-design-system";
 import { Link } from "react-router-dom";
-import { PATH_AUTH } from "../../../../routes/paths";
+import { PATH_AUTH } from "../../../routes/paths";
 
 const index = () => {
   const user = localStorage.getItem('me');

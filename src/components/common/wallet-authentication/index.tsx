@@ -3,7 +3,7 @@ import { FContainer, FCard, FCardTitle, FButton, FGrid, FGridItem, FItem } from 
 import { Web3AuthWrapper } from "./WalletAuthenticationForm";
 import { ClipLoader } from "react-spinners";
 import toast from "react-hot-toast";
-import { getAccessTokenForApplicationUser } from "../../../../_apis/WalletAuthencation";
+import { getAccessTokenForApplicationUser } from "../../../_apis/WalletAuthencation";
 
 const Index = () => {
   const [isVerified, setIsVerified] = useState(false);

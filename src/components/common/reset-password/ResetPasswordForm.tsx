@@ -6,8 +6,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { RiEyeOffFill, RiEyeLine } from "react-icons/ri";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
-import { authenticateForgotPasswordLink, resetPassword } from "../../../../_apis/OnboardingCrud";
-import { PATH_AUTH } from "../../../../routes/paths";
+import { authenticateForgotPasswordLink, resetPassword } from "../../../_apis/OnboardingCrud";
+import { PATH_AUTH } from "../../../routes/paths";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const ResetPasswordForm = (props: any) => {

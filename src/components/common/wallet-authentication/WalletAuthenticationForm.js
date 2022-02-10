@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import {FContainer } from "ferrum-design-system";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { verify } from 'jsonwebtoken';
 import { useHistory } from "react-router-dom";
@@ -8,10 +7,9 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import toast, { Toaster } from "react-hot-toast";
 // @ts-ignore
-import WalletConnectProvider from "@walletconnect/web3-provider";
-import { walletAuthenticationBackendURL } from "../../../../utils/const.utils";
-import { PATH_DASHBOARD, PATH_PUBLIC_USER } from "../../../../routes/paths";
-import { checkUniqueWalletAddress, saveAddressAndGenerateNonce, getIp, verifySignatureAndUpdateNonce, checkUniqueWalletAddressAndAuthenticated } from "../../../../_apis/WalletAuthencation";
+import WalletConnectProvider from "@walletconnect/web3-provider"; 
+import { PATH_DASHBOARD, PATH_PUBLIC_USER } from "../../../routes/paths";
+import { checkUniqueWalletAddressAndAuthenticated, saveAddressAndGenerateNonce, getIp, verifySignatureAndUpdateNonce } from "../../../_apis/WalletAuthencation";
  
 export const web3AuthSlice = createSlice({
   name: "web3åAuthSlice",
@@ -105,8 +103,7 @@ export function Web3AuthWrapper(props) {
       setNetwork(network);
       setConnected(true);
       props.setIsVerified(true);
-      setAddress(address);
-      console.log(address, network, "====");
+      setAddress(address); 
     } catch (e) {
       toast.error(`Error Occured ${e}`); 
     } finally {
@@ -122,13 +119,9 @@ export function Web3AuthWrapper(props) {
   const validateUserAddr = async () => {
     setLoading(true);  
 
-    if (props.email && props.user ) {
-      if(web3 && address && network && props.applicationUserToken){
-        await dispatch(validateAddress({ web3, address, network, email: props.email, applicationUserToken: props.applicationUserToken, user: props.user }));
-        await disconnectWeb3();
-      } else {
-        toast.error(`Error occured: Information not found. Try again later!`); 
-      }
+    if (props.email && props.user) {
+      await dispatch(validateAddress({ web3, address, network, email: props.email, applicationUserToken: props.applicationUserToken, user: props.user }));
+      await disconnectWeb3();
     } else {
       toast.error(`User not found!`);
     }
@@ -137,7 +130,7 @@ export function Web3AuthWrapper(props) {
 
   const isUserWalletAddressUniqueAndAuthenticated = async (address, network, applicationUserToken) => {
     try {
-      const res = await checkUniqueWalletAddressAndAuthenticated(address, network, applicationUserToken)
+      const res = await checkUniqueWalletAddressAndAuthenticated(`${address}`, network, applicationUserToken)
       return res.data.body.isUnique;
     } catch (e) { 
       throw (e?.response?.data?.status?.message)
@@ -167,9 +160,9 @@ export function Web3AuthWrapper(props) {
       const session = await checkSession(); 
       if (session) {
         return;
-      } 
-            
-      const uniqueResponse = await isUserWalletAddressUniqueAndAuthenticated(payload.address, payload.network, payload.applicationUserToken)
+      }  
+
+      const uniqueResponse = await isUserWalletAddressUniqueAndAuthenticated(payload.address, payload.network.toString(), payload.applicationUserToken)
 
       if ( uniqueResponse === true){
         const ipResponse = await getIp();
@@ -177,7 +170,7 @@ export function Web3AuthWrapper(props) {
         const data = { address: payload.address , ferrumNetworkIdentifier: payload.network.toString(), lastConnectedIpAddress: ipAddress};
       
          const nonceResponse = await saveUserWalletAddressAndGenerateNonce(payload.user._id, data, payload.applicationUserToken);
-         
+          
          if (payload.web3) {
           const connection = payload.web3;
           const accounts = (await connection?.eth.getAccounts()) || "";
@@ -191,23 +184,23 @@ export function Web3AuthWrapper(props) {
             await connection.currentProvider.sendAsync(
               {
                 method: "personal_sign",
-                params: [
-                  msg,
-                  from,
-                  "This signature verifies that you are the authorized owner of the wallet. The signature authentication is required to ensure allocations are awarded to the correct wallet owner.",
-                ],
+                params: [msg, from, "This signature verifies that you are the authorized owner of the wallet. The signature authentication is required to ensure allocations are awarded to the correct wallet owner."],
               },
               async (err, result) => { 
                 if (result.result) {
                   const data = {signature: result.result,address: payload.address , ferrumNetworkIdentifier: payload.network.toString(), ipAddress: ipAddress }
-                   try{
-                  const saveResponse = await saveUserSignatureAndGenerateNonce(payload.user._id, data, payload.applicationUserToken);  
-                  if (saveResponse && saveResponse.address.nonce){
-                    history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardByProvidedId);
-                  }  
-                } catch (e) {
-                  toast.error(`Error occured ${e}`); 
-                }
+                  try {
+                    const saveResponse = await saveUserSignatureAndGenerateNonce(payload.user._id, data, payload.applicationUserToken); 
+                     if (saveResponse && saveResponse.address.nonce){
+                      if ( props && props.user && props.user.role === "organizationAdmin") {
+                      history.push(PATH_DASHBOARD.general.leaderboardManagement) 
+                      } else if (props && props.user && props.user.role === "communityMember") {
+                        history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardByProvidedId);
+                      }
+                    }
+                  } catch (e) {
+                    toast.error(`Error occured ${e}`); 
+                  }
                 }
               }
             )
@@ -251,7 +244,6 @@ export function Web3AuthWrapper(props) {
 
   return (
     <>
-     {/* <FContainer width={700}> */}
     <Toaster/>
       <props.View
         connected={connected.toString()}
@@ -260,7 +252,6 @@ export function Web3AuthWrapper(props) {
         loading={loading}
         text={connected ? "Validate Address" : "Connect Wallet to Validate"}
       />
-      {/* </FContainer> */}
     </>
   );
 }
