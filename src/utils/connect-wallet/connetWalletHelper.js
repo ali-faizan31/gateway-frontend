@@ -39,7 +39,7 @@ const providerOptions = {
     return web3;
   }
   
-  const disconnectWeb3 = async () => {
+  export const disconnectWeb3 = async () => {
     const modal = web3Modal();
     await modal.clearCachedProvider();
   };
@@ -49,25 +49,24 @@ const providerOptions = {
       return;
     }
     provider.on("close", () => disconnectWeb3());
-    provider.on("onConnect", async (accounts) => {
-      console.log(accounts, "pppp");
+    provider.on("onConnect", async (accounts) => { 
       setAddress(accounts[0]);
     });
   
-    provider.on("accountsChanged", async (accounts) => {
-      console.log(accounts);
-      setAddress(accounts[0]);
+    provider.on("accountsChanged", async (accounts) => { 
+      setAddress(accounts[0]); 
       setConnected(false); 
     });
     provider.on("chainChanged", async (chainId) => {
-      const networkId = await web3.eth.net.getId();
-      setNetwork(chainId);
-      console.log(networkId);
+      const networkId = await web3.eth.net.getId(); 
+      setNetwork(networkId);  //chnaged from chain id
+      setConnected(false);
     });
   
     provider.on("networkChanged", async (networkId) => {
-      const chainId = await web3.eth.chainId();
+      const chainId = await web3.eth.chainId(); 
       setNetwork(chainId);
+      setConnected(false);
     });
   };
 
@@ -83,11 +82,9 @@ const providerOptions = {
       setNetwork(network);
       setConnected(true);
       setAddress(address); 
-      const walletInformation = {address: address, network: network};
-      console.log( address, network) 
+      const walletInformation = {address: address, network: network}; 
       await subscribeProvider(provider, web3, setAddress, setConnected, setNetwork);
-      return walletInformation;
-    //   onSubmit(values, network, address);
+      return walletInformation; 
     } catch (e) {
       toast.error(`Error Occured ${e}`); 
     }

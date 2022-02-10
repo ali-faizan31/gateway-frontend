@@ -36,7 +36,7 @@ const Index = () => {
 
 
   return ( 
-      <FContainer width={700}> 
+      <FContainer width={500}> 
           {isVerified ? (
             <>
                <h2 className="f-mb-2">Wallet Connected!</h2>

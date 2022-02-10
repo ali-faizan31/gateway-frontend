@@ -16,7 +16,7 @@ import { walletAddressAuthenticateCheckOnSignin, getAccessTokenForApplicationUse
 import { PATH_AUTH, PATH_PUBLIC_USER } from "../../../../routes/paths";
 import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader"; 
-import { connectWeb3 } from "../../../../utils/connetWalletHelper";
+import { connectWeb3 } from "../../../../utils/connect-wallet/connetWalletHelper";
 
 const LoginForm = () => {
   const history = useHistory();

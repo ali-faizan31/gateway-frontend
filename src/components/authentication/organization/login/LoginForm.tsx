@@ -11,7 +11,7 @@ import { organizationAdminLogin } from "../../../../_apis/OnboardingCrud";
 import { PATH_AUTH, PATH_DASHBOARD, PATH_PUBLIC_USER } from "../../../../routes/paths";
 import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader";
-import { connectWeb3 } from "../../../../utils/connetWalletHelper";
+import { connectWeb3 } from "../../../../utils/connect-wallet/connetWalletHelper";
 import { walletAddressAuthenticateCheckOnSignin, getAccessTokenForApplicationUser } from "../../../../_apis/WalletAuthencation";
 
 const LoginForm = () => {
