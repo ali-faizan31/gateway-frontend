@@ -31,14 +31,10 @@ const LeaderboardById = Loadable(lazy(() => import('./components/leaderboard/Lea
 const CreateLeaderboard = Loadable(lazy(() => import('./components/leaderboard/NewLeaderboard')));
 const MultiTokenLeaderboardById = Loadable(lazy(() => import('./components/leaderboard-multitoken/index')));
 const LeaderboardManagement = Loadable(lazy(() => import('./components/leaderboard/LeaderboardManagement')));
-const CommunityRegister = Loadable(lazy(() => import('./components/authentication/community/register')));
-const CommunityEmailVerification = Loadable(lazy(() => import('./components/authentication/community/email-verification')));
-const CommunityResend = Loadable(lazy(() => import('./components/authentication/community/resend-email-verification'))); 
+const CommunityRegister = Loadable(lazy(() => import('./components/authentication/community/register'))); 
 const CommunityLogin = Loadable(lazy(() => import('./components/authentication/community/login')));
-const OrganizationRegister = Loadable(lazy(() => import('./components/authentication/organization/register/index')));
-const OrganizationEmailVerification = Loadable(lazy(() => import('./components/authentication/organization/email-verification')));
-const OrganizationResend = Loadable(lazy(() => import('./components/authentication/organization/resend-email-verification')));
- const OrganizationLogin = Loadable(lazy(() => import('./components/authentication/organization/login')));
+const OrganizationRegister = Loadable(lazy(() => import('./components/authentication/organization/register/index'))); 
+const OrganizationLogin = Loadable(lazy(() => import('./components/authentication/organization/login')));
 const CreateCompetition = Loadable(lazy(() => import('./components/competition/NewCompetition')));
 const CompetitionManagement =  Loadable(lazy(() => import('./components/competition/CompetitionManagement')));
 const CompetitionById =  Loadable(lazy(() => import('./components/competition/CompetitionInformation')));
@@ -46,6 +42,8 @@ const Page404 = Loadable(lazy(() => import('./components/error/page404')));
 const ForgotPassword = Loadable(lazy(() => import('./components/common/forgot-password/index')));
 const ResetPassword = Loadable(lazy(() => import('./components/common/reset-password/index')));
 const WalletAuthentication = Loadable(lazy(() => import('./components/common/wallet-authentication/index')));
+const EmailVerification = Loadable(lazy(() => import('./components/common/email-verification/index')));
+const ResendEmailVerification = Loadable(lazy(() => import('./components/common/resend-email-verification/index')));
 const StakingLeaderboard = Loadable(lazy(()=> import('./components/leaderboard-staking/StakingLeaderboard')));
 
 function App() {
@@ -58,15 +56,13 @@ function App() {
         <Switch> 
           <Route exact path="/" ><Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb"/></Route> 
           <UnGuardedRoute path='/auth/forgot-password' component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/verify' component={EmailVerification} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/resend-code' component={ResendEmailVerification} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/reset-password/:token' component={ResetPassword} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/wallet-authentication' component={WalletAuthentication} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/login' component={CommunityLogin} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/register' component={CommunityRegister} auth={isAuthenticated} layout={AuthLayout}/>
-          <UnGuardedRoute path='/auth/verify' component={CommunityEmailVerification} auth={isAuthenticated} layout={AuthLayout}/>
-          <UnGuardedRoute path='/auth/resend-code' component={CommunityResend} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/org/register' component={OrganizationRegister} auth={isAuthenticated} layout={AuthLayout}/>
-          <UnGuardedRoute path='/auth/org/verify' component={OrganizationEmailVerification} auth={isAuthenticated} layout={AuthLayout}/>
-          <UnGuardedRoute path='/auth/org/resend-code' component={OrganizationResend} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/org/login' component={OrganizationLogin} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/pub/leaderboard/:id' component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
           <UnGuardedRoute path='/pub/multi/leaderboard/:id' component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>

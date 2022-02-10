@@ -99,7 +99,7 @@ const LoginForm = () => {
                         checkWalletAddress(user, token, response, walletInformation);
                      } else {
                         toast.error('Please verify your email first!');
-                        history.push(PATH_AUTH.orgResendCode);
+                        history.push(PATH_AUTH.emailResendCode);
                     }
                 }
             })

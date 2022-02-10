@@ -17,11 +17,11 @@ export function communityMemberRegister(values) {
   return axios.post(`${baseUrl}/api/v1/community-member/users/sign-up`, values);
 }
 
-export function communityMemberEmailVerify(values) {
+export function EmailVerify(values) {
   return axios.post(`${baseUrl}/api/v1/users/authenticate/email/otp`, values);
 }
 
-export function communityMemberResendVerifyCode(values) {
+export function ResendEmailVerifyCode(values) {
   return axios.post(`${baseUrl}/api/v1/users/re-send/email/otp`, values);
 }
  

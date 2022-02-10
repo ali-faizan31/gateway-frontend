@@ -97,7 +97,7 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
               checkWalletAddress(user, token, response, walletInformation);
           } else {
             toast.error("Please verify your email first!");
-            history.push(PATH_AUTH.communityResendCode);
+            history.push(PATH_AUTH.emailResendCode);
           }
         }
       })
