@@ -1,8 +1,5 @@
-import React from "react";
 import ForgotPasswordForm from "./ForgotPasswordForm";
-import { FContainer, FItem, FCardTitle } from "ferrum-design-system";
-import { Link } from "react-router-dom";
-import { PATH_AUTH } from "../../../../routes/paths";
+import { FContainer, FItem  } from "ferrum-design-system"; 
 
 const index = () => {
 

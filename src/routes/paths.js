@@ -19,13 +19,13 @@ function path(root, sublink) {
     orgRegister: path(ROOTS_AUTH, '/org/register'), 
     orgVerify: path(ROOTS_AUTH, '/org/verify'),
     orgResendCode: path(ROOTS_AUTH, '/org/resend-code'),
-    orgWalletAuthentication: path(ROOTS_AUTH, '/org/wallet-authentication'),
-    resetPassword: path(ROOTS_AUTH, '/reset-password'),
+    // orgWalletAuthentication: path(ROOTS_AUTH, '/org/wallet-authentication'), 
     communityVerify: path(ROOTS_AUTH, '/verify'),
     communityResendCode: path(ROOTS_AUTH, '/resend-code'),
-    communityWalletAuthentication: path(ROOTS_AUTH, '/wallet-authentication'),
+    // communityWalletAuthentication: path(ROOTS_AUTH, '/wallet-authentication'),
     forgotPassword: path(ROOTS_AUTH, '/forgot-password'),
     resetPassword: path(ROOTS_AUTH, '/reset-password/:token'),
+    walletAuthentication: path(ROOTS_AUTH, '/wallet-authentication'), 
   };
   
   export const PATH_ADMIN = {

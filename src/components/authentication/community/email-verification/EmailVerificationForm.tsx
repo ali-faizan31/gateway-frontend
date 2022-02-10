@@ -23,7 +23,7 @@ const EmailVerificationForm = (children: any) => {
         localStorage.setItem('me', JSON.stringify(user));
         localStorage.setItem('token', token);
         toast.success(response?.data?.status?.message)
-        history.push(PATH_AUTH.communityWalletAuthentication);
+        history.push(PATH_AUTH.walletAuthentication);
       })
       .catch((e) => {
         if (e.response) {

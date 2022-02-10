@@ -5,9 +5,9 @@ import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
-import { sendForgotPasswordLink } from "../../../../_apis/OnboardingCrud";
-import { PATH_AUTH } from "../../../../routes/paths";
-import * as validations from "../../../../utils/validations";
+import { sendForgotPasswordLink } from "../../../_apis/OnboardingCrud";
+import { PATH_AUTH } from "../../../routes/paths";
+import * as validations from "../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const ForgotPasswordForm = () => {

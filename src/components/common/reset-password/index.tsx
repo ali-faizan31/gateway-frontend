@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ResetPasswordForm from "./ResetPasswordForm";
 import { FContainer, FItem, FCardTitle } from "ferrum-design-system";
 import { Link } from "react-router-dom";
-import { PATH_AUTH } from "../../../../routes/paths";
+import { PATH_AUTH } from "../../../routes/paths";
 
 const Index = () => {
     const [isPasswordChanged, setIsPasswordChanged] = useState(false);
