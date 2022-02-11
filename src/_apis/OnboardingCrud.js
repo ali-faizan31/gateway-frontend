@@ -42,3 +42,13 @@ export function resetPassword(values, token) {
     }
   }); 
 }
+
+export function logout(values, token) { 
+  return axios.put(`${baseUrl}/api/v1/community-member/users/sign-out`, values, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Content-type': 'Application/json',
+      Authorization: `Bearer ${token}`
+    }
+  }); 
+}

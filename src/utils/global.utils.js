@@ -33,3 +33,29 @@ export const mergeTwoArrays = (dataset1, dataset2) => {
   } 
   return dataset1;
 };
+
+export const localStorageHelper = {
+  load(key) {
+      const stored = localStorage.getItem(key);
+      return stored == null ? undefined : JSON.parse(stored);
+  },
+  token() {
+    const stored = localStorage.getItem('token');
+    return stored == null ? undefined : (stored);
+},
+  store(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+  },
+  modify(key, fn) {
+      this.store(key, fn(this.load(key)));
+  },
+  appendItemToArray: (item, storageID) => {
+      this.modify(storageID, (storage = []) => [...storage, item]);
+  },
+  removeItemFromArray: (item, storageID) => {
+      this.modify(storageID, (storage = []) => storage.filter(s => s !== item));
+  },
+  saveItemToObject: (item, storageID) => {
+      this.modify(storageID, (storage = {}) => ({...storage, item}));
+  }
+};
