@@ -5,6 +5,9 @@ import { ClipLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import { getAccessTokenForApplicationUser } from "../../../_apis/WalletAuthencation";
 
+import { MetaMaskConnector } from "../../../container-components";
+import { ConnectWalletDialog }  from "../../../utils/connect-wallet/ConnectWalletDialog";
+
 const Index = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [applicationUserToken, setApplicationUserToken] = useState("");
@@ -51,6 +54,10 @@ const Index = () => {
             </>)} 
            <Web3AuthWrapper View={AuthenticationProp} email={parsedUser?.email} user={parsedUser} token={token} setIsVerified={setIsVerified} applicationUserToken = {applicationUserToken} />
            
+           <MetaMaskConnector.WalletConnector
+            WalletConnectView={FButton}
+            WalletConnectModal={ConnectWalletDialog}
+          />
     </FContainer>
   );
 };

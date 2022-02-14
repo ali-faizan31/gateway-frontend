@@ -9,7 +9,7 @@ import { connectWeb3, disconnectWeb3 } from "../../../utils/connect-wallet/conne
 import { checkUniqueWalletAddressAndAuthenticated,
    saveAddressAndGenerateNonce, getIp, verifySignatureAndUpdateNonce, 
    isFerrumNetworkIdentifierAllowedonGateway } from "../../../_apis/WalletAuthencation";
-import { FDialog, FItem, FList, FListItem, FContainer } from "ferrum-design-system";
+import { FDialog, FItem, FList, FListItem, FContainer, FButton, FGridItem } from "ferrum-design-system";
 import { chainData } from "../../../utils/constants";
 
 const checkSession = async () => {
@@ -160,6 +160,22 @@ export function Web3AuthWrapper(props) {
       setNetworkModal(true);
     } 
   }
+
+  const performSwitchNetwork = async (item) => {
+    console.log(item)
+    try { 
+      let ethereum = window.ethereum;
+      if (ethereum) { 
+        const hexChainId = item.networkId.toString(16);
+        await ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: `0x${hexChainId}` }],
+        });
+      }  
+    } catch (err) {
+      toast.error(err?.message);
+    }
+  };
  
   const handleClick = async () => {
     if (connected) {
@@ -176,37 +192,44 @@ export function Web3AuthWrapper(props) {
     <>
       <Toaster />
       <FContainer type="fluid">
-      <props.View
-        connected={connected.toString()}
-        network={network}
-        // onClick={() => (!connected ? connectWeb3() : validateUserAddr())}
-        onClick={handleClick}
-        loading={loading}
-        text={connected ? "Validate Address" : "Connect Wallet to Validate"}
-      />
+        <props.View
+          connected={connected.toString()}
+          network={network}
+          // onClick={() => (!connected ? connectWeb3() : validateUserAddr())}
+          onClick={handleClick}
+          loading={loading}
+          text={connected ? "Validate Address" : "Connect Wallet to Validate"}
+        />
 
-      <FDialog
-        show={networkModal}
-        size={"medium"}
-        onHide={() => setNetworkModal(false)}
-        title={"Allowed Networks on Gateway"}
-        className="connect-wallet-dialog w-50"
-      >
-        <FItem className={"f-mt-2"}>
-          Change your network into one of the following:
-        </FItem>
-        <FList variant="info" className="w-100">
-          {allowedNetworksData &&
-            allowedNetworksData.length &&
-            allowedNetworksData.map((item, index) => {
-              return (
-                <FListItem display={"flex"} className={"f-mt-1"} key={index}>
-                  {item.name}
-                </FListItem>
-              );
-            })}
-        </FList>
-      </FDialog>
+        <FDialog
+          show={networkModal}
+          size={"medium"}
+          onHide={() => setNetworkModal(false)}
+          title={"Allowed Networks on Gateway"}
+          className="connect-wallet-dialog w-50"
+        >
+          <FItem className={"f-mt-2"}>
+            Change your network into one of the following:
+          </FItem>
+          <FList variant="info" className="w-100">
+            {allowedNetworksData &&
+              allowedNetworksData.length &&
+              allowedNetworksData.map((item, index) => {
+                return ( 
+                    <FGridItem className={"f-mt-2"}  key={index} > 
+                      <FItem className={"f-mt-1 f-mr-3 w-100"} > 
+                        {item.name}
+                      </FItem>
+                      <FButton
+                        title={"Switch Network"}
+                        className="w-100"
+                        onClick={() => performSwitchNetwork(item)}
+                      />
+                    </FGridItem> 
+                );
+              })}
+          </FList>
+        </FDialog>
       </FContainer>
     </>
   );
