@@ -13,7 +13,7 @@ const GuardedRoute = ({component: Component, layout: Layout, ...rest}) => {
   }, [])
 
    
-  return <Route
+  return <Route exact
     {...rest}
     render={(props) =>
       isAuthenticated  ? (

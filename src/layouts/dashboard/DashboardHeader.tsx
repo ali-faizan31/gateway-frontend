@@ -47,7 +47,7 @@ const DashboardHeader = () => {
   const handleLogout = async () => {
     console.log('logout');
     let data = {};
-    let logoutResponse = await handleCommunityMemberLogout(data);
+    let logoutResponse =  localStorageHelper.token() && await handleCommunityMemberLogout(data);
 
 
     // localStorage.removeItem("me");

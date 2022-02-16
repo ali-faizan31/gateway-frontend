@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { FSider, FSiderItem, FSiderSubMenuItem } from "ferrum-design-system";
 import toast, { Toaster } from 'react-hot-toast';
 import { useSelector, RootStateOrAny } from 'react-redux';
-import { publicLeaderboardConfig, sidebarConfig, publicMultiLeaderboardConfig, publicCompetitionConfig } from './SidebarConfig';
+import { publicLeaderboardConfig,
+   sidebarConfig, publicMultiLeaderboardConfig, publicCompetitionConfig, tokensSidebarConfig, bridgeSidebarConfig, homeSidebarConfig, communityLeaderboardSidebarConfig } from './SidebarConfig';
 import { useLocation, useParams } from 'react-router-dom';
 import { PATH_PUBLIC_USER, PATH_ADMIN, PATH_DASHBOARD } from "../../routes/paths";
 import { getLeaderboardByIdForPublicUser, getAllLeaderboards } from "../../_apis/LeaderboardCrud";
 import { getCompetitionByIdForPublicUser, getAllCompetitions } from "../../_apis/CompetitionCrud";
-
+import { localStorageHelper } from "../../utils/global.utils";
 
 const DashboardSidebar = () => {
   const { id }: any = useParams();
@@ -118,17 +119,14 @@ const DashboardSidebar = () => {
   };
 
   const getSidebarItems = async () => {
-    let leaderboardResponse = await getAllLeaderboards(0,0, token);
-    console.log(leaderboardResponse?.data?.body?.leaderboards);
+    let leaderboardResponse = await getAllLeaderboards(0,0, token); 
     await mapList(leaderboardResponse?.data?.body?.leaderboards, "leaderboard");
     let competitionResponse = await getAllCompetitions(0,0);
-    await mapList(leaderboardResponse?.data?.body?.competitions, "competition");
-    console.log(leaderboardResponse, competitionResponse)
+    await mapList(leaderboardResponse?.data?.body?.competitions, "competition"); 
   }
 
   const mapList = async (list: any, component: any) => {
-    const mappedData: any = [];
-    console.log(list);
+    const mappedData: any = []; 
     if (list.length) {
       list.forEach((item: any) => {
         const temp = {
@@ -138,31 +136,36 @@ const DashboardSidebar = () => {
         };
         mappedData.push(temp);
       });
-    }
-    console.log(mappedData);
+    } 
     // setLeaderboardList(mappedData);
     await setSideConfig(mappedData);
   };
 
-  const renderContent = (items: any) => { 
-    return items.map((item: any) => (
-      <FSiderItem to={item.path} title={item.title} prefix={item.icon} key={item.path}>
+  const renderContent = (items: any) => {  
+    return items.map((item: any, index: any) => (
+      <FSiderItem to={item.path} title={item.title} prefix={item.icon} key={item.title}>
         {item.children &&
           <FSiderSubMenuItem>
-            {item.children.map((subItem: any) => (
-              <FSiderItem to={subItem.path} title={subItem.title} prefix={ <img src="/ferrum/bullet.png" height={"4px"}/>} key={subItem.path}></FSiderItem>
+            {item.children.map((subItem: any, index: any) => (
+              <FSiderItem to={subItem.path} title={subItem.title} prefix={ <img src="/ferrum/bullet.png" height={"4px"}/>} key={subItem.title}></FSiderItem>
             ))}
           </FSiderSubMenuItem>
         }
       </FSiderItem>
     ))
   }
-
+ 
   return (
     <FSider>
-      {(isPublicLeaderboard || isStakingLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig) 
-        || renderContent(sidebarConfig)}
+      {renderContent(homeSidebarConfig)}
+      {/* {(isPublicLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig)}  */}
+      {isStakingLeaderboard && renderContent(sideConfig)}
+      {localStorageHelper.load("me")?.role === "organizationAdmin" && renderContent(sidebarConfig)}
+      {renderContent(communityLeaderboardSidebarConfig)}
+      {renderContent(tokensSidebarConfig)}
+      {renderContent(bridgeSidebarConfig)}  
     </FSider>
+
   )
 }
 
