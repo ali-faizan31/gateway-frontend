@@ -13,7 +13,7 @@ import leaderboardReducer from './slices/leaderboard';
 const walletConnectorPersistConfig = {
   key: "walletConnector",
   storage: storageSession,
-  blacklist: ["error", "isConnecting",  "networkClient", "isWeb3Initialized"],
+  blacklist: ["error", "isConnecting", "isConnected",  "networkClient", "isWeb3Initialized"],
 };
 
 const walletApplicationWrapperPersistConfig = {
