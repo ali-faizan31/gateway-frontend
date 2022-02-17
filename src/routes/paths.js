@@ -12,20 +12,19 @@ function path(root, sublink) {
   // ----------------------------------------------------------------------
   export const PATH_AUTH = {
     root: ROOTS_AUTH,
-    communityLogin: path(ROOTS_AUTH, '/login'),
-    loginUnprotected: path(ROOTS_AUTH, '/login-unprotected'),
+    communityLogin: path(ROOTS_AUTH, '/login'), 
     communityRegister: path(ROOTS_AUTH, '/register'),
     orgLogin: path(ROOTS_AUTH, '/org/login'),
     orgRegister: path(ROOTS_AUTH, '/org/register'), 
-    orgVerify: path(ROOTS_AUTH, '/org/verify'),
-    orgResendCode: path(ROOTS_AUTH, '/org/resend-code'),
-    orgWalletAuthentication: path(ROOTS_AUTH, '/org/wallet-authentication'),
-    resetPassword: path(ROOTS_AUTH, '/reset-password'),
-    communityVerify: path(ROOTS_AUTH, '/verify'),
-    communityResendCode: path(ROOTS_AUTH, '/resend-code'),
-    communityWalletAuthentication: path(ROOTS_AUTH, '/wallet-authentication'),
+    // orgVerify: path(ROOTS_AUTH, '/org/verify'),
+    // orgResendCode: path(ROOTS_AUTH, '/org/resend-code'), 
+    // communityVerify: path(ROOTS_AUTH, '/verify'),
+    // communityResendCode: path(ROOTS_AUTH, '/resend-code'), 
+    emailVerify: path(ROOTS_AUTH, '/verify'),
+    emailResendCode: path(ROOTS_AUTH, '/resend-code'),
     forgotPassword: path(ROOTS_AUTH, '/forgot-password'),
     resetPassword: path(ROOTS_AUTH, '/reset-password/:token'),
+    walletAuthentication: path(ROOTS_AUTH, '/wallet-authentication'), 
   };
   
   export const PATH_ADMIN = {
@@ -60,7 +59,7 @@ function path(root, sublink) {
   export const PATH_DASHBOARD = {
     root: ROOTS_DASHBOARD,
     general: { 
-      leaderboard: path(ROOTS_DASHBOARD, '/leaderboard'),
+      leaderboard: '/pub/multi/leaderboard/61b6d48337f5125acbbfddeb',
       createLeaderboard: path(ROOTS_DASHBOARD, '/leaderboard/create'), 
       leaderboardManagement: path(ROOTS_DASHBOARD, '/leaderboard/management'),
       detailLeaderBoardById: path(ROOTS_DASHBOARD, '/leaderboard:id'),
@@ -69,7 +68,14 @@ function path(root, sublink) {
       competitionManagement: path(ROOTS_DASHBOARD, '/competition/management'),
       detailCompetitionById: path(ROOTS_DASHBOARD, '/competition:id'),
       multiLeaderBoardByProvidedId: path(ROOTS_DASHBOARD, '/multi/leaderboard/61b6d48337f5125acbbfddeb'),
-    }
+    },
+    token: {
+      buyFRM: 'https://app.apeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xa719b8ab7ea7af0ddb4358719a34631bb79d15dc&exactField=output&exactAmount=0',
+      buyFRMx: 'https://app.apeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x8523518001ad5d24b2a04e8729743c0643a316c0&exactField=output&exactAmount=0',
+    },
+    bridge: 'https://bridge.ferrum.network/',
+    home: '/home'
+
   };
    
   

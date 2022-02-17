@@ -462,10 +462,8 @@ const getFormattedBalanceHoldersList = (list) => {
   ];
 
   return (
-    <>
-      <div>
+    <> 
         <Toaster />
-      </div>
       <CSVLink
         data={filteredTokenHolderList}
         headers={csvHeaders}

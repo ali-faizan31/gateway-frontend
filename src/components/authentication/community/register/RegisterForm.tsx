@@ -27,7 +27,7 @@ const RegisterForm = () => {
         localStorage.setItem('me', JSON.stringify(user));
         localStorage.setItem('token', token);
         toast.success(response?.data?.status?.message)
-        history.push(PATH_AUTH.communityVerify);
+        history.push(PATH_AUTH.emailVerify);
       })
       .catch((e) => {
         if (e.response) {

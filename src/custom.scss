@@ -120,7 +120,21 @@ input:-webkit-autofill {
     }
 }
 
+.f-select__control {
+    input {
+        color: white !important;
+    }
+}
+
 aside.open .f-sider-item.has-child.f-sider-item {
+    border: none !important;
+}
+
+aside.sider-expanded .f-sider-item.has-child.f-sider-item {
+    border: none !important;
+}
+
+aside.sider-expanded .f-sider-item {
     border: none !important;
 }
 

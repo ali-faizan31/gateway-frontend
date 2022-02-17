@@ -16,7 +16,7 @@ import { walletAddressAuthenticateCheckOnSignin, getAccessTokenForApplicationUse
 import { PATH_AUTH, PATH_PUBLIC_USER } from "../../../../routes/paths";
 import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader"; 
-import { connectWeb3 } from "../../../../utils/connetWalletHelper";
+import { connectWeb3 } from "../../../../utils/connect-wallet/connetWalletHelper";
 
 const LoginForm = () => {
   const history = useHistory();
@@ -79,7 +79,7 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
         history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardByProvidedId);
     } else {
         toast.error("Please connect and authenticate your wallet first!");
-        history.push(PATH_AUTH.communityWalletAuthentication);
+        history.push(PATH_AUTH.walletAuthentication);
     } }catch (e){
         toast.error(`Error Occured ${e}`); 
     }
@@ -97,7 +97,7 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
               checkWalletAddress(user, token, response, walletInformation);
           } else {
             toast.error("Please verify your email first!");
-            history.push(PATH_AUTH.communityResendCode);
+            history.push(PATH_AUTH.emailResendCode);
           }
         }
       })
