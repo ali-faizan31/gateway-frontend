@@ -45,6 +45,7 @@ const WalletAuthentication = Loadable(lazy(() => import('./components/common/wal
 const EmailVerification = Loadable(lazy(() => import('./components/common/email-verification/index')));
 const ResendEmailVerification = Loadable(lazy(() => import('./components/common/resend-email-verification/index')));
 const StakingLeaderboard = Loadable(lazy(()=> import('./components/leaderboard-staking/StakingLeaderboard')));
+const Dashboard = Loadable(lazy(()=>import('./components/dashboard/dashboard')));
 
 function App() {
   const isAuthenticated = localStorage.getItem('token') ;
@@ -54,14 +55,15 @@ function App() {
     <WalletApplicationWrapper.ApplicationWrapper>
       <> 
         <Switch> 
-          <Route exact path="/" ><Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb"/></Route> 
+          <Route exact path="/" ><Redirect to="/home"/></Route> 
+          <UnGuardedRoute path='/home' component={Dashboard} auth={isAuthenticated} layout={DashboardLayout}/>
           <UnGuardedRoute path='/auth/forgot-password' component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/verify' component={EmailVerification} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/resend-code' component={ResendEmailVerification} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/reset-password/:token' component={ResetPassword} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/wallet-authentication' component={WalletAuthentication} auth={isAuthenticated} layout={AuthLayout}/>
-          <UnGuardedRoute path='/auth/login' component={CommunityLogin} auth={isAuthenticated} layout={AuthLayout}/>
-          <UnGuardedRoute path='/auth/register' component={CommunityRegister} auth={isAuthenticated} layout={AuthLayout}/>
+          {/* <UnGuardedRoute path='/auth/login' component={CommunityLogin} auth={isAuthenticated} layout={AuthLayout}/>
+          <UnGuardedRoute path='/auth/register' component={CommunityRegister} auth={isAuthenticated} layout={AuthLayout}/> */}
           <UnGuardedRoute path='/auth/org/register' component={OrganizationRegister} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/org/login' component={OrganizationLogin} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/pub/leaderboard/:id' component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout}/>
@@ -84,3 +86,6 @@ function App() {
 }
    
 export default App;
+
+
+///pub/multi/leaderboard/61b6d48337f5125acbbfddeb

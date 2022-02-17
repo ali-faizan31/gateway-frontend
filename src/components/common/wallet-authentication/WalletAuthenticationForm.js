@@ -85,7 +85,7 @@ export function Web3AuthWrapper(props) {
   }
 
    const isNetworkAllowedonGateway = async (identifier, applicationUserToken) => {
-     identifier = `0x${identifier.toString(16)}`;
+    //  identifier = `0x${identifier.toString(16)}`;
     try {  
       const res = await isFerrumNetworkIdentifierAllowedonGateway(identifier, applicationUserToken)
       return res.data.body;
@@ -176,6 +176,7 @@ export function Web3AuthWrapper(props) {
           params: [{ chainId: `0x${hexChainId}` }],
         });
       }  
+      setNetworkModal(false)
     } catch (err) {
       toast.error(err?.message);
     }

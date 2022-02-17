@@ -59,7 +59,7 @@ function path(root, sublink) {
   export const PATH_DASHBOARD = {
     root: ROOTS_DASHBOARD,
     general: { 
-      leaderboard: path(ROOTS_DASHBOARD, '/leaderboard'),
+      leaderboard: '/pub/multi/leaderboard/61b6d48337f5125acbbfddeb',
       createLeaderboard: path(ROOTS_DASHBOARD, '/leaderboard/create'), 
       leaderboardManagement: path(ROOTS_DASHBOARD, '/leaderboard/management'),
       detailLeaderBoardById: path(ROOTS_DASHBOARD, '/leaderboard:id'),
@@ -68,7 +68,14 @@ function path(root, sublink) {
       competitionManagement: path(ROOTS_DASHBOARD, '/competition/management'),
       detailCompetitionById: path(ROOTS_DASHBOARD, '/competition:id'),
       multiLeaderBoardByProvidedId: path(ROOTS_DASHBOARD, '/multi/leaderboard/61b6d48337f5125acbbfddeb'),
-    }
+    },
+    token: {
+      buyFRM: 'https://app.apeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xa719b8ab7ea7af0ddb4358719a34631bb79d15dc&exactField=output&exactAmount=0',
+      buyFRMx: 'https://app.apeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x8523518001ad5d24b2a04e8729743c0643a316c0&exactField=output&exactAmount=0',
+    },
+    bridge: 'https://bridge.ferrum.network/',
+    home: '/home'
+
   };
    
   
