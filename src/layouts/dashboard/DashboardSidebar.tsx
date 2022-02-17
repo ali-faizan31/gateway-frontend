@@ -7,6 +7,10 @@ import {
   sidebarConfig,
   publicMultiLeaderboardConfig,
   publicCompetitionConfig,
+  tokensSidebarConfig,
+  bridgeSidebarConfig,
+  homeSidebarConfig,
+  communityLeaderboardSidebarConfig,
   profileConfig,
 } from "./SidebarConfig";
 import { useLocation, useParams } from "react-router-dom";
@@ -23,6 +27,7 @@ import {
   getCompetitionByIdForPublicUser,
   getAllCompetitions,
 } from "../../_apis/CompetitionCrud";
+import { localStorageHelper } from "../../utils/global.utils";
 
 const DashboardSidebar = () => {
   const { id }: any = useParams();
@@ -161,16 +166,13 @@ const DashboardSidebar = () => {
 
   const getSidebarItems = async () => {
     let leaderboardResponse = await getAllLeaderboards(0, 0, token);
-    console.log(leaderboardResponse?.data?.body?.leaderboards);
     await mapList(leaderboardResponse?.data?.body?.leaderboards, "leaderboard");
     let competitionResponse = await getAllCompetitions(0, 0);
     await mapList(leaderboardResponse?.data?.body?.competitions, "competition");
-    console.log(leaderboardResponse, competitionResponse);
   };
 
   const mapList = async (list: any, component: any) => {
     const mappedData: any = [];
-    console.log(list);
     if (list.length) {
       list.forEach((item: any) => {
         const temp = {
@@ -184,27 +186,26 @@ const DashboardSidebar = () => {
         mappedData.push(temp);
       });
     }
-    console.log(mappedData);
     // setLeaderboardList(mappedData);
     await setSideConfig(mappedData);
   };
 
   const renderContent = (items: any) => {
-    return items.map((item: any) => (
+    return items.map((item: any, index: any) => (
       <FSiderItem
         to={item.path}
         title={item.title}
         prefix={item.icon}
-        key={item.path}
+        key={item.title}
       >
         {item.children && (
           <FSiderSubMenuItem>
-            {item.children.map((subItem: any) => (
+            {item.children.map((subItem: any, index: any) => (
               <FSiderItem
                 to={subItem.path}
                 title={subItem.title}
                 prefix={<img src="/ferrum/bullet.png" height={"4px"} />}
-                key={subItem.path}
+                key={subItem.title}
               ></FSiderItem>
             ))}
           </FSiderSubMenuItem>
@@ -215,13 +216,14 @@ const DashboardSidebar = () => {
 
   return (
     <FSider>
-      {((isPublicLeaderboard ||
-        isStakingLeaderboard ||
-        isPublicMultiLeaderboard ||
-        isPublicCompetition) &&
-        renderContent(sideConfig)) ||
+      {renderContent(homeSidebarConfig)}
+      {/* {(isPublicLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig)}  */}
+      {isStakingLeaderboard && renderContent(sideConfig)}
+      {localStorageHelper.load("me")?.role === "organizationAdmin" &&
         renderContent(sidebarConfig)}
-
+      {renderContent(communityLeaderboardSidebarConfig)}
+      {renderContent(tokensSidebarConfig)}
+      {renderContent(bridgeSidebarConfig)}
       {renderContent(profileConfig)}
     </FSider>
   );

@@ -11,7 +11,7 @@ import { organizationAdminLogin } from "../../../../_apis/OnboardingCrud";
 import { PATH_AUTH, PATH_DASHBOARD, PATH_PUBLIC_USER } from "../../../../routes/paths";
 import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader";
-import { connectWeb3 } from "../../../../utils/connetWalletHelper";
+import { connectWeb3 } from "../../../../utils/connect-wallet/connetWalletHelper";
 import { walletAddressAuthenticateCheckOnSignin, getAccessTokenForApplicationUser } from "../../../../_apis/WalletAuthencation";
 
 const LoginForm = () => {
@@ -76,7 +76,7 @@ const LoginForm = () => {
                 history.push(PATH_DASHBOARD.general.leaderboardManagement)
             } else {
                 toast.error("Please connect and authenticate your wallet first!");
-                history.push(PATH_AUTH.orgWalletAuthentication);
+                history.push(PATH_AUTH.walletAuthentication);
             } 
          }catch (e){
             toast.error(`Error Occured ${e}`); 
@@ -99,7 +99,7 @@ const LoginForm = () => {
                         checkWalletAddress(user, token, response, walletInformation);
                      } else {
                         toast.error('Please verify your email first!');
-                        history.push(PATH_AUTH.orgResendCode);
+                        history.push(PATH_AUTH.emailResendCode);
                     }
                 }
             })

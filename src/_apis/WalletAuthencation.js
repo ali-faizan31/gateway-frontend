@@ -70,3 +70,14 @@ export function verifySignatureAndUpdateNonce(userId, values, applicationUserTok
 export function getIp() {
     return axios.get("https://api.ipify.org?format=json");
 }
+
+export function isFerrumNetworkIdentifierAllowedonGateway (identifier, applicationUserToken){
+  const url = `${baseUrl}/api/v1/application-user/networks/allow/on/gateway?ferrumNetworkIdentifier=${identifier}`;
+    return axios.get(url, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "Application/json",
+        Authorization: `Bearer ${applicationUserToken}`,
+      },
+    });
+}

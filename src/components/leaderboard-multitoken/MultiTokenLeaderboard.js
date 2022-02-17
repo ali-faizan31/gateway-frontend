@@ -379,10 +379,8 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
   };
 
   return (
-    <>
-      <div>
-        <Toaster />
-      </div>
+    <> 
+        <Toaster /> 
       <CSVLink
         data={filteredTokenHolderList}
         headers={csvHeaders}

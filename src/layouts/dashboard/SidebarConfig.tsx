@@ -49,6 +49,21 @@ export const publicMultiLeaderboardConfig = [
 
 export const sidebarConfig = [
   {
+    title: "Competition",
+    path: PATH_DASHBOARD.general.competition,
+    icon: ICONS.competition,
+    children: [
+      {
+        title: "Create Competition",
+        path: PATH_DASHBOARD.general.createCompetition,
+      },
+      {
+        title: "Competition Management",
+        path: PATH_DASHBOARD.general.competitionManagement,
+      },
+    ],
+  },
+  {
     title: "Leaderboard",
     path: PATH_DASHBOARD.general.leaderboard,
     icon: ICONS.leaderboard,
@@ -63,23 +78,48 @@ export const sidebarConfig = [
       },
     ],
   },
+];
+
+export const communityLeaderboardSidebarConfig = [
   {
-    title: "Competitions",
-    path: PATH_DASHBOARD.general.competition,
-    icon: ICONS.competition,
+    title: "Leaderboard",
+    path: PATH_DASHBOARD.general.leaderboard,
+    icon: ICONS.leaderboard,
     children: [
       {
-        title: "Create Competition",
-        path: PATH_DASHBOARD.general.createCompetition,
-      },
-      {
-        title: "Competition Management",
-        path: PATH_DASHBOARD.general.competitionManagement,
+        title: "FRM & FRMx BSC Leaderboard",
+        path: PATH_DASHBOARD.general.leaderboard,
       },
     ],
   },
 ];
 
+export const tokensSidebarConfig = [
+  {
+    title: "Get FRM / FRMx",
+    icon: ICONS.leaderboard,
+    children: [
+      { title: "Buy FRM", path: "/#" },
+      { title: "Buy FRMx", path: "/#" },
+    ],
+  },
+];
+
+export const bridgeSidebarConfig = [
+  {
+    title: "Bridge",
+    icon: ICONS.leaderboard,
+    path: "/#",
+  },
+];
+
+export const homeSidebarConfig = [
+  {
+    title: "Home",
+    icon: ICONS.leaderboard,
+    path: PATH_DASHBOARD.home,
+  },
+];
 export const profileConfig = [
   {
     title: "Profile",

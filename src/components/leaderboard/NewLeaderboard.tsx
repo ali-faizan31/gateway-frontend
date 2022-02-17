@@ -70,10 +70,9 @@ export default function NewLeaderboard() {
 
 
   return (
-    <>
-      <div>
+    <> 
         <Toaster />
-      </div>
+       
       <FContainer type="fluid">
         <FContainer>
           <h1> Create Leaderboard </h1>

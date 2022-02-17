@@ -1,0 +1,26 @@
+@import "./variables";
+
+.filter-menu {
+  .dropdown-menu {
+    min-width: 300px;
+    padding: 1rem;
+    // background: $themePrimaryColor;
+    label {
+      color: white;
+    }
+    .input-group {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      small {
+        color: white;
+      }
+      button {
+        margin-right: 1rem;
+      }
+      input {
+        text-align: right;
+      }
+    }
+  }
+}

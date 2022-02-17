@@ -1,0 +1,154 @@
+@import "./variables";
+@media screen and (min-width: 768px) and (max-width: 4000px) {
+  body.modal-open > :not(.modal) {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+  }
+}
+.modal {
+  .modal-content {
+    position: relative;
+    z-index: 1000;
+    background: lighten($themePrimaryColor, 1);
+    padding: 1rem 2rem;
+    border: 0;
+  }
+  .modal-header {
+    border: 0;
+    .modal-title {
+      // color: $themePrimaryColor;
+    }
+    .btn-close {
+      background: url(../img/icon-close.svg) center center no-repeat;
+      width: 20px;
+      background-size: 15px;
+      height: 20px;
+      outline: 0;
+      border: 0;
+    }
+  }
+}
+
+.select-token {
+  ul {
+    margin: 0;
+    border: 0;
+    padding: 0;
+  }
+  .filter-list {
+    input {
+      border: 2px solid $themePrimaryColor;
+    }
+    .favourites {
+    }
+  }
+  .filter-list-wrapper {
+    margin-top: 1rem;
+    display: flex;
+    .networks-list {
+      margin: 0 auto;
+      list-style: none;
+      float: left;
+      max-width: 70px;
+      width: 100%;
+      overflow-x: hidden;
+      padding: 0;
+      border: 0;
+      li {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0.75rem;
+        padding: 0;
+        border: 1px solid;
+        a {
+          img,
+          svg {
+            max-width: 18px;
+            width: 100%;
+          }
+        }
+      }
+    }
+    .tokens-list {
+      width: 100%;
+      list-style: none;
+      padding: 0;
+      li {
+        margin: 0.5rem 1rem;
+        padding: 0.75rem;
+        display: flex;
+        border: 1px solid;
+        transition: $transition;
+        .icon-wrap {
+          margin-right: 0.5rem;
+        }
+        .token-detail {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          p {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 1;
+            margin-bottom: 0;
+            margin-left: 0.5rem;
+          }
+        }
+        .favourite-token {
+          svg {
+            color: white;
+          }
+          &:hover {
+            transition: $transition;
+            transform: scale(1.5);
+            cursor: pointer;
+          }
+        }
+        &:hover {
+          transform: scale(1.05);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+.f-list-connect-wallet {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid white;
+      margin-bottom: 1rem;
+      padding: 0.5rem 1rem;
+      transition: $transition;
+      .icon-wrap {
+        min-width: 50px;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          max-width: 50px;
+          width: 100%;
+          margin: 0 auto;
+        }
+      }
+      &:hover {
+        transform: scale(1.05);
+        cursor: pointer;
+      }
+    }
+  }
+}
