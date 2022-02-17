@@ -5,7 +5,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FButton, FGrid, FInputText, FGridItem } from "ferrum-design-system";
 
-const EmailFrom = ({ sendOTP }: any) => {
+interface EmailFromProps {
+  sendOTP: (value: any) => Promise<void>;
+}
+
+const EmailFrom = ({ sendOTP }: EmailFromProps) => {
   const initialValues = {
     email: "",
   };

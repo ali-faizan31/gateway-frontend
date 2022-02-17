@@ -3,16 +3,22 @@ import toast, { Toaster } from "react-hot-toast";
 import EmailForm from "./EmailForm";
 import OtpFrom from "./OtpForm";
 import { sendOTP, updateEmail } from "../../../_apis/ProfileCrud";
-import {
-  FCard,
-  FButton,
-  FGrid,
-  FGridItem,
-  FDialog,
-} from "ferrum-design-system";
+import { FButton, FGrid, FGridItem, FDialog } from "ferrum-design-system";
 import { AiOutlineMail } from "react-icons/ai";
 
-const EmailSection = ({ profileToken, setProfileToken, initialEmail }: any) => {
+interface EmailSectionProps {
+  profileToken: string;
+  setProfileToken: Function;
+  initialEmail: string;
+  getUserInfo: Function;
+}
+
+const EmailSection = ({
+  profileToken,
+  setProfileToken,
+  initialEmail,
+  getUserInfo,
+}: EmailSectionProps) => {
   const [showForm, setShowForm] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
 
@@ -36,6 +42,9 @@ const EmailSection = ({ profileToken, setProfileToken, initialEmail }: any) => {
     await updateEmail(token, profileToken, value)
       .then((response: any) => {
         closeForm();
+        localStorage.removeItem("profileToken");
+        setProfileToken("");
+        getUserInfo();
       })
       .catch((e) => {
         if (e.response) {
@@ -49,8 +58,6 @@ const EmailSection = ({ profileToken, setProfileToken, initialEmail }: any) => {
   const closeForm = () => {
     setShowForm(false);
     setOtpSent(false);
-    localStorage.removeItem("profileToken");
-    setProfileToken("");
   };
 
   return (

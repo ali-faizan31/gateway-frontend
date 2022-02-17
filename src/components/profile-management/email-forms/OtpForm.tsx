@@ -5,7 +5,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FButton, FGrid, FInputText, FGridItem } from "ferrum-design-system";
 
-const OtpFrom = ({ verifyOTP }: any) => {
+interface OtpFromProps {
+  verifyOTP: (value: any) => Promise<void>;
+}
+
+const OtpFrom = ({ verifyOTP }: OtpFromProps) => {
   const initialValues = { otp: "" };
   const registerSchema = Yup.object().shape({
     otp: Yup.string().required("OTP is required"),

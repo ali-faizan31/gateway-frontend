@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import EmailSection from "./email-forms";
-import { mockGetToken } from "../../_apis/ProfileCrud";
+import { mockGetToken, getMe } from "../../_apis/ProfileCrud";
 import {
   FContainer,
   FButton,
@@ -11,19 +11,35 @@ import {
 } from "ferrum-design-system";
 
 const ProfileSettings = () => {
+  let isLoading = false;
   const [profileToken, setprofileToken] = useState("");
+  const [user, setUser] = useState({ email: "" });
+
   let pToken = localStorage.getItem("profileToken");
+
   useEffect(() => {
-    if (pToken) {
-      setprofileToken(pToken);
-    } else {
-      setprofileToken("");
-    }
+    getUserInfo();
+    pToken ? setprofileToken(pToken) : setprofileToken("");
   }, [pToken]);
 
-  let isLoading = false;
-  let user = localStorage.getItem("me");
-  const email = user ? JSON.parse(user).email : "";
+  const getUserInfo = async () => {
+    const token = localStorage.getItem("token");
+    isLoading = true;
+    await getMe(token)
+      .then((response: any) => {
+        setUser(response.data.body.user);
+      })
+      .catch((e) => {
+        if (e.response) {
+          toast.error(e.response?.data?.status?.message);
+        } else {
+          toast.error("Something went wrong. Try again later!");
+        }
+      })
+      .finally(() => {
+        isLoading = false;
+      });
+  };
 
   const walletAuthentication = async () => {
     const signature = "xyz";
@@ -41,7 +57,7 @@ const ProfileSettings = () => {
         }
       })
       .finally(() => {
-        isLoading = true;
+        isLoading = false;
       });
   };
 
@@ -77,7 +93,8 @@ const ProfileSettings = () => {
           <EmailSection
             profileToken={profileToken}
             setProfileToken={setprofileToken}
-            initialEmail={email}
+            getUserInfo={getUserInfo}
+            initialEmail={user.email}
           />
         </FCard>
       </FContainer>

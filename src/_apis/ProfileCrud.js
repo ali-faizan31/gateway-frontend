@@ -2,7 +2,6 @@ import axios from "axios";
 import { baseUrl, apiKey } from "../utils/const.utils";
 
 export function sendOTP(token, profileToken, values) {
-  console.log(profileToken, "profileToken OTP");
   return axios.put(
     `${baseUrl}/api/v1/community-member/users/profile/re-send/email/otp`,
     values,
@@ -30,6 +29,15 @@ export function updateEmail(token, profileToken, values) {
       },
     }
   );
+}
+export function getMe(token) {
+  return axios.get(`${baseUrl}/api/v1/community-member/users/profile/me`, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "Application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
 export function mockGetToken(token, values) {
