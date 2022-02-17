@@ -6,6 +6,7 @@ import {
   MetaMaskConnector,
   WalletApplicationWrapper 
 } from "../container-components";
+import { walletConnectorSlice } from "../components/common/wallet-authentication/redux/walletAuthenticationSlice";
 // slices
 import competitionReducer from './slices/competition';
 import leaderboardReducer from './slices/leaderboard';
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
     walletApplicationWrapperPersistConfig,
     WalletApplicationWrapper.applicationWrapperSlice.reducer
   ),
+  walletAuthenticator: walletConnectorSlice.reducer,
   competition: competitionReducer,
   leaderboard: leaderboardReducer 
 });

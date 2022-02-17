@@ -10,15 +10,25 @@ import { RootState } from "../../redux/rootReducer";
 import { logout } from "../../_apis/OnboardingCrud";
 import toast, { Toaster } from "react-hot-toast"; 
 import { localStorageHelper } from "../../utils/global.utils";
+import WalletAuthenticationSignIn from '../../components/common/wallet-authentication/WalletAuthenticationSignIn';
 
 
 const DashboardHeader = () => {
   const { pathname } = useLocation();
   const history = useHistory(); 
   const isPublic = pathname.includes('pub'); 
-  const { isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet } = useSelector((state: RootState) => state.walletConnector);
+  const { isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet  } = useSelector((state: RootState) => state.walletConnector);
+  const { nonce, signature } = useSelector((state: RootState) => state.walletAuthenticator);
+  
+  useEffect(() => {
+    console.log('sig', signature)
+    console.log(isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet );
+  }, [isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet ])
+  
+useEffect(() => { 
+  console.log(signature, "hh", nonce, 'non')
+}, [signature, nonce])
 
-  console.log(isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet);
 
   useEffect(() => { 
     if ( isConnected === false ){
@@ -66,7 +76,7 @@ const DashboardHeader = () => {
         <MetaMaskConnector.WalletConnector
             WalletConnectView={FButton}
             WalletConnectModal={ConnectWalletDialog}
-          />
+          /> 
       </FItem>
     </FHeader>
   )
