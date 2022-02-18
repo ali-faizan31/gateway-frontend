@@ -9,32 +9,23 @@ import { useSelector } from 'react-redux';
 import { RootState } from "../../redux/rootReducer";
 import { logout } from "../../_apis/OnboardingCrud";
 import toast, { Toaster } from "react-hot-toast"; 
-import { localStorageHelper } from "../../utils/global.utils";
-import WalletAuthenticationSignIn from '../../components/common/wallet-authentication/WalletAuthenticationSignIn';
+import { localStorageHelper } from "../../utils/global.utils"; 
 
 
 const DashboardHeader = () => {
   const { pathname } = useLocation();
   const history = useHistory(); 
   const isPublic = pathname.includes('pub'); 
-  const { isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet  } = useSelector((state: RootState) => state.walletConnector);
-  const { nonce, signature } = useSelector((state: RootState) => state.walletAuthenticator);
-  
-  useEffect(() => {
-    console.log('sig', signature)
-    console.log(isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet );
-  }, [isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet ])
-  
-useEffect(() => { 
-  console.log(signature, "hh", nonce, 'non')
-}, [signature, nonce])
-
+  const { isConnected, isConnecting, currentWalletNetwork, walletAddress, walletBalance, currentWallet  } = useSelector((state: RootState) => state.walletConnector);
+  const { nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, error} = useSelector((state: RootState) => state.walletAuthenticator);
+   
 
   useEffect(() => { 
-    if ( isConnected === false ){
+    console.log(isConnected, isConnecting)
+    if (isConnecting === false && isConnected === false ){
       handleLogout(); 
     }
-  }, [isConnected])
+  }, [isConnected, isConnecting])
   
 
   const showLogoutButton = () => { 
@@ -56,13 +47,15 @@ useEffect(() => {
 
   const handleLogout = async () => {
     console.log('logout');
-    let data = {};
-    let logoutResponse =  localStorageHelper.token() && await handleCommunityMemberLogout(data);
+    let data = {}; 
+    try {
+    // let logoutResponse =  localStorageHelper.token() && await handleCommunityMemberLogout(data);
+    // console.log(logoutResponse)
+    localStorageHelper.removeItem('me');
+    localStorageHelper.removeItem('token');
+    } catch (e) {
 
-
-    // localStorage.removeItem("me");
-    // localStorage.removeItem("token");
-    // history.push(PATH_AUTH.communityLogin);
+    }
   };
 
   return (

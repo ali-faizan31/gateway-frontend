@@ -27,6 +27,14 @@ export const walletConnectorSlice = createSlice({
       error: (state, action) => { 
         state.error = action.payload.walletAuthenticator.error;
       },
+      resetWalletAuthentication: (state, action) => {
+        state.nonce = "";
+        state.signature = "";
+        state.applicationUserToken = action.payload.walletAuthenticator.userToken;
+        state.isAllowedonGateway = undefined;
+        state.allowedNetworksonGateway = [];
+        state.error = false
+      }
     }
 })
   

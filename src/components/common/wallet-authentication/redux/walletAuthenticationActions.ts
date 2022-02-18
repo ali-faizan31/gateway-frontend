@@ -30,3 +30,8 @@ export const error = (walletAuthenticator: any) => (dispatch: any) => {
     console.log('dispatch', walletAuthenticator)
     dispatch(actions.error({ walletAuthenticator }));
 };
+
+export const resetWalletAuthentication = (walletAuthenticator: any) => (dispatch: any) => {
+    console.log('dispatch', walletAuthenticator)
+    dispatch(actions.resetWalletAuthentication({ walletAuthenticator }));
+};

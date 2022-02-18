@@ -3,7 +3,7 @@ export interface WALLET_AUTHENTICATION_STATE {
     signature: String;
     applicationUserToken: String;
     isAllowedonGateway: Boolean | undefined;
-    allowedNetworksonGateway: [];
+    allowedNetworksonGateway: string[];
     error: Boolean;
   }
   
