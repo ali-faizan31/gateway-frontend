@@ -9,22 +9,23 @@ import { useSelector } from 'react-redux';
 import { RootState } from "../../redux/rootReducer";
 import { logout } from "../../_apis/OnboardingCrud";
 import toast, { Toaster } from "react-hot-toast"; 
-import { localStorageHelper } from "../../utils/global.utils";
+import { localStorageHelper } from "../../utils/global.utils"; 
 
 
 const DashboardHeader = () => {
   const { pathname } = useLocation();
   const history = useHistory(); 
   const isPublic = pathname.includes('pub'); 
-  const { isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet } = useSelector((state: RootState) => state.walletConnector);
-
-  console.log(isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet);
+  const { isConnected, isConnecting, currentWalletNetwork, walletAddress, walletBalance, currentWallet  } = useSelector((state: RootState) => state.walletConnector);
+  const { nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, error} = useSelector((state: RootState) => state.walletAuthenticator);
+   
 
   useEffect(() => { 
-    if ( isConnected === false ){
+    console.log(isConnected, isConnecting)
+    if (isConnecting === false && isConnected === false ){
       handleLogout(); 
     }
-  }, [isConnected])
+  }, [isConnected, isConnecting])
   
 
   const showLogoutButton = () => { 
@@ -46,13 +47,15 @@ const DashboardHeader = () => {
 
   const handleLogout = async () => {
     console.log('logout');
-    let data = {};
-    let logoutResponse =  localStorageHelper.token() && await handleCommunityMemberLogout(data);
+    let data = {}; 
+    try {
+    // let logoutResponse =  localStorageHelper.token() && await handleCommunityMemberLogout(data);
+    // console.log(logoutResponse)
+    localStorageHelper.removeItem('me');
+    localStorageHelper.removeItem('token');
+    } catch (e) {
 
-
-    // localStorage.removeItem("me");
-    // localStorage.removeItem("token");
-    // history.push(PATH_AUTH.communityLogin);
+    }
   };
 
   return (
@@ -66,7 +69,7 @@ const DashboardHeader = () => {
         <MetaMaskConnector.WalletConnector
             WalletConnectView={FButton}
             WalletConnectModal={ConnectWalletDialog}
-          />
+          /> 
       </FItem>
     </FHeader>
   )
