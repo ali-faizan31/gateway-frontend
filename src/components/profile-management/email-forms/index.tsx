@@ -42,7 +42,6 @@ const EmailSection = ({
     await updateEmail(token, profileToken, value)
       .then((response: any) => {
         closeForm();
-        localStorage.removeItem("profileToken");
         setProfileToken("");
         getUserInfo();
       })

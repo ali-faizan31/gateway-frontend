@@ -14,13 +14,9 @@ const ProfileSettings = () => {
   let isLoading = false;
   const [profileToken, setprofileToken] = useState("");
   const [user, setUser] = useState({ email: "" });
-
-  let pToken = localStorage.getItem("profileToken");
-
   useEffect(() => {
     getUserInfo();
-    pToken ? setprofileToken(pToken) : setprofileToken("");
-  }, [pToken]);
+  }, []);
 
   const getUserInfo = async () => {
     const token = localStorage.getItem("token");
@@ -46,7 +42,6 @@ const ProfileSettings = () => {
     const token = localStorage.getItem("token");
     await mockGetToken(token, { signature })
       .then((response: any) => {
-        localStorage.setItem("profileToken", response.data.body.token);
         setprofileToken(response.data.body.token);
       })
       .catch((e) => {

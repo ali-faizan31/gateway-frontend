@@ -11,12 +11,7 @@ const GuardedRoute = ({ component: Component, layout: Layout, ...rest }) => {
     if (isAuthenticated) {
       setAuth(true);
     }
-    if (window.location.pathname != PATH_DASHBOARD.general.profile) {
-      if (localStorage.getItem("profileToken")) {
-        localStorage.removeItem("profileToken");
-      }
-    }
-  }, [window.location.pathname]);
+  }, []);
 
   return (
     <Route
