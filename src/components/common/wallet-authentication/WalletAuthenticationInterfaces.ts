@@ -3,8 +3,11 @@ export interface WALLET_AUTHENTICATION_STATE {
     signature: String;
     applicationUserToken: String;
     isAllowedonGateway: Boolean | undefined;
-    allowedNetworksonGateway: string[];
+    allowedNetworksonGateway: Array<any>;
     error: Boolean;
+    getSignatureFromMetamask: Boolean;
+    me: any;
+    communityMemberToken: String;
   }
   
   export const defaultWalletAuthenticationState: WALLET_AUTHENTICATION_STATE = {
@@ -13,5 +16,8 @@ export interface WALLET_AUTHENTICATION_STATE {
     applicationUserToken:"",
     isAllowedonGateway:undefined,
     allowedNetworksonGateway: [],
-    error: false
+    error: false,
+    getSignatureFromMetamask: false,
+    me: {},
+    communityMemberToken: ""
   };

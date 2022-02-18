@@ -39,11 +39,12 @@ export const localStorageHelper = {
       const stored = localStorage.getItem(key);
       return stored == null ? undefined : JSON.parse(stored);
   },
-  token() {
-    const stored = localStorage.getItem('token');
+  getToken(key) {
+    const stored = localStorage.getItem(key);
     return stored == null ? undefined : (stored);
 },
   storeObject(key, value) {
+    console.log(key, value)
       localStorage.setItem(key, JSON.stringify(value));
   },
   storeToken(key, value) {

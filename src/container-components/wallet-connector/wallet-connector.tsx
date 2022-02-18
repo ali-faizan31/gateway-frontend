@@ -13,7 +13,7 @@ import toast, {Toaster} from "react-hot-toast";
 import * as walletAuthenticatorActions from "../../components/common/wallet-authentication/redux/walletAuthenticationActions";
 import { StartAuthenticationProcess } from "../../components/common/wallet-authentication/WalletAuthenticationSignIn";
 
-import { getAccessTokenForApplicationUser, generateNonceByABN, verifySignatureAndSignin, isFerrumNetworkIdentifierAllowedonGateway } from "../../_apis/WalletAuthencation";
+import { getAccessTokenForApplicationUser, generateNonceByABN, verifySignatureAndSignin, isFerrumNetworkIdentifierAllowedonGateway, verifySignatureAndUpdateProfile } from "../../_apis/WalletAuthencation";
 import { FDialog, FItem, FList, FButton, FGridItem} from "ferrum-design-system";
 import { sign } from "crypto";
 import { locale } from "moment";
@@ -28,11 +28,11 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
   const dispatch = useDispatch();
   const { active, activate, deactivate, library, account, chainId, error, connector } =  useWeb3React();
   const { isConnected, isConnecting, currentWalletNetwork, walletAddress } = useSelector((state: RootState) => state.walletConnector);
-  const { nonce, applicationUserToken, signature, isAllowedonGateway, allowedNetworksonGateway  } = useSelector((state: RootState) => state.walletAuthenticator); 
+  const { nonce, applicationUserToken, signature, isAllowedonGateway, allowedNetworksonGateway, getSignatureFromMetamask  } = useSelector((state: RootState) => state.walletAuthenticator); 
   const [allowedNetworkModal, setAllowedNetworkModal] = useState<boolean>(false);
   const [getSignature, setGetSignature] = useState<boolean>(false);
   const [isValidated, setIsValidated] = useState<boolean | undefined>(undefined);
-
+  const [isForSigninFlow, setIsForSigninFlow] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
     console.log("Account Changed reconnect wallet");
@@ -103,15 +103,26 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
       }
     }, [allowedNetworksonGateway, isValidated])
     
-       useEffect(() => { 
-      if (!error && currentWalletNetwork &&  walletAddress && applicationUserToken && signature){
+    useEffect(() => { 
+      if (!error && currentWalletNetwork &&  walletAddress && applicationUserToken && signature && isForSigninFlow ){
          verifySignatureToSignin(currentWalletNetwork.toString(), walletAddress, signature, applicationUserToken);
       }
-    }, [currentWalletNetwork, walletAddress, signature, applicationUserToken])
+    }, [currentWalletNetwork, walletAddress, signature, applicationUserToken, isForSigninFlow])
+
+    useEffect(() => { 
+      if ( localStorageHelper.getToken() && signature && getSignatureFromMetamask){
+         verifySignatureToUpdateProfileForCommunityMember(localStorageHelper.getToken(), signature);
+      }
+    }, [ signature, getSignatureFromMetamask ])
+
+    useEffect(() => {
+      console.log('prob',networkClient, account)
+    }, [networkClient, account])
+    
 
   useEffect(() => { 
     console.log(networkClient , isConnected , account , nonce  , currentWalletNetwork , getSignature)
-    if ( networkClient && isConnected && account && nonce  && currentWalletNetwork && getSignature) { 
+    if ( networkClient && isConnected && account && nonce  && currentWalletNetwork && (getSignature || getSignatureFromMetamask)) { 
 
     const msg = `0x${Buffer.from(
       `This signature verifies that you are the authorized owner of the wallet. The signature authentication is required to ensure allocations are awarded to the correct wallet owner.${nonce}. id: ${currentWalletNetwork}`,
@@ -134,10 +145,11 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
           dispatch( walletAuthenticatorActions.saveNonce({ nonce: "" }) ); 
         } else if ( signature ){ 
           dispatch( walletAuthenticatorActions.saveSignature({ signature }) ); 
+          setIsForSigninFlow(true);
         }
       })
     }
-  }, [networkClient, nonce, getSignature])
+  }, [networkClient, nonce, getSignature, getSignatureFromMetamask])
   
 
   useEffect(() =>{
@@ -264,8 +276,30 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
     .then((res: any) => {
       if (res && res.data && res.data.body && res.data.body) { 
         console.log(res.data.body)
+        dispatch( walletAuthenticatorActions.saveME({ me: res.data.body.user }) );
+        dispatch( walletAuthenticatorActions.saveCommunityMemberToken({ communityMemberToken: res.data.body.token }) );
         localStorageHelper.storeObject('me', res.data.body.user);
-        localStorageHelper.storeToken('token', res.data.body.token);
+        localStorageHelper.storeToken('communityMemberToken', res.data.body.token);
+        setIsForSigninFlow(false); 
+      }
+    })
+    .catch((e) => {
+      if (e.response) {
+        toast.error(` Error Occured: nonce ${e?.response?.data?.status?.message}`);
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
+    });
+  }
+  
+  const verifySignatureToUpdateProfileForCommunityMember = (signature: any, communityMemberToken: any) => {
+    let data = { signature: signature };
+    verifySignatureAndUpdateProfile(data, communityMemberToken)
+    .then((res: any) => {
+      if (res && res.data && res.data.body && res.data.body) { 
+        console.log(res.data.body)
+        // localStorageHelper.storeObject('me', res.data.body.user);
+        // localStorageHelper.storeToken('profileToken', res.data.body.token);
         // dispatch( walletAuthenticatorActions.saveNonce({ nonce: res.data.body.nonce }) ); 
       }
     })

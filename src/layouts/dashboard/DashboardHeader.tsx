@@ -37,7 +37,7 @@ const DashboardHeader = () => {
 
   const handleCommunityMemberLogout = async ( values: any ) => {
     try {
-     const res = await logout(values, localStorageHelper.token() )
+     const res = await logout(values, localStorageHelper.getToken() )
      return res?.data?.body;
    } catch (e: any) { 
     toast.error(`Error Occured: ${e?.response?.data?.status?.message}`)

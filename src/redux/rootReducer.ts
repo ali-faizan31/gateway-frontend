@@ -20,8 +20,14 @@ const walletConnectorPersistConfig = {
 const walletApplicationWrapperPersistConfig = {
   key: "walletApplicationWrapper",
   storage: localStorage,
-  whitelist: ["tokenList"],
+  whitelist: ["tokenList" ],
   timeout: 172800,
+};
+
+const walletAutheticatorPersistConfig = {
+  key: "walletAutheticator",
+  storage: localStorage,
+  whitelist: [ "me", "communityMemberToken"] 
 };
 
 const rootReducer = combineReducers({
@@ -33,7 +39,10 @@ const rootReducer = combineReducers({
     walletApplicationWrapperPersistConfig,
     WalletApplicationWrapper.applicationWrapperSlice.reducer
   ),
-  walletAuthenticator: walletConnectorSlice.reducer,
+  walletAuthenticator: persistReducer(
+    walletAutheticatorPersistConfig,
+     walletConnectorSlice.reducer
+  ),
   competition: competitionReducer,
   leaderboard: leaderboardReducer 
 });
