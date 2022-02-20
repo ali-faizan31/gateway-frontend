@@ -12,7 +12,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { localStorageHelper } from "../../utils/global.utils";
 
 
-const DashboardHeader = () => {
+const DashboardHeader = ({title}:any) => {
   const { pathname } = useLocation();
   const history = useHistory(); 
   const isPublic = pathname.includes('pub'); 
@@ -56,7 +56,11 @@ const DashboardHeader = () => {
   };
 
   return (
-    <FHeader showLogo={false}> 
+    <FHeader showLogo={false}>
+       
+      <FItem align="left">
+        <h2>{title}</h2>
+      </FItem>
       <FItem align="right">
         {/* <FButton
           title="Logout"

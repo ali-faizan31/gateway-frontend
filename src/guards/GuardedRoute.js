@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { PATH_DASHBOARD } from "../routes/paths";
 
-const GuardedRoute = ({ component: Component, layout: Layout, ...rest }) => {
+const GuardedRoute = ({headerTitle=headerTitle, component: Component, layout: Layout, ...rest }) => {
   const [auth, setAuth] = useState(false);
   const isAuthenticated = localStorage.getItem("token");
 
@@ -19,7 +19,7 @@ const GuardedRoute = ({ component: Component, layout: Layout, ...rest }) => {
       {...rest}
       render={(props) =>
         isAuthenticated ? (
-          <Layout>
+          <Layout headerTitle={headerTitle}>
             <Component {...props} />
           </Layout>
         ) : (

@@ -215,6 +215,7 @@ function App() {
             component={ProfileSettings}
             auth={isAuthenticated}
             layout={DashboardLayout}
+            headerTitle="My Profile"
           />
           <Route path="*" component={Page404}></Route>
         </Switch>
