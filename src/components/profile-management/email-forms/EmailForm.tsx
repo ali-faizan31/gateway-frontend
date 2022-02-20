@@ -7,9 +7,10 @@ import { FButton, FGrid, FInputText, FGridItem } from "ferrum-design-system";
 
 interface EmailFromProps {
   sendOTP: (value: any) => Promise<void>;
+  sendBtnText:string
 }
 
-const EmailFrom = ({ sendOTP }: EmailFromProps) => {
+const EmailFrom = ({ sendOTP, sendBtnText}: EmailFromProps) => {
   const initialValues = {
     email: "",
   };
@@ -30,24 +31,32 @@ const EmailFrom = ({ sendOTP }: EmailFromProps) => {
 
   return (
     <>
+
       <form autoComplete="true" onSubmit={handleSubmit(sendOTP)}>
         <FGrid>
+        <FGridItem size={[8, 8, 8]} alignY={"center"} className={"f-mt-1"}>
+        <h2>Register your Email</h2>
+        </FGridItem>    
           <FGridItem size={[12, 12, 12]} alignX="center" className={"f-mt-1"}>
             <FInputText
               label="Email"
               name="email"
-              placeholder="someone@email.com"
+              placeholder="Please enter your email"
               register={register}
               error={errors["email"]?.message ? errors["email"]?.message : ""}
             />
           </FGridItem>
+          <FGridItem  className={"f-mt-2"} alignX={"end"} alignY={"end"} dir={"row"} size={[12, 12, 12]}>
+           
+              <FButton
+                 type={"submit"}
+                 className={"btn-create f-ml-1"}
+                  title={sendBtnText}
+                  postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}
+        ></FButton>      
+            </FGridItem>
         </FGrid>
-        <FButton
-          type={"submit"}
-          className={"w-100 f-mt-2 f-mb-1"}
-          title={"Send OTP"}
-          postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}
-        ></FButton>
+       
       </form>
     </>
   );

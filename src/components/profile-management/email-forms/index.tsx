@@ -9,90 +9,77 @@ import { AiOutlineMail } from "react-icons/ai";
 interface EmailSectionProps {
   profileToken: string;
   setProfileToken: Function;
-  initialEmail: string;
   getUserInfo: Function;
 }
 
 const EmailSection = ({
   profileToken,
   setProfileToken,
-  initialEmail,
   getUserInfo,
 }: EmailSectionProps) => {
-  const [showForm, setShowForm] = useState(false);
+  const [emailedTo, setEmailedTo] = useState('');
   const [otpSent, setOtpSent] = useState(false);
+  const [emailBtnText, setEmailBtnText] = useState("Register");
+
+
+  const resendCode =  ()=>{
+    setOtpSent(false)
+    setEmailBtnText("Resend Code")
+  }
 
   const handleSendOTP = async (values: any) => {
-    const token = localStorage.getItem("token");
-    await sendOTP(token, profileToken, values)
-      .then((response: any) => {
-        setOtpSent(true);
-      })
-      .catch((e) => {
-        if (e.response) {
-          toast.error(e.response?.data?.status?.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
+    setEmailedTo( values.email)
+    setOtpSent(true); 
+    // const token = localStorage.getItem("token");
+    // await sendOTP(token, profileToken, values)
+    //   .then((response: any) => {
+    //     setEmailedTo( values.email)
+    //     setOtpSent(true);        
+    //   })
+    //   .catch((e) => {
+    //     if (e.response) {
+    //       toast.error(e.response?.data?.status?.message);
+    //     } else {
+    //       toast.error("Something went wrong. Try again later!");
+    //     }
+    //   });
   };
 
   const verifyOTP = async (value: any) => {
-    let token = localStorage.getItem("token");
-    await updateEmail(token, profileToken, value)
-      .then((response: any) => {
-        closeForm();
-        setProfileToken("");
-        getUserInfo();
-      })
-      .catch((e) => {
-        if (e.response) {
-          toast.error(e.response?.data?.status?.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
+    closeForm();
+    setProfileToken("");
+    getUserInfo();
+
+    // let token = localStorage.getItem("token");
+    // await updateEmail(token, profileToken, value)
+    //   .then((response: any) => {
+    //     closeForm();
+    //     setProfileToken("");
+    //     getUserInfo();
+    //   })
+    //   .catch((e) => {
+    //     if (e.response) {
+    //       toast.error(e.response?.data?.status?.message);
+    //     } else {
+    //       toast.error("Something went wrong. Try again later!");
+    //     }
+    //   });
   };
 
   const closeForm = () => {
-    setShowForm(false);
+  
     setOtpSent(false);
   };
 
   return (
     <>
-      <div>
-        <Toaster />
-      </div>
-      <FGrid>
-        <FGridItem size={[8, 8, 8]} alignY={"center"} className={"f-mt-1"}>
-          <AiOutlineMail className="f-mr-1" size={30} />
-          <span className="font-size-18">
-            {initialEmail ? initialEmail : "Please add Email"}
-          </span>
-        </FGridItem>
-        <FGridItem size={[4, 4, 4]} alignX="right">
-          {profileToken && (
-            <FButton
-              onClick={() => setShowForm(true)}
-              type="submit"
-              title={"Update"}
-            ></FButton>
-          )}
-        </FGridItem>
-      </FGrid>
-      <FDialog
-        title={initialEmail ? "Update Email" : "Add Email"}
-        show={showForm}
-        onHide={closeForm}
-        size={"small"}
-      >
+     <Toaster />          
         {!otpSent ? (
-          <EmailForm sendOTP={handleSendOTP} />
+          <EmailForm sendOTP={handleSendOTP}  sendBtnText={emailBtnText}/>
         ) : (
-          <OtpFrom verifyOTP={verifyOTP} />
+          <OtpFrom verifyOTP={verifyOTP} emailedTo={emailedTo} resendCode={resendCode} />
         )}
-      </FDialog>
+     
     </>
   );
 };

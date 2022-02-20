@@ -8,6 +8,7 @@ import {
   FGrid,
   FGridItem,
   FCard,
+  FInputText
 } from "ferrum-design-system";
 
 const ProfileSettings = () => {
@@ -38,60 +39,70 @@ const ProfileSettings = () => {
   };
 
   const walletAuthentication = async () => {
-    const signature = "xyz";
-    const token = localStorage.getItem("token");
-    await mockGetToken(token, { signature })
-      .then((response: any) => {
-        setprofileToken(response.data.body.token);
-      })
-      .catch((e) => {
-        if (e.response) {
-          toast.error(e.response?.data?.status?.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      })
-      .finally(() => {
-        isLoading = false;
-      });
+    setprofileToken('test');
+    
+    // const signature = "xyz";
+    // const token = localStorage.getItem("token");
+    // await mockGetToken(token, { signature })
+    //   .then((response: any) => {
+    //     setprofileToken(response.data.body.token);
+    //   })
+    //   .catch((e) => {
+    //     if (e.response) {
+    //       toast.error(e.response?.data?.status?.message);
+    //     } else {
+    //       toast.error("Something went wrong. Try again later!");
+    //     }
+    //   })
+    //   .finally(() => {
+    //     isLoading = false;
+    //   });
   };
 
   return (
-    <>
-      <div>
-        <Toaster />
-      </div>
-      <FContainer width={600}>
-        <FCard>
-          <FGrid className={"f-mb-1"}>
-            <FGridItem size={[6, 12, 12]} alignX="start" alignY={"end"}>
-              <h1>Profile</h1>
-            </FGridItem>
-            <FGridItem
-              alignX={"end"}
-              alignY={"end"}
-              dir={"row"}
-              size={[6, 12, 12]}
-            >
-              {isLoading}
-              {!profileToken && (
+    <>      
+     <Toaster />
+      <FContainer width={1000}>
+      {!profileToken ? (
+          <FGrid className={"f-mb-1"}>           
+          <FGridItem size={[12, 12, 12]} alignX="center" className={"f-mt-2"}>
+            <FInputText
+              label="Wallet"
+              name="wallet"
+              placeholder=""
+              disabled={true}  
+              value="xxxx"            
+            />
+          </FGridItem>
+          <FGridItem size={[12, 12, 12]} alignX="center" className={"f-mt-2"}>
+            <FInputText
+              label="Email"
+              name="email"
+              placeholder=""
+              disabled={true}  
+              value={user.email}            
+            />
+          </FGridItem>
+      
+            <FGridItem  className={"f-mt-2"} alignX={"end"} alignY={"end"} dir={"row"} size={[12, 12, 12]}>
+              {isLoading}           
                 <FButton
                   type="button"
                   className={"btn-create f-ml-1 "}
                   disabled={isLoading}
                   onClick={walletAuthentication}
                   title={"Edit Profile"}
-                ></FButton>
-              )}
+                ></FButton>         
             </FGridItem>
-          </FGrid>
-          <EmailSection
-            profileToken={profileToken}
-            setProfileToken={setprofileToken}
-            getUserInfo={getUserInfo}
-            initialEmail={user.email}
-          />
-        </FCard>
+          </FGrid>      
+       ):(
+        <EmailSection
+        profileToken={profileToken}
+        setProfileToken={setprofileToken}
+        getUserInfo={getUserInfo}
+      
+      />
+       )}
       </FContainer>
     </>
   );
