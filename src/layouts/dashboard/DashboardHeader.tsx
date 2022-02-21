@@ -17,8 +17,13 @@ const DashboardHeader = () => {
   const history = useHistory(); 
   const isPublic = pathname.includes('pub'); 
   const { isConnected, isConnecting, currentWalletNetwork, walletAddress, walletBalance, currentWallet  } = useSelector((state: RootState) => state.walletConnector);
-  const { nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, error} = useSelector((state: RootState) => state.walletAuthenticator);
+  const { nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, profileToken, error} = useSelector((state: RootState) => state.walletAuthenticator);
    
+
+  useEffect(() => {
+    console.log( nonce, 'sig', signature, 'token',applicationUserToken, 'prof', profileToken, isAllowedonGateway, allowedNetworksonGateway, "authentication state",)
+  }, [nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, profileToken])
+  
 
   useEffect(() => { 
     console.log(isConnected, isConnecting)
@@ -37,7 +42,7 @@ const DashboardHeader = () => {
 
   const handleCommunityMemberLogout = async ( values: any ) => {
     try {
-     const res = await logout(values, localStorageHelper.token() )
+     const res = await logout(values, localStorageHelper.getToken() )
      return res?.data?.body;
    } catch (e: any) { 
     toast.error(`Error Occured: ${e?.response?.data?.status?.message}`)

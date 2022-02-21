@@ -24,8 +24,20 @@ export const walletConnectorSlice = createSlice({
       allowedNetworksonGateway: (state, action) => { 
         state.allowedNetworksonGateway = action.payload.walletAuthenticator.allowedNetworksonGateway;
       },
+      getSignatureFromMetamask: (state, action) => { 
+        state.getSignatureFromMetamask = action.payload.walletAuthenticator.getSignatureFromMetamask;
+      },
       error: (state, action) => { 
         state.error = action.payload.walletAuthenticator.error;
+      },
+      saveME: (state, action) => { 
+        state.me = action.payload.walletAuthenticator.me;
+      },
+      saveCommunityMemberToken: (state, action) => { 
+        state.communityMemberToken = action.payload.walletAuthenticator.communityMemberToken;
+      },
+      saveCommunityMemberProfileToken: (state, action) => { 
+        state.profileToken = action.payload.walletAuthenticator.profileToken;
       },
       resetWalletAuthentication: (state, action) => {
         state.nonce = "";
@@ -33,7 +45,9 @@ export const walletConnectorSlice = createSlice({
         state.applicationUserToken = action.payload.walletAuthenticator.userToken;
         state.isAllowedonGateway = undefined;
         state.allowedNetworksonGateway = [];
-        state.error = false
+        state.error = false;
+        state.communityMemberToken = "";
+        state.me = {};
       }
     }
 })

@@ -14,7 +14,7 @@ export const ConnectWalletDialog = ({show, onHide, metaMaskClickEvent } :any) =>
       onHide={onHide}
       size="small"
       title="Connect Wallet"
-      className="connect-wallet-dialog w-50 f-mb-2"
+      className="connect-wallet-dialog  f-mb-2"
     >
       <FList display="block" type="number" className={"f-mt-2"} variant="connect-wallet">
         <FListItem display="flex" onClick={metaMaskClickEvent}>

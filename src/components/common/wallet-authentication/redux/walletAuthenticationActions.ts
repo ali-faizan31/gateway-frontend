@@ -35,3 +35,23 @@ export const resetWalletAuthentication = (walletAuthenticator: any) => (dispatch
     console.log('dispatch', walletAuthenticator)
     dispatch(actions.resetWalletAuthentication({ walletAuthenticator }));
 };
+
+export const getSignatureFromMetamask = (walletAuthenticator: any) => (dispatch: any) => {
+    console.log('dispatch', walletAuthenticator)
+    dispatch(actions.getSignatureFromMetamask({ walletAuthenticator }));
+};
+
+export const saveME = (walletAuthenticator: any) => (dispatch: any) => {
+    console.log('dispatch', walletAuthenticator)
+    dispatch(actions.saveME({ walletAuthenticator }));
+};
+
+export const saveCommunityMemberToken = (walletAuthenticator: any) => (dispatch: any) => {
+    console.log('dispatch', walletAuthenticator)
+    dispatch(actions.saveCommunityMemberToken({ walletAuthenticator }));
+};
+
+export const saveCommunityMemberProfileToken = (walletAuthenticator: any) => (dispatch: any) => {
+    console.log('dispatch', walletAuthenticator)
+    dispatch(actions.saveCommunityMemberProfileToken({ walletAuthenticator }));
+};

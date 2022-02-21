@@ -95,6 +95,28 @@ export function generateNonceByABN(values, applicationUserToken) {
   });
 }
 
+export function generateNonceForCommunityMember(communityMembertoken) {
+  const url = `${baseUrl}/api/v1/community-member/addresses/generate/nonce`;
+  return axios.get(url, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "Application/json",
+      Authorization: `Bearer ${communityMembertoken}`,
+    },
+  });
+}
+
+export function verifySignatureAndUpdateProfile(values, communityMemberToken) {
+  const url = `${baseUrl}/api/v1/community-member/addresses/verify-signature`;
+  return axios.post(url, values, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "Application/json",
+      Authorization: `Bearer ${communityMemberToken}`,
+    },
+  });
+}
+
 export function verifySignatureAndSignin(values, applicationUserToken) {
   const url = `${baseUrl}/api/v1/application-user/addresses/verify-signature`;
   return axios.post(url, values, {

@@ -451,7 +451,7 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
           size={"medium"}   
           onHide={()=>setShowExportModal(false)}
           title={"Export"}
-          className="connect-wallet-dialog w-50">
+          className="connect-wallet-dialog ">
 
           <FItem className={"f-mt-2 f-mb-2"}>
             Loading Export Data

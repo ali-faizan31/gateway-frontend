@@ -293,7 +293,7 @@ const LeaderboardManagement = () => {
           size={"medium"}   
           onHide={onCancel}
           title={"Update Leaderboard Status"}
-          className="connect-wallet-dialog w-50">
+          className="connect-wallet-dialog ">
 
           <FItem className={"f-mt-2"}>
             Select Status of Leaderboard
