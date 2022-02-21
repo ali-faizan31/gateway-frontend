@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import { FHeader, FButton, FItem } from "ferrum-design-system";
 import { RiLogoutCircleRLine } from "react-icons/ri";
+import { FaUserCircle } from "react-icons/fa";
 import { useHistory, useLocation, Link } from 'react-router-dom';
-import { PATH_AUTH } from '../../routes/paths';
+import { PATH_AUTH, PATH_DASHBOARD } from '../../routes/paths';
 import { MetaMaskConnector } from "../../container-components";
 import { ConnectWalletDialog }  from "../../utils/connect-wallet/ConnectWalletDialog";
 import { useSelector } from 'react-redux';
@@ -56,12 +57,8 @@ const DashboardHeader = ({title}:any) => {
   };
 
   return (
-    <FHeader showLogo={false}>
-       
-      <FItem align="left">
-        <h2>{title}</h2>
-      </FItem>
-      <FItem align="right">
+    <FHeader showLogo={false} titleText={title}>       
+      <FItem align="right" display={"flex"}>
         {/* <FButton
           title="Logout"
           postfix={<RiLogoutCircleRLine />}
@@ -71,6 +68,20 @@ const DashboardHeader = ({title}:any) => {
             WalletConnectView={FButton}
             WalletConnectModal={ConnectWalletDialog}
           />
+        <Link
+              to={PATH_DASHBOARD.general.profile}
+              style={{
+                border: "1px solid #cba461",
+                minWidth: "45px",
+                height: "45px",
+                borderRadius: "100px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <FaUserCircle color="#cba461" size={"40px"} />
+            </Link>
       </FItem>
     </FHeader>
   )

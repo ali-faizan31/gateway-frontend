@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FButton, FGrid, FInputText, FGridItem } from "ferrum-design-system";
+import { CgEnter } from "react-icons/cg";
 
 interface EmailFromProps {
   sendOTP: (value: any) => Promise<void>;
@@ -35,9 +36,9 @@ const EmailFrom = ({ sendOTP, sendBtnText}: EmailFromProps) => {
       <form autoComplete="true" onSubmit={handleSubmit(sendOTP)}>
         <FGrid>
         <FGridItem size={[8, 8, 8]} alignY={"center"} className={"f-mt-1"}>
-        <h2>Register your Email</h2>
+        <h2 className={"primary-color"}>Register your Email</h2>
         </FGridItem>    
-          <FGridItem size={[12, 12, 12]} alignX="center" className={"f-mt-1"}>
+          <FGridItem size={[12, 12, 12]} alignX="center" className={"f-mt-2"}>
             <FInputText
               label="Email"
               name="email"
@@ -53,6 +54,7 @@ const EmailFrom = ({ sendOTP, sendBtnText}: EmailFromProps) => {
                  className={"btn-create f-ml-1"}
                   title={sendBtnText}
                   postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}
+                  prefix={<CgEnter />}
         ></FButton>      
             </FGridItem>
         </FGrid>

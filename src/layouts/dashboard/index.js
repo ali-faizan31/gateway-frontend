@@ -5,7 +5,7 @@ import DashboardSidebar from './DashboardSidebar';
 
 const DashboardLayout = ({headerTitle, children}) => { 
     return (
-      <FLayout>
+      <FLayout themeBuilder={false}>
         <DashboardSidebar />
         <FMain>
           <DashboardHeader title={headerTitle} />

@@ -27,43 +27,37 @@ const EmailSection = ({
     setEmailBtnText("Resend Code")
   }
 
-  const handleSendOTP = async (values: any) => {
-    setEmailedTo( values.email)
-    setOtpSent(true); 
-    // const token = localStorage.getItem("token");
-    // await sendOTP(token, profileToken, values)
-    //   .then((response: any) => {
-    //     setEmailedTo( values.email)
-    //     setOtpSent(true);        
-    //   })
-    //   .catch((e) => {
-    //     if (e.response) {
-    //       toast.error(e.response?.data?.status?.message);
-    //     } else {
-    //       toast.error("Something went wrong. Try again later!");
-    //     }
-    //   });
+  const handleSendOTP = async (values: any) => {    
+    const token = localStorage.getItem("token");
+    await sendOTP(token, profileToken, values)
+      .then((response: any) => {
+        setEmailedTo( values.email)
+        setOtpSent(true);        
+      })
+      .catch((e) => {
+        if (e.response) {
+          toast.error(e.response?.data?.status?.message);
+        } else {
+          toast.error("Something went wrong. Try again later!");
+        }
+      });
   };
 
-  const verifyOTP = async (value: any) => {
-    closeForm();
-    setProfileToken("");
-    getUserInfo();
-
-    // let token = localStorage.getItem("token");
-    // await updateEmail(token, profileToken, value)
-    //   .then((response: any) => {
-    //     closeForm();
-    //     setProfileToken("");
-    //     getUserInfo();
-    //   })
-    //   .catch((e) => {
-    //     if (e.response) {
-    //       toast.error(e.response?.data?.status?.message);
-    //     } else {
-    //       toast.error("Something went wrong. Try again later!");
-    //     }
-    //   });
+  const verifyOTP = async (value: any) => {   
+    let token = localStorage.getItem("token");
+    await updateEmail(token, profileToken, value)
+      .then((response: any) => {
+        closeForm();
+        setProfileToken("");
+        getUserInfo();
+      })
+      .catch((e) => {
+        if (e.response) {
+          toast.error(e.response?.data?.status?.message);
+        } else {
+          toast.error("Something went wrong. Try again later!");
+        }
+      });
   };
 
   const closeForm = () => {
