@@ -17,8 +17,13 @@ const DashboardHeader = () => {
   const history = useHistory(); 
   const isPublic = pathname.includes('pub'); 
   const { isConnected, isConnecting, currentWalletNetwork, walletAddress, walletBalance, currentWallet  } = useSelector((state: RootState) => state.walletConnector);
-  const { nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, error} = useSelector((state: RootState) => state.walletAuthenticator);
+  const { nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, profileToken, error} = useSelector((state: RootState) => state.walletAuthenticator);
    
+
+  useEffect(() => {
+    console.log( nonce, 'sig', signature, 'token',applicationUserToken, 'prof', profileToken, isAllowedonGateway, allowedNetworksonGateway, "authentication state",)
+  }, [nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, profileToken])
+  
 
   useEffect(() => { 
     console.log(isConnected, isConnecting)

@@ -106,13 +106,13 @@ export function generateNonceForCommunityMember(communityMembertoken) {
   });
 }
 
-export function verifySignatureAndUpdateProfile(values, applicationUserToken) {
+export function verifySignatureAndUpdateProfile(values, communityMemberToken) {
   const url = `${baseUrl}/api/v1/community-member/addresses/verify-signature`;
   return axios.post(url, values, {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Content-type": "Application/json",
-      Authorization: `Bearer ${applicationUserToken}`,
+      Authorization: `Bearer ${communityMemberToken}`,
     },
   });
 }

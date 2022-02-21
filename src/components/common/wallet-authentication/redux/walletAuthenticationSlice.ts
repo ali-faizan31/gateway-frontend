@@ -36,6 +36,9 @@ export const walletConnectorSlice = createSlice({
       saveCommunityMemberToken: (state, action) => { 
         state.communityMemberToken = action.payload.walletAuthenticator.communityMemberToken;
       },
+      saveCommunityMemberProfileToken: (state, action) => { 
+        state.profileToken = action.payload.walletAuthenticator.profileToken;
+      },
       resetWalletAuthentication: (state, action) => {
         state.nonce = "";
         state.signature = "";

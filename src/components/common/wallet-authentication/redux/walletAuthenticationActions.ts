@@ -50,3 +50,8 @@ export const saveCommunityMemberToken = (walletAuthenticator: any) => (dispatch:
     console.log('dispatch', walletAuthenticator)
     dispatch(actions.saveCommunityMemberToken({ walletAuthenticator }));
 };
+
+export const saveCommunityMemberProfileToken = (walletAuthenticator: any) => (dispatch: any) => {
+    console.log('dispatch', walletAuthenticator)
+    dispatch(actions.saveCommunityMemberProfileToken({ walletAuthenticator }));
+};

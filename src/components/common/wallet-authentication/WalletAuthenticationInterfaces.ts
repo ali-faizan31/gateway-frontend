@@ -8,6 +8,7 @@ export interface WALLET_AUTHENTICATION_STATE {
     getSignatureFromMetamask: Boolean;
     me: any;
     communityMemberToken: String;
+    profileToken: String;
   }
   
   export const defaultWalletAuthenticationState: WALLET_AUTHENTICATION_STATE = {
@@ -19,5 +20,6 @@ export interface WALLET_AUTHENTICATION_STATE {
     error: false,
     getSignatureFromMetamask: false,
     me: {},
-    communityMemberToken: ""
+    communityMemberToken: "",
+    profileToken:""
   };

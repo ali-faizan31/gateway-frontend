@@ -105,13 +105,15 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
     
     useEffect(() => { 
       if (!error && currentWalletNetwork &&  walletAddress && applicationUserToken && signature && isForSigninFlow ){
+        console.log('signin')
          verifySignatureToSignin(currentWalletNetwork.toString(), walletAddress, signature, applicationUserToken);
       }
     }, [currentWalletNetwork, walletAddress, signature, applicationUserToken, isForSigninFlow])
 
     useEffect(() => { 
-      if ( localStorageHelper.getToken() && signature && getSignatureFromMetamask){
-         verifySignatureToUpdateProfileForCommunityMember(localStorageHelper.getToken(), signature);
+      if ( localStorageHelper.getToken("communityMemberToken") && signature && getSignatureFromMetamask){
+        console.log('profile')
+         verifySignatureToUpdateProfileForCommunityMember(signature, localStorageHelper.getToken("communityMemberToken"));
       }
     }, [ signature, getSignatureFromMetamask ])
 
@@ -145,7 +147,6 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
           dispatch( walletAuthenticatorActions.saveNonce({ nonce: "" }) ); 
         } else if ( signature ){ 
           dispatch( walletAuthenticatorActions.saveSignature({ signature }) ); 
-          setIsForSigninFlow(true);
         }
       })
     }
@@ -259,6 +260,7 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
       if (res && res.data && res.data.body && res.data.body.nonce) { 
         dispatch( walletAuthenticatorActions.saveNonce({ nonce: res.data.body.nonce }) ); 
         setGetSignature(true)
+        setIsForSigninFlow(true);
       }
     })
     .catch((e) => {
@@ -278,9 +280,11 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
         console.log(res.data.body)
         dispatch( walletAuthenticatorActions.saveME({ me: res.data.body.user }) );
         dispatch( walletAuthenticatorActions.saveCommunityMemberToken({ communityMemberToken: res.data.body.token }) );
+        dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken}))
         localStorageHelper.storeObject('me', res.data.body.user);
         localStorageHelper.storeToken('communityMemberToken', res.data.body.token);
         setIsForSigninFlow(false); 
+        setGetSignature(false);
       }
     })
     .catch((e) => {
@@ -294,13 +298,11 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
   
   const verifySignatureToUpdateProfileForCommunityMember = (signature: any, communityMemberToken: any) => {
     let data = { signature: signature };
+    console.log(data)
     verifySignatureAndUpdateProfile(data, communityMemberToken)
     .then((res: any) => {
-      if (res && res.data && res.data.body && res.data.body) { 
-        console.log(res.data.body)
-        // localStorageHelper.storeObject('me', res.data.body.user);
-        // localStorageHelper.storeToken('profileToken', res.data.body.token);
-        // dispatch( walletAuthenticatorActions.saveNonce({ nonce: res.data.body.nonce }) ); 
+      if (res && res.data && res.data.body && res.data.body) {  
+        dispatch( walletAuthenticatorActions.saveCommunityMemberProfileToken({ profileToken: res.data.body.token }) ); 
       }
     })
     .catch((e) => {
@@ -353,12 +355,12 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
         onHide={() => setShowWalletDialog(false)}
       />
 
-<FDialog
+        <FDialog
           show={allowedNetworkModal}
           size={"medium"}
           onHide={() => setAllowedNetworkModal(false)}
           title={"Allowed Networks on Gateway"}
-          className="connect-wallet-dialog w-50"
+          className="connect-wallet-dialog "
         >
           <FItem className={"f-mt-2"}>
             Change your network into one of the following:
