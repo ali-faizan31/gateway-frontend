@@ -48,6 +48,9 @@ export const walletConnectorSlice = createSlice({
         state.error = false;
         state.communityMemberToken = "";
         state.me = {};
+        state.getSignatureFromMetamask = false;
+        state.profileToken = "";
+        
       }
     }
 })
