@@ -9,7 +9,16 @@ import { RootState } from "../../redux/rootReducer";
 import { AiOutlineDisconnect, AiOutlineLoading3Quarters } from "react-icons/ai";
 // import { GrConnect } from "react-icons/gr";
 import { VscDebugDisconnect } from "react-icons/vsc";
-import toast from "react-hot-toast";
+import toast, {Toaster} from "react-hot-toast";
+import * as walletAuthenticatorActions from "../../components/common/wallet-authentication/redux/walletAuthenticationActions";
+import { StartAuthenticationProcess } from "../../components/common/wallet-authentication/WalletAuthenticationSignIn";
+
+import { getAccessTokenForApplicationUser, generateNonceByABN, verifySignatureAndSignin, isFerrumNetworkIdentifierAllowedonGateway, verifySignatureAndUpdateProfile } from "../../_apis/WalletAuthencation";
+import { FDialog, FItem, FList, FButton, FGridItem} from "ferrum-design-system";
+import { sign } from "crypto";
+import { locale } from "moment";
+import { localStorageHelper } from "../../utils/global.utils";
+
 
 export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  WalletConnectViewProps, }: WalletConnectorProps) => {
   
@@ -17,80 +26,159 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
   const [reconnect, setReconnect] = useState<boolean>(false);
   const [networkClient, setNetworkClient] = useState<Web3 | undefined>(undefined);
   const dispatch = useDispatch();
-  const { active, activate, deactivate, library, account, chainId, error } =  useWeb3React();
+  const { active, activate, deactivate, library, account, chainId, error, connector } =  useWeb3React();
   const { isConnected, isConnecting, currentWalletNetwork, walletAddress } = useSelector((state: RootState) => state.walletConnector);
- 
+  const { nonce, applicationUserToken, signature, isAllowedonGateway, allowedNetworksonGateway, getSignatureFromMetamask  } = useSelector((state: RootState) => state.walletAuthenticator); 
+  const [allowedNetworkModal, setAllowedNetworkModal] = useState<boolean>(false);
+  const [getSignature, setGetSignature] = useState<boolean>(false);
+  const [isValidated, setIsValidated] = useState<boolean | undefined>(undefined);
+  const [isForSigninFlow, setIsForSigninFlow] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
+    console.log("Account Changed reconnect wallet");
     if ( account && walletAddress && walletAddress !== account && isConnected && active ) {
-    // console.log("Account Changed reconnect wallet");
-      activate(injected);
-      // console.log('first')
+      console.log("Account Changed reconnect wallet");
+      console.log('injected 1', injected) 
+      activate(injected); 
       setReconnect(true);
     } 
   }, [walletAddress, account, isConnected, active]);
 
-  useEffect(() => {
-    // console.log(currentWalletNetwork, chainId, isConnected, active, 'chain ')
-    if ( chainId && currentWalletNetwork && currentWalletNetwork !== chainId && isConnected && active ) {
-    // console.log("Chain Changed reconnect wallet");
-      activate(injected);
-      // console.log('2nd')
+  useEffect(() => { 
+    if ( chainId && currentWalletNetwork && currentWalletNetwork !== chainId && isConnected && active ) { 
+      activate(injected); 
       setReconnect(true);
     } 
   }, [currentWalletNetwork, chainId, isConnected, active]);
 
   useEffect(() => {
-    if (active && !isConnected && library && !networkClient) {
-    // console.log("web3 react connect set network client");
+    if (active && !isConnected && library && !networkClient) { 
       dispatch(walletConnectorActions.connectWallet());
       setNetworkClient(library);
     }
-    if (!active && isConnected && !library && !isConnecting) {
-    // console.log("connected in currenct browser session reconnect wallet");
+    if (!active && isConnected && !library && !isConnecting) { 
       activate(injected);
       setReconnect(true);
     } 
   }, [isConnected, active, library, isConnecting, networkClient]);
 
   useEffect(() => {
-    if (reconnect && active) {
-    // console.log( "reconnect called and web3 is active again reset network client to set again" );
+    if (reconnect && active) { 
       dispatch(walletConnectorActions.reconnectWallet());
       setNetworkClient(undefined);
       setReconnect(false);
     } 
   }, [reconnect, active]);
  
+  // wallet authentication 
 
   useEffect(() => {
-    if ( active && networkClient && library && !isConnected && account && chainId && isConnecting ) {
-    // console.log( "network client is set, web3 react is also active test by fetching account balance" );
+      if ( isConnected && !applicationUserToken) {
+        getUserAccessToken();
+      }
+      
+      if (isConnected && currentWalletNetwork  && applicationUserToken ){
+        dispatch( walletAuthenticatorActions.saveSignature({ signature: "" }) );
+        dispatch( walletAuthenticatorActions.saveNonce({ nonce: "" }) ); 
+        checkAllowedIdentifier(currentWalletNetwork, applicationUserToken)
+      } 
+
+    }, [currentWalletNetwork, applicationUserToken, isConnected ]);  
+
+    useEffect(() => { 
+
+    }, [account])
+    
+
+    useEffect(() => { 
+      if ( isAllowedonGateway === false ){
+        setAllowedNetworkModal(true);
+        dispatch( walletAuthenticatorActions.error({ error: true }) );
+      }
+    }, [isAllowedonGateway])
+
+    useEffect(() => {  
+      if ( isAllowedonGateway === true  ){
+        getNonce(currentWalletNetwork, walletAddress, applicationUserToken);
+      }
+    }, [allowedNetworksonGateway, isValidated])
+    
+    useEffect(() => { 
+      if (!error && currentWalletNetwork &&  walletAddress && applicationUserToken && signature && isForSigninFlow ){
+        console.log('signin')
+         verifySignatureToSignin(currentWalletNetwork.toString(), walletAddress, signature, applicationUserToken);
+      }
+    }, [currentWalletNetwork, walletAddress, signature, applicationUserToken, isForSigninFlow])
+
+    useEffect(() => { 
+      if ( localStorageHelper.getToken("communityMemberToken") && signature && getSignatureFromMetamask){
+        console.log('profile')
+         verifySignatureToUpdateProfileForCommunityMember(signature, localStorageHelper.getToken("communityMemberToken"));
+      }
+    }, [ signature, getSignatureFromMetamask ])
+
+    useEffect(() => {
+      console.log('prob',networkClient, account)
+    }, [networkClient, account])
+    
+
+  useEffect(() => { 
+    console.log(networkClient , isConnected , account , nonce  , currentWalletNetwork , getSignature)
+    if ( networkClient && isConnected && account && nonce  && currentWalletNetwork && (getSignature || getSignatureFromMetamask)) { 
+
+    const msg = `0x${Buffer.from(
+      `This signature verifies that you are the authorized owner of the wallet. The signature authentication is required to ensure allocations are awarded to the correct wallet owner.${nonce}. id: ${currentWalletNetwork}`,
+      "utf8"
+    ).toString("hex")}`; 
+ 
+    networkClient.eth.personal.sign(msg, account, 
+      "This signature verifies that you are the authorized owner of the wallet. The signature authentication is required to ensure allocations are awarded to the correct wallet owner.",
+       function (err, signature) {
+        console.log(signature, err);  
+        if ( err ){
+          setIsValidated(false);
+          err.message && toast.error(err.message);
+          // openWalletSelectorDialog()
+          dispatch(walletConnectorActions.resetWalletConnector());
+          // dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken}))
+          // setNetworkClient(undefined);
+          // deactivate(); // disconnect
+          dispatch( walletAuthenticatorActions.saveSignature({ signature: "" }) );
+          dispatch( walletAuthenticatorActions.saveNonce({ nonce: "" }) ); 
+        } else if ( signature ){ 
+          dispatch( walletAuthenticatorActions.saveSignature({ signature }) ); 
+        }
+      })
+    }
+  }, [networkClient, nonce, getSignature, getSignatureFromMetamask])
+  
+
+  useEffect(() =>{
+    if ( active && networkClient && library && !isConnected && account && chainId && isConnecting ) { 
+ 
       networkClient.eth
         .getBalance(account?.toString())
-        .then((balance: String) => {
-        // console.log( "newtork ping completed successfully update redux with wallet and network client information" );
-        // console.log(chainId, account, balance);
+        .then((balance: String) => { 
           dispatch( walletConnectorActions.walletConnected({ chainId, account, balance, currentWallet: undefined, networkClient, }) );
         })
-        .catch((err: any) => {
-        // console.log("newtork ping failed reset wallet state");
-        // console.log(err, " : error connecting wallet");
+        .catch((err: any) => { 
           toast.error(err || "Error connecting wallet");
           dispatch(walletConnectorActions.resetWalletConnector());
         });
     } 
   }, [ networkClient, library, isConnected, active, account, chainId, isConnecting, ]);
 
-  const openWalletSelectorDialog = () => {
-  // console.log("open wallet selector to connect");
-  // console.log(isConnecting,isConnected );
+  const openWalletSelectorDialog = () => { 
     if (!isConnecting) {
       if (!isConnected) {
         setShowWalletDialog(true);
-      } else {
-      // console.log("wallet is already connect disconnect wallet");
+       } 
+      // else if ( !isValidated ){
+      //     setIsValidated(true)
+      // } 
+      else { 
         dispatch(walletConnectorActions.resetWalletConnector());
+        dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken}))
         setNetworkClient(undefined);
         deactivate();
       }
@@ -112,16 +200,12 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
   // console.log(currentWalletNetwork === chainId);
   // console.log(error);
 
-  const connectMetaMask = () => {
-  // console.log('first');
-    if (isConnected) {
-    // console.log("wallet is already connect disconnect wallet");
+  const connectMetaMask = () => { 
+    if (isConnected) { 
       dispatch(walletConnectorActions.resetWalletConnector());
       setNetworkClient(undefined);
       deactivate();
-    } else {
-    // console.log("intialize web3 wallet connect for meta mask");
-    // console.log('injected', injected)
+    } else { 
       activate(injected);
       setShowWalletDialog(false);
       setNetworkClient(undefined);
@@ -136,11 +220,124 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
     } 
   }, [error]);
 
+  const getUserAccessToken = () => {
+    getAccessTokenForApplicationUser()
+      .then((res: any) => {
+        if (res && res.data && res.data.body && res.data.body.token) { 
+          dispatch( walletAuthenticatorActions.saveApplicationUserToken({ userToken: res.data.body.token }) ); 
+        }
+      })
+      .catch((e) => {
+        if (e.response) {
+          toast.error(` Error Occured: user token ${e?.response?.data?.status?.message}`);
+        } else {
+          toast.error("Something went wrong. Try again later!");
+        }
+      });
+  }
+
+  const checkAllowedIdentifier = async (identifier: any, applicationUserToken: any) => {
+    isFerrumNetworkIdentifierAllowedonGateway(identifier, applicationUserToken)
+      .then((res: any) => {
+        if (res && res.data && res.data.body ) { 
+          dispatch( walletAuthenticatorActions.isAllowedOnGateway({ isAllowedOnGateway: res.data.body.status }) ); 
+          dispatch( walletAuthenticatorActions.allowedNetworksonGateway({ allowedNetworksonGateway: res.data.body.networks }) ); 
+        }
+      })
+      .catch((e) => {
+        if (e.response) {
+          toast.error(` Error Occured: allowed on gateway ${e?.response?.data?.status?.message}`);
+        } else {
+          toast.error("Something went wrong. Try again later!");
+        }
+      }); 
+    }
+
+    const getNonce = async (currentWalletNetwork: any, walletAddress: any, applicationUserToken: any) => {
+    let data = { address: walletAddress, ferrumNetworkIdentifier: currentWalletNetwork.toString()}
+    generateNonceByABN(data, applicationUserToken)
+    .then((res: any) => {
+      if (res && res.data && res.data.body && res.data.body.nonce) { 
+        dispatch( walletAuthenticatorActions.saveNonce({ nonce: res.data.body.nonce }) ); 
+        setGetSignature(true)
+        setIsForSigninFlow(true);
+      }
+    })
+    .catch((e) => {
+      if (e.response) {
+        toast.error(` Error Occured: nonce ${e?.response?.data?.status?.message}`);
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
+    });
+  }
+
+    const verifySignatureToSignin = (currentWalletNetwork: any, walletAddress: any, signature: any, applicationUserToken: any) => {
+    let data = { address: walletAddress, ferrumNetworkIdentifier: currentWalletNetwork.toString(), signature: signature, role: "communityMember"};
+    verifySignatureAndSignin(data, applicationUserToken)
+    .then((res: any) => {
+      if (res && res.data && res.data.body && res.data.body) { 
+        console.log(res.data.body)
+        dispatch( walletAuthenticatorActions.saveME({ me: res.data.body.user }) );
+        dispatch( walletAuthenticatorActions.saveCommunityMemberToken({ communityMemberToken: res.data.body.token }) );
+        dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken}))
+        localStorageHelper.storeObject('me', res.data.body.user);
+        localStorageHelper.storeToken('communityMemberToken', res.data.body.token);
+        setIsForSigninFlow(false); 
+        setGetSignature(false);
+      }
+    })
+    .catch((e) => {
+      if (e.response) {
+        toast.error(` Error Occured: nonce ${e?.response?.data?.status?.message}`);
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
+    });
+  }
+  
+  const verifySignatureToUpdateProfileForCommunityMember = (signature: any, communityMemberToken: any) => {
+    let data = { signature: signature };
+    console.log(data)
+    verifySignatureAndUpdateProfile(data, communityMemberToken)
+    .then((res: any) => {
+      if (res && res.data && res.data.body && res.data.body) {  
+        dispatch( walletAuthenticatorActions.saveCommunityMemberProfileToken({ profileToken: res.data.body.token }) ); 
+      }
+    })
+    .catch((e) => {
+      if (e.response) {
+        toast.error(` Error Occured: nonce ${e?.response?.data?.status?.message}`);
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
+    });
+  }
+
+  const performSwitchNetwork = async (item: any) => { 
+    try { 
+      let ethereum = window.ethereum;
+      if (ethereum) { 
+        const hexChainId = Number(item.networkId).toString(16); 
+        await ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: `0x${hexChainId}` }],
+        });
+      }  
+      setAllowedNetworkModal(false)
+    } catch (err: any) {
+      toast.error(err?.message);
+    }
+  };
+ 
+
+
   return (
     <>
+    <Toaster />
       <WalletConnectView {...{...WalletConnectViewProps,  prefix: { ...(isConnecting ? ( <AiOutlineLoading3Quarters /> ) : !isConnected ? ( <VscDebugDisconnect /> ) : ( <AiOutlineDisconnect /> )), },
           title: isConnecting
-            ? "Connecting..."
+            ? "Connecting..." 
             : !isConnected
             ? "Connect"
             : "Disconnect",
@@ -157,6 +354,36 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
         }}
         onHide={() => setShowWalletDialog(false)}
       />
+
+        <FDialog
+          show={allowedNetworkModal}
+          size={"medium"}
+          onHide={() => setAllowedNetworkModal(false)}
+          title={"Allowed Networks on Gateway"}
+          className="connect-wallet-dialog "
+        >
+          <FItem className={"f-mt-2"}>
+            Change your network into one of the following:
+          </FItem>
+          <FList variant="info" className="w-100">
+            {allowedNetworksonGateway &&
+              allowedNetworksonGateway.length &&
+              allowedNetworksonGateway.map((item: any, index) => {
+                return ( 
+                    <FGridItem className={"f-mt-2"}  key={index} > 
+                      <FItem className={"f-mt-1 f-mr-3 w-100"} > 
+                        {item.name} 
+                      </FItem>
+                      <FButton
+                        title={"Switch Network"}
+                        className="w-100"
+                        onClick={() => performSwitchNetwork(item)}
+                      />
+                    </FGridItem> 
+                );
+              })}
+          </FList>
+        </FDialog>
     </>
   );
 };

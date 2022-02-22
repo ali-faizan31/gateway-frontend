@@ -216,7 +216,7 @@ export function Web3AuthWrapper(props) {
           size={"medium"}
           onHide={() => setNetworkModal(false)}
           title={"Allowed Networks on Gateway"}
-          className="connect-wallet-dialog w-50"
+          className="connect-wallet-dialog "
         >
           <FItem className={"f-mt-2"}>
             Change your network into one of the following:

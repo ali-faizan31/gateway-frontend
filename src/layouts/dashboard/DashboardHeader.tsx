@@ -9,22 +9,28 @@ import { useSelector } from 'react-redux';
 import { RootState } from "../../redux/rootReducer";
 import { logout } from "../../_apis/OnboardingCrud";
 import toast, { Toaster } from "react-hot-toast"; 
-import { localStorageHelper } from "../../utils/global.utils";
+import { localStorageHelper } from "../../utils/global.utils"; 
 
 
 const DashboardHeader = () => {
   const { pathname } = useLocation();
   const history = useHistory(); 
   const isPublic = pathname.includes('pub'); 
-  const { isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet } = useSelector((state: RootState) => state.walletConnector);
+  const { isConnected, isConnecting, currentWalletNetwork, walletAddress, walletBalance, currentWallet  } = useSelector((state: RootState) => state.walletConnector);
+  const { nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, profileToken, error} = useSelector((state: RootState) => state.walletAuthenticator);
+   
 
-  console.log(isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet);
+  useEffect(() => {
+    console.log( nonce, 'sig', signature, 'token',applicationUserToken, 'prof', profileToken, isAllowedonGateway, allowedNetworksonGateway, "authentication state",)
+  }, [nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, profileToken])
+  
 
   useEffect(() => { 
-    if ( isConnected === false ){
+    console.log(isConnected, isConnecting)
+    if (isConnecting === false && isConnected === false ){
       handleLogout(); 
     }
-  }, [isConnected])
+  }, [isConnected, isConnecting])
   
 
   const showLogoutButton = () => { 
@@ -36,7 +42,7 @@ const DashboardHeader = () => {
 
   const handleCommunityMemberLogout = async ( values: any ) => {
     try {
-     const res = await logout(values, localStorageHelper.token() )
+     const res = await logout(values, localStorageHelper.getToken() )
      return res?.data?.body;
    } catch (e: any) { 
     toast.error(`Error Occured: ${e?.response?.data?.status?.message}`)
@@ -46,13 +52,15 @@ const DashboardHeader = () => {
 
   const handleLogout = async () => {
     console.log('logout');
-    let data = {};
-    let logoutResponse =  localStorageHelper.token() && await handleCommunityMemberLogout(data);
+    let data = {}; 
+    try {
+    // let logoutResponse =  localStorageHelper.token() && await handleCommunityMemberLogout(data);
+    // console.log(logoutResponse)
+    localStorageHelper.removeItem('me');
+    localStorageHelper.removeItem('token');
+    } catch (e) {
 
-
-    // localStorage.removeItem("me");
-    // localStorage.removeItem("token");
-    // history.push(PATH_AUTH.communityLogin);
+    }
   };
 
   return (
@@ -66,7 +74,7 @@ const DashboardHeader = () => {
         <MetaMaskConnector.WalletConnector
             WalletConnectView={FButton}
             WalletConnectModal={ConnectWalletDialog}
-          />
+          /> 
       </FItem>
     </FHeader>
   )

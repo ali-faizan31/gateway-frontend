@@ -254,7 +254,7 @@ const onCancel = () => {
           size={"medium"}   
           onHide={onCancel}
           title={"Update Competition Status"}
-          className="connect-wallet-dialog w-50">
+          className="connect-wallet-dialog ">
 
           <FItem className={"f-mt-2"}>
             Select Status of Competition

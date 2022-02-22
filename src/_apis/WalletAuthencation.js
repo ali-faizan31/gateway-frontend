@@ -81,3 +81,49 @@ export function isFerrumNetworkIdentifierAllowedonGateway (identifier, applicati
       },
     });
 }
+
+//sign in by wallet flow apis
+
+export function generateNonceByABN(values, applicationUserToken) {
+  const url = `${baseUrl}/api/v1/application-user/addresses/generate/nonce`;
+  return axios.post(url, values, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "Application/json",
+      Authorization: `Bearer ${applicationUserToken}`,
+    },
+  });
+}
+
+export function generateNonceForCommunityMember(communityMembertoken) {
+  const url = `${baseUrl}/api/v1/community-member/addresses/generate/nonce`;
+  return axios.get(url, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "Application/json",
+      Authorization: `Bearer ${communityMembertoken}`,
+    },
+  });
+}
+
+export function verifySignatureAndUpdateProfile(values, communityMemberToken) {
+  const url = `${baseUrl}/api/v1/community-member/addresses/verify-signature`;
+  return axios.post(url, values, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "Application/json",
+      Authorization: `Bearer ${communityMemberToken}`,
+    },
+  });
+}
+
+export function verifySignatureAndSignin(values, applicationUserToken) {
+  const url = `${baseUrl}/api/v1/application-user/addresses/verify-signature`;
+  return axios.post(url, values, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "Application/json",
+      Authorization: `Bearer ${applicationUserToken}`,
+    },
+  });
+}

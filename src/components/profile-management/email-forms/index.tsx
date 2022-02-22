@@ -13,12 +13,7 @@ interface EmailSectionProps {
   getUserInfo: Function;
 }
 
-const EmailSection = ({
-  profileToken,
-  setProfileToken,
-  initialEmail,
-  getUserInfo,
-}: EmailSectionProps) => {
+const EmailSection = ({ profileToken, setProfileToken, initialEmail, getUserInfo, }: EmailSectionProps) => {
   const [showForm, setShowForm] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
 

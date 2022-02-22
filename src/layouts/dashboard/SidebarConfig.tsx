@@ -7,7 +7,7 @@ import {
 
 const getSideMenuIcon = (name: any) => (
   <img
-    src={`/ferrum/${name}.png`}
+    src={`/ferrum/Icons/Icons/${name}`}
     height="22px"
     width="22px"
     max-height="22px"
@@ -18,6 +18,7 @@ const getSideMenuIcon = (name: any) => (
 const ICONS = {
   leaderboard: getSideMenuIcon("leaderboard_active@2x"),
   competition: getSideMenuIcon("competition_active@2x"),
+  home: getSideMenuIcon("Home.svg")
 };
 
 export const publicCompetitionConfig = [
@@ -99,8 +100,8 @@ export const tokensSidebarConfig = [
     title: "Get FRM / FRMx",
     icon: ICONS.leaderboard,
     children: [
-      { title: "Buy FRM", path: "/#" },
-      { title: "Buy FRMx", path: "/#" },
+      { title: "Buy FRM", path: PATH_DASHBOARD.token.buyFRM, target: "_blank" },
+      { title: "Buy FRMx", path: PATH_DASHBOARD.token.buyFRMx, target: "_blank" },
     ],
   },
 ];
@@ -109,14 +110,15 @@ export const bridgeSidebarConfig = [
   {
     title: "Bridge",
     icon: ICONS.leaderboard,
-    path: "/#",
+    path: PATH_DASHBOARD.bridge,
+    target: "_blank"
   },
 ];
 
 export const homeSidebarConfig = [
   {
     title: "Home",
-    icon: ICONS.leaderboard,
+    icon: ICONS.home,
     path: PATH_DASHBOARD.home,
   },
 ];
@@ -124,6 +126,6 @@ export const profileConfig = [
   {
     title: "Profile",
     path: PATH_DASHBOARD.general.profile,
-    icon: ICONS.leaderboard,
+    icon: ICONS.leaderboard 
   },
 ];
