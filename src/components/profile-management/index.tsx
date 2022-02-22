@@ -25,6 +25,11 @@ const ProfileSettings = () => {
   const {walletAddress} = useSelector(
     (state: RootState)=> state.walletConnector
   )
+
+  const walletAuthenticator= useSelector(
+    (state: RootState)=> state.walletAuthenticator
+  )
+  
   
   let isLoading = false;
   const dispatch = useDispatch();
@@ -32,9 +37,17 @@ const ProfileSettings = () => {
   const [user, setUser] = useState({ email: "" });
   const [errorModal, setErrorModal] = useState({show:false, message:''})
 
+useEffect(() => {
+    if(walletAuthenticator.profileToken){     
+      getUserInfo();
+    }
+    setprofileToken(walletAuthenticator.profileToken)
+  }, [walletAuthenticator]);
+
   useEffect(() => {
     getUserInfo();
-  }, []);
+  },[])
+
 
   const getUserInfo = async () => { 
     isLoading = true;
@@ -72,26 +85,8 @@ const ProfileSettings = () => {
 
 
   const walletAuthentication = async () => {   
-    localStorageHelper.getToken("communityMemberToken") &&  getNonce(localStorageHelper.getToken("communityMemberToken"));
-    
+    localStorageHelper.getToken("communityMemberToken") &&  getNonce(localStorageHelper.getToken("communityMemberToken"));    
     setErrorModal({show:false, message:""})   
-    
-    const signature = "xyz";
-    const token = localStorage.getItem("token");
-    await mockGetToken(token, { signature })
-      .then((response: any) => {
-        setprofileToken(response.data.body.token);
-      })
-      .catch((e) => {
-        if (e.response) {
-          toast.error(e.response?.data?.status?.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      })
-      .finally(() => {
-        isLoading = false;
-      });
   };
 
   return (
@@ -115,7 +110,7 @@ const ProfileSettings = () => {
               name="email"
               placeholder=""
               disabled={true}  
-              value={user.email}            
+              value={user.email?user.email:"You do not have a registered email."}            
             />
           </FGridItem>
       

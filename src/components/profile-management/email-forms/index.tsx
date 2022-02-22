@@ -28,7 +28,7 @@ const EmailSection = ({
   }
 
   const handleSendOTP = async (values: any) => {    
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("communityMemberToken");
     await sendOTP(token, profileToken, values)
       .then((response: any) => {
         setEmailedTo( values.email)
@@ -44,7 +44,7 @@ const EmailSection = ({
   };
 
   const verifyOTP = async (value: any) => {   
-    let token = localStorage.getItem("token");
+    let token = localStorage.getItem("communityMemberToken");
     await updateEmail(token, profileToken, value)
       .then((response: any) => {
         closeForm();
