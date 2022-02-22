@@ -1,4 +1,5 @@
-export const baseUrl = "https://api-leaderboard.dev.svcs.ferrumnetwork.io" // dev
+export const baseUrl = "http://localhost:8080" // local
+// export const baseUrl = "https://api-leaderboard.dev.svcs.ferrumnetwork.io" // dev
 // export const baseUrl = "https://api-leaderboard.svcs.ferrumnetwork.io" // prod
 // export const baseUrl = 'https://api-leaderboard.stage.svcs.ferrumnetwork.io';  // staging
 export const apiKey = 'ckey_173b82c807954a8697b251305c5:'; 
