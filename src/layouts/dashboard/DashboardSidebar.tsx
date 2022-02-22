@@ -226,7 +226,6 @@ const DashboardSidebar = () => {
       {renderContent(communityLeaderboardSidebarConfig)}
       {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
-      {renderContent(profileConfig)} 
     </FSider>
 
   );

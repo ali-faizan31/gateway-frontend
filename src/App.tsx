@@ -75,7 +75,7 @@ function App() {
           <GuardedRoute path="/dashboard/competition/:id" component={CompetitionById} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/multi/leaderboard/:id" component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/leaderboard/:id" component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout} />
-          <UnGuardedRoute path={PATH_DASHBOARD.general.profile} component={ProfileSettings} auth={isAuthenticated} layout={DashboardLayout} />
+          <UnGuardedRoute path={PATH_DASHBOARD.general.profile} component={ProfileSettings} auth={isAuthenticated} layout={DashboardLayout} headerTitle="My Profile" />
           <Route path="*" component={Page404}></Route>
         </Switch>
       </>

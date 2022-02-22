@@ -3,12 +3,12 @@ import { FLayout, FMain  } from "ferrum-design-system";
 import DashboardHeader from './DashboardHeader';
 import DashboardSidebar from './DashboardSidebar';
 
-const DashboardLayout = ({children}) => { 
+const DashboardLayout = ({headerTitle, children}) => { 
     return (
-      <FLayout>
+      <FLayout themeBuilder={false}>
         <DashboardSidebar />
         <FMain>
-          <DashboardHeader />
+          <DashboardHeader title={headerTitle} />
           {children} 
         </FMain>
       </FLayout>
