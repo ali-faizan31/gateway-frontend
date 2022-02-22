@@ -193,10 +193,11 @@ const DashboardSidebar = () => {
   const renderContent = (items: any) => {
     return items.map((item: any, index: any) => (
       <FSiderItem
-        to={item.path}
+        to={ item.path}
         title={item.title}
         prefix={item.icon}
         key={item.title}
+        target={ item.target && item.target }
       >
         {item.children && (
           <FSiderSubMenuItem>
@@ -206,6 +207,7 @@ const DashboardSidebar = () => {
                 title={subItem.title}
                 prefix={<img src="/ferrum/bullet.png" height={"4px"} />}
                 key={subItem.title}
+                target={ subItem.target && subItem.target}
               ></FSiderItem>
             ))}
           </FSiderSubMenuItem>
@@ -224,8 +226,8 @@ const DashboardSidebar = () => {
       {renderContent(communityLeaderboardSidebarConfig)}
       {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
-     
     </FSider>
+
   );
 };
 

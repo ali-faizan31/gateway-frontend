@@ -39,13 +39,20 @@ export const localStorageHelper = {
       const stored = localStorage.getItem(key);
       return stored == null ? undefined : JSON.parse(stored);
   },
-  token() {
-    const stored = localStorage.getItem('token');
+  getToken(key) {
+    const stored = localStorage.getItem(key);
     return stored == null ? undefined : (stored);
 },
-  store(key, value) {
+  storeObject(key, value) {
+    console.log(key, value)
       localStorage.setItem(key, JSON.stringify(value));
   },
+  storeToken(key, value) {
+    localStorage.setItem(key, (value));
+},
+removeItem(key) {
+  localStorage.removeItem(key);
+}, 
   modify(key, fn) {
       this.store(key, fn(this.load(key)));
   },

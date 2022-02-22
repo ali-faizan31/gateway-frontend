@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useSelector, useDispatch } from "react-redux";
 import EmailSection from "./email-forms";
 import { mockGetToken, getMe } from "../../_apis/ProfileCrud";
 import { CgEnter } from "react-icons/cg";
 import { AiFillWarning } from "react-icons/ai";
 import { FiRefreshCcw } from "react-icons/fi";
-import { RootStateOrAny, useSelector } from "react-redux";
 import {RootState} from "../../redux/rootReducer"
 import {
   FContainer,
@@ -16,6 +16,10 @@ import {
   FDialog,
   FItem
 } from "ferrum-design-system";
+import { generateNonceForCommunityMember } from "../../_apis/WalletAuthencation"
+
+import { localStorageHelper } from "../../utils/global.utils";
+import * as walletAuthenticatorActions from "../common/wallet-authentication/redux/walletAuthenticationActions";
 
 const ProfileSettings = () => {
   const {walletAddress} = useSelector(
@@ -23,17 +27,18 @@ const ProfileSettings = () => {
   )
   
   let isLoading = false;
+  const dispatch = useDispatch();
   const [profileToken, setprofileToken] = useState("");
   const [user, setUser] = useState({ email: "" });
   const [errorModal, setErrorModal] = useState({show:false, message:''})
+
   useEffect(() => {
     getUserInfo();
   }, []);
 
-  const getUserInfo = async () => {
-    const token = localStorage.getItem("token");
+  const getUserInfo = async () => { 
     isLoading = true;
-    await getMe(token)
+    localStorageHelper.getToken("communityMemberToken") && await getMe(localStorageHelper.getToken("communityMemberToken"))
       .then((response: any) => {
         setUser(response.data.body.user);
       })
@@ -48,8 +53,27 @@ const ProfileSettings = () => {
         isLoading = false;
       });
   };
+  const getNonce = async (communityMemberToken: any) => { 
+    generateNonceForCommunityMember(communityMemberToken)
+    .then((res: any) => {
+      if (res && res.data && res.data.body && res.data.body.nonce) { 
+        dispatch( walletAuthenticatorActions.saveNonce({ nonce: res.data.body.nonce }) );  
+        dispatch( walletAuthenticatorActions.getSignatureFromMetamask({getSignatureFromMetamask: true}))
+      }
+    })
+    .catch((e) => {
+      if (e.response) {
+        toast.error(` Error Occured: nonce ${e?.response?.data?.status?.message}`);
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
+    });
+  }
 
-  const walletAuthentication = async () => {    
+
+  const walletAuthentication = async () => {   
+    localStorageHelper.getToken("communityMemberToken") &&  getNonce(localStorageHelper.getToken("communityMemberToken"));
+    
     setErrorModal({show:false, message:""})   
     
     const signature = "xyz";
