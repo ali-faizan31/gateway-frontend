@@ -20,6 +20,7 @@ import { generateNonceForCommunityMember } from "../../_apis/WalletAuthencation"
 
 import { localStorageHelper } from "../../utils/global.utils";
 import * as walletAuthenticatorActions from "../common/wallet-authentication/redux/walletAuthenticationActions";
+import { TOKEN_TAG } from "../../utils/const.utils";
 
 const ProfileSettings = () => {
   const {walletAddress} = useSelector(
@@ -51,7 +52,7 @@ useEffect(() => {
 
   const getUserInfo = async () => { 
     isLoading = true;
-    localStorageHelper.getToken("communityMemberToken") && await getMe(localStorageHelper.getToken("communityMemberToken"))
+    localStorageHelper.getToken(TOKEN_TAG) && await getMe(localStorageHelper.getToken(TOKEN_TAG))
       .then((response: any) => {
         setUser(response.data.body.user);
       })
@@ -85,14 +86,14 @@ useEffect(() => {
 
 
   const walletAuthentication = async () => {   
-    localStorageHelper.getToken("communityMemberToken") &&  getNonce(localStorageHelper.getToken("communityMemberToken"));    
+    localStorageHelper.getToken(TOKEN_TAG) &&  getNonce(localStorageHelper.getToken(TOKEN_TAG));    
     setErrorModal({show:false, message:""})   
   };
 
   return (
     <>      
      <Toaster />
-      <FContainer width={1000} >
+      <FContainer type={"fluid"} >
       {!profileToken ? (
           <FGrid className={"f-mb-1"}>           
           <FGridItem size={[12, 12, 12]} alignX="center" className={"f-mt-2"}>
@@ -115,16 +116,14 @@ useEffect(() => {
           </FGridItem>
       
             <FGridItem  className={"f-mt-2"} alignX={"end"} alignY={"end"} dir={"row"} size={[12, 12, 12]}>
-              {isLoading}           
-                <FButton
-                variant={"secondary"}
+              {isLoading}     
+                <FButton 
                 prefix={<CgEnter />}
                   type="button"
-                  className={"btn-create f-ml-1 "}
+                  className={" f-ml-1 "}
                   disabled={isLoading}
                   onClick={walletAuthentication}
-                  title={"Edit Profile"}
-                  outlined
+                  title={"Edit Profile"} 
                 ></FButton>         
             </FGridItem>
           </FGrid>      

@@ -11,6 +11,7 @@ import { RootState } from "../../redux/rootReducer";
 import { logout } from "../../_apis/OnboardingCrud";
 import toast, { Toaster } from "react-hot-toast"; 
 import { localStorageHelper } from "../../utils/global.utils"; 
+import { ME_TAG, TOKEN_TAG } from '../../utils/const.utils';
 
 
 const DashboardHeader = ({title}:any) => {
@@ -21,13 +22,12 @@ const DashboardHeader = ({title}:any) => {
   const { nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, profileToken, error} = useSelector((state: RootState) => state.walletAuthenticator);
    
 
-  useEffect(() => {
-    console.log( nonce, 'sig', signature, 'token',applicationUserToken, 'prof', profileToken, isAllowedonGateway, allowedNetworksonGateway, "authentication state",)
-  }, [nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, profileToken])
+  // useEffect(() => {
+  //   console.log( nonce, 'sig', signature, 'token',applicationUserToken, 'prof', profileToken, isAllowedonGateway, allowedNetworksonGateway, "authentication state",)
+  // }, [nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, profileToken])
   
 
-  useEffect(() => { 
-    console.log(isConnected, isConnecting)
+  useEffect(() => {  
     if (isConnecting === false && isConnected === false ){
       handleLogout(); 
     }
@@ -51,14 +51,13 @@ const DashboardHeader = ({title}:any) => {
  }
 
 
-  const handleLogout = async () => {
-    console.log('logout');
+  const handleLogout = async () => { 
     let data = {}; 
     try {
     // let logoutResponse =  localStorageHelper.token() && await handleCommunityMemberLogout(data);
     // console.log(logoutResponse)
-    localStorageHelper.removeItem('me');
-    localStorageHelper.removeItem('token');
+    localStorageHelper.removeItem(ME_TAG);
+    localStorageHelper.removeItem(TOKEN_TAG);
     } catch (e) {
 
     }

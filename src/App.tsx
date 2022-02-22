@@ -10,6 +10,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import moment from "moment-timezone";
 import { WalletApplicationWrapper } from "./container-components";
 import { PATH_DASHBOARD } from "./routes/paths";
+import { TOKEN_TAG } from "./utils/const.utils";
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -47,7 +48,7 @@ const Dashboard = Loadable( lazy(() => import("./components/dashboard/dashboard"
 const ProfileSettings = Loadable( lazy(() => import("./components/profile-management")) );
 
 function App() {
-  const isAuthenticated = localStorage.getItem("token");
+  const isAuthenticated = localStorage.getItem(TOKEN_TAG);
   moment.tz.setDefault("UTC");
 
   return (

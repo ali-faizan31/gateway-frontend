@@ -5,6 +5,7 @@ import OtpFrom from "./OtpForm";
 import { sendOTP, updateEmail } from "../../../_apis/ProfileCrud";
 import { FButton, FGrid, FGridItem, FDialog } from "ferrum-design-system";
 import { AiOutlineMail } from "react-icons/ai";
+import { TOKEN_TAG } from "../../../utils/const.utils";
 
 interface EmailSectionProps {
   profileToken: string;
@@ -28,7 +29,7 @@ const EmailSection = ({
   }
 
   const handleSendOTP = async (values: any) => {    
-    const token = localStorage.getItem("communityMemberToken");
+    const token = localStorage.getItem(TOKEN_TAG);
     await sendOTP(token, profileToken, values)
       .then((response: any) => {
         setEmailedTo( values.email)
@@ -44,7 +45,7 @@ const EmailSection = ({
   };
 
   const verifyOTP = async (value: any) => {   
-    let token = localStorage.getItem("communityMemberToken");
+    let token = localStorage.getItem(TOKEN_TAG);
     await updateEmail(token, profileToken, value)
       .then((response: any) => {
         closeForm();

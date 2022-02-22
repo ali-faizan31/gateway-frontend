@@ -39,21 +39,15 @@ export const ApplicationWrapper = ({ children }: any) => {
   }, []);
 
   useEffect(() => {
-    console.log(isConnected  , isWeb3Initialized  , networkClient  , walletWrapperInitialized );
     if (isConnected && isWeb3Initialized && networkClient && walletWrapperInitialized  ) {
-      console.log("Meta mask is connect, web3 intialized, network client is available wallet wrapper is initialized attempt to signin into server");
-      signIntoServer();
+       signIntoServer();
     } else if (!isConnected ||  !isWeb3Initialized || !networkClient ||  !walletWrapperInitialized  ) {
-      console.log("App Initialization is not valid reset user profile");
-      dispatch(applicationWrapperActions.resetUserProfile());
+       dispatch(applicationWrapperActions.resetUserProfile());
     } 
   }, [isConnected, walletWrapperInitialized]);
 
-  const signIntoServer = async () => {
-    console.log("building user profile before sign in");
-    const user = await getUserProfile();
-    console.log("user profile built : ", user);
-    console.log("continue with signin", user);
+  const signIntoServer = async () => { 
+    const user = await getUserProfile(); 
     // dispatch(applicationWrapperActions.getUserProfile(user));
   };
 
@@ -65,8 +59,7 @@ export const ApplicationWrapper = ({ children }: any) => {
       const currentNetwork = userTokens[0]?.currency.split(":")[0];
       const currencies = groupInfo.bridgeCurrencies.filter(
         (currency: any) => currency.split(":")[0] === currentNetwork
-      );
-      console.log(currencies);
+      ); 
       const addressesF = currencies.map(async (c: any) => {
         const [network, tokenAddr] = c.split(":");
         let symbol: string = "";
