@@ -86,7 +86,7 @@ const LoginForm = () => {
 
 
     const onSubmit = async (values: any) => { 
-        let walletInformation = await connectWeb3(setAddress, setConnected, setWeb3, setNetwork, toast); 
+        // let walletInformation = await connectWeb3(setAddress, setConnected, setWeb3, setNetwork, toast); 
         await organizationAdminLogin(values)
             .then((response: any) => {
                 const { user } = response.data.body;

@@ -55,7 +55,7 @@ function App() {
     <WalletApplicationWrapper.ApplicationWrapper>
       <>
         <Switch>
-          <Route exact path="/"> <Redirect to="/home" /> </Route>
+          <Route exact path="/"> <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" /> </Route>
           <UnGuardedRoute path="/home" component={Dashboard} auth={isAuthenticated} layout={DashboardLayout} />
           <UnGuardedRoute path="/auth/forgot-password" component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout} />
           <UnGuardedRoute path="/auth/verify" component={EmailVerification} auth={isAuthenticated} layout={AuthLayout} />

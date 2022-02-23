@@ -57,6 +57,11 @@ const OtpFrom = ({ verifyOTP, emailedTo, resendCode }: OtpFromProps) => {
           title={"Verify your Email"}
           postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}
         ></FButton>
+        <FButton
+              type={"button"}
+              className={"btn-create f-ml-1"}
+              title={"Cancel"}  
+            ></FButton>
          </FGridItem>
         </FGrid>
         

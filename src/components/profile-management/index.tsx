@@ -39,11 +39,11 @@ const ProfileSettings = () => {
   const [errorModal, setErrorModal] = useState({show:false, message:''})
 
 useEffect(() => {
-    if(walletAuthenticator.profileToken){     
+    if(walletAuthenticator.profileToken || localStorageHelper.getToken(TOKEN_TAG)){     
       getUserInfo();
-    }
+    }  
     setprofileToken(walletAuthenticator.profileToken)
-  }, [walletAuthenticator]);
+  }, [walletAuthenticator, localStorageHelper.getToken(TOKEN_TAG)]);
 
   useEffect(() => {
     getUserInfo();
@@ -54,7 +54,7 @@ useEffect(() => {
     isLoading = true;
     localStorageHelper.getToken(TOKEN_TAG) && await getMe(localStorageHelper.getToken(TOKEN_TAG))
       .then((response: any) => {
-        setUser(response.data.body.user);
+        setUser(response.data.body.user); 
       })
       .catch((e) => {
         if (e.response) {
