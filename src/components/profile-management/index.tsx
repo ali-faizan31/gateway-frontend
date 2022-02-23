@@ -67,6 +67,7 @@ useEffect(() => {
         isLoading = false;
       });
   };
+
   const getNonce = async (communityMemberToken: any) => { 
     generateNonceForCommunityMember(communityMemberToken)
     .then((res: any) => {
@@ -87,8 +88,14 @@ useEffect(() => {
 
   const walletAuthentication = async () => {   
     localStorageHelper.getToken(TOKEN_TAG) &&  getNonce(localStorageHelper.getToken(TOKEN_TAG));    
-    setErrorModal({show:false, message:""})   
+    setErrorModal({show:false, message:""}) 
   };
+
+  const onCancelClick = () => {      
+    dispatch( walletAuthenticatorActions.saveCommunityMemberProfileToken({ profileToken: "" }) );
+
+  }
+
 
   return (
     <>      
@@ -132,7 +139,7 @@ useEffect(() => {
         profileToken={profileToken}
         setProfileToken={setprofileToken}
         getUserInfo={getUserInfo}
-      
+        onCancelClick={onCancelClick}
       />
        )}
        <FDialog show={errorModal.show} size={"medium"}  className="bg-white">  

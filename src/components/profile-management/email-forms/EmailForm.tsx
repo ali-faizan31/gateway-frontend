@@ -8,10 +8,11 @@ import { CgEnter } from "react-icons/cg";
 
 interface EmailFromProps {
   sendOTP: (value: any) => Promise<void>;
-  sendBtnText: string
+  sendBtnText: string;
+  onCancelClick: Function
 }
 
-const EmailFrom = ({ sendOTP, sendBtnText }: EmailFromProps) => {
+const EmailFrom = ({ sendOTP, sendBtnText, onCancelClick }: EmailFromProps) => {
   const initialValues = {
     email: "",
   };
@@ -61,6 +62,7 @@ const EmailFrom = ({ sendOTP, sendBtnText }: EmailFromProps) => {
               type={"button"}
               className={"btn-create f-ml-1"}
               title={"Cancel"}  
+              onClick={onCancelClick}
             ></FButton>
           </FGridItem>
         </FGrid>

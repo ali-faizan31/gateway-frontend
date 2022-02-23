@@ -37,6 +37,50 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
   const [isValidationCompleted, setIsValidationCompleted] = useState<boolean | undefined>(undefined);
   const [connectedAndVerifiedWallet, setConnectedAndVerifiedWallet] = useState("");
 
+ useEffect(() => { 
+   console.log('active', active); 
+ }, [active])
+
+ useEffect(() => { 
+  console.log('library', library); 
+}, [library])
+
+useEffect(() => { 
+  console.log('account', account); 
+}, [account])
+
+useEffect(() => { 
+  console.log('chainId', chainId); 
+}, [chainId])
+
+useEffect(() => { 
+ console.log('isConnected', isConnected); 
+}, [isConnected])
+
+useEffect(() => { 
+ console.log('isConnecting', isConnecting); 
+}, [isConnecting])
+
+useEffect(() => { 
+  console.log('currentWalletNetwork', currentWalletNetwork); 
+ }, [currentWalletNetwork])
+
+ useEffect(() => { 
+  console.log('walletAddress', walletAddress); 
+ }, [walletAddress])
+ 
+//  useEffect(() => { 
+//   console.log('active', active);
+//   console.log('library', library);
+//   console.log('account', account);
+//   console.log('chainId', chainId);
+//   console.log('isConnected', isConnected);
+//   console.log('isConnecting', isConnecting);
+//   console.log('currentWalletNetwork', currentWalletNetwork);
+//   console.log('walletAddress', walletAddress);
+// }, [active, library, account, chainId, isConnected, isConnecting, currentWalletNetwork, walletAddress])
+
+
   useEffect(() => {  
     // if ( isValidationCompleted ){
     //   setIsValidated(false); //changed account after validation

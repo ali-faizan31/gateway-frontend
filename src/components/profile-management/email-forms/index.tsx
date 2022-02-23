@@ -11,12 +11,14 @@ interface EmailSectionProps {
   profileToken: string;
   setProfileToken: Function;
   getUserInfo: Function;
+  onCancelClick: Function;
 }
 
 const EmailSection = ({
   profileToken,
   setProfileToken,
   getUserInfo,
+  onCancelClick
 }: EmailSectionProps) => {
   const [emailedTo, setEmailedTo] = useState('');
   const [otpSent, setOtpSent] = useState(false);
@@ -62,17 +64,18 @@ const EmailSection = ({
   };
 
   const closeForm = () => {
-  
     setOtpSent(false);
   };
+
+
 
   return (
     <>
      <Toaster />          
         {!otpSent ? (
-          <EmailForm sendOTP={handleSendOTP}  sendBtnText={emailBtnText}/>
+          <EmailForm sendOTP={handleSendOTP} onCancelClick={onCancelClick} sendBtnText={emailBtnText}/>
         ) : (
-          <OtpFrom verifyOTP={verifyOTP} emailedTo={emailedTo} resendCode={resendCode} />
+          <OtpFrom verifyOTP={verifyOTP} onCancelClick={onCancelClick} emailedTo={emailedTo} resendCode={resendCode} />
         )}
      
     </>
