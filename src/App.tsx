@@ -10,6 +10,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import moment from "moment-timezone";
 import { WalletApplicationWrapper } from "./container-components";
 import { PATH_DASHBOARD } from "./routes/paths";
+import { TOKEN_TAG } from "./utils/const.utils";
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -47,14 +48,14 @@ const Dashboard = Loadable( lazy(() => import("./components/dashboard/dashboard"
 const ProfileSettings = Loadable( lazy(() => import("./components/profile-management")) );
 
 function App() {
-  const isAuthenticated = localStorage.getItem("token");
+  const isAuthenticated = localStorage.getItem(TOKEN_TAG);
   moment.tz.setDefault("UTC");
 
   return (
     <WalletApplicationWrapper.ApplicationWrapper>
       <>
         <Switch>
-          <Route exact path="/"> <Redirect to="/home" /> </Route>
+          <Route exact path="/"> <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" /> </Route>
           <UnGuardedRoute path="/home" component={Dashboard} auth={isAuthenticated} layout={DashboardLayout} />
           <UnGuardedRoute path="/auth/forgot-password" component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout} />
           <UnGuardedRoute path="/auth/verify" component={EmailVerification} auth={isAuthenticated} layout={AuthLayout} />

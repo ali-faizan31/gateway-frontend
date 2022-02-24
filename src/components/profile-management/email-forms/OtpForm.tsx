@@ -9,11 +9,12 @@ import {Link} from 'react-router-dom'
 interface OtpFromProps {
   verifyOTP: (value: any) => Promise<void>;
   resendCode: (value: any) => void;
-  emailedTo: string
+  emailedTo: string;
+  onCancelClick: Function;
 
 }
 
-const OtpFrom = ({ verifyOTP, emailedTo, resendCode }: OtpFromProps) => {
+const OtpFrom = ({ verifyOTP, emailedTo, resendCode, onCancelClick }: OtpFromProps) => {
   const initialValues = { otp: "" };
   const registerSchema = Yup.object().shape({
     otp: Yup.string().required("OTP is required"),
@@ -57,6 +58,12 @@ const OtpFrom = ({ verifyOTP, emailedTo, resendCode }: OtpFromProps) => {
           title={"Verify your Email"}
           postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}
         ></FButton>
+        <FButton
+              type={"button"}
+              className={"btn-create f-ml-1"}
+              title={"Cancel"}
+              onClick={onCancelClick}  
+            ></FButton>
          </FGridItem>
         </FGrid>
         
