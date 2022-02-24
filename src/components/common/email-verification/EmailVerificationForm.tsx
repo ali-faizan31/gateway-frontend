@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { EmailVerify } from "../../../_apis/OnboardingCrud";
 import { PATH_AUTH } from "../../../routes/paths"; 
 import ClipLoader from "react-spinners/ClipLoader";
+import { ME_TAG, TOKEN_TAG } from "../../../utils/const.utils";
 
 const EmailVerificationForm = (children: any) => {
   const { parsedUser } = children;
@@ -15,12 +16,12 @@ const EmailVerificationForm = (children: any) => {
     values.email = parsedUser.email;
     await EmailVerify(values)
       .then((response: any) => {
-        localStorage.removeItem('me');
-        localStorage.removeItem('token');
+        localStorage.removeItem(ME_TAG);
+        localStorage.removeItem(TOKEN_TAG);
         const { user } = response.data.body;
         const { token } = response.data.body;
-        localStorage.setItem('me', JSON.stringify(user));
-        localStorage.setItem('token', token);
+        localStorage.setItem(ME_TAG, JSON.stringify(user));
+        localStorage.setItem(TOKEN_TAG, token);
         toast.success(response?.data?.status?.message)
         history.push(PATH_AUTH.walletAuthentication);
       })

@@ -23,14 +23,14 @@ import {
   getTokenHolderlistByContractAddressBSC
 } from "../../_apis/LeaderboardCrud";
 import { arraySortByKeyDescending } from "../../utils/global.utils";
-import { stakingContractAddressListFOMO } from "../../utils/const.utils";
+import { stakingContractAddressListFOMO, TOKEN_TAG } from "../../utils/const.utils";
 import { filterList } from "./LeaderboardHelper";
 
 const LeaderboardInformation = () => {
   const { id } = useParams();
   const exportRef = useRef();
   const { pathname } = useLocation();
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem(TOKEN_TAG);
   const isPublicUser = pathname.includes("/pub");
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);

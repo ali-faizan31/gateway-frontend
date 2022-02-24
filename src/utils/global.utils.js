@@ -43,8 +43,7 @@ export const localStorageHelper = {
     const stored = localStorage.getItem(key);
     return stored == null ? undefined : (stored);
 },
-  storeObject(key, value) {
-    console.log(key, value)
+  storeObject(key, value) { 
       localStorage.setItem(key, JSON.stringify(value));
   },
   storeToken(key, value) {
@@ -66,3 +65,10 @@ removeItem(key) {
       this.modify(storageID, (storage = {}) => ({...storage, item}));
   }
 };
+
+
+export const checkSession = () => {
+        
+  let session  = sessionStorage?.getItem('persist:walletAutheticator');
+  return JSON.parse(session).tokenV2 ? true : false;
+}

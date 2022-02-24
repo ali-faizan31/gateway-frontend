@@ -6,9 +6,9 @@ export interface WALLET_AUTHENTICATION_STATE {
     allowedNetworksonGateway: Array<any>;
     error: Boolean;
     getSignatureFromMetamask: Boolean;
-    me: any;
-    communityMemberToken: String;
-    profileToken: String;
+    meV2: any;
+    tokenV2: String;
+    profileToken: string;
   }
   
   export const defaultWalletAuthenticationState: WALLET_AUTHENTICATION_STATE = {
@@ -19,7 +19,7 @@ export interface WALLET_AUTHENTICATION_STATE {
     allowedNetworksonGateway: [],
     error: false,
     getSignatureFromMetamask: false,
-    me: {},
-    communityMemberToken: "",
+    meV2: {},
+    tokenV2: "",
     profileToken:""
   };

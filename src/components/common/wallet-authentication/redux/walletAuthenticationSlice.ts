@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { ME_TAG } from "../../../../utils/const.utils";
 import { WALLET_AUTHENTICATION_STATE, defaultWalletAuthenticationState } from "../WalletAuthenticationInterfaces";
 
 const initialWalletAUthenticationState: WALLET_AUTHENTICATION_STATE = {
@@ -31,10 +32,10 @@ export const walletConnectorSlice = createSlice({
         state.error = action.payload.walletAuthenticator.error;
       },
       saveME: (state, action) => { 
-        state.me = action.payload.walletAuthenticator.me;
+        state.meV2 = action.payload.walletAuthenticator.meV2;
       },
-      saveCommunityMemberToken: (state, action) => { 
-        state.communityMemberToken = action.payload.walletAuthenticator.communityMemberToken;
+      saveToken: (state, action) => { 
+        state.tokenV2 = action.payload.walletAuthenticator.tokenV2;
       },
       saveCommunityMemberProfileToken: (state, action) => { 
         state.profileToken = action.payload.walletAuthenticator.profileToken;
@@ -46,8 +47,12 @@ export const walletConnectorSlice = createSlice({
         state.isAllowedonGateway = undefined;
         state.allowedNetworksonGateway = [];
         state.error = false;
-        state.communityMemberToken = "";
-        state.me = {};
+        state.getSignatureFromMetamask = false;
+        state.profileToken = "";
+      },
+      removeSession: (state, action) => {
+        state.tokenV2 = "";
+        state.meV2 = {};
       }
     }
 })

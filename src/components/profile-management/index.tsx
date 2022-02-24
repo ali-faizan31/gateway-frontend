@@ -3,26 +3,59 @@ import toast, { Toaster } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import EmailSection from "./email-forms";
 import { mockGetToken, getMe } from "../../_apis/ProfileCrud";
+import { CgEnter } from "react-icons/cg";
+import { AiFillWarning } from "react-icons/ai";
+import { FiRefreshCcw } from "react-icons/fi";
+import {RootState} from "../../redux/rootReducer"
+import {
+  FContainer,
+  FButton,
+  FGrid,
+  FGridItem,
+  FInputText,
+  FDialog,
+  FItem
+} from "ferrum-design-system";
 import { generateNonceForCommunityMember } from "../../_apis/WalletAuthencation"
-import { FContainer, FButton, FGrid, FGridItem, FCard, } from "ferrum-design-system";
-import { localStorageHelper } from "../../utils/global.utils";
+
+import { checkSession, localStorageHelper } from "../../utils/global.utils";
 import * as walletAuthenticatorActions from "../common/wallet-authentication/redux/walletAuthenticationActions";
+import { TOKEN_TAG } from "../../utils/const.utils";
 
 const ProfileSettings = () => {
   let isLoading = false;
   const dispatch = useDispatch();
   const [profileToken, setprofileToken] = useState("");
   const [user, setUser] = useState({ email: "" });
+  const [errorModal, setErrorModal] = useState({show:false, message:''})
+
+  const {walletAddress, isConnected} = useSelector( (state: RootState)=> state.walletConnector )
+  const walletAuthenticator= useSelector( (state: RootState)=> state.walletAuthenticator )
+  
+  useEffect(() => { 
+    dispatch( walletAuthenticatorActions.saveCommunityMemberProfileToken({ profileToken: "" }) );
+  }, [])
+
+  useEffect(() => { 
+    if (!isConnected){
+      setUser({ email: ""})
+    }
+  }, [isConnected])
+  
 
   useEffect(() => {
-    getUserInfo();
-  }, []);
+    if( isConnected && ( walletAuthenticator.profileToken || walletAuthenticator.tokenV2)){     
+      getUserInfo();
+    }  
+    setprofileToken(walletAuthenticator.profileToken)
+  }, [walletAuthenticator, walletAuthenticator.tokenV2]); 
+
 
   const getUserInfo = async () => { 
     isLoading = true;
-    localStorageHelper.getToken("communityMemberToken") && await getMe(localStorageHelper.getToken("communityMemberToken"))
+    walletAuthenticator.tokenV2 && await getMe(walletAuthenticator.tokenV2)
       .then((response: any) => {
-        setUser(response.data.body.user);
+        setUser(response.data.body.user); 
       })
       .catch((e) => {
         if (e.response) {
@@ -45,6 +78,8 @@ const ProfileSettings = () => {
       }
     })
     .catch((e) => {
+      dispatch( walletAuthenticatorActions.saveNonce({ nonce: '' }) );  
+        dispatch( walletAuthenticatorActions.getSignatureFromMetamask({getSignatureFromMetamask: false}))
       if (e.response) {
         toast.error(` Error Occured: nonce ${e?.response?.data?.status?.message}`);
       } else {
@@ -53,55 +88,75 @@ const ProfileSettings = () => {
     });
   }
 
-  const walletAuthentication = async () => {
-    localStorageHelper.getToken("communityMemberToken") &&  getNonce(localStorageHelper.getToken("communityMemberToken"));
-    // const signature = "xyz";
-    // const token = localStorage.getItem("token");
-    // await mockGetToken(token, { signature })
-    //   .then((response: any) => {
-    //     setprofileToken(response.data.body.token);
-    //   })
-    //   .catch((e) => {
-    //     if (e.response) {
-    //       toast.error(e.response?.data?.status?.message);
-    //     } else {
-    //       toast.error("Something went wrong. Try again later!");
-    //     }
-    //   })
-    //   .finally(() => {
-    //     isLoading = false;
-    //   });
+
+  const walletAuthentication = async () => {   
+    walletAuthenticator.tokenV2 &&  getNonce(walletAuthenticator.tokenV2);    
+    setErrorModal({show:false, message:""}) 
   };
 
+  const onCancelClick = () => {      
+    dispatch( walletAuthenticatorActions.saveCommunityMemberProfileToken({ profileToken: "" }) );
+  }
+
+
   return (
-    <>  
-      <Toaster />  
-      <FContainer width={600}>
-        <FCard>
-          <FGrid className={"f-mb-1"}>
-            <FGridItem size={[6, 12, 12]} alignX="start" alignY={"end"}>
-              <h1>Profile</h1>
-            </FGridItem>
-            <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[6, 12, 12]} >
-              {isLoading}
-              {!profileToken && (
-                <FButton
+    <>      
+     <Toaster />
+      <FContainer type={"fluid"} >
+      {!profileToken ? (
+          <FGrid className={"f-mb-1"}>           
+          <FGridItem size={[12, 12, 12]} alignX="center" className={"f-mt-2"}>
+            <FInputText
+              label="Wallet"
+              name="wallet"
+              placeholder={walletAddress}
+              disabled={true}  
+                        
+            />
+          </FGridItem>
+          <FGridItem size={[12, 12, 12]} alignX="center" className={"f-mt-2"}>
+            <FInputText
+              label="Email"
+              name="email"
+              placeholder=""
+              disabled={true}  
+              value={user.email?user.email:"You do not have a registered email."}            
+            />
+          </FGridItem>
+      
+            <FGridItem  className={"f-mt-2"} alignX={"end"} alignY={"end"} dir={"row"} size={[12, 12, 12]}>
+              {isLoading}     
+                <FButton 
+                prefix={<CgEnter />}
                   type="button"
-                  className={"btn-create f-ml-1 "}
-                  disabled={isLoading}
+                  className={" f-ml-1 "}
+                  disabled={isLoading || !walletAuthenticator.tokenV2 || !isConnected}
                   onClick={walletAuthentication}
-                  title={"Edit Profile"}
-                ></FButton>
-              )}
+                  title={"Edit Profile"} 
+                ></FButton>         
             </FGridItem>
-          </FGrid>
-          <EmailSection
-            profileToken={profileToken}
-            setProfileToken={setprofileToken}
-            getUserInfo={getUserInfo}
-            initialEmail={user.email}
-          />
-        </FCard>
+          </FGrid>      
+       ):(
+        <EmailSection
+        profileToken={profileToken}
+        setProfileToken={setprofileToken}
+        getUserInfo={getUserInfo}
+        onCancelClick={onCancelClick}
+      />
+       )}
+       <FDialog show={errorModal.show} size={"medium"}  className="bg-white">  
+       <FItem align={"center"}>   
+        <AiFillWarning className={" f-mb--5"} size={100}  color={"black"} style={{marginTop:-20}} />
+         <p className={"f-mb-2 font-size-20"} style={{color: "black"}}>{errorModal.message}</p>
+         <FButton
+                  prefix={<FiRefreshCcw />}
+                  type="button"
+                  className={"btn-create f-ml-1 f-mb-1 "}
+                  onClick={walletAuthentication}
+                  title={"Retry Authentication"}                  
+                ></FButton>   
+                </FItem>       
+          </FDialog>  
       </FContainer>
     </>
   );

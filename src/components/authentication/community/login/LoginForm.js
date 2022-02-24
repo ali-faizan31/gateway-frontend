@@ -17,6 +17,7 @@ import { PATH_AUTH, PATH_PUBLIC_USER } from "../../../../routes/paths";
 import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader"; 
 import { connectWeb3 } from "../../../../utils/connect-wallet/connetWalletHelper";
+import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils";
 
 const LoginForm = () => {
   const history = useHistory();
@@ -74,7 +75,7 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
     try {
     let isAuthenticated = await checkIsUserWalletAddressAuthenticated(user._id, walletInformation );
     if (isAuthenticated === true) {
-        localStorage.setItem("token", token);
+        localStorage.setItem(TOKEN_TAG, token);
         toast.success(response.data.status.message);
         history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardByProvidedId);
     } else {
@@ -91,7 +92,7 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
       .then((response) => {
         const { user } = response.data.body;
         const { token } = response.data.body;
-        localStorage.setItem("me", JSON.stringify(user));
+        localStorage.setItem(ME_TAG, JSON.stringify(user));
         if (token) {
           if (user.isEmailAuthenticated === true) {
               checkWalletAddress(user, token, response, walletInformation);
@@ -184,7 +185,7 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
             </Link>
             </div>
           {/* </FItem> */}
-          <FButton
+        <FButton  
                 type="submit"
                 title={"Login"}
                 className={"w-100 f-mt-1"}

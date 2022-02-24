@@ -23,7 +23,7 @@ export const ConnectWalletDialog = ({show, onHide, metaMaskClickEvent } :any) =>
             <img src={IconMetaMask} alt={IconMetaMask}></img>
           </span>
         </FListItem>
-        <FListItem display="flex">
+        {/* <FListItem display="flex">
           <strong>Coinbase wallet</strong>
           <span className="icon-wrap">
             <img src={IconCoinbase} alt={IconCoinbase}></img>
@@ -34,7 +34,7 @@ export const ConnectWalletDialog = ({show, onHide, metaMaskClickEvent } :any) =>
           <span className="icon-wrap">
             <img src={IconWalletConnect} alt={IconWalletConnect}></img>
           </span>
-        </FListItem>
+        </FListItem> */}
       </FList>
     </FDialog>
   );

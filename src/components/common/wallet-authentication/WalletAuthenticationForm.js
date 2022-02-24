@@ -14,9 +14,10 @@ import { chainData } from "../../../utils/constants";
 import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog }  from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { useSelector } from 'react-redux'; 
+import { TOKEN_TAG } from "../../../utils/const.utils";
 
 const checkSession = async () => {
-  const session = localStorage.getItem('token'); 
+  const session = localStorage.getItem(TOKEN_TAG); 
   if(session){ 
       try {
           const isValid = verify(session||'','secret');
