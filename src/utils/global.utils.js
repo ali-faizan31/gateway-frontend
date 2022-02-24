@@ -65,3 +65,10 @@ removeItem(key) {
       this.modify(storageID, (storage = {}) => ({...storage, item}));
   }
 };
+
+
+export const checkSession = () => {
+        
+  let session  = sessionStorage?.getItem('persist:walletAutheticator');
+  return JSON.parse(session).tokenV2 ? true : false;
+}

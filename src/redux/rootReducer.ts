@@ -17,34 +17,35 @@ const walletConnectorPersistConfig = {
   blacklist: ["error", "isConnecting",   "networkClient", "isWeb3Initialized"],
 };
 
-// const walletApplicationWrapperPersistConfig = {
-//   key: "walletApplicationWrapper",
-//   storage: localStorage,
-//   whitelist: ["tokenList" ],
-//   timeout: 172800,
-// };
+const walletApplicationWrapperPersistConfig = {
+  key: "walletApplicationWrapper",
+  storage: localStorage,
+  whitelist: ["tokenList" ],
+  timeout: 172800,
+};
 
-// const walletAutheticatorPersistConfig = {
-//   key: "walletAutheticator",
-//   storage: localStorage,
-//   whitelist: [ "me", "communityMemberToken"] 
-// };
+const walletAutheticatorPersistConfig = {
+  key: "walletAutheticator",
+  storage: storageSession,
+  whitelist: [ "meV2", "tokenV2"] 
+};
 
 const rootReducer = combineReducers({
   walletConnector: persistReducer(
     walletConnectorPersistConfig,
     MetaMaskConnector.walletConnectorSlice.reducer
   ),
-  // walletApplicationWrapper: persistReducer(
-  //   walletApplicationWrapperPersistConfig,
-  //   WalletApplicationWrapper.applicationWrapperSlice.reducer
-  // ),
-  walletApplicationWrapper: WalletApplicationWrapper.applicationWrapperSlice.reducer,
-  walletAuthenticator: walletConnectorSlice.reducer,
-  // walletAuthenticator: persistReducer(
-  //   walletAutheticatorPersistConfig,
-  //    walletConnectorSlice.reducer
-  // ),
+  walletApplicationWrapper: persistReducer(
+    walletApplicationWrapperPersistConfig,
+    WalletApplicationWrapper.applicationWrapperSlice.reducer
+  ),
+  walletAuthenticator: persistReducer(
+    walletAutheticatorPersistConfig,
+     walletConnectorSlice.reducer
+  ),
+  // walletConnector: MetaMaskConnector.walletConnectorSlice.reducer,
+  // walletApplicationWrapper: WalletApplicationWrapper.applicationWrapperSlice.reducer,
+  // walletAuthenticator: walletConnectorSlice.reducer,
   competition: competitionReducer,
   leaderboard: leaderboardReducer 
 });

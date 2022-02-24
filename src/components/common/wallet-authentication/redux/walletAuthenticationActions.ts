@@ -29,18 +29,25 @@ export const resetWalletAuthentication = (walletAuthenticator: any) => (dispatch
     dispatch(actions.resetWalletAuthentication({ walletAuthenticator }));
 };
 
+export const removeSession = (walletAuthenticator: any) => (dispatch: any) => {
+    dispatch(actions.removeSession({ walletAuthenticator }));
+};
+
 export const getSignatureFromMetamask = (walletAuthenticator: any) => (dispatch: any) => {
     dispatch(actions.getSignatureFromMetamask({ walletAuthenticator }));
 };
 
 export const saveME = (walletAuthenticator: any) => (dispatch: any) => {
+    console.log('dis', walletAuthenticator)
     dispatch(actions.saveME({ walletAuthenticator }));
 };
 
-export const saveCommunityMemberToken = (walletAuthenticator: any) => (dispatch: any) => {
-    dispatch(actions.saveCommunityMemberToken({ walletAuthenticator }));
+export const saveToken = (walletAuthenticator: any) => (dispatch: any) => {
+    console.log('dis', walletAuthenticator)
+    dispatch(actions.saveToken({ walletAuthenticator }));
 };
 
 export const saveCommunityMemberProfileToken = (walletAuthenticator: any) => (dispatch: any) => {
     dispatch(actions.saveCommunityMemberProfileToken({ walletAuthenticator }));
 };
+

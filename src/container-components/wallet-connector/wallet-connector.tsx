@@ -17,7 +17,7 @@ import { getAccessTokenForApplicationUser, generateNonceByABN, verifySignatureAn
 import { FDialog, FItem, FList, FButton, FGridItem} from "ferrum-design-system";
 import { sign } from "crypto";
 import { locale } from "moment";
-import { localStorageHelper } from "../../utils/global.utils";
+import { localStorageHelper, checkSession } from "../../utils/global.utils";
 import { ME_TAG, TOKEN_TAG } from "../../utils/const.utils";
 
 
@@ -29,7 +29,7 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
   const dispatch = useDispatch();
   const { active, activate, deactivate, library, account, chainId, error, connector } =  useWeb3React();
   const { isConnected, isConnecting, currentWalletNetwork, walletAddress } = useSelector((state: RootState) => state.walletConnector);
-  const { nonce, applicationUserToken, signature, isAllowedonGateway, allowedNetworksonGateway, getSignatureFromMetamask  } = useSelector((state: RootState) => state.walletAuthenticator); 
+  const { nonce, applicationUserToken, signature, isAllowedonGateway, allowedNetworksonGateway, getSignatureFromMetamask, tokenV2, meV2  } = useSelector((state: RootState) => state.walletAuthenticator); 
   const [allowedNetworkModal, setAllowedNetworkModal] = useState<boolean>(false);
   const [getSignatureForSignin, setGetSignatureForSignin] = useState<boolean>(false);
   const [isValidated, setIsValidated] = useState<boolean | undefined>(undefined);
@@ -38,8 +38,8 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
   const [connectedAndVerifiedWallet, setConnectedAndVerifiedWallet] = useState("");
 
  useEffect(() => { 
-   console.log('active', active); 
- }, [active])
+   console.log('active', active, 'token', tokenV2); 
+ }, [active, tokenV2])
 
  useEffect(() => { 
   console.log('library', library); 
@@ -68,6 +68,13 @@ useEffect(() => {
  useEffect(() => { 
   console.log('walletAddress', walletAddress); 
  }, [walletAddress])
+ 
+ useEffect(() => {  
+  console.log('networkClient', networkClient); 
+  if (!networkClient && library){
+    setNetworkClient(library);
+  }
+ }, [networkClient])
  
 //  useEffect(() => { 
 //   console.log('active', active);
@@ -105,10 +112,7 @@ useEffect(() => {
     dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken}))
   }
 
-  const refreshAuthenticationVariables = () => {
-    dispatch(walletAuthenticatorActions.saveNonce({nonce: ""}))
-    dispatch(walletAuthenticatorActions.saveSignature({signature: ""}))
-    dispatch( walletAuthenticatorActions.getSignatureFromMetamask({getSignatureFromMetamask: false}))
+  const refreshAuthenticationVariables = () => { 
     setIsForSigninFlow(false);
     setIsValidated(false);
     setIsValidationCompleted(false);
@@ -147,20 +151,24 @@ useEffect(() => {
       if ( isConnected && !applicationUserToken) {
         getUserAccessToken();
       }
-      
+
       if (isConnected && currentWalletNetwork  && applicationUserToken ){
         dispatch( walletAuthenticatorActions.saveSignature({ signature: "" }) );
-        dispatch( walletAuthenticatorActions.saveNonce({ nonce: "" }) ); 
-        checkAllowedIdentifier(currentWalletNetwork, applicationUserToken)
+          dispatch( walletAuthenticatorActions.saveNonce({ nonce: "" }) ); 
+          checkAllowedIdentifier(currentWalletNetwork, applicationUserToken)
+        // if (tokenV2 && meV2.ferrumNetworkIdentifier !== currentWalletNetwork){
+        //   dispatch( walletAuthenticatorActions.saveSignature({ signature: "" }) );
+        //   dispatch( walletAuthenticatorActions.saveNonce({ nonce: "" }) ); 
+        //   checkAllowedIdentifier(currentWalletNetwork, applicationUserToken)
+        // } else {
+        //   dispatch( walletAuthenticatorActions.saveSignature({ signature: "" }) );
+        //   dispatch( walletAuthenticatorActions.saveNonce({ nonce: "" }) ); 
+        //   checkAllowedIdentifier(currentWalletNetwork, applicationUserToken)
+        // }
       } 
 
     }, [currentWalletNetwork, applicationUserToken, isConnected ]);  
-
-    useEffect(() => { 
-
-    }, [account])
-    
-
+ 
     useEffect(() => { 
       if ( isAllowedonGateway === false ){
         setAllowedNetworkModal(true);
@@ -168,7 +176,7 @@ useEffect(() => {
       }
     }, [isAllowedonGateway])
 
-    useEffect(() => {  
+    useEffect(() => {   
       if ( isAllowedonGateway === true ){ 
         getNonce(currentWalletNetwork, walletAddress, applicationUserToken); 
       }
@@ -243,6 +251,9 @@ useEffect(() => {
       else { 
         dispatch(walletConnectorActions.resetWalletConnector());
         dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken}))
+        dispatch(walletAuthenticatorActions.removeSession({userToken: applicationUserToken}))
+        console.log('dis 1')
+        // networkClient?.eth.personal
         setNetworkClient(undefined);
         deactivate();
       }
@@ -254,11 +265,13 @@ useEffect(() => {
   const connectMetaMask = () => {  
     if (isConnected) {  
       dispatch(walletConnectorActions.resetWalletConnector());
+      console.log('dis 2')
       setNetworkClient(undefined);
       deactivate();
     } else {   
       activate(injected);
       setShowWalletDialog(false);
+      console.log('dis 3')
       setNetworkClient(undefined);
     }
   };
@@ -287,9 +300,9 @@ useEffect(() => {
   }
 
   const checkAllowedIdentifier = async (identifier: any, applicationUserToken: any) => {
-    let chainId: any = await connector?.getChainId();
-    let networkId = parseInt(chainId, 16); 
-    isFerrumNetworkIdentifierAllowedonGateway(networkId, applicationUserToken)
+    // let chainId: any = await connector?.getChainId();
+    // let networkId = parseInt(chainId, 16); 
+    isFerrumNetworkIdentifierAllowedonGateway(identifier, applicationUserToken)
       .then((res: any) => {
         if (res && res.data && res.data.body ) { 
           dispatch( walletAuthenticatorActions.isAllowedOnGateway({ isAllowedOnGateway: res.data.body.status }) ); 
@@ -332,8 +345,8 @@ useEffect(() => {
       if (res && res.data && res.data.body && res.data.body) {
         setIsValidationCompleted(true);
         account && setConnectedAndVerifiedWallet(account);
-        dispatch( walletAuthenticatorActions.saveME({ me: res.data.body.user }) );
-        dispatch( walletAuthenticatorActions.saveCommunityMemberToken({ communityMemberToken: res.data.body.token }) );
+        dispatch( walletAuthenticatorActions.saveME({ meV2: res.data.body.user }) );
+        dispatch( walletAuthenticatorActions.saveToken({ tokenV2: res.data.body.token }) );
         dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken})) 
         localStorageHelper.storeObject(ME_TAG, res.data.body.user);
         localStorageHelper.storeToken(TOKEN_TAG, res.data.body.token);
@@ -396,7 +409,10 @@ useEffect(() => {
     }
   };
  
-
+  const onSwitchNetworkClose = () => {
+    dispatch(walletConnectorActions.resetWalletConnector());
+    setAllowedNetworkModal(false);
+  }
 
   return (
     <>
@@ -424,7 +440,7 @@ useEffect(() => {
         <FDialog
           show={allowedNetworkModal}
           size={"medium"}
-          onHide={() => setAllowedNetworkModal(false)}
+          onHide={onSwitchNetworkClose}
           title={"Allowed Networks on Gateway"}
           className="connect-wallet-dialog "
         >

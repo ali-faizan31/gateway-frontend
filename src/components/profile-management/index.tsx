@@ -18,12 +18,12 @@ import {
 } from "ferrum-design-system";
 import { generateNonceForCommunityMember } from "../../_apis/WalletAuthencation"
 
-import { localStorageHelper } from "../../utils/global.utils";
+import { checkSession, localStorageHelper } from "../../utils/global.utils";
 import * as walletAuthenticatorActions from "../common/wallet-authentication/redux/walletAuthenticationActions";
 import { TOKEN_TAG } from "../../utils/const.utils";
 
 const ProfileSettings = () => {
-  const {walletAddress} = useSelector(
+  const {walletAddress, isConnected} = useSelector(
     (state: RootState)=> state.walletConnector
   )
 
@@ -31,28 +31,28 @@ const ProfileSettings = () => {
     (state: RootState)=> state.walletAuthenticator
   )
   
+  useEffect(() => { 
+    dispatch( walletAuthenticatorActions.saveCommunityMemberProfileToken({ profileToken: "" }) );
+  }, [])
   
+
   let isLoading = false;
   const dispatch = useDispatch();
   const [profileToken, setprofileToken] = useState("");
   const [user, setUser] = useState({ email: "" });
   const [errorModal, setErrorModal] = useState({show:false, message:''})
 
-useEffect(() => {
-    if(walletAuthenticator.profileToken || localStorageHelper.getToken(TOKEN_TAG)){     
+  useEffect(() => {
+    if( isConnected && ( walletAuthenticator.profileToken || walletAuthenticator.tokenV2)){     
       getUserInfo();
     }  
     setprofileToken(walletAuthenticator.profileToken)
-  }, [walletAuthenticator, localStorageHelper.getToken(TOKEN_TAG)]);
-
-  useEffect(() => {
-    getUserInfo();
-  },[])
+  }, [walletAuthenticator, walletAuthenticator.tokenV2]); 
 
 
   const getUserInfo = async () => { 
     isLoading = true;
-    localStorageHelper.getToken(TOKEN_TAG) && await getMe(localStorageHelper.getToken(TOKEN_TAG))
+    walletAuthenticator.tokenV2 && await getMe(walletAuthenticator.tokenV2)
       .then((response: any) => {
         setUser(response.data.body.user); 
       })
@@ -77,6 +77,8 @@ useEffect(() => {
       }
     })
     .catch((e) => {
+      dispatch( walletAuthenticatorActions.saveNonce({ nonce: '' }) );  
+        dispatch( walletAuthenticatorActions.getSignatureFromMetamask({getSignatureFromMetamask: false}))
       if (e.response) {
         toast.error(` Error Occured: nonce ${e?.response?.data?.status?.message}`);
       } else {
@@ -87,13 +89,12 @@ useEffect(() => {
 
 
   const walletAuthentication = async () => {   
-    localStorageHelper.getToken(TOKEN_TAG) &&  getNonce(localStorageHelper.getToken(TOKEN_TAG));    
+    walletAuthenticator.tokenV2 &&  getNonce(walletAuthenticator.tokenV2);    
     setErrorModal({show:false, message:""}) 
   };
 
   const onCancelClick = () => {      
     dispatch( walletAuthenticatorActions.saveCommunityMemberProfileToken({ profileToken: "" }) );
-
   }
 
 
@@ -128,7 +129,7 @@ useEffect(() => {
                 prefix={<CgEnter />}
                   type="button"
                   className={" f-ml-1 "}
-                  disabled={isLoading}
+                  disabled={isLoading || !walletAuthenticator.tokenV2 || !isConnected}
                   onClick={walletAuthentication}
                   title={"Edit Profile"} 
                 ></FButton>         
