@@ -115,7 +115,7 @@ export const homeSidebarConfig = [
   {
     title: "Home",
     icon: ICONS.home,
-    path: PATH_DASHBOARD.home,
+    path: PATH_DASHBOARD.general.leaderboard,
   },
 ];
 export const profileConfig = [
