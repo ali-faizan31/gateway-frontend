@@ -12,11 +12,12 @@ import { PATH_ADMIN, PATH_DASHBOARD } from '../../routes/paths';
 import { addLeaderboard, getAllLeaderboards } from '../../_apis/LeaderboardCrud';
 import { getAllLeaderboardsDispatch } from '../../redux/slices/leaderboard';
 import { chainIdList, dexUrlList } from './LeaderboardHelper';
+import { TOKEN_TAG } from '../../utils/const.utils';
 
 export default function NewLeaderboard() {
   const dispatch = useDispatch();
   const history = useHistory();
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem(TOKEN_TAG);
   const [isLeaderboardPresent, setIsLeaderboardPresent] = useState(false);
   const [leaderboardInfo, setLeaderboardInfo] = useState({});
 
@@ -70,10 +71,9 @@ export default function NewLeaderboard() {
 
 
   return (
-    <>
-      <div>
+    <> 
         <Toaster />
-      </div>
+       
       <FContainer type="fluid">
         <FContainer>
           <h1> Create Leaderboard </h1>

@@ -13,11 +13,12 @@ import {
   tokenFRMxBSCMainnet,
   tokenFRMBSCMainnet,
   tokenUSDCBSCMainnet,
+  TOKEN_TAG,
 } from "../../utils/const.utils";
 
 export default function MultiTokenLeaderboardIndex() {
   const { id } = useParams();
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem(TOKEN_TAG);
   const { pathname } = useLocation();
   const isPublicUser = pathname.includes("/pub");
   const [leaderboardData, setLeaderboardData] = useState({});
@@ -171,10 +172,8 @@ export default function MultiTokenLeaderboardIndex() {
   };
 
   return (
-    <>
-      <div>
-        <Toaster />
-      </div>
+    <> 
+        <Toaster /> 
       <FContainer type="fluid">
         <FContainer>
           {frmUsdcValue && frmxUsdcValue && (

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="9.629" height="9.876" viewBox="0 0 9.629 9.876">
+  <g id="Double_Arrow" data-name="Double Arrow" transform="translate(-11.371 -10.672)">
+    <g id="Group_4635" data-name="Group 4635" transform="translate(11.371 10.672)">
+      <g id="arrow-down-sign-to-navigate" transform="translate(9.629 0) rotate(90)">
+        <path id="Path_311" data-name="Path 311" d="M4.938,0a.69.69,0,0,0-.489.2L.2,4.449a.692.692,0,0,0,.978.978L4.938,1.669,8.695,5.427a.692.692,0,1,0,.978-.978L5.427.2A.69.69,0,0,0,4.938,0Z" fill="#dab46e"/>
+      </g>
+      <g id="arrow-down-sign-to-navigate-2" data-name="arrow-down-sign-to-navigate" transform="translate(5.629 0) rotate(90)">
+        <path id="Path_311-2" data-name="Path 311" d="M4.938,0a.69.69,0,0,0-.489.2L.2,4.449a.692.692,0,0,0,.978.978L4.938,1.669,8.695,5.427a.692.692,0,1,0,.978-.978L5.427.2A.69.69,0,0,0,4.938,0Z" fill="#dab46e"/>
+      </g>
+    </g>
+  </g>
+</svg>

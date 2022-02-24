@@ -21,14 +21,14 @@ import {
   getTokenHolderlistByContractAddressBSC
 } from "../../_apis/LeaderboardCrud";
 import { arraySortByKeyDescending } from "../../utils/global.utils";
-import { stakingContractAddressListFOMO } from "../../utils/const.utils";
+import { stakingContractAddressListFOMO, TOKEN_TAG } from "../../utils/const.utils";
 import { filterList } from "../leaderboard/LeaderboardHelper";
 
 const LeaderboardInformation = () => {
   const { id } = useParams();
   const exportRef = useRef();
   const { pathname } = useLocation();
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem(TOKEN_TAG);
   const isPublicUser = pathname.includes("/pub");
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -371,9 +371,9 @@ const LeaderboardInformation = () => {
       cell: (params)=><div data-label="Rank">{params.rank}</div>
     },
     {
-      prop: "address",
+      prop: "formattedAddress",
       title: "Wallet Address",
-      cell: (params)=><div data-label="Wallet Address">{params.address}</div>
+      cell: (params)=><div data-label="Wallet Address">{params.formattedAddress}</div>
     },
     {
       prop: "formattedBalance",
@@ -393,10 +393,8 @@ const LeaderboardInformation = () => {
   ];
 
   return (
-    <>
-      <div>
-        <Toaster />
-      </div>
+    <> 
+        <Toaster /> 
       <CSVLink
         data={filteredTokenHolderList}
         headers={csvHeaders}

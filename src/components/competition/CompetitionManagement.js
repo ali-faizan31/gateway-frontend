@@ -22,12 +22,13 @@ import { useHistory } from "react-router-dom";
 import moment from 'moment';
 import { PATH_ADMIN, PATH_DASHBOARD } from '../../routes/paths';
 import { getAllCompetitions, updateCompetitionStatusById } from '../../_apis/CompetitionCrud';
+import { TOKEN_TAG } from '../../utils/const.utils';
 
 
 const CompetitionManagement = () => { 
   const history = useHistory();
   const limit = 10;
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem(TOKEN_TAG);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -217,10 +218,8 @@ const onCancel = () => {
 }
 
   return (
-    <>
-     <div>
-        <Toaster />
-      </div>
+    <> 
+        <Toaster /> 
       <FContainer type="fluid">
         <FContainer>
           <FGrid className={"f-mt-1 f-mb-1"}>
@@ -256,7 +255,7 @@ const onCancel = () => {
           size={"medium"}   
           onHide={onCancel}
           title={"Update Competition Status"}
-          className="connect-wallet-dialog w-50">
+          className="connect-wallet-dialog ">
 
           <FItem className={"f-mt-2"}>
             Select Status of Competition

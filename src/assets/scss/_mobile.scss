@@ -1,0 +1,94 @@
+@import "./variables";
+
+@media screen and (max-width: 991px) {
+  .app-wrapper {
+    .desktop-aside-toggler {
+      display: none;
+    }
+    aside {
+      height: auto;
+      left: auto;
+      position: fixed;
+      right: 0;
+      z-index: 1000;
+      background: $themePrimaryColor;
+      right: -$siderWidth - 20px;
+      overflow: visible;
+      .mobile-aside-toggler {
+        display: block;
+      }
+      &.open {
+        right: 0;
+        .mobile-aside-toggler {
+          right: 2rem;
+          top: 2rem;
+        }
+      }
+      .aside-header {
+        .brand-logo {
+          // margin-left: -1rem;
+        }
+      }
+    }
+
+    header {
+      padding-right: 5rem;
+      display: block !important;
+      .form-group {
+        width: 100%;
+        padding-right: 1rem;
+      }
+      .header-actions {
+        width: calc(100% + 5rem);
+        display: flex;
+        justify-content: center;
+        margin: 1rem 0;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+  }
+
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: 0.625em;
+  }
+
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 0.8em;
+    text-align: right;
+  }
+
+  table td::before {
+    /*
+      * aria-label has no advantage, it won't be read inside a table
+      content: attr(aria-label);
+      */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  table td:last-child {
+    border-bottom: 0;
+  }
+}

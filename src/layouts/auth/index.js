@@ -23,9 +23,8 @@ function useWindowSize() {
 
 const AuthLayout = ({ children }) => {
   const [width, height] = useWindowSize();
-  const [showPicture, setShowPicture] = useState(true);
+  const [showPicture, setShowPicture] = useState(true); 
 
-  console.log(width, height);
   useEffect(() => {
     if (width < 1200) {
       setShowPicture(false);
@@ -33,6 +32,7 @@ const AuthLayout = ({ children }) => {
       setShowPicture(true);
     }
   }, [width]);
+  
   return (
     <>
       <FGrid layout={"grid"}>

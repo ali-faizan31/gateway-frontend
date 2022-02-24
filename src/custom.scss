@@ -120,7 +120,21 @@ input:-webkit-autofill {
     }
 }
 
+.f-select__control {
+    input {
+        color: white !important;
+    }
+}
+
 aside.open .f-sider-item.has-child.f-sider-item {
+    border: none !important;
+}
+
+aside.sider-expanded .f-sider-item.has-child.f-sider-item {
+    border: none !important;
+}
+
+aside.sider-expanded .f-sider-item {
     border: none !important;
 }
 
@@ -151,4 +165,12 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
             }
         }
     }
+}
+.f-link {
+    color: #cba461;
+    text-decoration: none;
+}
+
+.f-dialog.bg-white .f-dialog-content {
+    background: white !important;
 }

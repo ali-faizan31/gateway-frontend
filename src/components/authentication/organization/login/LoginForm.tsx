@@ -11,8 +11,9 @@ import { organizationAdminLogin } from "../../../../_apis/OnboardingCrud";
 import { PATH_AUTH, PATH_DASHBOARD, PATH_PUBLIC_USER } from "../../../../routes/paths";
 import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader";
-import { connectWeb3 } from "../../../../utils/connetWalletHelper";
+import { connectWeb3 } from "../../../../utils/connect-wallet/connetWalletHelper";
 import { walletAddressAuthenticateCheckOnSignin, getAccessTokenForApplicationUser } from "../../../../_apis/WalletAuthencation";
+import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils";
 
 const LoginForm = () => {
     const history = useHistory();
@@ -70,13 +71,13 @@ const LoginForm = () => {
         try {
             let isAuthenticated = await checkIsUserWalletAddressAuthenticated(user._id, walletInformation);
             if (isAuthenticated === true) {
-                localStorage.setItem("token", token);
+                localStorage.setItem(TOKEN_TAG, token);
                 toast.success(response.data.status.message);
                 // history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardByProvidedId);
                 history.push(PATH_DASHBOARD.general.leaderboardManagement)
             } else {
                 toast.error("Please connect and authenticate your wallet first!");
-                history.push(PATH_AUTH.orgWalletAuthentication);
+                history.push(PATH_AUTH.walletAuthentication);
             } 
          }catch (e){
             toast.error(`Error Occured ${e}`); 
@@ -85,22 +86,23 @@ const LoginForm = () => {
 
 
     const onSubmit = async (values: any) => { 
-        let walletInformation = await connectWeb3(setAddress, setConnected, setWeb3, setNetwork, toast); 
+        // let walletInformation = await connectWeb3(setAddress, setConnected, setWeb3, setNetwork, toast); 
         await organizationAdminLogin(values)
             .then((response: any) => {
                 const { user } = response.data.body;
                 const { token } = response.data.body;
-                localStorage.removeItem('token');
-                localStorage.removeItem('me');
-                localStorage.setItem('me', JSON.stringify(user));
-                localStorage.setItem("token", token);
+                localStorage.removeItem(TOKEN_TAG);
+                localStorage.removeItem(ME_TAG);
+                localStorage.setItem(ME_TAG, JSON.stringify(user));
+                localStorage.setItem(TOKEN_TAG, token);
                 if (token) {
-                    if (user.isEmailAuthenticated === true) {
-                        checkWalletAddress(user, token, response, walletInformation);
-                     } else {
-                        toast.error('Please verify your email first!');
-                        history.push(PATH_AUTH.orgResendCode);
-                    }
+                    history.push(PATH_DASHBOARD.general.leaderboardManagement)
+                //     if (user.isEmailAuthenticated === true) {
+                //         checkWalletAddress(user, token, response, walletInformation);
+                //      } else {
+                //         toast.error('Please verify your email first!');
+                //         history.push(PATH_AUTH.emailResendCode);
+                //     }
                 }
             })
             .catch((e) => {

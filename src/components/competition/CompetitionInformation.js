@@ -23,11 +23,12 @@ import {
 } from '../../_apis/CompetitionCrud';
 import { arraySortByKeyDescending } from '../../utils/global.utils';
 import { filterList } from '../leaderboard/LeaderboardHelper';
+import { TOKEN_TAG } from '../../utils/const.utils';
 
 const CompetitionInformation = () => {
   const { id } = useParams();
   const exportRef = useRef(); 
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem(TOKEN_TAG);
   const { pathname } = useLocation();
   const isPublicUser = pathname.includes('/pub');
   const [query, setQuery] = useState('');
@@ -337,10 +338,8 @@ const CompetitionInformation = () => {
   };
 
   return (
-    <>
-     <div>
-        <Toaster />
-      </div>
+    <> 
+    <Toaster /> 
     <CSVLink
         data={filteredTokenHolderList}
         headers={csvHeaders}

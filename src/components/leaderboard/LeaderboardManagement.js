@@ -23,11 +23,12 @@ import { RiFileCopy2Fill, RiMailOpenLine, RiEdit2Fill } from "react-icons/ri";
 import { getAllLeaderboards, updateLeaderboardStatusById } from "../../_apis/LeaderboardCrud";
 import { chainIdList } from "./LeaderboardHelper";
 import { useHistory } from "react-router-dom";
+import { TOKEN_TAG } from "../../utils/const.utils";
 
 const LeaderboardManagement = () => {
   const limit = 10;
   const history = useHistory();
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem(TOKEN_TAG);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -253,10 +254,8 @@ const LeaderboardManagement = () => {
   ];
 
   return (
-    <>
-      <div>
-        <Toaster />
-      </div>
+    <> 
+        <Toaster /> 
       <FContainer type="fluid">
         <FContainer>
           <FGrid className={"f-mt-1 f-mb-1"}>
@@ -295,7 +294,7 @@ const LeaderboardManagement = () => {
           size={"medium"}   
           onHide={onCancel}
           title={"Update Leaderboard Status"}
-          className="connect-wallet-dialog w-50">
+          className="connect-wallet-dialog ">
 
           <FItem className={"f-mt-2"}>
             Select Status of Leaderboard

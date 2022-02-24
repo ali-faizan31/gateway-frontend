@@ -33,3 +33,42 @@ export const mergeTwoArrays = (dataset1, dataset2) => {
   } 
   return dataset1;
 };
+
+export const localStorageHelper = {
+  load(key) {
+      const stored = localStorage.getItem(key);
+      return stored == null ? undefined : JSON.parse(stored);
+  },
+  getToken(key) {
+    const stored = localStorage.getItem(key);
+    return stored == null ? undefined : (stored);
+},
+  storeObject(key, value) { 
+      localStorage.setItem(key, JSON.stringify(value));
+  },
+  storeToken(key, value) {
+    localStorage.setItem(key, (value));
+},
+removeItem(key) {
+  localStorage.removeItem(key);
+}, 
+  modify(key, fn) {
+      this.store(key, fn(this.load(key)));
+  },
+  appendItemToArray: (item, storageID) => {
+      this.modify(storageID, (storage = []) => [...storage, item]);
+  },
+  removeItemFromArray: (item, storageID) => {
+      this.modify(storageID, (storage = []) => storage.filter(s => s !== item));
+  },
+  saveItemToObject: (item, storageID) => {
+      this.modify(storageID, (storage = {}) => ({...storage, item}));
+  }
+};
+
+
+export const checkSession = () => {
+        
+  let session  = sessionStorage?.getItem('persist:walletAutheticator');
+  return JSON.parse(session).tokenV2 ? true : false;
+}

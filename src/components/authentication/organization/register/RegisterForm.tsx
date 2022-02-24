@@ -14,6 +14,7 @@ import { uniqueOrganizationSiteName } from "../../../../_apis/OrganizationCrud";
 import { PATH_AUTH } from "../../../../routes/paths";
 import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader";
+import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils";
 
 const RegisterForm = () => {
   const history = useHistory();
@@ -27,10 +28,10 @@ const RegisterForm = () => {
       .then((response: any) => {
         const { user } = response.data.body;
         const { token } = response.data.body;
-        localStorage.setItem('me', JSON.stringify(user));
-        localStorage.setItem('token', token);
+        localStorage.setItem(ME_TAG, JSON.stringify(user));
+        localStorage.setItem(TOKEN_TAG, token);
         toast.success(response?.data?.status?.message)
-        history.push(PATH_AUTH.orgVerify);
+        history.push(PATH_AUTH.emailVerify);
       })
       .catch((e) => {
         if (e.response) {

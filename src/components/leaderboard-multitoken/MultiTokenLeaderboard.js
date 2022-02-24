@@ -26,15 +26,17 @@ import { filterList } from "../leaderboard/LeaderboardHelper";
 import {
   tokenFRMxBSCMainnet,
   tokenFRMBSCMainnet,
+  TOKEN_TAG,
+  ME_TAG,
 } from "../../utils/const.utils";
 import { arraySortByKeyDescending } from "../../utils/global.utils";
 
 const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboardData}) => {
   const exportRef = useRef();
   const { pathname } = useLocation();
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem(TOKEN_TAG);
   const isPublicUser = pathname.includes("/pub");
-  const user = localStorage.getItem('me');
+  const user = localStorage.getItem(ME_TAG);
   const parsedUser = user && JSON.parse(user); 
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -379,10 +381,8 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
   };
 
   return (
-    <>
-      <div>
-        <Toaster />
-      </div>
+    <> 
+        <Toaster /> 
       <CSVLink
         data={filteredTokenHolderList}
         headers={csvHeaders}
@@ -453,7 +453,7 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
           size={"medium"}   
           onHide={()=>setShowExportModal(false)}
           title={"Export"}
-          className="connect-wallet-dialog w-50">
+          className="connect-wallet-dialog ">
 
           <FItem className={"f-mt-2 f-mb-2"}>
             Loading Export Data
