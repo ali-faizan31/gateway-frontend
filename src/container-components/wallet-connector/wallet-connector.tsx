@@ -36,6 +36,7 @@ export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  Wallet
   const [isForSigninFlow, setIsForSigninFlow] = useState<boolean | undefined>(undefined);
   const [isValidationCompleted, setIsValidationCompleted] = useState<boolean | undefined>(undefined);
   const [connectedAndVerifiedWallet, setConnectedAndVerifiedWallet] = useState("");
+  const [performedSwitch, setPerformedSwitch] = useState<boolean | undefined>(undefined);
 
  useEffect(() => { 
    console.log('active', active, 'token', tokenV2); 
@@ -75,29 +76,9 @@ useEffect(() => {
     setNetworkClient(library);
   }
  }, [networkClient])
- 
-//  useEffect(() => { 
-//   console.log('active', active);
-//   console.log('library', library);
-//   console.log('account', account);
-//   console.log('chainId', chainId);
-//   console.log('isConnected', isConnected);
-//   console.log('isConnecting', isConnecting);
-//   console.log('currentWalletNetwork', currentWalletNetwork);
-//   console.log('walletAddress', walletAddress);
-// }, [active, library, account, chainId, isConnected, isConnecting, currentWalletNetwork, walletAddress])
-
+  
 
   useEffect(() => {  
-    // if ( isValidationCompleted ){
-    //   setIsValidated(false); //changed account after validation
-    // }
-    // if ( isValidationCompleted && connectedAndVerifiedWallet !== account){
-    //   connectMetaMask();
-    //   dispatch(walletConnectorActions.resetWalletConnector());
-    //       dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken})) 
-    //       refreshAuthenticationVariables()
-    // }
     if ( account && walletAddress && walletAddress !== account && isConnected && active ) { 
       activate(injected); 
       setReconnect(true);
@@ -152,21 +133,19 @@ useEffect(() => {
         getUserAccessToken();
       }
 
-      if (isConnected && currentWalletNetwork  && applicationUserToken ){
-        dispatch( walletAuthenticatorActions.saveSignature({ signature: "" }) );
+      if (isConnected && currentWalletNetwork  && applicationUserToken ){  
+        if (tokenV2 && meV2.addresses[0].network.ferrumNetworkIdentifier.toString() !== currentWalletNetwork.toString()){
+          console.log(tokenV2, meV2, meV2.addresses[0].network.ferrumNetworkIdentifier,currentWalletNetwork )
+          dispatch( walletAuthenticatorActions.saveSignature({ signature: "" }) );
           dispatch( walletAuthenticatorActions.saveNonce({ nonce: "" }) ); 
           checkAllowedIdentifier(currentWalletNetwork, applicationUserToken)
-        // if (tokenV2 && meV2.ferrumNetworkIdentifier !== currentWalletNetwork){
-        //   dispatch( walletAuthenticatorActions.saveSignature({ signature: "" }) );
-        //   dispatch( walletAuthenticatorActions.saveNonce({ nonce: "" }) ); 
-        //   checkAllowedIdentifier(currentWalletNetwork, applicationUserToken)
-        // } else {
-        //   dispatch( walletAuthenticatorActions.saveSignature({ signature: "" }) );
-        //   dispatch( walletAuthenticatorActions.saveNonce({ nonce: "" }) ); 
-        //   checkAllowedIdentifier(currentWalletNetwork, applicationUserToken)
-        // }
+        } else if (tokenV2 === "") {
+          console.log(tokenV2)
+          dispatch( walletAuthenticatorActions.saveSignature({ signature: "" }) );
+          dispatch( walletAuthenticatorActions.saveNonce({ nonce: "" }) ); 
+          checkAllowedIdentifier(currentWalletNetwork, applicationUserToken)
+        }
       } 
-
     }, [currentWalletNetwork, applicationUserToken, isConnected ]);  
  
     useEffect(() => { 
@@ -177,10 +156,11 @@ useEffect(() => {
     }, [isAllowedonGateway])
 
     useEffect(() => {   
-      if ( isAllowedonGateway === true ){ 
+      if (  isConnected &&  isAllowedonGateway === true ){ 
+        console.log(currentWalletNetwork)
         getNonce(currentWalletNetwork, walletAddress, applicationUserToken); 
       }
-    }, [allowedNetworksonGateway, isValidated])
+    }, [ isAllowedonGateway, isConnected])
     
     useEffect(() => { 
       if (!error && currentWalletNetwork &&  walletAddress && applicationUserToken && signature && isForSigninFlow ){ // signin
@@ -190,9 +170,9 @@ useEffect(() => {
     }, [currentWalletNetwork, walletAddress, signature, applicationUserToken, isForSigninFlow])
 
     useEffect(() => { 
-      if ( localStorageHelper.getToken(TOKEN_TAG) && signature && getSignatureFromMetamask){ // profile
+      if ( tokenV2 && signature && getSignatureFromMetamask){ // profile
         console.log('profile')
-         verifySignatureToUpdateProfileForCommunityMember(signature, localStorageHelper.getToken(TOKEN_TAG));
+         verifySignatureToUpdateProfileForCommunityMember(signature, tokenV2);
       }
     }, [ signature, getSignatureFromMetamask ])
  
@@ -212,10 +192,12 @@ useEffect(() => {
       "This signature verifies that you are the authorized owner of the wallet. The signature authentication is required to ensure allocations are awarded to the correct wallet owner.",
        function (err, signature) {   
         if ( err ){
+          
           setIsValidated(false);
           err.message && toast.error(err.message); 
           dispatch(walletConnectorActions.resetWalletConnector());
           dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken})) 
+          dispatch(walletAuthenticatorActions.removeSession({userToken: applicationUserToken})) 
           refreshAuthenticationVariables()
         } else if ( signature ){  
           dispatch( walletAuthenticatorActions.saveSignature({ signature }) ); 
@@ -244,16 +226,12 @@ useEffect(() => {
     if (!isConnecting) {
       if (!isConnected) {
         setShowWalletDialog(true);
-       } 
-      // else if ( !isValidated ){
-      //     setIsValidated(true)
-      // } 
+       }  
       else { 
         dispatch(walletConnectorActions.resetWalletConnector());
         dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken}))
         dispatch(walletAuthenticatorActions.removeSession({userToken: applicationUserToken}))
-        console.log('dis 1')
-        // networkClient?.eth.personal
+        console.log('dis 1') 
         setNetworkClient(undefined);
         deactivate();
       }
@@ -385,7 +363,7 @@ useEffect(() => {
           style:{
             maxWidth:'650px '
           },
-          duration: 2000 
+          duration: 4000 
         })
       } else {
         toast.error("Something went wrong. Try again later!");
@@ -394,23 +372,33 @@ useEffect(() => {
   }
 
   const performSwitchNetwork = async (item: any) => { 
+    dispatch( walletAuthenticatorActions.isAllowedOnGateway({ isAllowedOnGateway: false }) );
     try { 
       let ethereum = window.ethereum;
       if (ethereum) { 
         const hexChainId = Number(item.networkId).toString(16); 
-        await ethereum.request({
+        let response = await ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId: `0x${hexChainId}` }],
-        });
+        }); 
+        if (response === null ){
+          setTimeout(() => {
+            dispatch( walletAuthenticatorActions.isAllowedOnGateway({ isAllowedOnGateway: true }) ); 
+          }, 2000);
+        }
       }  
-      setAllowedNetworkModal(false)
+      setAllowedNetworkModal(false) 
     } catch (err: any) {
+      onSwitchNetworkClose()
+      setAllowedNetworkModal(false)
       toast.error(err?.message);
     }
   };
  
   const onSwitchNetworkClose = () => {
     dispatch(walletConnectorActions.resetWalletConnector());
+    dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken}))
+    dispatch(walletAuthenticatorActions.removeSession({userToken: applicationUserToken}))
     setAllowedNetworkModal(false);
   }
 

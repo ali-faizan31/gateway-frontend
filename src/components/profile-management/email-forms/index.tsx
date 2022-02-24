@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import EmailForm from "./EmailForm";
+import { useSelector, useDispatch } from "react-redux";
 import OtpFrom from "./OtpForm";
 import { sendOTP, updateEmail } from "../../../_apis/ProfileCrud";
 import { FButton, FGrid, FGridItem, FDialog } from "ferrum-design-system";
 import { AiOutlineMail } from "react-icons/ai";
 import { TOKEN_TAG } from "../../../utils/const.utils";
+import {RootState} from "../../../redux/rootReducer"
 
 interface EmailSectionProps {
   profileToken: string;
@@ -23,16 +25,15 @@ const EmailSection = ({
   const [emailedTo, setEmailedTo] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [emailBtnText, setEmailBtnText] = useState("Register");
-
+  const walletAuthenticator= useSelector( (state: RootState)=> state.walletAuthenticator )
 
   const resendCode =  ()=>{
     setOtpSent(false)
     setEmailBtnText("Resend Code")
   }
 
-  const handleSendOTP = async (values: any) => {    
-    const token = localStorage.getItem(TOKEN_TAG);
-    await sendOTP(token, profileToken, values)
+  const handleSendOTP = async (values: any) => {   
+    await sendOTP(walletAuthenticator.tokenV2, profileToken, values)
       .then((response: any) => {
         setEmailedTo( values.email)
         setOtpSent(true);        
@@ -47,8 +48,7 @@ const EmailSection = ({
   };
 
   const verifyOTP = async (value: any) => {   
-    let token = localStorage.getItem(TOKEN_TAG);
-    await updateEmail(token, profileToken, value)
+    await updateEmail(walletAuthenticator.tokenV2, profileToken, value)
       .then((response: any) => {
         closeForm();
         setProfileToken("");

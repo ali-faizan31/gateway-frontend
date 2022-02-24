@@ -23,24 +23,25 @@ import * as walletAuthenticatorActions from "../common/wallet-authentication/red
 import { TOKEN_TAG } from "../../utils/const.utils";
 
 const ProfileSettings = () => {
-  const {walletAddress, isConnected} = useSelector(
-    (state: RootState)=> state.walletConnector
-  )
-
-  const walletAuthenticator= useSelector(
-    (state: RootState)=> state.walletAuthenticator
-  )
-  
-  useEffect(() => { 
-    dispatch( walletAuthenticatorActions.saveCommunityMemberProfileToken({ profileToken: "" }) );
-  }, [])
-  
-
   let isLoading = false;
   const dispatch = useDispatch();
   const [profileToken, setprofileToken] = useState("");
   const [user, setUser] = useState({ email: "" });
   const [errorModal, setErrorModal] = useState({show:false, message:''})
+
+  const {walletAddress, isConnected} = useSelector( (state: RootState)=> state.walletConnector )
+  const walletAuthenticator= useSelector( (state: RootState)=> state.walletAuthenticator )
+  
+  useEffect(() => { 
+    dispatch( walletAuthenticatorActions.saveCommunityMemberProfileToken({ profileToken: "" }) );
+  }, [])
+
+  useEffect(() => { 
+    if (!isConnected){
+      setUser({ email: ""})
+    }
+  }, [isConnected])
+  
 
   useEffect(() => {
     if( isConnected && ( walletAuthenticator.profileToken || walletAuthenticator.tokenV2)){     
