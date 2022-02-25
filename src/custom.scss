@@ -27,8 +27,38 @@ $secondaryColor: #495057;
     color: #cba461;
 }
 
+.primary-color-background {
+    color: #1c2229;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.overflow-visible {
+    overflow: visible;
+}
+
+.mint-info-tag {
+    position: absolute;
+    right: 1px;
+    top: -10px;
+    padding: 5px;
+    border-radius: 10px 10px 0 10px;
+    background-color: white;
+    color: #cba461;
+}
+
 .grey-primary {
     color: #495057;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-end {
+    text-align: end;
 }
 
 .justify-content-space-between {
@@ -166,6 +196,7 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
         }
     }
 }
+
 .f-link {
     color: #cba461;
     text-decoration: none;

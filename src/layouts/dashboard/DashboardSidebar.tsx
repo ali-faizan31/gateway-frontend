@@ -10,13 +10,11 @@ import {
   tokensSidebarConfig,
   bridgeSidebarConfig,
   homeSidebarConfig,
-  communityLeaderboardSidebarConfig,
-  profileConfig,
+  communityLeaderboardSidebarConfig, 
+  crucibleConfig
 } from "./SidebarConfig";
 import { useLocation, useParams } from "react-router-dom";
-import {
-  PATH_PUBLIC_USER,
-  PATH_ADMIN,
+import { 
   PATH_DASHBOARD,
 } from "../../routes/paths";
 import {
@@ -227,6 +225,7 @@ const DashboardSidebar = () => {
       {renderContent(communityLeaderboardSidebarConfig)}
       {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
+      {renderContent(crucibleConfig)}
     </FSider>
 
   );

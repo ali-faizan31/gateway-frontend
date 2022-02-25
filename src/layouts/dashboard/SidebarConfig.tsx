@@ -15,6 +15,7 @@ const ICONS = {
   home: getSideMenuIcon("Home.svg"),
   bridge: getSideMenuIcon("Bridge.svg"),
   getFrmAndFrmx: getSideMenuIcon("FRMx.svg"),
+  crucible: getSideMenuIcon("Crucible.svg"),
 };
 
 export const publicCompetitionConfig = [
@@ -118,10 +119,19 @@ export const homeSidebarConfig = [
     path: PATH_DASHBOARD.general.leaderboard,
   },
 ];
+
 export const profileConfig = [
   {
     title: "Profile",
     path: PATH_DASHBOARD.general.profile,
     icon: ICONS.leaderboard 
+  },
+];
+
+export const crucibleConfig = [
+  {
+    title: "Crucible",
+    path: PATH_DASHBOARD.crucible.intro,
+    icon: ICONS.crucible
   },
 ];

@@ -3,8 +3,8 @@
 // export const baseUrl = "https://api-leaderboard.svcs.ferrumnetwork.io" // prod
 // export const baseUrl = 'https://api-leaderboard.stage.svcs.ferrumnetwork.io';  // staging
 export const apiKey = 'ckey_173b82c807954a8697b251305c5:'; 
-export const baseUrl = "https://api-gateway-v1.svcs.ferrumnetwork.io" // prod-gateway
-// export const baseUrl = "https://api-gateway-v1.stage.svcs.ferrumnetwork.io" // staging-gateway
+// export const baseUrl = "https://api-gateway-v1.svcs.ferrumnetwork.io" // prod-gateway
+export const baseUrl = "https://api-gateway-v1.stage.svcs.ferrumnetwork.io" // staging-gateway
 // export const apiKeyForApplicationUser = "42bfdf36-5625-4dbe-9af8-6149cc0a903f"; // staging
 // export const apiKeyForApplicationUser =  "b63d9502-1ddd-4ccb-b0bd-e59a3531d7f6"; // dev
 export const apiKeyForApplicationUser =  "66fadbfe-b625-48d1-9255-2c6317adf0bf"; // prod
