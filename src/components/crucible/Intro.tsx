@@ -11,12 +11,12 @@ import {
     FGrid,
     FLabel
 } from "ferrum-design-system";
-import { RootState } from "../../redux/rootReducer";
-import { info } from 'console';
-import { MetaMaskConnector } from '../../container-components';
-import { ConnectWalletDialog } from '../../utils/connect-wallet/ConnectWalletDialog';
+import { RootState } from "../../redux/rootReducer"; 
+import CrucibleActionButtons from './CrucibleActionButtons';
 
 const Intro = () => {
+
+    const { walletAddress, isConnected } = useSelector((state: RootState) => state.walletConnector)
 
     const cardData = ({ title, value, token }: any) => {
         return (<>
@@ -36,7 +36,6 @@ const Intro = () => {
         </>)
     }
 
-    const { walletAddress, isConnected } = useSelector((state: RootState) => state.walletConnector)
     return (<>
         <FContainer width={700}>
             <FCard variant="primary">
@@ -71,13 +70,10 @@ const Intro = () => {
                 <p className='primary-color text-center f-mt-1 f-mb-1'>This Crucible Token attracts 4% on withdrawal to base Token.</p>
 
 
-                {/* <MetaMaskConnector.WalletConnector
-                    WalletConnectView={FButton}
-                    WalletConnectModal={ConnectWalletDialog}
-                    WalletConnectViewProps={{
-                        className: "mt-3 w-100" 
-                    }}
-                /> */}
+                <CrucibleActionButtons 
+                isConnected = {isConnected} />
+
+                
             </FCard>
         </FContainer>
     </>)
