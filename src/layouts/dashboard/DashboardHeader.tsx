@@ -74,6 +74,7 @@ const DashboardHeader = ({title}:any) => {
         <MetaMaskConnector.WalletConnector
             WalletConnectView={FButton}
             WalletConnectModal={ConnectWalletDialog}
+            isAuthenticationNeeded ={true}
           />
         <Link
               to={PATH_DASHBOARD.general.profile}

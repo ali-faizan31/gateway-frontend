@@ -46,6 +46,8 @@ const ResendEmailVerification = Loadable( lazy(() => import("./components/common
 const StakingLeaderboard = Loadable( lazy(() => import("./components/leaderboard-staking/StakingLeaderboard")) );
 const Dashboard = Loadable( lazy(() => import("./components/dashboard/dashboard")) );
 const ProfileSettings = Loadable( lazy(() => import("./components/profile-management")) );
+const CrucibleIntroduction = Loadable( lazy(() => import("./components/crucible/Intro")) );
+const MintAndStake = Loadable( lazy(() => import("./components/crucible/MintAndStake")) );
 
 function App() {
   const isAuthenticated = localStorage.getItem(TOKEN_TAG);
@@ -56,19 +58,20 @@ function App() {
       <>
         <Switch>
           <Route exact path="/"> <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" /> </Route>
-          <UnGuardedRoute path="/home" component={Dashboard} auth={isAuthenticated} layout={DashboardLayout} />
-          <UnGuardedRoute path="/auth/forgot-password" component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout} />
-          <UnGuardedRoute path="/auth/verify" component={EmailVerification} auth={isAuthenticated} layout={AuthLayout} />
-          <UnGuardedRoute path="/auth/resend-code" component={ResendEmailVerification} auth={isAuthenticated} layout={AuthLayout} />
-          <UnGuardedRoute path="/auth/reset-password/:token" component={ResetPassword} auth={isAuthenticated} layout={AuthLayout} />
-          <UnGuardedRoute path="/auth/wallet-authentication" component={WalletAuthentication} auth={isAuthenticated} layout={AuthLayout} />
+          <UnGuardedRoute path="/home" component={Dashboard} auth={isAuthenticated} layout={DashboardLayout} headerTitle=""/>
+          <UnGuardedRoute path="/auth/forgot-password" component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout} headerTitle=""/>
+          <UnGuardedRoute path="/auth/verify" component={EmailVerification} auth={isAuthenticated} layout={AuthLayout} headerTitle=""/>
+          <UnGuardedRoute path="/auth/resend-code" component={ResendEmailVerification} auth={isAuthenticated} layout={AuthLayout} headerTitle=""/>
+          <UnGuardedRoute path="/auth/reset-password/:token" component={ResetPassword} auth={isAuthenticated} layout={AuthLayout} headerTitle=""/>
+          <UnGuardedRoute path="/auth/wallet-authentication" component={WalletAuthentication} auth={isAuthenticated} layout={AuthLayout} headerTitle=""/>
           {/* <UnGuardedRoute path='/auth/login' component={CommunityLogin} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/register' component={CommunityRegister} auth={isAuthenticated} layout={AuthLayout}/> */}
-          <UnGuardedRoute path="/auth/org/register" component={OrganizationRegister} auth={isAuthenticated} layout={AuthLayout} />
-          <UnGuardedRoute path="/auth/org/login" component={OrganizationLogin} auth={isAuthenticated} layout={AuthLayout} />
-          <UnGuardedRoute path="/pub/leaderboard/:id" component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout} /> <UnGuardedRoute path="/pub/multi/leaderboard/:id" component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout} />
-          <UnGuardedRoute path="/pub/competition/:id" component={CompetitionById} auth={isAuthenticated} layout={DashboardLayout} />
-          <UnGuardedRoute path="/pub/staking/leaderboard/:id" component={StakingLeaderboard} auth={isAuthenticated} layout={DashboardLayout} />
+          <UnGuardedRoute path="/auth/org/register" component={OrganizationRegister} auth={isAuthenticated} layout={AuthLayout} headerTitle=""/>
+          <UnGuardedRoute path="/auth/org/login" component={OrganizationLogin} auth={isAuthenticated} layout={AuthLayout} headerTitle=""/>
+          <UnGuardedRoute path="/pub/leaderboard/:id" component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout} headerTitle=""/> 
+          <UnGuardedRoute path="/pub/multi/leaderboard/:id" component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout} headerTitle=""/>
+          <UnGuardedRoute path="/pub/competition/:id" component={CompetitionById} auth={isAuthenticated} layout={DashboardLayout} headerTitle=""/>
+          <UnGuardedRoute path="/pub/staking/leaderboard/:id" component={StakingLeaderboard} auth={isAuthenticated} layout={DashboardLayout} headerTitle=""/>
           <GuardedRoute path="/dashboard/leaderboard/management" component={LeaderboardManagement} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/leaderboard/create" component={CreateLeaderboard} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/competition/create" component={CreateCompetition} auth={isAuthenticated} layout={DashboardLayout} />
@@ -77,6 +80,8 @@ function App() {
           <GuardedRoute path="/dashboard/multi/leaderboard/:id" component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/leaderboard/:id" component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout} />
           <UnGuardedRoute path={PATH_DASHBOARD.general.profile} component={ProfileSettings} auth={isAuthenticated} layout={DashboardLayout} headerTitle="My Profile" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.intro} component={CrucibleIntroduction} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.mintAndStake} component={MintAndStake} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
           <Route path="*" component={Page404}></Route>
         </Switch>
       </>
