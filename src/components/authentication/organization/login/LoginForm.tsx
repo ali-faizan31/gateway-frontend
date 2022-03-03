@@ -13,10 +13,14 @@ import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader";
 import { connectWeb3 } from "../../../../utils/connect-wallet/connetWalletHelper";
 import { walletAddressAuthenticateCheckOnSignin, getAccessTokenForApplicationUser } from "../../../../_apis/WalletAuthencation";
-import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils";
+import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils"; 
+import { walletConnectorActions } from "../../../../container-components/wallet-connector";
+import * as walletAuthenticatorActions from "../../../common/wallet-authentication/redux/walletAuthenticationActions";
+import { useDispatch } from "react-redux";
 
 const LoginForm = () => {
     const history = useHistory();
+    const dispatch = useDispatch();
     const [viewPassword, setViewPassword] = useState(false);
     const [connected, setConnected] = useState(false);
     const [address, setAddress] = useState("");
@@ -84,15 +88,22 @@ const LoginForm = () => {
         }
     }
 
+    const removeOldSession = () => {
+        localStorage.removeItem(TOKEN_TAG);
+        localStorage.removeItem(ME_TAG);
+        dispatch(walletConnectorActions.resetWalletConnector());
+        dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken}))
+        dispatch(walletAuthenticatorActions.removeSession({userToken: applicationUserToken}))
+
+    }
 
     const onSubmit = async (values: any) => { 
         // let walletInformation = await connectWeb3(setAddress, setConnected, setWeb3, setNetwork, toast); 
+        removeOldSession();
         await organizationAdminLogin(values)
             .then((response: any) => {
                 const { user } = response.data.body;
                 const { token } = response.data.body;
-                localStorage.removeItem(TOKEN_TAG);
-                localStorage.removeItem(ME_TAG);
                 localStorage.setItem(ME_TAG, JSON.stringify(user));
                 localStorage.setItem(TOKEN_TAG, token);
                 if (token) {
