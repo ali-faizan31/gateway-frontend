@@ -72,7 +72,7 @@ const LeaderboardManagement = () => {
   };
 
   const onDetailClick = (row) => {  
-    history.push(`${PATH_DASHBOARD.general.leaderboard}/${row._id}`);
+    history.push(`${PATH_DASHBOARD.general.leaderboardForDashboard}/${row._id}`);
   };
 
   const openCreateLeaderboard = () => { 
