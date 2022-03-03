@@ -87,12 +87,13 @@ const LoginForm = () => {
 
     const onSubmit = async (values: any) => { 
         // let walletInformation = await connectWeb3(setAddress, setConnected, setWeb3, setNetwork, toast); 
+        localStorage.removeItem(TOKEN_TAG);
+        localStorage.removeItem(ME_TAG);
         await organizationAdminLogin(values)
             .then((response: any) => {
                 const { user } = response.data.body;
                 const { token } = response.data.body;
-                localStorage.removeItem(TOKEN_TAG);
-                localStorage.removeItem(ME_TAG);
+                console.log(user,token)
                 localStorage.setItem(ME_TAG, JSON.stringify(user));
                 localStorage.setItem(TOKEN_TAG, token);
                 if (token) {

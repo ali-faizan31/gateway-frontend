@@ -29,7 +29,7 @@ const DashboardHeader = ({title}:any) => {
 
   useEffect(() => {  
     if (isConnecting === false && isConnected === false ){
-      handleLogout(); 
+      // handleLogout(); 
     }
   }, [isConnected, isConnecting])
   

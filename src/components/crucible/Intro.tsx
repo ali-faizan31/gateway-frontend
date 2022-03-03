@@ -9,71 +9,50 @@ import {
     FGridItem,
     FInputText,
     FGrid,
-    FLabel
+    FLabel, FList,
+    FListItem,
+    FItem
 } from "ferrum-design-system";
-import { RootState } from "../../redux/rootReducer"; 
+import { RootState } from "../../redux/rootReducer";
 import CrucibleActionButtons from './CrucibleActionButtons';
+import { RiCheckboxCircleLine, RiArrowRightCircleLine } from "react-icons/ri"
+import { PATH_DASHBOARD } from '../../routes/paths';
+import { useHistory } from 'react-router';
 
 const Intro = () => {
-
+    const history = useHistory();
     const { walletAddress, isConnected } = useSelector((state: RootState) => state.walletConnector)
 
-    const cardData = ({ title, value, token }: any) => {
-        return (<>
-            <FCard variant="secondary">
-                <div className='font-10'>{title}</div>
-                <h3 className='f-mt-2'>{value} {token} </h3>
-            </FCard>
-        </>)
-    }
-
-    const info = ({ title, value }: any) => {
-        return (<>
-            <div className='justify-content-space-between'>
-                <div> {value}  </div>
-                <div className='font-10 text-end'> {title} </div>
-            </div>
-        </>)
-    }
+    const info = [
+        { title: "Dolor sit amet, adipiscing elit. " },
+        { title: "Consectetuer adipiscing." },
+        { title: "Dolor adipiscing elit. " },
+        { title: "Sit amet, consectetuer adipiscing." }
+    ]
 
     return (<>
         <FContainer width={700}>
             <FCard variant="primary">
-                <FCardTitle>
-                    <h2> W Crucible Beta </h2>
-                </FCardTitle>
-                <FGrid>
-                    <FGridItem size={[6, 6, 6]} alignY={"center"}  className={"f-mt-1"}>
-                        {cardData({ title: "Transfer fee", value: "2%" })}
-                    </FGridItem>
-                    <FGridItem size={[6, 6, 6]} alignY={"center"}  className={"f-mt-1"}>
-                        {cardData({ title: "Total Supply", value: "28208.941", token: "wCBTe" })}
-                    </FGridItem>
-                </FGrid>
-                <FGrid>
-                    <FGridItem size={[6, 6, 6]} alignY={"center"}  className={"f-mt-1"}>
-                        {cardData({ title: "CBT Price (USD)", value: "$0" })}
-                    </FGridItem>
-                    <FGridItem size={[6, 6, 6]} alignY={"center"}  className={"f-mt-1"}>
-                        {cardData({ title: "wCBTe Price (USD)", value: "$0" })}
-                    </FGridItem>
-                </FGrid>
+                <h2 className='primary-color f-mb-1'>Title lorem ipsum sit amet elit.</h2>
+                <p className='f-mb-1'>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. </p>
 
-                <FCard className={"f-mt-2 position-relative overflow-visible"} variant="secondary">
-                    <h5 className={"mint-info-tag"}>Minting Is Open ( 2571306 Open Cap)</h5> 
-                    <h3 className='font-10 f-mb-1'>Your Available Crucible Liquidity</h3>
-                    {info({ title: "wCBTe", value: "0" })}
-                    {info({ title: "Your Staked Volume", value: "0 wCBTe" })}
-                    {info({ title: "Your Total Reward(s) Accrued", value: "0 wCBTe" })}
+                <FCard variant={"secondary"} style={{ height: "44px" }}>
+                    test
                 </FCard>
 
-                <p className='primary-color text-center f-mt-1 f-mb-1'>This Crucible Token attracts 4% on withdrawal to base Token.</p>
+                <h3 className='f-mb-1 f-mt-1'> Title lorem ipsum sit amet elit.</h3>
+                <p className='f-mb-1'>Lorem ipsum dolor sit amet, consectetuer adipiscing elit commodo ligula. </p>
 
 
-                <CrucibleActionButtons 
-                isConnected = {isConnected} />
+                {info.length && info.map((item, index) => (
+                    <FItem key={index}>
+                        <span className='f-m--4'><RiCheckboxCircleLine className='primary-color' /></span>
+                        {item.title} 
+                    </FItem>
+                ))}
 
-                
+                <FButton title={"Get Started"} className="w-100 f-mt-2 " postfix={<RiArrowRightCircleLine/>} onClick={()=>history.push(PATH_DASHBOARD.crucible.mintAndStake)}/>
+
             </FCard>
         </FContainer>
     </>)
