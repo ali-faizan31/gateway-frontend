@@ -48,6 +48,7 @@ const Dashboard = Loadable( lazy(() => import("./components/dashboard/dashboard"
 const ProfileSettings = Loadable( lazy(() => import("./components/profile-management")) );
 const CrucibleIntroduction = Loadable( lazy(() => import("./components/crucible/Intro")) );
 const MintAndStake = Loadable( lazy(() => import("./components/crucible/MintAndStake")) );
+const Crucible = Loadable( lazy(() => import("./components/crucible/index")) );
 
 function App() {
   const isAuthenticated = localStorage.getItem(TOKEN_TAG);
@@ -82,6 +83,8 @@ function App() {
           <UnGuardedRoute path={PATH_DASHBOARD.general.profile} component={ProfileSettings} auth={isAuthenticated} layout={DashboardLayout} headerTitle="My Profile" />
           <UnGuardedRoute path={PATH_DASHBOARD.crucible.intro} component={CrucibleIntroduction} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
           <UnGuardedRoute path={PATH_DASHBOARD.crucible.mintAndStake} component={MintAndStake} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.index} component={Crucible} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+
           <Route path="*" component={Page404}></Route>
         </Switch>
       </>

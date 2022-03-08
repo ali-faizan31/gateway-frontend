@@ -1,4 +1,8 @@
 $secondaryColor: #495057;
+body {
+    line-height: 1.3 !important;
+}
+
 .f-dialog-connect-wallet {
     .f-list-connect-wallet {
         .f-list-item {
@@ -204,4 +208,10 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 
 .f-dialog.bg-white .f-dialog-content {
     background: white !important;
+}
+
+@for $i from 0 through 30 {
+    .custom-font-size-#{$i} {
+        font-size: #{$i}px !important;
+    }
 }

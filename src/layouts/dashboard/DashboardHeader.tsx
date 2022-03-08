@@ -63,8 +63,7 @@ const DashboardHeader = ({title}:any) => {
 
     }
   };
-
-  console.log(localStorageHelper.load(ME_TAG))
+ 
 
   return (
     <> 
