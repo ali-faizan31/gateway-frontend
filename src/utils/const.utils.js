@@ -3,8 +3,8 @@ export const baseUrl =
             // "https://api-leaderboard.dev.svcs.ferrumnetwork.io"; // dev
             // "https://api-leaderboard.svcs.ferrumnetwork.io" // prod
             // 'https://api-leaderboard.stage.svcs.ferrumnetwork.io';  // staging
-            "https://api-gateway-v1.svcs.ferrumnetwork.io" // prod-gateway
-            // "https://api-gateway-v1.stage.svcs.ferrumnetwork.io" // staging-gateway
+            // "https://api-gateway-v1.svcs.ferrumnetwork.io" // prod-gateway
+            "https://api-gateway-v1.stage.svcs.ferrumnetwork.io" // staging-gateway
 export const apiKeyForApplicationUser = 
             // "42bfdf36-5625-4dbe-9af8-6149cc0a903f"; // staging
                 // "b63d9502-1ddd-4ccb-b0bd-e59a3531d7f6"; // dev
