@@ -1,320 +1,88 @@
 export const jsonTemplate = {
-    "_id": "xxxxxxxxx",
-    "stepId": "xxxxxxxxx",
-    "orderIndex": ["0x1","0x2","0x3"],
-    "stepRenderingJson": {
-        "0x1": [
-            {
-                "id": "name",
-                "label": "Enter Your Fullname",
-                "type": "input",
-                "placeholder": "Enter name",
-                "config": {
-                    "datatype": "text",
-                    "placeholder": "Your Name"
-                },
-                "value": "",
-                "validation": {
-                    "required": true
-                },
-                "valid": false, 
-                "errorMessage": "Enter valid data",
-                "touched": false
-            },
-            {
-                "id": "street",
-                "label": "Enter Your Address",
-                "type": "textarea",
-                "placeholder": "Enter Address",
-                "config": {
-                    "datatype": "text",
-                    "placeholder": "Street"
-                },
-                "value": "",
-                "validation": {
-                    "required": true
-                },
-                "valid": false,
-                "errorMessage": "Enter valid data",
-                "touched": false
-            },
-            {
-                "id": "zipCode",
-                "type": "input",
-                "label": "Enter zipcode",
-                "placeholder": "Enter zipcode",
-                "config": {
-                    "datatype": "text",
-                    "placeholder": "ZIP Code"
-                },
-                "value": "",
-                "validation": {
-                    "required": true,
-                    "minLength": 5,
-                    "maxLength": 5
-                },
-                "valid": false,
-                "errorMessage": "Enter valid data",
-                "touched": false
-            },
-            {
-                "id": "country",
-                "type": "select",
-                "label":"Enter country",
-                "placeholder": "Enter country",
-                "config": {
-                    "datatype": "text",
-                    "placeholder": "Country"
-                },
-                "options": [
-                    {
-                        "value": "USA",
-                        "displayvalue": "United state of america"
-                    },
-                    {
-                        "value": "UK",
-                        "displayvalue": "United kingdom"
-                    },
-                    {
-                        "value": "IN",
-                        "displayvalue": "India"
-                    }
-                ],
-                "value": "",
-                "validation": {
-                    "required": true
-                },
-                "valid": false,
-                "errorMessage": "Enter valid data",
-                "touched": false
-            },
-            {
-                "id": "email",
-                "type": "input",
-                "label": "Enter email",
-                "placeholder": "Enter email",
-                "config": {
-                    "datatype": "email",
-                    "placeholder": "Your E-Mail"
-                },
-                "value": "",
-                "validation": {
-                    "required": true,
-                    "isEmail": true
-                },
-                "valid": false,
-                "errorMessage": "Enter valid data",
-                "touched": false
-            }
+  status: {
+    code: 200,
+    message: "Success",
+    phraseKey: "",
+  },
+  body: {
+    stepFlowStepsHistory: [
+      {
+        _id: "62239f36256b14a90d64cb18",
+        status: "started",
+        isActive: true,
+        step: [
+          {
+            _id: "6223754d9cec1e9af5d77507",
+            name: "intro",
+            isActive: true,
+          },
         ],
-        "0x2": [
-            {
-                "id": "name",
-                "label": "Enter Your Fullname",
-                "type": "input",
-                "placeholder": "Enter name",
-                "config": {
-                    "datatype": "text",
-                    "placeholder": "Your Name"
+        createdAt: "2022-03-05T17:34:40.643Z",
+        updatedAt: "2022-03-05T17:34:40.643Z",
+        stepFlow: "62234dde70e5db92daa08776",
+        user: "61fd47d4e9ae7a0d8eae9661",
+        __v: 0,
+        stepFlowStep: [
+          {
+            _id: "6223773de797a89bb3d7550a",
+            name: "stepFlowStepA",
+            isActive: true,
+            stepsRenderingJson: {
+              json: [
+                {
+                  id: "title",
+                  type: "h2",
+                  content: "The Gateway by Ferrum Network",
+                  config: {
+                    datatype: "text",
+                    placeholder: "Your Name",
+                  },
+                  value: "",
                 },
-                "value": "",
-                "validation": {
-                    "required": true
+                {
+                  id: "title",
+                  type: "h4",
+                  content:
+                    "Access presales, rewards, and sustainable sustainable staking through the Crucible.",
+                  config: {
+                    datatype: "text",
+                    placeholder: "Your Name",
+                  },
+                  value: "",
                 },
-                "valid": false, 
-                "errorMessage": "Enter valid data",
-                "touched": false
+                {
+                  id: "stages",
+                  type: "list",
+                  title: "Mint Your Crucible Today.",
+                  config: {
+                    datatype: "text",
+                    placeholder: "Your Name",
+                  },
+                  value: "",
+                  items: [
+                    "Mint Crucible with FRM",
+                    "Mint CrucibleX with FRMx",
+                    "Stake Crucible",
+                    "Stake CrucibleX",
+                    "Enjoy access to presales, rewards, sustainable staking",
+                  ],
+                },
+                {
+                  id: "start",
+                  type: "submit",
+                  content: "Get Started",
+                  config: {
+                    datatype: "text",
+                    placeholder: "Your Name",
+                  },
+                  value: "",
+                },
+              ],
             },
-            {
-                "id": "street",
-                "label": "Enter Your Address",
-                "type": "textarea",
-                "placeholder": "Enter Address",
-                "config": {
-                    "datatype": "text",
-                    "placeholder": "Street"
-                },
-                "value": "",
-                "validation": {
-                    "required": true
-                },
-                "valid": false,
-                "errorMessage": "Enter valid data",
-                "touched": false
-            },
-            {
-                "id": "zipCode",
-                "type": "input",
-                "label": "Enter zipcode",
-                "placeholder": "Enter zipcode",
-                "config": {
-                    "datatype": "text",
-                    "placeholder": "ZIP Code"
-                },
-                "value": "",
-                "validation": {
-                    "required": true,
-                    "minLength": 5,
-                    "maxLength": 5
-                },
-                "valid": false,
-                "errorMessage": "Enter valid data",
-                "touched": false
-            },
-            {
-                "id": "country",
-                "type": "select",
-                "label":"Enter country",
-                "placeholder": "Enter country",
-                "config": {
-                    "datatype": "text",
-                    "placeholder": "Country"
-                },
-                "options": [
-                    {
-                        "value": "USA",
-                        "displayvalue": "United state of america"
-                    },
-                    {
-                        "value": "UK",
-                        "displayvalue": "United kingdom"
-                    },
-                    {
-                        "value": "IN",
-                        "displayvalue": "India"
-                    }
-                ],
-                "value": "",
-                "validation": {
-                    "required": true
-                },
-                "valid": false,
-                "errorMessage": "Enter valid data",
-                "touched": false
-            },
-            {
-                "id": "email",
-                "type": "input",
-                "label": "Enter email",
-                "placeholder": "Enter email",
-                "config": {
-                    "datatype": "email",
-                    "placeholder": "Your E-Mail"
-                },
-                "value": "",
-                "validation": {
-                    "required": true,
-                    "isEmail": true
-                },
-                "valid": false,
-                "errorMessage": "Enter valid data",
-                "touched": false
-            }
+            orderIndex: 0,
+          },
         ],
-        "0x3": [
-            {
-                "id": "name",
-                "label": "Enter Your Fullname",
-                "type": "input",
-                "placeholder": "Enter name",
-                "config": {
-                    "datatype": "text",
-                    "placeholder": "Your Name"
-                },
-                "value": "",
-                "validation": {
-                    "required": true
-                },
-                "valid": false, 
-                "errorMessage": "Enter valid data",
-                "touched": false
-            },
-            {
-                "id": "street",
-                "label": "Enter Your Address",
-                "type": "textarea",
-                "placeholder": "Enter Address",
-                "config": {
-                    "datatype": "text",
-                    "placeholder": "Street"
-                },
-                "value": "",
-                "validation": {
-                    "required": true
-                },
-                "valid": false,
-                "errorMessage": "Enter valid data",
-                "touched": false
-            },
-            {
-                "id": "zipCode",
-                "type": "input",
-                "label": "Enter zipcode",
-                "placeholder": "Enter zipcode",
-                "config": {
-                    "datatype": "text",
-                    "placeholder": "ZIP Code"
-                },
-                "value": "",
-                "validation": {
-                    "required": true,
-                    "minLength": 5,
-                    "maxLength": 5
-                },
-                "valid": false,
-                "errorMessage": "Enter valid data",
-                "touched": false
-            },
-            {
-                "id": "country",
-                "type": "select",
-                "label":"Enter country",
-                "placeholder": "Enter country",
-                "config": {
-                    "datatype": "text",
-                    "placeholder": "Country"
-                },
-                "options": [
-                    {
-                        "value": "USA",
-                        "displayvalue": "United state of america"
-                    },
-                    {
-                        "value": "UK",
-                        "displayvalue": "United kingdom"
-                    },
-                    {
-                        "value": "IN",
-                        "displayvalue": "India"
-                    }
-                ],
-                "value": "",
-                "validation": {
-                    "required": true
-                },
-                "valid": false,
-                "errorMessage": "Enter valid data",
-                "touched": false
-            },
-            {
-                "id": "email",
-                "type": "input",
-                "label": "Enter email",
-                "placeholder": "Enter email",
-                "config": {
-                    "datatype": "email",
-                    "placeholder": "Your E-Mail"
-                },
-                "value": "",
-                "validation": {
-                    "required": true,
-                    "isEmail": true
-                },
-                "valid": false,
-                "errorMessage": "Enter valid data",
-                "touched": false
-            }
-        ]
-       
-    }
-}
+      },
+    ],
+  },
+};
