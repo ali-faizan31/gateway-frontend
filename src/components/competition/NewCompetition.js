@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {format,parseISO} from 'date-fns';
+import { format, parseISO } from "date-fns";
 import { useForm } from "react-hook-form";
 import {
   FInputText,
@@ -11,7 +11,7 @@ import {
   FContainer,
   FSelect,
   FDatepicker,
-  FInputCheckbox
+  FInputCheckbox,
 } from "ferrum-design-system";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -32,7 +32,7 @@ export default function NewCompetition() {
   const dispatch = useDispatch();
   const history = useHistory();
   let token = localStorage.getItem(TOKEN_TAG);
-  const [leaderboardList, setLeaderboardList] = useState([]);   
+  const [leaderboardList, setLeaderboardList] = useState([]);
 
   useEffect(() => {
     getLeaderboardListing();
@@ -42,19 +42,19 @@ export default function NewCompetition() {
     name: Yup.string().required("Name is required"),
     leaderboard: Yup.object().required("Leaderboard is required"),
     startBlock: Yup.string(),
-    endBlock: Yup.string() ,
+    endBlock: Yup.string(),
     startDate: Yup.string().required("Start Date/Time is required"),
     endDate: Yup.string().required("End Date/Time is required"),
   });
 
   const initialValues = {
     name: "",
-    leaderboard: {label:"Select"},
+    leaderboard: { label: "Select" },
     startBlock: "",
     endBlock: "",
     endDate: "",
     startDate: "",
-    status: false
+    status: false,
   };
 
   const {
@@ -70,22 +70,24 @@ export default function NewCompetition() {
   });
 
   const onSubmit = async (values) => {
-    try{ 
-      values.leaderboard = values.leaderboard._id ;  
-      values.startDate = new Date(`${values.startDate} UTC`).toISOString(); 
+    try {
+      values.leaderboard = values.leaderboard._id;
+      values.startDate = new Date(`${values.startDate} UTC`).toISOString();
       values.endDate = new Date(`${values.endDate} UTC`).toISOString();
-      values.status === true ? values.status = "published" : values.status = "pending";  
+      values.status === true
+        ? (values.status = "published")
+        : (values.status = "pending");
     } catch (e) {
-      toast.error(`Error: ${e}`)
+      toast.error(`Error: ${e}`);
     }
 
     console.log(values);
 
-    if (!values.leaderboard){
+    if (!values.leaderboard) {
       toast.error("leaderboard is required");
       return;
     }
-   console.log(values);
+    console.log(values);
     await addCompetition(values, token)
       .then((response) => {
         // dispatch(getAllCompetitionsDispatch());
@@ -99,27 +101,30 @@ export default function NewCompetition() {
           toast.error("Something went wrong. Try again later!");
         }
       });
-  }; 
+  };
 
   const mapLeaderboardData = (leaderboards) => {
+    let tempLeaderboardArray = [];
     if (leaderboards && leaderboards.length) {
-      leaderboards.forEach((leaderboard) => {  
+      leaderboards.forEach((leaderboard) => {
+        let chainId = leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId;
         for (let i = 0; i < chainIdList.length; i += 1) {
-          if (chainIdList[i].id === leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId) { 
-            leaderboard.network = chainIdList[i].label; 
-            leaderboard.label = `${leaderboard?.name} | ${leaderboard?.network} | ${leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress}`; 
-            leaderboard.value = leaderboard._id; 
-          }  
+          if (chainId && chainIdList[i].id === chainId) {
+            leaderboard.network = chainIdList[i].label;
+            leaderboard.label = `${leaderboard?.name} | ${leaderboard?.network} | ${leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress}`;
+            leaderboard.value = leaderboard._id;
+            tempLeaderboardArray.push(leaderboard);
+          }
         }
       });
     }
-    setLeaderboardList(leaderboards);
+    setLeaderboardList(tempLeaderboardArray);
   };
 
   const getLeaderboardListing = () => {
     getAllLeaderboards(0, 10, token)
       .then((res) => {
-        if (res?.data?.body?.leaderboards?.length) { 
+        if (res?.data?.body?.leaderboards?.length) {
           mapLeaderboardData(res.data.body.leaderboards);
         } else {
           setLeaderboardList([]);
@@ -133,14 +138,14 @@ export default function NewCompetition() {
         }
       });
   };
- 
+
   const onCancel = () => {
     history.push(PATH_DASHBOARD.general.competitionManagement);
   };
 
   return (
-    <> 
-        <Toaster /> 
+    <>
+      <Toaster />
       <FContainer type="fluid">
         <FContainer>
           <h1>Create Competition </h1>
@@ -165,7 +170,7 @@ export default function NewCompetition() {
                   }
                 />
               </FGridItem>
-            </FGrid> 
+            </FGrid>
             <FGrid>
               <FGridItem alignX="center" size={[12]} className={"f-mt-1"}>
                 <FInputText
@@ -175,7 +180,7 @@ export default function NewCompetition() {
                   register={register}
                   error={errors["name"]?.message ? errors["name"]?.message : ""}
                 />
-              </FGridItem> 
+              </FGridItem>
             </FGrid>
             <FGrid>
               <FGridItem alignX="center" size={[6, 12, 12]}>
@@ -194,22 +199,24 @@ export default function NewCompetition() {
                 <FDatepicker
                   className={"f-mt-1"}
                   label={"Start Date/Time in UTC"}
-                  name={"startDate"} 
+                  name={"startDate"}
                   placeholder={"MM/DD/YYYY hh:mm"}
-                  showTimeSelect={true} 
+                  showTimeSelect={true}
                   register={register}
                   control={control}
                   error={
-                    errors["startDate"]?.message ? errors["startDate"]?.message : ""
+                    errors["startDate"]?.message
+                      ? errors["startDate"]?.message
+                      : ""
                   }
                 />
               </FGridItem>
               <FGridItem alignX="center" size={[6, 12, 12]}>
-              <FDatepicker
+                <FDatepicker
                   className={"f-mt-1"}
                   label={"End Date/Time in UTC"}
-                  name={"endDate"} 
-                  showTimeSelect={true} 
+                  name={"endDate"}
+                  showTimeSelect={true}
                   placeholder={"MM/DD/YYYY hh:mm"}
                   register={register}
                   control={control}
@@ -232,7 +239,11 @@ export default function NewCompetition() {
               </FGridItem>
             </FGrid>
             <FGrid>
-              <FGridItem alignX="center" className={"f-mt-1"} size={[6, 12, 12]}>
+              <FGridItem
+                alignX="center"
+                className={"f-mt-1"}
+                size={[6, 12, 12]}
+              >
                 <FInputText
                   label="Start Block"
                   name="startBlock"
@@ -243,9 +254,13 @@ export default function NewCompetition() {
                       ? errors["startBlock"]?.message
                       : ""
                   }
-                /> 
+                />
               </FGridItem>
-              <FGridItem alignX="center" className={"f-mt-1"} size={[6, 12, 12]}>
+              <FGridItem
+                alignX="center"
+                className={"f-mt-1"}
+                size={[6, 12, 12]}
+              >
                 <FInputText
                   label="End Block"
                   name="endBlock"
@@ -256,19 +271,17 @@ export default function NewCompetition() {
                       ? errors["endBlock"]?.message
                       : ""
                   }
-                /> 
+                />
               </FGridItem>
             </FGrid>
             <FInputCheckbox
-            display={"inline"}
-            label="Publish Competition"
-            className={"f-mt-2 f-mb-2"}
-            name={"status"}
-            register={register}
-            error={
-              errors["status"]?.message ? errors["status"]?.message : ""
-            }
-          /> 
+              display={"inline"}
+              label="Publish Competition"
+              className={"f-mt-2 f-mb-2"}
+              name={"status"}
+              register={register}
+              error={errors["status"]?.message ? errors["status"]?.message : ""}
+            />
             <FGrid>
               <FGridItem alignX="end" dir={"row"} className={"f-mt-1"}>
                 <FButton

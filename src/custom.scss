@@ -210,8 +210,43 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
     background: white !important;
 }
 
-@for $i from 0 through 30 {
+@for $i from 0 through 50 {
     .custom-font-size-#{$i} {
         font-size: #{$i}px !important;
     }
+}
+
+@for $i from 0 through 50 {
+    .custom-padding-#{$i} {
+        padding: #{$i}px !important;
+    }
+}
+
+@for $i from 0 through 50 {
+    .custom-border-radius-#{$i} {
+        border-radius: #{$i}px !important;
+    }
+}
+
+@for $i from 0 through 1000 {
+    .custom-min-width-#{$i} {
+        min-width: #{$i}px !important;
+    }
+}
+
+.no-right-margin {
+    margin-right: 0 !important;
+}
+
+.no-left-margin {
+    margin-left: 0 !important;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+.connect-button-left-borders {
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
 }
