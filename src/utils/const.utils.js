@@ -20,3 +20,5 @@ export const TOKEN_TAG = "tokenV2";
 export const ME_TAG = "meV2";
 export const ORG_ROLE_TAG = "organizationAdmin";
 export const COMMUNITY_ROLE_TAG = "communityMember";
+export const PHRASE_TOKEN = "bf3fa63f66e88f4453c018f568445a03889f494343973cc33c90401d9d525447"
+export const PHRASE_PROJECT = "dbc35f418d27873591479252f9883427"

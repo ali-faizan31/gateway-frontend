@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { Switch, Route, useLocation, Redirect } from "react-router-dom";
 import DashboardLayout from "./layouts/dashboard";
 import "./custom.scss";
@@ -11,7 +11,8 @@ import moment from "moment-timezone";
 import { WalletApplicationWrapper } from "./container-components";
 import { PATH_DASHBOARD } from "./routes/paths";
 import { TOKEN_TAG } from "./utils/const.utils";
-
+import { useDispatch } from "react-redux";
+import { getPhraseDataDispatch } from "./redux/slices/phrase";
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { pathname } = useLocation();
@@ -48,8 +49,12 @@ const Dashboard = Loadable( lazy(() => import("./components/dashboard/dashboard"
 const ProfileSettings = Loadable( lazy(() => import("./components/profile-management")) );
 
 function App() {
+  const dispatch = useDispatch();
   const isAuthenticated = localStorage.getItem(TOKEN_TAG);
   moment.tz.setDefault("UTC");
+  useEffect(()=>{
+    dispatch(getPhraseDataDispatch())
+  },[])
 
   return (
     <WalletApplicationWrapper.ApplicationWrapper>
