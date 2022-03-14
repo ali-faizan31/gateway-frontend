@@ -23,11 +23,12 @@ import { RiFileCopy2Fill, RiMailOpenLine, RiEdit2Fill } from "react-icons/ri";
 import { getAllLeaderboards, updateLeaderboardStatusById } from "../../_apis/LeaderboardCrud";
 import { chainIdList } from "./LeaderboardHelper";
 import { useHistory } from "react-router-dom";
+import { TOKEN_TAG } from "../../utils/const.utils";
 
 const LeaderboardManagement = () => {
   const limit = 10;
   const history = useHistory();
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem(TOKEN_TAG);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -71,7 +72,7 @@ const LeaderboardManagement = () => {
   };
 
   const onDetailClick = (row) => {  
-    history.push(`${PATH_DASHBOARD.general.leaderboard}/${row._id}`);
+    history.push(`${PATH_DASHBOARD.general.leaderboardForDashboard}/${row._id}`);
   };
 
   const openCreateLeaderboard = () => { 

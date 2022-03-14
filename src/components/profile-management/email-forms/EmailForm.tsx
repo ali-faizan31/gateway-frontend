@@ -8,10 +8,11 @@ import { CgEnter } from "react-icons/cg";
 
 interface EmailFromProps {
   sendOTP: (value: any) => Promise<void>;
-  sendBtnText:string
+  sendBtnText: string;
+  onCancelClick: Function
 }
 
-const EmailFrom = ({ sendOTP, sendBtnText}: EmailFromProps) => {
+const EmailFrom = ({ sendOTP, sendBtnText, onCancelClick }: EmailFromProps) => {
   const initialValues = {
     email: "",
   };
@@ -35,9 +36,9 @@ const EmailFrom = ({ sendOTP, sendBtnText}: EmailFromProps) => {
 
       <form autoComplete="true" onSubmit={handleSubmit(sendOTP)}>
         <FGrid>
-        <FGridItem size={[8, 8, 8]} alignY={"center"} className={"f-mt-1"}>
-        <h2 className={"primary-color"}>Register your Email</h2>
-        </FGridItem>    
+          <FGridItem size={[8, 8, 8]} alignY={"center"} className={"f-mt-1"}>
+            <h2 className={"primary-color"}>Register your Email</h2>
+          </FGridItem>
           <FGridItem size={[12, 12, 12]} alignX="center" className={"f-mt-2"}>
             <FInputText
               label="Email"
@@ -47,18 +48,25 @@ const EmailFrom = ({ sendOTP, sendBtnText}: EmailFromProps) => {
               error={errors["email"]?.message ? errors["email"]?.message : ""}
             />
           </FGridItem>
-          <FGridItem  className={"f-mt-2"} alignX={"end"} alignY={"end"} dir={"row"} size={[12, 12, 12]}>
-           
-              <FButton
-                 type={"submit"}
-                 className={"btn-create f-ml-1"}
-                  title={sendBtnText}
-                  postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}
-                  prefix={<CgEnter />}
-        ></FButton>      
-            </FGridItem>
+          <FGridItem className={"f-mt-2"} alignX={"end"} alignY={"end"} dir={"row"} size={[12, 12, 12]}>
+
+            <FButton
+              type={"submit"}
+              className={"btn-create f-ml-1"}
+              title={sendBtnText}
+              postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}
+              prefix={<CgEnter />}
+            ></FButton>
+
+            <FButton
+              type={"button"}
+              className={"btn-create f-ml-1"}
+              title={"Cancel"}  
+              onClick={onCancelClick}
+            ></FButton>
+          </FGridItem>
         </FGrid>
-       
+
       </form>
     </>
   );

@@ -3,9 +3,10 @@ import EmailVerificationForm from "./EmailVerificationForm";
 import { FContainer, FCard, FCardTitle } from "ferrum-design-system";
 import { Link } from "react-router-dom";
 import { PATH_AUTH } from "../../../routes/paths";
+import { ME_TAG } from "../../../utils/const.utils";
 
 const index = () => {
-  const user = localStorage.getItem('me');
+  const user = localStorage.getItem(ME_TAG);
   const parsedUser = user && JSON.parse(user); 
 
   return (

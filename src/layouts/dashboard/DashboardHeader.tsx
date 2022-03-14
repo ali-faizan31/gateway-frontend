@@ -11,25 +11,22 @@ import { RootState } from "../../redux/rootReducer";
 import { logout } from "../../_apis/OnboardingCrud";
 import toast, { Toaster } from "react-hot-toast"; 
 import { localStorageHelper } from "../../utils/global.utils"; 
+import { COMMUNITY_ROLE_TAG, ME_TAG, TOKEN_TAG, ORG_ROLE_TAG } from '../../utils/const.utils';
 
 
 const DashboardHeader = ({title}:any) => {
   const { pathname } = useLocation();
   const history = useHistory(); 
   const isPublic = pathname.includes('pub'); 
-  const { isConnected, isConnecting, currentWalletNetwork, walletAddress, walletBalance, currentWallet  } = useSelector((state: RootState) => state.walletConnector);
-  const { nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, profileToken, error} = useSelector((state: RootState) => state.walletAuthenticator);
-   
+  const { isConnected, isConnecting } = useSelector((state: RootState) => state.walletConnector);
+  const { meV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+    
 
-  useEffect(() => {
-    console.log( nonce, 'sig', signature, 'token',applicationUserToken, 'prof', profileToken, isAllowedonGateway, allowedNetworksonGateway, "authentication state",)
-  }, [nonce, signature, applicationUserToken, isAllowedonGateway, allowedNetworksonGateway, profileToken])
-  
-
-  useEffect(() => { 
-    console.log(isConnected, isConnecting)
-    if (isConnecting === false && isConnected === false ){
-      handleLogout(); 
+  useEffect(() => {  
+    if (meV2 && meV2.role === COMMUNITY_ROLE_TAG) {
+      if (isConnecting === false && isConnected === false) {
+        handleLogout();
+      }
     }
   }, [isConnected, isConnecting])
   
@@ -51,28 +48,34 @@ const DashboardHeader = ({title}:any) => {
  }
 
 
-  const handleLogout = async () => {
-    console.log('logout');
+  const handleLogout = async () => { 
     let data = {}; 
     try {
     // let logoutResponse =  localStorageHelper.token() && await handleCommunityMemberLogout(data);
     // console.log(logoutResponse)
-    localStorageHelper.removeItem('me');
-    localStorageHelper.removeItem('token');
+    if (localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG){
+      history.push(PATH_AUTH.orgLogin)
+    }
+    localStorageHelper.removeItem(ME_TAG);
+    localStorageHelper.removeItem(TOKEN_TAG);
+
     } catch (e) {
 
     }
   };
 
+  console.log(localStorageHelper.load(ME_TAG))
+
   return (
+    <> 
     <FHeader showLogo={false} titleText={title}>       
       <FItem align="right" display={"flex"}>
-        {/* <FButton
+        {localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG && <FButton
           title="Logout"
           postfix={<RiLogoutCircleRLine />}
           onClick={handleLogout}
-        ></FButton>    */}
-        <MetaMaskConnector.WalletConnector
+        ></FButton>}   
+        {localStorageHelper.load(ME_TAG)?.role !== ORG_ROLE_TAG && <> <MetaMaskConnector.WalletConnector
             WalletConnectView={FButton}
             WalletConnectModal={ConnectWalletDialog}
           />
@@ -89,10 +92,11 @@ const DashboardHeader = ({title}:any) => {
               }}
             >
               <FaUserCircle color="#cba461" size={"40px"} />
-            </Link>
-           
+            </Link> 
+            </>}
       </FItem>
     </FHeader>
+    </>
   )
 }
 

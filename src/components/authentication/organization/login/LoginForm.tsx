@@ -13,9 +13,14 @@ import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader";
 import { connectWeb3 } from "../../../../utils/connect-wallet/connetWalletHelper";
 import { walletAddressAuthenticateCheckOnSignin, getAccessTokenForApplicationUser } from "../../../../_apis/WalletAuthencation";
+import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils"; 
+import { walletConnectorActions } from "../../../../container-components/wallet-connector";
+import * as walletAuthenticatorActions from "../../../common/wallet-authentication/redux/walletAuthenticationActions";
+import { useDispatch } from "react-redux";
 
 const LoginForm = () => {
     const history = useHistory();
+    const dispatch = useDispatch();
     const [viewPassword, setViewPassword] = useState(false);
     const [connected, setConnected] = useState(false);
     const [address, setAddress] = useState("");
@@ -70,7 +75,7 @@ const LoginForm = () => {
         try {
             let isAuthenticated = await checkIsUserWalletAddressAuthenticated(user._id, walletInformation);
             if (isAuthenticated === true) {
-                localStorage.setItem("token", token);
+                localStorage.setItem(TOKEN_TAG, token);
                 toast.success(response.data.status.message);
                 // history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardByProvidedId);
                 history.push(PATH_DASHBOARD.general.leaderboardManagement)
@@ -83,24 +88,32 @@ const LoginForm = () => {
         }
     }
 
+    const removeOldSession = () => {
+        localStorage.removeItem(TOKEN_TAG);
+        localStorage.removeItem(ME_TAG);
+        dispatch(walletConnectorActions.resetWalletConnector());
+        dispatch(walletAuthenticatorActions.resetWalletAuthentication({userToken: applicationUserToken}))
+        dispatch(walletAuthenticatorActions.removeSession({userToken: applicationUserToken}))
+
+    }
 
     const onSubmit = async (values: any) => { 
-        let walletInformation = await connectWeb3(setAddress, setConnected, setWeb3, setNetwork, toast); 
+        // let walletInformation = await connectWeb3(setAddress, setConnected, setWeb3, setNetwork, toast); 
+        removeOldSession();
         await organizationAdminLogin(values)
             .then((response: any) => {
                 const { user } = response.data.body;
                 const { token } = response.data.body;
-                localStorage.removeItem('token');
-                localStorage.removeItem('me');
-                localStorage.setItem('me', JSON.stringify(user));
-                localStorage.setItem("token", token);
+                localStorage.setItem(ME_TAG, JSON.stringify(user));
+                localStorage.setItem(TOKEN_TAG, token);
                 if (token) {
-                    if (user.isEmailAuthenticated === true) {
-                        checkWalletAddress(user, token, response, walletInformation);
-                     } else {
-                        toast.error('Please verify your email first!');
-                        history.push(PATH_AUTH.emailResendCode);
-                    }
+                    history.push(PATH_DASHBOARD.general.leaderboardManagement)
+                //     if (user.isEmailAuthenticated === true) {
+                //         checkWalletAddress(user, token, response, walletInformation);
+                //      } else {
+                //         toast.error('Please verify your email first!');
+                //         history.push(PATH_AUTH.emailResendCode);
+                //     }
                 }
             })
             .catch((e) => {

@@ -28,11 +28,12 @@ import {
   getAllCompetitions,
 } from "../../_apis/CompetitionCrud";
 import { localStorageHelper } from "../../utils/global.utils";
+import { ME_TAG, TOKEN_TAG } from "../../utils/const.utils";
 
 const DashboardSidebar = () => {
   const { id }: any = useParams();
   const { pathname } = useLocation();
-  let token = localStorage.getItem("token");
+  let token = localStorage.getItem(TOKEN_TAG);
   const [sideConfig, setSideConfig]: any = useState([]);
   const { competitionList } = useSelector(
     (state: RootStateOrAny) => state.competition
@@ -221,7 +222,7 @@ const DashboardSidebar = () => {
       {renderContent(homeSidebarConfig)}
       {/* {(isPublicLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig)}  */}
       {isStakingLeaderboard && renderContent(sideConfig)}
-      {localStorageHelper.load("me")?.role === "organizationAdmin" &&
+      {localStorageHelper.load(ME_TAG)?.role === "organizationAdmin" &&
         renderContent(sidebarConfig)}
       {renderContent(communityLeaderboardSidebarConfig)}
       {renderContent(tokensSidebarConfig)}

@@ -4,14 +4,15 @@ import { Web3AuthWrapper } from "./WalletAuthenticationForm";
 import { ClipLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import { getAccessTokenForApplicationUser } from "../../../_apis/WalletAuthencation";
+import { ME_TAG, TOKEN_TAG } from "../../../utils/const.utils";
 
 
 const Index = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [applicationUserToken, setApplicationUserToken] = useState("");
-  const user = localStorage.getItem('me');
+  const user = localStorage.getItem(ME_TAG);
   const parsedUser = user && JSON.parse(user);
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem(TOKEN_TAG);
 
   useEffect(() => {
    getAccessToken();

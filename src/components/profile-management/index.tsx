@@ -18,42 +18,44 @@ import {
 } from "ferrum-design-system";
 import { generateNonceForCommunityMember } from "../../_apis/WalletAuthencation"
 
-import { localStorageHelper } from "../../utils/global.utils";
+import { checkSession, localStorageHelper } from "../../utils/global.utils";
 import * as walletAuthenticatorActions from "../common/wallet-authentication/redux/walletAuthenticationActions";
+import { TOKEN_TAG } from "../../utils/const.utils";
 
 const ProfileSettings = () => {
-  const {walletAddress} = useSelector(
-    (state: RootState)=> state.walletConnector
-  )
-
-  const walletAuthenticator= useSelector(
-    (state: RootState)=> state.walletAuthenticator
-  )
-  
-  
   let isLoading = false;
   const dispatch = useDispatch();
   const [profileToken, setprofileToken] = useState("");
   const [user, setUser] = useState({ email: "" });
   const [errorModal, setErrorModal] = useState({show:false, message:''})
 
-useEffect(() => {
-    if(walletAuthenticator.profileToken){     
-      getUserInfo();
+  const {walletAddress, isConnected} = useSelector( (state: RootState)=> state.walletConnector )
+  const walletAuthenticator= useSelector( (state: RootState)=> state.walletAuthenticator )
+  
+  useEffect(() => { 
+    dispatch( walletAuthenticatorActions.saveCommunityMemberProfileToken({ profileToken: "" }) );
+  }, [])
+
+  useEffect(() => { 
+    if (!isConnected){
+      setUser({ email: ""})
     }
-    setprofileToken(walletAuthenticator.profileToken)
-  }, [walletAuthenticator]);
+  }, [isConnected])
+  
 
   useEffect(() => {
-    getUserInfo();
-  },[])
+    if( isConnected && ( walletAuthenticator.profileToken || walletAuthenticator.tokenV2)){     
+      getUserInfo();
+    }  
+    setprofileToken(walletAuthenticator.profileToken)
+  }, [walletAuthenticator, walletAuthenticator.tokenV2]); 
 
 
   const getUserInfo = async () => { 
     isLoading = true;
-    localStorageHelper.getToken("communityMemberToken") && await getMe(localStorageHelper.getToken("communityMemberToken"))
+    walletAuthenticator.tokenV2 && await getMe(walletAuthenticator.tokenV2)
       .then((response: any) => {
-        setUser(response.data.body.user);
+        setUser(response.data.body.user); 
       })
       .catch((e) => {
         if (e.response) {
@@ -66,6 +68,7 @@ useEffect(() => {
         isLoading = false;
       });
   };
+
   const getNonce = async (communityMemberToken: any) => { 
     generateNonceForCommunityMember(communityMemberToken)
     .then((res: any) => {
@@ -75,6 +78,8 @@ useEffect(() => {
       }
     })
     .catch((e) => {
+      dispatch( walletAuthenticatorActions.saveNonce({ nonce: '' }) );  
+        dispatch( walletAuthenticatorActions.getSignatureFromMetamask({getSignatureFromMetamask: false}))
       if (e.response) {
         toast.error(` Error Occured: nonce ${e?.response?.data?.status?.message}`);
       } else {
@@ -85,14 +90,19 @@ useEffect(() => {
 
 
   const walletAuthentication = async () => {   
-    localStorageHelper.getToken("communityMemberToken") &&  getNonce(localStorageHelper.getToken("communityMemberToken"));    
-    setErrorModal({show:false, message:""})   
+    walletAuthenticator.tokenV2 &&  getNonce(walletAuthenticator.tokenV2);    
+    setErrorModal({show:false, message:""}) 
   };
+
+  const onCancelClick = () => {      
+    dispatch( walletAuthenticatorActions.saveCommunityMemberProfileToken({ profileToken: "" }) );
+  }
+
 
   return (
     <>      
      <Toaster />
-      <FContainer width={1000} >
+      <FContainer type={"fluid"} >
       {!profileToken ? (
           <FGrid className={"f-mb-1"}>           
           <FGridItem size={[12, 12, 12]} alignX="center" className={"f-mt-2"}>
@@ -115,16 +125,14 @@ useEffect(() => {
           </FGridItem>
       
             <FGridItem  className={"f-mt-2"} alignX={"end"} alignY={"end"} dir={"row"} size={[12, 12, 12]}>
-              {isLoading}           
-                <FButton
-                variant={"secondary"}
+              {isLoading}     
+                <FButton 
                 prefix={<CgEnter />}
                   type="button"
-                  className={"btn-create f-ml-1 "}
-                  disabled={isLoading}
+                  className={" f-ml-1 "}
+                  disabled={isLoading || !walletAuthenticator.tokenV2 || !isConnected}
                   onClick={walletAuthentication}
-                  title={"Edit Profile"}
-                  outlined
+                  title={"Edit Profile"} 
                 ></FButton>         
             </FGridItem>
           </FGrid>      
@@ -133,7 +141,7 @@ useEffect(() => {
         profileToken={profileToken}
         setProfileToken={setprofileToken}
         getUserInfo={getUserInfo}
-      
+        onCancelClick={onCancelClick}
       />
        )}
        <FDialog show={errorModal.show} size={"medium"}  className="bg-white">  

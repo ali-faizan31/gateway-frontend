@@ -26,11 +26,12 @@ import { addCompetition } from "../../_apis/CompetitionCrud";
 import { getAllCompetitionsDispatch } from "../../redux/slices/competition";
 // import "./Competition.scss";
 import { chainIdList } from "../leaderboard/LeaderboardHelper";
+import { TOKEN_TAG } from "../../utils/const.utils";
 
 export default function NewCompetition() {
   const dispatch = useDispatch();
   const history = useHistory();
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem(TOKEN_TAG);
   const [leaderboardList, setLeaderboardList] = useState([]);   
 
   useEffect(() => {
