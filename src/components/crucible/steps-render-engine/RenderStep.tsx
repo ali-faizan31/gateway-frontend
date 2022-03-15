@@ -1,6 +1,7 @@
 import { FButton, FItem } from 'ferrum-design-system';
 import React, { useEffect } from 'react'
 import { jsonTemplate } from './ExampleJson'
+import WistiaRenderer from './WistiaRenderer';
 
 const RenderStep = (props: any) => {  
 
@@ -30,20 +31,27 @@ const RenderStep = (props: any) => {
         {inputElement.content}
       </h6>)
 
-      case 'list': return (<>
+      case 'p': return (<p className='f-mb-1'>
+      {inputElement.content}
+      </p>)
+
+      case 'custom-video-wystia': return <WistiaRenderer video={inputElement.content} /> 
+       
+
+      case 'ul': return (<>
         <h4>{inputElement.title}</h4>
-        {inputElement.items.length && inputElement.items.map((item: any, index: any) => (
+        {inputElement.content.length && inputElement.content.map((item: any, index: any) => (
           <FItem key={index}>
-            <span className='f-pr--3'><img src="/ferrum/check.svg" /></span>
+            <span className='f-pr--3'><img src={`/ferrum/${inputElement.style}.svg`} /></span>
             {item}
           </FItem>
         ))}
       </>)
 
-      case 'submit': return (
+      case 'button': return (
         <FButton title={inputElement.content}
           className="w-100 f-mt-2 font-size-22"
-          postfix={<img src="/ferrum/Get_Started.svg" />}
+          postfix={<img src={`/ferrum/${inputElement.style}.svg`} />}
           onClick={() => console.log('hi')}
         />)
     }

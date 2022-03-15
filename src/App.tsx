@@ -83,7 +83,9 @@ function App() {
           <UnGuardedRoute path={PATH_DASHBOARD.general.profile} component={ProfileSettings} auth={isAuthenticated} layout={DashboardLayout} headerTitle="My Profile" />
           <UnGuardedRoute path={PATH_DASHBOARD.crucible.intro} component={CrucibleIntroduction} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
           <UnGuardedRoute path={PATH_DASHBOARD.crucible.mintAndStake} component={MintAndStake} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <UnGuardedRoute path={PATH_DASHBOARD.crucible.index} component={Crucible} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.id} component={Crucible} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          
+          {/* <Route exact path={PATH_DASHBOARD.crucible.id}> <Redirect to={PATH_DASHBOARD.crucible.index} /> </Route> */}
 
           <Route path="*" component={Page404}></Route>
         </Switch>
@@ -95,3 +97,6 @@ function App() {
 export default App;
 
 ///pub/multi/leaderboard/61b6d48337f5125acbbfddeb
+
+//stepflowsetep 6230f64e4ed3666984f7c765
+//622f88547a0cc65e0dee6462

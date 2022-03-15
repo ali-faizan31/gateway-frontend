@@ -85,8 +85,9 @@ export const PATH_DASHBOARD = {
   },
   bridge: "https://bridge.ferrum.network/",
   home: "/home",
-  crucible: {
-    index: path(ROOTS_DASHBOARD, "/crucible"),
+  crucible: { 
+    id: path(ROOTS_DASHBOARD, "/crucible/:id"),
+    index: path(ROOTS_DASHBOARD, "/crucible/622f88547a0cc65e0dee6462"),
     intro: path(ROOTS_DASHBOARD, "/crucible/intro"),
     mintAndStake: path(ROOTS_DASHBOARD, "/crucible/mint"),
   }
