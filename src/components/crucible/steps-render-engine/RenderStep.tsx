@@ -1,17 +1,20 @@
-import { FButton, FItem } from 'ferrum-design-system';
+import { FButton, FInputText, FItem } from 'ferrum-design-system';
 import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux';
 import { jsonTemplate } from './ExampleJson'
+import ModalRenderer from './ModalRenderer';
 import WistiaRenderer from './WistiaRenderer';
 
-const RenderStep = (props: any) => {  
+const RenderStep = ({ element }: any) => {
+  
 
-  const getElement = (inputElement: any) => { 
+  const getElement = (inputElement: any) => {
     switch (inputElement.type) {
       case 'h1': return (<h1 className='f-mb-1 primary-color'>
         {inputElement.content}
       </h1>)
 
-      case 'h2': return (<h2 className='f-mb-1 primary-color'> 
+      case 'h2': return (<h2 className='f-mb-1 primary-color'>
         {inputElement.content}
       </h2>)
 
@@ -32,11 +35,35 @@ const RenderStep = (props: any) => {
       </h6>)
 
       case 'p': return (<p className='f-mb-1'>
-      {inputElement.content}
+        {inputElement.content}
       </p>)
 
-      case 'custom-video-wystia': return <WistiaRenderer video={inputElement.content} /> 
-       
+      case 'custom-text-field': return <div className='f-mb-1'>
+        <p className='custom-font-size-16'> {inputElement.label}</p>
+        <FInputText
+          placeholder={inputElement.content}
+          prefix={<img src="" />}
+          postfix={<strong className='primary-color f-pr-1' onClick={() => console.log("max")}> Max </strong>}
+        />
+        <p className='primary-color custom-font-size-16'> You have ---- available</p>
+      </div>
+
+      case 'custom-video-wystia': return <WistiaRenderer video={inputElement.content} />
+
+      case 'custom-modal-approved': return (
+        <ModalRenderer content={inputElement.content} style={inputElement.style} type="approved"
+          onHide={() => console.log('hi')}
+        />)
+
+      case 'custom-modal-confirming': return (
+        <ModalRenderer content={inputElement.content} style={inputElement.style} type="confirming"
+          onHide={() => console.log('hi')}
+        />)
+
+      case 'custom-modal-submitted': return (
+        <ModalRenderer content={inputElement.content} style={inputElement.style} type="submitted"
+          onHide={() => console.log('hi')}
+        />)
 
       case 'ul': return (<>
         <h4>{inputElement.title}</h4>
@@ -54,12 +81,14 @@ const RenderStep = (props: any) => {
           postfix={<img src={`/ferrum/${inputElement.style}.svg`} />}
           onClick={() => console.log('hi')}
         />)
+
+
     }
   }
 
   return (
     <>
-      {getElement(props.element)}
+      {getElement(element)}
     </>
   )
 }

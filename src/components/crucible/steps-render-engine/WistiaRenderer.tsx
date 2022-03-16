@@ -12,8 +12,7 @@ const WistiaRenderer = (props: any) => {
 
     script2.src = props.video[1];
     script2.async = true;
-
-    console.log(script1, script2)
+ 
     document.body.appendChild(script1);
     document.body.appendChild(script2);
   }, [])

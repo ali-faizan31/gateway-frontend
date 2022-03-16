@@ -7,6 +7,7 @@ import {
   WalletApplicationWrapper 
 } from "../container-components";
 import { walletConnectorSlice } from "../components/common/wallet-authentication/redux/walletAuthenticationSlice";
+import { crucibleSlice } from '../components/crucible/redux/CrucibleSlice';
 // slices
 import competitionReducer from './slices/competition';
 import leaderboardReducer from './slices/leaderboard';
@@ -45,6 +46,7 @@ const rootReducer = combineReducers({
     walletAutheticatorPersistConfig,
      walletConnectorSlice.reducer
   ),
+  crucible: crucibleSlice.reducer,
   competition: competitionReducer,
   leaderboard: leaderboardReducer 
 });
