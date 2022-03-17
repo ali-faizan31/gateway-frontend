@@ -424,8 +424,7 @@ const LeaderboardInformation = () => {
               {!isPublicUser && (
                 <FButton
                   type="button"
-                  className="btn-create"
-                  className={"f-ml-1"}
+                  className="btn-create f-ml-1" 
                   disabled={isLoading}
                   onClick={onExportClick}
                   title={" Export to CSV"}

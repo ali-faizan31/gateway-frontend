@@ -103,7 +103,8 @@ const DashboardSidebar = () => {
       let productList = getSubscriptionListAgainstOrganization(subscriptionResponse); 
       setSideMenuItems(productList); 
     } catch (e: any) { 
-      toast.error(`Error occured: ${e.response.data.status.message}`)
+      console.log(`Error occured: ${e.response.data.status.message}`)
+      // toast.error(`Error occured: ${e.response.data.status.message}`)
     }
   }
 

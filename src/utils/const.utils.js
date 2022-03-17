@@ -19,3 +19,4 @@ export const TOKEN_TAG = "tokenV2";
 export const ME_TAG = "meV2";
 export const ORG_ROLE_TAG = "organizationAdmin";
 export const COMMUNITY_ROLE_TAG = "communityMember"; 
+export const PUBLIC_TAG = "/pub";
