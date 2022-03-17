@@ -280,14 +280,14 @@ const DashboardSidebar = () => {
   return (
     <FSider>
       {renderContent(homeSidebarConfig)}  
-      {renderContent(sideMenuItems)}
+      {/* {renderContent(sideMenuItems)} */}
       {localStorageHelper.load(ME_TAG)?.role === "organizationAdmin" && renderContent(sidebarConfig)}
       {/* {(isPublicLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig)}  */}
-      {/* {isStakingLeaderboard && renderContent(sideConfig)} 
+      {isStakingLeaderboard && renderContent(sideConfig)} 
        {renderContent(communityLeaderboardSidebarConfig)}
       {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
-      {renderContent(crucibleConfig)} */}
+      {renderContent(crucibleConfig)}
     </FSider>
 
   );
