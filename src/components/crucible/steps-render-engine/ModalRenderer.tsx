@@ -12,8 +12,8 @@ import { useDispatch } from 'react-redux';
 import GetCrucibleActions from "./CrucibleActions";
 
 const ModalRenderer = ({ show, onHide, content, style, type }: any) => {
-    const dispatch = useDispatch();
-    console.log(GetCrucibleActions(type, dispatch));
+    // const dispatch = useDispatch();
+    // console.log(GetCrucibleActions(type, dispatch));
 
     // useEffect(() => { 
     //     console.log(GetCrucibleActions(type, dispatch));
@@ -30,7 +30,7 @@ const ModalRenderer = ({ show, onHide, content, style, type }: any) => {
     return (
         <div>
             <FDialog
-                show={true}
+                show={show}
                 size={"medium"}
                 onHide={onHide}>
 

@@ -11,10 +11,8 @@ const Index = () => {
     const { id }: any = useParams();
     const [stepJson, setStepJson] = useState([]);
 
-    useEffect(() => {
-        console.log(id, 'id')
-        if (id) {
-
+    useEffect(() => { 
+        if (id && id !== ":id") {
             getStepFlowStepInformation(id);
         }
     }, [id])
