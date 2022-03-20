@@ -18,8 +18,14 @@ import {
 } from "./SidebarConfig";
 import { useLocation, useParams } from "react-router-dom";
 import { PATH_DASHBOARD } from "../../routes/paths";
-import { getLeaderboardByIdForPublicUser, getAllLeaderboards } from "../../_apis/LeaderboardCrud";
-import { getCompetitionByIdForPublicUser, getAllCompetitions } from "../../_apis/CompetitionCrud";
+import {
+  getLeaderboardByIdForPublicUser,
+  getAllLeaderboards,
+} from "../../_apis/LeaderboardCrud";
+import {
+  getCompetitionByIdForPublicUser,
+  getAllCompetitions,
+} from "../../_apis/CompetitionCrud";
 import { localStorageHelper } from "../../utils/global.utils";
 import { ME_TAG, TOKEN_TAG } from "../../utils/const.utils";
 import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
@@ -30,8 +36,12 @@ const DashboardSidebar = () => {
   let token = localStorage.getItem(TOKEN_TAG);
   const [sideConfig, setSideConfig]: any = useState([]);
   const [sideMenuItems, setSideMenuItems] = useState([]);
-  const { competitionList } = useSelector((state: RootStateOrAny) => state.competition);
-  const { leaderboardList } = useSelector((state: RootStateOrAny) => state.leaderboard);
+  const { competitionList } = useSelector(
+    (state: RootStateOrAny) => state.competition
+  );
+  const { leaderboardList } = useSelector(
+    (state: RootStateOrAny) => state.leaderboard
+  );
   const isPublic = pathname.includes("/pub");
   const isPublicLeaderboard = pathname.includes("/pub/leader");
   const isStakingLeaderboard = pathname.includes("/staking");
@@ -61,7 +71,9 @@ const DashboardSidebar = () => {
     return currencyArray;
   };
 
-  const getSubscriptionListAgainstOrganization = (subscriptionResponse: any) => {
+  const getSubscriptionListAgainstOrganization = (
+    subscriptionResponse: any
+  ) => {
     const { subscriptions } = subscriptionResponse;
     let subsciptionArray: any = [];
     subscriptions.forEach((item: any) => {
@@ -70,14 +82,30 @@ const DashboardSidebar = () => {
         item[productName].length > 0 &&
           item[productName].forEach((child: any) => {
             child.title = child.name;
-            child.path = GET_PATHS(productName, child._id, child.numberOfCurrencies);
+            child.path = GET_PATHS(
+              productName,
+              child._id,
+              child.numberOfCurrencies
+            );
           });
-        subsciptionArray.push({ title: productName, path: "", icon: GET_ICONS(productName), children: item[productName] });
+        subsciptionArray.push({
+          title: productName,
+          path: "",
+          icon: GET_ICONS(productName),
+          children: item[productName],
+        });
       }
     });
-    let currencies = getCurrenciesAgainstOrganization(subscriptionResponse.currencies);
+    let currencies = getCurrenciesAgainstOrganization(
+      subscriptionResponse.currencies
+    );
     if (currencies.length && currencies.length > 1) {
-      subsciptionArray.push({ title: "Get Token", path: "", icon: GET_ICONS("Token"), children: currencies });
+      subsciptionArray.push({
+        title: "Get Token",
+        path: "",
+        icon: GET_ICONS("Token"),
+        children: currencies,
+      });
     } else {
       subsciptionArray.push(...currencies);
     }
@@ -87,9 +115,14 @@ const DashboardSidebar = () => {
   const getSideMenuInformation = async () => {
     try {
       let siteName = getSiteName(pathname, "/", "/");
-      let response = await getSubscriptionInformationForAssociatedOrganizationBySiteName(siteName);
-      let subscriptionResponse = response && response.data && response.data.body;
-      let productList = getSubscriptionListAgainstOrganization(subscriptionResponse);
+      let response =
+        await getSubscriptionInformationForAssociatedOrganizationBySiteName(
+          siteName
+        );
+      let subscriptionResponse =
+        response && response.data && response.data.body;
+      let productList =
+        getSubscriptionListAgainstOrganization(subscriptionResponse);
       setSideMenuItems(productList);
     } catch (e: any) {
       toast.error(`Error occured: ${e.response.data.status.message}`);
@@ -99,7 +132,11 @@ const DashboardSidebar = () => {
   useEffect(() => {
     if (id !== ":id") {
       if (isPublic) {
-        if (isStakingLeaderboard || isPublicLeaderboard || isPublicMultiLeaderboard) {
+        if (
+          isStakingLeaderboard ||
+          isPublicLeaderboard ||
+          isPublicMultiLeaderboard
+        ) {
           getPublicLeaderboard();
         }
         if (isPublicCompetition) {
@@ -156,7 +193,9 @@ const DashboardSidebar = () => {
   };
 
   const updatePublicLeaderboardConfig = (list: any) => {
-    setSideConfig([{ title: "Leaderboard", path: PATH_DASHBOARD.general.competition }]);
+    setSideConfig([
+      { title: "Leaderboard", path: PATH_DASHBOARD.general.competition },
+    ]);
     if (isPublicMultiLeaderboard) {
       setSideConfig([]);
       const np: any = [list[0]];
@@ -196,7 +235,9 @@ const DashboardSidebar = () => {
   };
 
   const updatePublicCompetitionConfig = (list: any) => {
-    setSideConfig([{ title: "Competition", path: PATH_DASHBOARD.general.competition }]);
+    setSideConfig([
+      { title: "Competition", path: PATH_DASHBOARD.general.competition },
+    ]);
     if (isPublicCompetition) {
       setSideConfig([]);
       let np: any = publicCompetitionConfig[0].children;
@@ -220,7 +261,10 @@ const DashboardSidebar = () => {
         const temp = {
           title: item.name,
           _id: item._id,
-          path: component === "leaderboard" ? `/dashboard/leaderboard/${item._id}` : `/dashboard/competition/${item._id}`,
+          path:
+            component === "leaderboard"
+              ? `/dashboard/leaderboard/${item._id}`
+              : `/dashboard/competition/${item._id}`,
         };
         mappedData.push(temp);
       });
@@ -231,7 +275,13 @@ const DashboardSidebar = () => {
 
   const renderContent = (items: any) => {
     return items.map((item: any, index: any) => (
-      <FSiderItem to={item.path} title={item.title} prefix={item.icon} key={index} target={item.target && item.target}>
+      <FSiderItem
+        to={item.path}
+        title={item.title}
+        prefix={item.icon}
+        key={index}
+        target={item.target && item.target}
+      >
         <>
           {" "}
           {item.children && (
@@ -242,7 +292,8 @@ const DashboardSidebar = () => {
                   title={subItem.title}
                   prefix={<img src="/ferrum/bullet.png" height={"4px"} />}
                   key={index}
-                  target={subItem.target && subItem.target}></FSiderItem>
+                  target={subItem.target && subItem.target}
+                ></FSiderItem>
               ))}
             </FSiderSubMenuItem>
           )}
@@ -255,14 +306,14 @@ const DashboardSidebar = () => {
     <FSider>
       {renderContent(homeSidebarConfig)}
       {renderContent(sideMenuItems)}
-      {localStorageHelper.load(ME_TAG)?.role === "organizationAdmin" && renderContent(sidebarConfig)}
+      {localStorageHelper.load(ME_TAG)?.role === "organizationAdmin" &&
+        renderContent(sidebarConfig)}
       {/* {(isPublicLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig)}  */}
       {/* {isStakingLeaderboard && renderContent(sideConfig)} 
        {renderContent(communityLeaderboardSidebarConfig)}
       {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
       {renderContent(crucibleConfig)} */}
-      <FSiderItem to="/dashboard" title={"Home"}></FSiderItem>
       <FSiderItem to="/dashboard/crucible" title={"Crucible"}></FSiderItem>
     </FSider>
   );
