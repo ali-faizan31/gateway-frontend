@@ -1,39 +1,20 @@
 @import "./variables";
 
-.app-wrapper {
-  display: flex;
-  main {
-    width: 100%;
-    padding: 1rem 2rem 1rem 3rem;
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      // position: sticky;
-      // top: 0;
-      // z-index: 1000;
-      div {
-        display: flex;
-      }
-      .page-name {
-        margin-right: 1rem;
-        text-transform: capitalize;
-      }
-      .form-group {
-        margin: 0;
-        input {
-        }
-      }
-      &.sticky-header {
-        position: sticky;
-        top: 0;
-        padding-top: 1rem;
-      }
-    }
-    .swap-page {
-      max-width: 700px;
-      margin: 2rem auto;
+.f-main {
+  width: 100%;
+
+  .page-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 3rem;
+  }
+  .f-header {
+    padding: 2rem 2rem 2rem 3rem !important;
+    margin-bottom: 2rem;
+  }
+  .f-container {
+    &.fluid {
+      padding: 0 3rem;
+      padding-right: 20rem;
     }
   }
 }
