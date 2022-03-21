@@ -29,53 +29,81 @@ const CrucibleCongratsPage = () => {
         </FTypo>
         <FGrid>
           <FGridItem size={[6, 6, 6]}>
-            <FItem bgColor="#1C2229" className={" item-whats-next"}>
-              <div className="network-icon-wrapper text-center f-mb-1">
-                <span className="icon-wrap">
-                  <IconNetworkCFrm />
-                  <IconNetworkBsc />
-                </span>
+            <FItem bgColor="#1C2229" className={"card-whats-next"}>
+              <div className="card-whats-next-inner">
+                <div className="card-whats-next-front">
+                  <div className="network-icon-wrapper text-center f-mb-1">
+                    <span className="icon-wrap">
+                      <IconNetworkCFrm />
+                      <IconNetworkBsc />
+                    </span>
+                  </div>
+                  <FTypo size={20} weight={400} align={"center"}>
+                    cFRMx / BNB Mint and Stake
+                  </FTypo>
+                </div>
+                <div className="card-whats-next-back">
+                  <FTypo>Use cFRM and BNB to add Liquidity and compound rewards with Farming</FTypo>
+                </div>
               </div>
-              <FTypo size={20} weight={400} align={"center"}>
-                cFRMx / BNB Mint and Stake
-              </FTypo>
             </FItem>
           </FGridItem>
           <FGridItem size={[6, 6, 6]}>
-            <FItem bgColor="#1C2229" className={" item-whats-next"}>
-              <div className="network-icon-wrapper text-center f-mb-1">
-                <span className="icon-wrap">
-                  <IconNetworkCFrm />
-                  <IconNetworkBsc />
-                </span>
+            <FItem bgColor="#1C2229" className={"card-whats-next"}>
+              <div className="card-whats-next-inner">
+                <div className="card-whats-next-front">
+                  <div className="network-icon-wrapper text-center f-mb-1">
+                    <span className="icon-wrap">
+                      <IconNetworkCFrm />
+                      <IconNetworkBsc />
+                    </span>
+                  </div>
+                  <FTypo size={20} weight={400} align={"center"}>
+                    Go to cFRM Leaderboard Competition
+                  </FTypo>
+                </div>
+                <div className="card-whats-next-back">
+                  <FTypo>Check out the cFRM Leaderboard and participate in the competition to generate rewards</FTypo>
+                </div>
               </div>
-              <FTypo size={20} weight={400} align={"center"}>
-                Go to cFRM Leaderboard Competition
-              </FTypo>
             </FItem>
           </FGridItem>
           <FGridItem size={[6, 6, 6]}>
-            <FItem bgColor="#1C2229" className={"item-whats-next"}>
-              <div className="network-icon-wrapper text-center f-mb-1">
-                <span className="icon-wrap">
-                  <IconNetworkCFrm />
-                </span>
+            <FItem bgColor="#1C2229" className={"card-whats-next"}>
+              <div className="card-whats-next-inner">
+                <div className="card-whats-next-front">
+                  <div className="network-icon-wrapper text-center f-mb-1">
+                    <span className="icon-wrap">
+                      <IconNetworkCFrm />
+                    </span>
+                  </div>
+                  <FTypo size={20} weight={400} align={"center"}>
+                    Mint cFRM
+                  </FTypo>
+                </div>
+                <div className="card-whats-next-back">
+                  <FTypo>You can always mint more cFRM to increase your pool share.</FTypo>
+                </div>
               </div>
-              <FTypo size={20} weight={400} align={"center"}>
-                Mint cFRM
-              </FTypo>
             </FItem>
           </FGridItem>
           <FGridItem size={[6, 6, 6]}>
-            <FItem bgColor="#1C2229" className={"item-whats-next"}>
-              <div className="network-icon-wrapper text-center f-mb-1">
-                <span className="icon-wrap">
-                  <IconNetworkCFrm />
-                </span>
+            <FItem bgColor="#1C2229" className={"card-whats-next"}>
+              <div className="card-whats-next-inner">
+                <div className="card-whats-next-front">
+                  <div className="network-icon-wrapper text-center f-mb-1">
+                    <span className="icon-wrap">
+                      <IconNetworkCFrm />
+                    </span>
+                  </div>
+                  <FTypo size={20} weight={400} align={"center"}>
+                    Trade cFRM
+                  </FTypo>
+                </div>
+                <div className="card-whats-next-back">
+                  <FTypo>You can always mint more cFRM to increase your pool share.</FTypo>
+                </div>
               </div>
-              <FTypo size={20} weight={400} align={"center"}>
-                Trade cFRM
-              </FTypo>
             </FItem>
           </FGridItem>
           <Link to="/dashboard/crucible" className="go-back">
