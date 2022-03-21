@@ -33,8 +33,8 @@ export const CardAPR = () => {
           </FItem>
         ),
         totalDeposited: <FTypo className={"col-amount"}>127.{rd}</FTypo>,
-        yourDeposit: <FTypo className={"col-amount"}>$13.{rd}</FTypo>,
-        yourRewards: <FTypo className={"col-amount"}>$.{rd}</FTypo>,
+        yourDeposit: <FTypo className={"col-your"}>$13.{rd}</FTypo>,
+        yourRewards: <FTypo className={"col-your"}>$.{rd}</FTypo>,
         apr: (
           <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}>
             {rd}
