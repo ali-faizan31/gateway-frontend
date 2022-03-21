@@ -8,26 +8,13 @@
     filter: blur(5px);
   }
 }
-.modal {
-  .modal-content {
+
+.transaction-status {
+  .f-loader {
     position: relative;
-    z-index: 1000;
-    background: lighten($themePrimaryColor, 1);
-    padding: 1rem 2rem;
-    border: 0;
-  }
-  .modal-header {
-    border: 0;
-    .modal-title {
-      // color: $themePrimaryColor;
-    }
-    .btn-close {
-      background: url(../img/icon-close.svg) center center no-repeat;
-      width: 20px;
-      background-size: 15px;
-      height: 20px;
-      outline: 0;
-      border: 0;
+    margin-bottom: 2rem;
+    &:before {
+      background: none;
     }
   }
 }

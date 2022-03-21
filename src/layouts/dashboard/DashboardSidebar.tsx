@@ -11,15 +11,13 @@ import {
   bridgeSidebarConfig,
   homeSidebarConfig,
   communityLeaderboardSidebarConfig,
-  crucibleConfig, 
+  crucibleConfig,
   GET_PATHS,
   GET_ICONS,
-  getCurrencyIcon
+  getCurrencyIcon,
 } from "./SidebarConfig";
 import { useLocation, useParams } from "react-router-dom";
-import {
-  PATH_DASHBOARD,
-} from "../../routes/paths";
+import { PATH_DASHBOARD } from "../../routes/paths";
 import {
   getLeaderboardByIdForPublicUser,
   getAllLeaderboards,
@@ -29,7 +27,7 @@ import {
   getAllCompetitions,
 } from "../../_apis/CompetitionCrud";
 import { localStorageHelper } from "../../utils/global.utils";
-import { ME_TAG, TOKEN_TAG  } from "../../utils/const.utils";
+import { ME_TAG, TOKEN_TAG } from "../../utils/const.utils";
 import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 
 const DashboardSidebar = () => {
@@ -52,48 +50,67 @@ const DashboardSidebar = () => {
 
   useEffect(() => {
     getSideMenuInformation();
-  }, [])
+  }, []);
 
   const getSiteName = (url: string, indexA: string, indexB: string) => {
     let substr = url.indexOf(indexA) + indexA.length;
     return url.substring(substr, url.indexOf(indexB, substr));
-  }
+  };
 
   const getCurrenciesAgainstOrganization = (currencies: any) => {
     let currencyArray: any = [];
-    currencies.length && currencies.forEach((currency: any) => {
-      currencyArray.push({
-        title: currency.name, 
-        icon: getCurrencyIcon(currency.logo),
-        target: "_blank",
-        path: `${currency?.cabn?.networkDex?.dex?.url}swap?inputCurrency=BNB&outputCurrency=${currency?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`
-      }) 
-    });
+    currencies.length &&
+      currencies.forEach((currency: any) => {
+        currencyArray.push({
+          title: currency.name,
+          icon: getCurrencyIcon(currency.logo),
+          target: "_blank",
+          path: `${currency?.cabn?.networkDex?.dex?.url}swap?inputCurrency=BNB&outputCurrency=${currency?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`,
+        });
+      });
     return currencyArray;
-  }
+  };
 
-
-  const getSubscriptionListAgainstOrganization = (subscriptionResponse: any) => { 
+  const getSubscriptionListAgainstOrganization = (
+    subscriptionResponse: any
+  ) => {
     const { subscriptions } = subscriptionResponse;
     let subsciptionArray: any = [];
-    subscriptions.forEach((item: any) => { 
-      let productName = item.product.name; 
-      if (item[productName]){
-        item[productName].length > 0 && item[productName].forEach((child: any)=>{
-          child.title = child.name;
-          child.path = GET_PATHS(productName, child._id, child.numberOfCurrencies)
-        })
-        subsciptionArray.push({ title: productName, path: '', icon: GET_ICONS(productName), children: item[productName] });
+    subscriptions.forEach((item: any) => {
+      let productName = item.product.name;
+      if (item[productName]) {
+        item[productName].length > 0 &&
+          item[productName].forEach((child: any) => {
+            child.title = child.name;
+            child.path = GET_PATHS(
+              productName,
+              child._id,
+              child.numberOfCurrencies
+            );
+          });
+        subsciptionArray.push({
+          title: productName,
+          path: "",
+          icon: GET_ICONS(productName),
+          children: item[productName],
+        });
       }
-    }); 
-    let currencies = getCurrenciesAgainstOrganization(subscriptionResponse.currencies);
-    if ( currencies.length && currencies.length > 1){
-      subsciptionArray.push({ title: 'Get Token', path: '', icon: GET_ICONS('Token'), children: currencies });
+    });
+    let currencies = getCurrenciesAgainstOrganization(
+      subscriptionResponse.currencies
+    );
+    if (currencies.length && currencies.length > 1) {
+      subsciptionArray.push({
+        title: "Get Token",
+        path: "",
+        icon: GET_ICONS("Token"),
+        children: currencies,
+      });
     } else {
-      subsciptionArray.push(...currencies)
-    } 
+      subsciptionArray.push(...currencies);
+    }
     return subsciptionArray;
-  }
+  };
 
   const getSideMenuInformation = async () => {
     try {
@@ -106,7 +123,7 @@ const DashboardSidebar = () => {
       console.log(`Error occured: ${e.response.data.status.message}`)
       // toast.error(`Error occured: ${e.response.data.status.message}`)
     }
-  }
+  };
 
   useEffect(() => {
     if (id !== ":id") {
@@ -251,7 +268,7 @@ const DashboardSidebar = () => {
     // setLeaderboardList(mappedData);
     await setSideConfig(mappedData);
   };
- 
+
   const renderContent = (items: any) => {
     return items.map((item: any, index: any) => (
       <FSiderItem
@@ -261,36 +278,40 @@ const DashboardSidebar = () => {
         key={index}
         target={item.target && item.target}
       >
-        {item.children && (
-          <FSiderSubMenuItem>
-            {item.children.map((subItem: any, index: any) => (
-              <FSiderItem
-                to={subItem.path}
-                title={subItem.title}
-                prefix={<img src="/ferrum/bullet.png" height={"4px"} />}
-                key={index}
-                target={subItem.target && subItem.target}
-              ></FSiderItem>
-            ))}
-          </FSiderSubMenuItem>
-        )}
+        <>
+          {" "}
+          {item.children && (
+            <FSiderSubMenuItem>
+              {item.children.map((subItem: any, index: any) => (
+                <FSiderItem
+                  to={subItem.path}
+                  title={subItem.title}
+                  prefix={<img src="/ferrum/bullet.png" height={"4px"} />}
+                  key={index}
+                  target={subItem.target && subItem.target}
+                ></FSiderItem>
+              ))}
+            </FSiderSubMenuItem>
+          )}
+        </>
       </FSiderItem>
     ));
   };
 
   return (
     <FSider>
-      {renderContent(homeSidebarConfig)}  
-      {/* {renderContent(sideMenuItems)} */}
-      {localStorageHelper.load(ME_TAG)?.role === "organizationAdmin" && renderContent(sidebarConfig)}
+      {renderContent(homeSidebarConfig)}
+      {renderContent(sideMenuItems)}
+      {localStorageHelper.load(ME_TAG)?.role === "organizationAdmin" &&
+        renderContent(sidebarConfig)}
       {/* {(isPublicLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig)}  */}
       {isStakingLeaderboard && renderContent(sideConfig)} 
        {renderContent(communityLeaderboardSidebarConfig)}
       {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
-      {renderContent(crucibleConfig)}
+      {renderContent(crucibleConfig)} 
+      <FSiderItem to="/dashboard/crucible" title={"Crucible"}></FSiderItem>
     </FSider>
-
   );
 };
 

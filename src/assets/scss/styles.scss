@@ -1,18 +1,29 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
-@import "./mobile";
 @import "./variables";
-@import "./sider";
 @import "./layout";
 @import "./cards";
 @import "./dialogs";
-@import "./dropdowns";
-@import "./tables";
-@import "./buttons";
+@import "./mobile";
+// @import "./sider";
+// @import "./dropdowns";
+// @import "./tables";
+// @import "./buttons";
 
 body {
-  background: $baseColor;
+  background: #161c24 !important;
   color: white;
   font-family: Roboto, sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 5px;
+}
+
+.marker-app {
+  #feedback-button {
+    transform: rotateZ(-90deg) translateX(20%) translateY(50%);
+  }
 }
 
 .custom-scrollbar {
