@@ -3,7 +3,7 @@
 @import "./layout";
 @import "./cards";
 @import "./dialogs";
-// @import "./mobile";
+@import "./mobile";
 // @import "./sider";
 // @import "./dropdowns";
 // @import "./tables";
@@ -13,6 +13,11 @@ body {
   background: #161c24 !important;
   color: white;
   font-family: Roboto, sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 5px;
 }
 
 .marker-app {

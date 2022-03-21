@@ -1,7 +1,6 @@
 import React from "react";
 import { FButton, FCard, FContainer, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../assets/img/icon-arrow-square.svg";
-import { CrucibleMyBalance } from "./CardMyBalance";
 import { useHistory } from "react-router";
 
 export const CrucibleGetStarted = () => {
@@ -40,7 +39,6 @@ export const CrucibleGetStarted = () => {
         </ul>
         <FButton title={"Get Started"} postfix={<IconArrow />} className="w-100 f-mt-2" onClick={() => history.push("/dashboard/crucible/manage")} />
       </FCard>
-      <CrucibleMyBalance />
     </FContainer>
   );
 };
