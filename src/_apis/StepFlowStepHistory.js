@@ -20,3 +20,13 @@ export function updateStepFlowStepHistoryByStepFlowStepHistoryId( id, values, to
         },
     });
 }
+
+export function startNewSequenceForStepFlowStepHistoryByStepFlowId( id, token ) {
+    return axios.get(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/restart/stepFlow/${id}`, {
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "Application/json",
+        Authorization: `Bearer ${token}`,
+        },
+    });
+}

@@ -1,12 +1,24 @@
-import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { FButton, FCard, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../assets/img/icon-go-back.svg";
 import { ReactComponent as IconNetworkCFrm } from "../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkBsc } from "../../assets/img/icon-network-bsc.svg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/rootReducer";
 
 export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) => {
   const history = useHistory();
+  const location: any = useLocation();
+  const { isConnected } = useSelector((state: RootState) => state.walletConnector);
+
+  useEffect(() => { 
+    if ( isConnected === false ){
+      history.push('dashboard/crucible')
+    }
+  }, [isConnected])
+  
+  
   return (
     <FCard variant={"secondary"} className="card-manage-crucible card-shadow">
       <div className="card-title">
@@ -15,7 +27,7 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
-            Crucible Farm Dashboard - cFRMx / BNB
+            Crucible Farm Dashboard - {location.state.name}
           </FTypo>
         </FItem>
         <div className="network-icon-wrapper">

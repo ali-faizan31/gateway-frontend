@@ -23,6 +23,13 @@ export const crucibleSlice = createSlice({
         },
         updateStepFlowStepHistory: (state, action) => {
             state.stepFlowStepHistory = action.payload.crucible.stepFlowStepHistory;
-        }
+        },
+        updateCurrentStep: (state, action) => {
+            state.currentStep = action.payload.crucible.currentStep;
+        },
+        resetCrucible: (state) => {
+            state.currentStep = {};
+            state.stepFlowStepHistory = [];
+        },
     }
 })

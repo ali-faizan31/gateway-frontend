@@ -13,15 +13,25 @@ import { getLatestStepWithPendingStatus } from "../../utils/global.utils";
 
 export const CrucibleGetStarted = () => {
   const history = useHistory();
-  const location = useLocation();
+  const location: any = useLocation();
 
   const [neverShowAgain, setNeverShowAgain] = useState(false);
   const [stepFlowResponse, setStepFlowResponse]  = useState<any>(undefined);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
-  const { stepFlowStepHistory } = useSelector((state: RootState) => state.crucible); 
+  const { stepFlowStepHistory, currentStep } = useSelector((state: RootState) => state.crucible);
+  const { isConnected } = useSelector((state: RootState) => state.walletConnector);
 
-  useEffect(() => {
-    if (location.state === undefined) {
+  // useEffect(() => { 
+  //   if ( isConnected === false ){
+  //     history.push('dashboard/crucible')
+  //   }
+  // }, [isConnected])
+
+
+  /// handle disconnect on here
+  useEffect(() => { 
+    console.log(location.state)
+    if (location.state.id === undefined) {
       history.push(PATH_DASHBOARD.crucible.index)
     }
   }, [location])
@@ -29,28 +39,28 @@ export const CrucibleGetStarted = () => {
   useEffect(() => { 
     if ( stepFlowStepHistory?.length ){
         const step: any = getLatestStepWithPendingStatus(stepFlowStepHistory); // undefined check implement to reatrt sequence  
-      if (tokenV2 && location.state && step?.step?.name !== "Introduction") {  
+      if (tokenV2 && location.state.id && step?.step?.name !== "Introduction") {  
         history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
       }
     }
   }, [tokenV2, location, stepFlowStepHistory])
 
 
-  const onGetStartedClick = () => {
+  const onGetStartedClick = async () => {
     console.log(neverShowAgain)
-    // if ( neverShowAgain === true ){
-    //   let data = { status: "completed" }
-    //   let updateResponse: any = updateStepFlowStepHistoryByStepFlowStepHistoryId(location.state, data, tokenV2);
-    //   updateResponse = updateResponse.data.body
-    //   console.log(updateResponse)
-    // } else {
-    //   history.push("/dashboard/crucible/manage") 
-    // }
+    if ( neverShowAgain === true ){
+      let data = { status: "completed" }
+      let updateResponse: any = await updateStepFlowStepHistoryByStepFlowStepHistoryId(currentStep._id, data, tokenV2);
+      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      console.log(updateResponse, '------------------')
+      history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
+    } else {
+      history.push({pathname:"/dashboard/crucible/manage", state: location.state}) 
+    }
   }
 
-  const onNeverShowClick = (target: any) => {
-    console.log(target, target.value)
-    // setNeverShowAgain(true)
+  const onNeverShowClick = (value: any) => { 
+    setNeverShowAgain(value)
   }
 
   return (
@@ -96,7 +106,7 @@ export const CrucibleGetStarted = () => {
           />
         }
       </FCard>
-      <FInputCheckbox onClick={(e: any) => onNeverShowClick(e.target) } name="step2Check" className="f-mb-1 f-mt-1" label={"Don’t show the intro guide again."} /> 
+      <FInputCheckbox onClick={() => onNeverShowClick(!neverShowAgain) } name="neverShowAgain" className="f-mb-1 f-mt-1" label={"Don’t show the intro guide again."} /> 
     </FContainer>
   );
 };

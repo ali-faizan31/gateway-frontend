@@ -58,20 +58,20 @@ export const CardAPR = () => {
         ),
         action: (
           <div className="col-action">
-            <FButton title={"Manage"} onClick={()=> renderComponent(stepFlow.id)} />
+            <FButton title={"Manage"} onClick={()=> renderComponent(stepFlow.id, stepFlow.sustainableCrucibleFarms)} />
             <FButton title={"Deposit"} onClick={() => history.push({pathname: "/dashboard/crucible/get-started", state: stepFlow.id})}></FButton>
           </div>
         ),
       }; 
   }); 
 
-  const renderComponent = (id: any) => {
+  const renderComponent = (id: any, name: any) => {
     //   if ( isConnected ) {
     //     getStepToRender(id, true)
     // } else {
     //     getStepToRender(id, false)
     // } 
-    history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: id}) 
+    history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: {id, name}}) 
   }
 
   const getStepToRender = async (id: any, isConnected: any) => {
