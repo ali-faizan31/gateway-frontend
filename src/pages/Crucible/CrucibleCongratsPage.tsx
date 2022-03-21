@@ -9,6 +9,7 @@ import { ReactComponent as IconNetworkBsc } from "../../assets/img/icon-network-
 const CrucibleCongratsPage = () => {
   return (
     <FContainer className="f-mr-0" width={800}>
+      <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-congrats">
         <FItem align="center">
           <IconCongrats />
@@ -82,7 +83,6 @@ const CrucibleCongratsPage = () => {
           </Link>
         </FGrid>
       </FCard>
-      <CrucibleMyBalance />
     </FContainer>
   );
 };

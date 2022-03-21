@@ -11,6 +11,7 @@ const CrucibleStepsPage = () => {
 
   return (
     <FContainer className="f-mr-0" width={900}>
+      <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-crucible-steps">
         <FTypo size={20} className={"card-title w-100"} display="flex">
           Crucible Token Sustainable Liquidity Farming
@@ -68,7 +69,6 @@ const CrucibleStepsPage = () => {
           </li>
         </ul>
       </FCard>
-      <CrucibleMyBalance />
     </FContainer>
   );
 };

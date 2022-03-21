@@ -8,7 +8,7 @@ import { ReactComponent as IconNetworkBsc } from "../../assets/img/icon-network-
 export const CardAPR = () => {
   const history = useHistory();
   const tableHeads: any[] = [
-    { prop: "sustainableCrucibleFarms", title: "Sustainable Crucible Farms" },
+    { width: 200, prop: "sustainableCrucibleFarms", title: "Sustainable Crucible Farms" },
     { prop: "totalDeposited", title: "Total Deposited" },
     { prop: "yourDeposit", title: "Your Deposit" },
     { prop: "yourRewards", title: "Your Rewards" },
@@ -24,7 +24,7 @@ export const CardAPR = () => {
     if (rd > 0.5) {
       return {
         sustainableCrucibleFarms: (
-          <FItem display={"flex"} alignY="center">
+          <FItem data-label="Sustainable Crucible Farms" className={"col-crucible-farming"} display={"flex"} alignY="center">
             <span className="network-icon-wrap f-mr-1">
               <IconNetworkCFrm />
               <IconNetworkBsc />
@@ -32,11 +32,11 @@ export const CardAPR = () => {
             cFRM / BNB
           </FItem>
         ),
-        totalDeposited: `127.${rd}`,
-        yourDeposit: `$13.${rd}`,
-        yourRewards: `$7.${rd}`,
+        totalDeposited: <FTypo className={"col-amount"}>127.{rd}</FTypo>,
+        yourDeposit: <FTypo className={"col-amount"}>$13.{rd}</FTypo>,
+        yourRewards: <FTypo className={"col-amount"}>$.{rd}</FTypo>,
         apr: (
-          <FTypo size={24} color="#DAB46E" weight={500}>
+          <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}>
             {rd}
           </FTypo>
         ),

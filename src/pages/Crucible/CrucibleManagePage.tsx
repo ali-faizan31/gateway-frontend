@@ -9,6 +9,8 @@ const CrucibleManagePage = () => {
   const [unwrap, setUnwrap] = useState(false);
   return (
     <FContainer className="f-mr-0 card-manage" width={900}>
+      <CrucibleMyBalance />
+
       {/* <FResponseBar variant="success" title={"Withdraw Transaction Successful. [ 0x06167934...5bvf645949c ]"} /> */}
       {deposit ? <CrucibleDeposit /> : <CrucibleManage deposit={deposit} setDeposit={setDeposit} />}
       <FCard className="card-crucible-token-info" width={"95%"}>
@@ -89,7 +91,6 @@ const CrucibleManagePage = () => {
           </FGridItem>
         </FGrid>
       </FContainer>
-      <CrucibleMyBalance />
     </FContainer>
   );
 };

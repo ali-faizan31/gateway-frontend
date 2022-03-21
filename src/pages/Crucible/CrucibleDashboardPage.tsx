@@ -7,25 +7,9 @@ import { CruciblePrice } from "../../components/crucible/CardPrice";
 const CrucibleDashboardPage = () => {
   return (
     <FContainer className="f-ml-0">
-      <FTypo className="page-title">Dashboard</FTypo>
-      <FCard>
-        <FTypo className="card-title f-pl-1">Price</FTypo>
-        <FGrid>
-          <FGridItem size={[3, 3, 6]}>
-            <CruciblePrice />
-          </FGridItem>
-          <FGridItem size={[3, 3, 6]}>
-            <CruciblePrice />
-          </FGridItem>
-          <FGridItem size={[3, 3, 6]}>
-            <CruciblePrice />
-          </FGridItem>
-          <FGridItem size={[3, 3, 6]}>
-            <CruciblePrice />
-          </FGridItem>
-        </FGrid>
-      </FCard>
       <CrucibleMyBalance />
+      <FTypo className="page-title">Dashboard</FTypo>
+      <CruciblePrice />
       <CardAPR />
     </FContainer>
   );
