@@ -1,8 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router";
 import { FButton, FCard, FInputText, FItem, FTable, FTypo } from "ferrum-design-system";
-import { ReactComponent as IconFerrum } from "../../assets/img/icon-ferrum.svg";
-import { ReactComponent as IconArrowGreen } from "../../assets/img/icon-price-arrow-indicator-green.svg";
 import Datatable from "react-bs-datatable";
 
 export const CardAPR = () => {
@@ -35,7 +33,7 @@ export const CardAPR = () => {
         action: (
           <div className="col-action">
             <FButton title={"Manage"} onClick={() => history.push("/dashboard/crucible/manage")} />
-            <FButton title={"Deposit"}></FButton>
+            <FButton title={"Deposit"} onClick={() => history.push("/dashboard/crucible/get-started")}></FButton>
           </div>
         ),
       };
@@ -43,7 +41,7 @@ export const CardAPR = () => {
   });
 
   return (
-    <FCard className="card-apr f-mt-2">
+    <FCard className="card-apr f-mt-2 f-mb-2">
       <FItem display={"flex"} alignX="between" alignY={"center"} className="f-pb-1 f-m-0">
         <FTypo className="card-title f-pl-1">APR</FTypo>
         <FInputText type={"text"} placeholder="Search by Farm Name, Token Name, Token Contract Address" />

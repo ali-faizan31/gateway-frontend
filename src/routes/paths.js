@@ -82,6 +82,7 @@ export const PATH_DASHBOARD = {
   crucible: {
     index: path(ROOTS_DASHBOARD, "/crucible"),
     intro: path(ROOTS_DASHBOARD, "/crucible/intro"),
+    getStarted: path(ROOTS_DASHBOARD, "/crucible/get-started"),
     mintAndStake: path(ROOTS_DASHBOARD, "/crucible/mint"),
     manage: path(ROOTS_DASHBOARD, "/crucible/manage"),
   },

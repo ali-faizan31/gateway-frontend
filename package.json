@@ -48,6 +48,9 @@
         "web3modal": "^1.9.4",
         "yup": "^0.32.11"
     },
+    "resolutions": {
+        "react-error-overlay": "6.0.9"
+    },
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
@@ -71,8 +74,6 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    },
-    "resolutions": {
-        "react-error-overlay": "6.0.9"
     }
+    
 }

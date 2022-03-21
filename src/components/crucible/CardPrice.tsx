@@ -4,7 +4,7 @@ import { ReactComponent as IconFerrum } from "../../assets/img/icon-ferrum.svg";
 import { ReactComponent as IconArrowGreen } from "../../assets/img/icon-price-arrow-indicator-green.svg";
 import { ReactComponent as IconArrowRed } from "../../assets/img/icon-price-arrow-indicator-red.svg";
 
-export const CardPrice = () => {
+export const CruciblePrice = () => {
   return (
     <FCard variant={"secondary"} className="card-price styled-card align-h">
       <FItem display={"flex"} alignX="between" alignY={"center"}>
