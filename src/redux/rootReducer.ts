@@ -25,6 +25,12 @@ const walletConnectorPersistConfig = {
 //   timeout: 172800,
 // };
 
+const cruciblePersistConfig = {
+  key: "crucible",
+  storage: storageSession,
+  whitelist: [ "stepFlowStepHistory"] 
+};
+
 const walletAutheticatorPersistConfig = {
     key: "walletAutheticator",
     storage: storageSession,
@@ -46,7 +52,7 @@ const rootReducer = combineReducers({
     walletAutheticatorPersistConfig,
      walletConnectorSlice.reducer
   ),
-  crucible: crucibleSlice.reducer,
+  crucible: persistReducer(cruciblePersistConfig, crucibleSlice.reducer),
   competition: competitionReducer,
   leaderboard: leaderboardReducer 
 });

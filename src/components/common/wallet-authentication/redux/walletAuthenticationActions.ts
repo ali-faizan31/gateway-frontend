@@ -52,7 +52,7 @@ export const saveME = (walletAuthenticator: any) => (dispatch: any) => {
 };
 
 export const saveToken = (walletAuthenticator: any) => (dispatch: any) => {
-    console.log('dis', walletAuthenticator)
+    console.log('dispp', walletAuthenticator)
     dispatch(actions.saveToken({ walletAuthenticator }));
 };
 

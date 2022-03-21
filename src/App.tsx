@@ -15,6 +15,10 @@ import { TOKEN_TAG } from "./utils/const.utils";
 import { CrucibleGetStarted } from "./components/crucible/CardGetStarted";
 import CrucibleStepsPage from "./pages/Crucible/CrucibleStepsPage";
 import CrucibleCongratsPage from "./pages/Crucible/CrucibleCongratsPage";
+import { Deployer as CrucibleDeployer } from "./components/crucible/Deployer";
+import { useSelector } from "react-redux";
+import { WalletAuthencationOnSignIn } from "./components/common/wallet-authentication/WalletAuthenticationSignIn";
+import { RootState } from "./redux/rootReducer";
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -53,12 +57,15 @@ const CrucibleManagePage = Loadable(lazy(() => import("./pages/Crucible/Crucible
 const CrucibleIntroduction = Loadable(lazy(() => import("./components/crucible/Intro")));
 const MintAndStake = Loadable(lazy(() => import("./components/crucible/MintAndStake")));
 const Crucible = Loadable(lazy(() => import("./components/crucible/index")));
+// const CrucibleDeployer =  Loadable(lazy(() => import("./components/crucible/Deployer")));
 
 function App() {
   const isAuthenticated = localStorage.getItem(TOKEN_TAG);
   moment.tz.setDefault("UTC");
+  const { networkClient, walletAddress } = useSelector((state: RootState) => state.walletConnector);
+  
 
-  return (
+  return ( 
     <WalletApplicationWrapper.ApplicationWrapper>
       <>
         <Switch>
@@ -118,6 +125,13 @@ function App() {
             headerTitle="My Profile"
           />
           {/* <UnGuardedRoute path={PATH_DASHBOARD.crucible.index} component={CrucibleDashboard} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" /> */}
+         <UnGuardedRoute
+            path={PATH_DASHBOARD.crucible.deployer}
+            component={CrucibleDeployer}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
           <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.intro}
             component={CrucibleIntroduction}
@@ -168,16 +182,18 @@ function App() {
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
+          
+
           <Route path="*" component={Page404}></Route>
         </Switch>
+      <WalletAuthencationOnSignIn account={walletAddress} networkClient={networkClient} />
       </>
     </WalletApplicationWrapper.ApplicationWrapper>
+
   );
 }
 
 export default App;
 
 ///pub/multi/leaderboard/61b6d48337f5125acbbfddeb
-
-//stepflowsetep 6230f64e4ed3666984f7c765
-//622f88547a0cc65e0dee6462
+ 

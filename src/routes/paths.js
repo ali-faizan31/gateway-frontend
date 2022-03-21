@@ -87,5 +87,6 @@ export const PATH_DASHBOARD = {
     intro: path(ROOTS_DASHBOARD, "/crucible/intro"),
     mintAndStake: path(ROOTS_DASHBOARD, "/crucible/mint"),
     manage: path(ROOTS_DASHBOARD, "/crucible/manage"),
+    deployer: path(ROOTS_DASHBOARD, "/crucible/deployer"),
   },
 };

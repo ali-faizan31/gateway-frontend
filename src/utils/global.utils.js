@@ -79,3 +79,24 @@ export const getFormattedBalance = (balance) =>
 
 export const getFormattedWalletAddress = (address) =>
   `${address.substr(0, 6)}...${address.substr(address.length - 4)}`;
+
+export const getLatestStepWithPendingStatus = (stepResponse) => {
+  let previous = {};
+  let current = {};
+  for (let i = 0; i < stepResponse.length; i++) {
+    if (i === 0) {
+      previous = stepResponse[i];
+      current = stepResponse[i];
+      if (previous.status === "pending") {
+        return previous;
+      }
+    } else {
+      previous = stepResponse[i - 1];
+      current = stepResponse[i];
+
+      if (previous.status === "completed" && current.status === "pending") {
+        return current;
+      }
+    }
+  }
+};

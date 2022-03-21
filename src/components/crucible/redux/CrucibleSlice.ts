@@ -21,5 +21,8 @@ export const crucibleSlice = createSlice({
             state.isApproved = false;
             state.isApproving = false;
         },
+        updateStepFlowStepHistory: (state, action) => {
+            state.stepFlowStepHistory = action.payload.crucible.stepFlowStepHistory;
+        }
     }
 })

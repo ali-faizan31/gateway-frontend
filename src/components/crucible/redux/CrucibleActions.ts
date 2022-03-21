@@ -12,3 +12,8 @@ export const approving = () => (dispatch: any) => {
 export const disApprove = () => (dispatch: any) => {
     dispatch(actions.disApprove());
 }
+
+export const updateStepFlowStepHistory = (crucible: any) => (dispatch: any) => {
+    console.log('dispatch', crucible)
+    dispatch(actions.updateStepFlowStepHistory({ crucible }));
+};
