@@ -2,7 +2,7 @@ import React from "react";
 import { FCard, FItem, FList, FListItem, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconFerrum } from "../../assets/img/icon-ferrum.svg";
 
-export const CardMyBalance = () => {
+export const CrucibleMyBalance = () => {
   return (
     <FCard variant={"secondary"} className="card-my-balance styled-card align-v">
       <FTypo className="card-title" size={20} color="#DAB46E">

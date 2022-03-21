@@ -12,6 +12,7 @@ import moment from "moment-timezone";
 import { WalletApplicationWrapper } from "./container-components";
 import { PATH_DASHBOARD } from "./routes/paths";
 import { TOKEN_TAG } from "./utils/const.utils";
+import { CrucibleGetStarted } from "./components/crucible/CardGetStarted";
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -45,8 +46,8 @@ const ResendEmailVerification = Loadable(lazy(() => import("./components/common/
 const StakingLeaderboard = Loadable(lazy(() => import("./components/leaderboard-staking/StakingLeaderboard")));
 const Dashboard = Loadable(lazy(() => import("./components/dashboard/dashboard")));
 const ProfileSettings = Loadable(lazy(() => import("./components/profile-management")));
-const CrucibleDashboard = Loadable(lazy(() => import("./pages/Crucible/Dashboard")));
-const CrucibleManage = Loadable(lazy(() => import("./pages/Crucible/Manage")));
+const CrucibleDashboardPage = Loadable(lazy(() => import("./pages/Crucible/CrucibleDashboardPage")));
+const CrucibleManagePage = Loadable(lazy(() => import("./pages/Crucible/CrucibleManagePage")));
 const CrucibleIntroduction = Loadable(lazy(() => import("./components/crucible/Intro")));
 const MintAndStake = Loadable(lazy(() => import("./components/crucible/MintAndStake")));
 const Crucible = Loadable(lazy(() => import("./components/crucible/index")));
@@ -130,15 +131,22 @@ function App() {
             headerTitle="Crucible"
           />
           <UnGuardedRoute
+            path={PATH_DASHBOARD.crucible.getStarted}
+            component={CrucibleGetStarted}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.manage}
-            component={CrucibleManage}
+            component={CrucibleManagePage}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.index}
-            component={CrucibleDashboard}
+            component={CrucibleDashboardPage}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
