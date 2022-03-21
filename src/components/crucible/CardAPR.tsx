@@ -7,7 +7,7 @@ import { ReactComponent as IconNetworkBsc } from "../../assets/img/icon-network-
 
 export const CardAPR = () => {
   const history = useHistory();
-  const tableHeads = [
+  const tableHeads: any[] = [
     { prop: "sustainableCrucibleFarms", title: "Sustainable Crucible Farms" },
     { prop: "totalDeposited", title: "Total Deposited" },
     { prop: "yourDeposit", title: "Your Deposit" },
@@ -20,7 +20,7 @@ export const CardAPR = () => {
   ];
 
   const body = Array.from(new Array(57), () => {
-    const rd = (Math.random() * 10).toFixed(1);
+    const rd: any = (Math.random() * 10).toFixed(1);
     if (rd > 0.5) {
       return {
         sustainableCrucibleFarms: (
@@ -51,7 +51,7 @@ export const CardAPR = () => {
   });
 
   return (
-    <FCard className="card-apr f-mt-2 f-mb-2">
+    <FCard className="card-apr f-mt-2">
       <FItem display={"flex"} alignX="between" alignY={"center"} className="f-pb-1 f-m-0">
         <FTypo className="card-title f-pl-1">APR</FTypo>
         <FInputText type={"text"} placeholder="Search by Farm Name, Token Name, Token Contract Address" />
