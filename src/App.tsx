@@ -13,6 +13,8 @@ import { WalletApplicationWrapper } from "./container-components";
 import { PATH_DASHBOARD } from "./routes/paths";
 import { TOKEN_TAG } from "./utils/const.utils";
 import { CrucibleGetStarted } from "./components/crucible/CardGetStarted";
+import CrucibleStepsPage from "./pages/Crucible/CrucibleStepsPage";
+import CrucibleCongratsPage from "./pages/Crucible/CrucibleCongratsPage";
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -130,9 +132,24 @@ function App() {
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
+
           <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.getStarted}
             component={CrucibleGetStarted}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <UnGuardedRoute
+            path={PATH_DASHBOARD.crucible.steps}
+            component={CrucibleStepsPage}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <UnGuardedRoute
+            path={PATH_DASHBOARD.crucible.congrats}
+            component={CrucibleCongratsPage}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"

@@ -217,3 +217,115 @@ $cardSecondary: #242b35;
     font-weight: 300;
   }
 }
+
+.card-crucible-steps {
+  .card-title {
+    justify-content: center;
+    width: 100%;
+  }
+  ul {
+    counter-reset: number;
+    li {
+      position: relative;
+      display: flex;
+      margin-bottom: 4rem;
+      &:before {
+        background: white;
+        width: 70px;
+        min-width: 70px;
+        height: 70px;
+        margin-right: 2rem;
+        border-radius: 100px;
+        counter-increment: number;
+        content: counter(number);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: black;
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+      &:after {
+        content: "";
+        height: 100%;
+        width: 3px;
+        background: white;
+        position: absolute;
+        top: 70px;
+        left: 35px;
+        transform: translateX(-50%);
+      }
+      &:nth-last-child(2) {
+        &::after {
+          display: none;
+        }
+      }
+      &.step-success {
+        &:before {
+          content: "";
+          color: white;
+          background: #dab46e url(../img/icon-check.svg) center center no-repeat;
+        }
+        &::after {
+          background: #dab46e;
+        }
+      }
+      &.step-last {
+        display: flex;
+        &::before {
+          width: 70px;
+          min-width: 70px;
+          height: 50px;
+          margin-right: 2rem;
+          background: none;
+          content: "";
+        }
+        &::after {
+          display: none;
+        }
+      }
+
+      .step-info {
+        padding-top: 1rem;
+        .f-input-checkbox {
+          display: flex;
+        }
+      }
+      .f-btn {
+        font-size: 1.1rem;
+        padding: 0.5rem 2rem;
+        font-weight: 300;
+        &:disabled {
+          background: #1d232b;
+          border: 1px solid #1d232b;
+        }
+      }
+    }
+  }
+}
+
+.card-congrats {
+  padding: 3rem;
+  .go-back {
+    text-decoration: none;
+    font-size: 22px;
+    text-align: center;
+    width: 100%;
+    margin: 2rem 0 0;
+    color: white;
+  }
+  .item-whats-next {
+    padding: 2rem;
+    .network-icon-wrapper {
+      .icon-wrap {
+        svg {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+    .f-typo {
+      min-height: 50px;
+    }
+  }
+}

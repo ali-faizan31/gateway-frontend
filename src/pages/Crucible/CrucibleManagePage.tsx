@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system";
+import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTypo } from "ferrum-design-system";
 import { CrucibleMyBalance } from "../../components/crucible/CardMyBalance";
 import { CrucibleManage } from "../../components/crucible/CardManage";
 import { CrucibleDeposit } from "../../components/crucible/CardDeposit";
@@ -10,6 +9,7 @@ const CrucibleManagePage = () => {
   const [unwrap, setUnwrap] = useState(false);
   return (
     <FContainer className="f-mr-0 card-manage" width={900}>
+      {/* <FResponseBar variant="success" title={"Withdraw Transaction Successful. [ 0x06167934...5bvf645949c ]"} /> */}
       {deposit ? <CrucibleDeposit /> : <CrucibleManage deposit={deposit} setDeposit={setDeposit} />}
       <FCard className="card-crucible-token-info" width={"95%"}>
         <FTypo size={24}>Crucible Token Info</FTypo>
