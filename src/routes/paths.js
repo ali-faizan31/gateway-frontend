@@ -48,10 +48,7 @@ export const PATH_PUBLIC_USER = {
   multiLeaderboard: {
     root: path(ROOTS_PUBLIC_USER, "/multi/leaderboard"),
     detailLeaderBoardById: path(ROOTS_PUBLIC_USER, "/multi/leaderboard/:id"),
-    detailLeaderBoardByProvidedId: path(
-      ROOTS_PUBLIC_USER,
-      "/multi/leaderboard/61b6d48337f5125acbbfddeb"
-    ),
+    detailLeaderBoardByProvidedId: path(ROOTS_PUBLIC_USER, "/multi/leaderboard/61b6d48337f5125acbbfddeb"),
   },
   competition: {
     root: path(ROOTS_PUBLIC_USER, "/competition"),
@@ -71,10 +68,7 @@ export const PATH_DASHBOARD = {
     createCompetition: path(ROOTS_DASHBOARD, "/competition/create"),
     competitionManagement: path(ROOTS_DASHBOARD, "/competition/management"),
     detailCompetitionById: path(ROOTS_DASHBOARD, "/competition:id"),
-    multiLeaderBoardByProvidedId: path(
-      ROOTS_DASHBOARD,
-      "/multi/leaderboard/61b6d48337f5125acbbfddeb"
-    ),
+    multiLeaderBoardByProvidedId: path(ROOTS_DASHBOARD, "/multi/leaderboard/61b6d48337f5125acbbfddeb"),
     profile: path(ROOTS_DASHBOARD, "/profile"),
   },
   token: {
@@ -87,7 +81,11 @@ export const PATH_DASHBOARD = {
   home: "/home",
   crucible: {
     index: path(ROOTS_DASHBOARD, "/crucible"),
+    getStarted: path(ROOTS_DASHBOARD, "/crucible/get-started"),
+    steps: path(ROOTS_DASHBOARD, "/crucible/steps"),
+    congrats: path(ROOTS_DASHBOARD, "/crucible/congrats"),
     intro: path(ROOTS_DASHBOARD, "/crucible/intro"),
     mintAndStake: path(ROOTS_DASHBOARD, "/crucible/mint"),
-  }
+    manage: path(ROOTS_DASHBOARD, "/crucible/manage"),
+  },
 };

@@ -6,16 +6,9 @@ import IconWalletConnect from "../../assets/img/icon-wallet-connect.svg";
 import { FDialog, FList, FListItem } from "ferrum-design-system";
 import "./ConnectWalletDialog-styles.scss";
 
-export const ConnectWalletDialog = ({show, onHide, metaMaskClickEvent } :any) => { 
-
+export const ConnectWalletDialog = ({ show, onHide, metaMaskClickEvent }: any) => {
   return (
-    <FDialog
-      show={show}
-      onHide={onHide}
-      size="small"
-      title="Connect Wallet"
-      className="connect-wallet-dialog  f-mb-2"
-    >
+    <FDialog show={show} onHide={onHide} size="small" title="Connect Wallet" className="connect-wallet-dialog  f-mb-2">
       <FList display="block" type="number" className={"f-mt-2"} variant="connect-wallet">
         <FListItem display="flex" onClick={metaMaskClickEvent}>
           <strong>MetaMask</strong>
