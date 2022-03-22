@@ -4,7 +4,7 @@ import { FCard, FContainer, FGrid, FGridItem, FItem, FTypo } from "ferrum-design
 import { CrucibleMyBalance } from "../../components/crucible/CardMyBalance";
 import { ReactComponent as IconCongrats } from "../../assets/img/icon-check-congrats.svg";
 import { ReactComponent as IconNetworkCFrm } from "../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../assets/img/icon-network-bsc.svg";
+import { ReactComponent as IconNetworkBnb } from "../../assets/img/icon-network-bnb.svg";
 
 const CrucibleCongratsPage = () => {
   return (
@@ -35,7 +35,7 @@ const CrucibleCongratsPage = () => {
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
                       <IconNetworkCFrm />
-                      <IconNetworkBsc />
+                      <IconNetworkBnb />
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
@@ -55,7 +55,7 @@ const CrucibleCongratsPage = () => {
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
                       <IconNetworkCFrm />
-                      <IconNetworkBsc />
+                      <IconNetworkBnb />
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
