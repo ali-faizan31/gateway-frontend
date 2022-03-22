@@ -8,7 +8,11 @@ import { ReactComponent as IconNetworkBnb } from "../../assets/img/icon-network-
 export const CardAPR = () => {
   const history = useHistory();
   const tableHeads: any[] = [
-    { width: 200, prop: "sustainableCrucibleFarms", title: "Sustainable Crucible Farms" },
+    {
+      width: 200,
+      prop: "sustainableCrucibleFarms",
+      title: "Sustainable Crucible Farms",
+    },
     { prop: "totalDeposited", title: "Total Deposited" },
     { prop: "yourDeposit", title: "Your Deposit" },
     { prop: "yourRewards", title: "Your Rewards" },
@@ -21,33 +25,31 @@ export const CardAPR = () => {
 
   const body = Array.from(new Array(57), () => {
     const rd: any = (Math.random() * 10).toFixed(1);
-    if (rd > 0.5) {
-      return {
-        sustainableCrucibleFarms: (
-          <FItem data-label="Sustainable Crucible Farms" className={"col-crucible-farming"} display={"flex"} alignY="center">
-            <span className="network-icon-wrap f-mr-1">
-              <IconNetworkCFrm />
-              <IconNetworkBnb />
-            </span>
-            cFRM / BNB
-          </FItem>
-        ),
-        totalDeposited: <FTypo className={"col-amount"}>127.{rd}</FTypo>,
-        yourDeposit: <FTypo className={"col-your"}>$13.{rd}</FTypo>,
-        yourRewards: <FTypo className={"col-your"}>$.{rd}</FTypo>,
-        apr: (
-          <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}>
-            {rd}
-          </FTypo>
-        ),
-        action: (
-          <div className="col-action">
-            <FButton title={"Manage"} onClick={() => history.push("/dashboard/crucible/manage")} />
-            <FButton title={"Deposit"} onClick={() => history.push("/dashboard/crucible/get-started")}></FButton>
-          </div>
-        ),
-      };
-    }
+    return {
+      sustainableCrucibleFarms: (
+        <FItem data-label="Sustainable Crucible Farms" className={"col-crucible-farming"} display={"flex"} alignY="center">
+          <span className="network-icon-wrap f-mr-1">
+            <IconNetworkCFrm />
+            <IconNetworkBnb />
+          </span>
+          cFRM / BNB
+        </FItem>
+      ),
+      totalDeposited: <FTypo className={"col-amount"}>127.{rd}</FTypo>,
+      yourDeposit: <FTypo className={"col-your"}>$13.{rd}</FTypo>,
+      yourRewards: <FTypo className={"col-your"}>$.{rd}</FTypo>,
+      apr: (
+        <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}>
+          {rd}
+        </FTypo>
+      ),
+      action: (
+        <div className="col-action">
+          <FButton title={"Manage"} onClick={() => history.push("/dashboard/crucible/manage")} />
+          <FButton title={"Deposit"} onClick={() => history.push("/dashboard/crucible/get-started")}></FButton>
+        </div>
+      ),
+    };
   });
 
   return (
