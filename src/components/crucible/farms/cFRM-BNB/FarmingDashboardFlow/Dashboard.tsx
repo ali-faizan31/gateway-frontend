@@ -4,19 +4,34 @@ import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTyp
 import { CrucibleDeposit as DepositAndMint } from "../MintFlow/DepositAndMintCard";
 import { CrucibleManage } from "../common/CardManage";
 import { CrucibleMyBalance } from "../../../CardMyBalance"; 
+import { useHistory } from "react-router";
+import { PATH_DASHBOARD } from "../../../../../routes/paths";
 // import { CrucibleDeposit } from "../../../CardDeposit";
 // import { CrucibleManage } from "../../../CardManage";
 
 export const Manage = () => {
+  const history = useHistory()
   const [dashboardAction, setDashboardAction] = useState(false);
   const [unwrap, setUnwrap] = useState(false);
   const [flowType, setFlowType] = useState("");
 
-  const getTransactionCard = () => {
-    switch(flowType){
-      case "cFRM / BNB": return <DepositAndMint />
-    }
+  const onUnStakeClick = () => {
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.unstake.unstake})
   }
+
+  const onStakeClick = () => {
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake})
+  }
+
+  const onClaimRewardsClick = () => {
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.withdraw})
+  }
+
+  const onAddLiquidityClick = () => {
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.liquidity})
+  }
+
+  
 
   return (
     <FContainer className="f-mr-0 card-manage" width={900}> 
@@ -84,7 +99,7 @@ export const Manage = () => {
               </FTypo>
             </FGridItem>
             <FGridItem size={[4, 4, 6]} alignX="center" alignY={"end"}>
-              <FButton title={"Claim"}></FButton>
+              <FButton title={"Claim"} onClick={()=>onClaimRewardsClick()}></FButton>
             </FGridItem>
           </FGrid>
         </FCard>
@@ -92,13 +107,13 @@ export const Manage = () => {
       <FContainer width={850}>
         <FGrid className="btn-wrap f-mt-2 f-mb-2">
           <FGridItem size={[4, 4, 4]}>
-            <FButton title={"Stake"} className={"w-100"}></FButton>
+            <FButton title={"Stake"} className={"w-100"} onClick={()=>onStakeClick()}></FButton>
           </FGridItem>
           <FGridItem size={[4, 4, 4]}>
-            <FButton variant={"secondary"} title={"Unstake"} outlined className={"w-100"}></FButton>
+            <FButton variant={"secondary"} title={"Unstake"} outlined className={"w-100"} onClick={()=>onUnStakeClick()}></FButton>
           </FGridItem>
           <FGridItem size={[4, 4, 4]}>
-            <FButton variant={"secondary"} title={"Add Liquidity"} outlined className={"w-100"}></FButton>
+            <FButton variant={"secondary"} title={"Add Liquidity"} outlined className={"w-100"} onClick={()=>onAddLiquidityClick()}></FButton>
           </FGridItem>
         </FGrid>
       </FContainer> 

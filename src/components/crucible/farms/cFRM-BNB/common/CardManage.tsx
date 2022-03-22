@@ -24,6 +24,11 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
     history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint});
   }
 
+  const onWrapClick = () => { 
+    history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.unwrap});
+  }
+
+
   return (
     <FCard variant={"secondary"} className="card-manage-crucible card-shadow">
       <div className="card-title">
@@ -72,7 +77,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <FButton title={"Mint cFRM"} outlined className={"w-100"} onClick={() => onMintcFRMClick()}></FButton>
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
-          <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"}></FButton>
+          <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"} onClick={() => onWrapClick()}></FButton>
         </FGridItem>
       </FGrid>
     </FCard>

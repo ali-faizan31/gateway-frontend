@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTypo } from "ferrum-design-system"; 
-import { Stake as CrucibleStake } from "./StakeCard";
-import CrucibleFeeCard  from "../common/CrucibleFeeCard";
+import { Withdraw as CrucibleWithdraw } from "./WithdrawCard";
+import CrucibleWithdrawFeeCard  from "../common/CrucibleWithdrawFeeCard";
 import { CrucibleMyBalance } from "../../../CardMyBalance";  
 
-export const Stake = () => {
+export const Withdraw = () => {
   const [dashboardAction, setDashboardAction] = useState(false);
   const [unwrap, setUnwrap] = useState(false);
   const [flowType, setFlowType] = useState(""); 
@@ -13,9 +13,9 @@ export const Stake = () => {
     <FContainer className="f-mr-0 card-manage" width={900}> 
       <CrucibleMyBalance />
 
-      <CrucibleStake />
+      <CrucibleWithdraw />
 
-      <CrucibleFeeCard /> 
+      <CrucibleWithdrawFeeCard /> 
     </FContainer>
   );
 }; 

@@ -22,7 +22,7 @@ useEffect(() => {
 }, [approvedDone])
 
 
-  const onMintClick = () => {
+  const onStakeClick = () => {
     setIsProcessing(true);
     setIsApproving(false);
     setTransitionStatusDialog(true);
@@ -32,7 +32,7 @@ useEffect(() => {
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title">
         <FItem display={"flex"} alignY="center">
-          <Link to="/dashboard/crucible/manage" className="btn-back">
+          <Link to="/dashboard/crucible/cFRM-BNB/manage" className="btn-back">
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
@@ -78,7 +78,7 @@ useEffect(() => {
       </FTypo>
       {approvedDone ? 
       <div className="btn-wrap f-mt-2">
-        <FButton title={"Mint"} className={"w-100"} onClick={() => onMintClick()}></FButton>
+        <FButton title={"Stake"} className={"w-100"} onClick={() => onStakeClick()}></FButton>
       </div>
        :   
       <div className="btn-wrap f-mt-2">

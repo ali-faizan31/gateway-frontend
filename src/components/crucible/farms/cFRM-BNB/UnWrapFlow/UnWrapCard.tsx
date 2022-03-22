@@ -6,7 +6,7 @@ import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/ico
 import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
 
-export const CrucibleDeposit = () => {
+export const UnWrap = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [approvedDone, setapprovedDone] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
@@ -22,7 +22,7 @@ useEffect(() => {
 }, [approvedDone])
 
 
-  const onMintClick = () => {
+  const onUnWrapClick = () => {
     setIsProcessing(true);
     setIsApproving(false);
     setTransitionStatusDialog(true);
@@ -36,7 +36,7 @@ useEffect(() => {
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
-            Deposit and Mint Crucible Token
+          Unwrap Crucible Token
           </FTypo>
         </FItem>
       </div>
@@ -74,7 +74,7 @@ useEffect(() => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-        You have 100000.000 available in Base Token FRM.
+      You have 100000.000 available in Base Token cFRM.
       </FTypo>
       <FTypo size={15} className={"f-mt-2 f-pl--5"}>
         Amount you will receive
@@ -86,19 +86,14 @@ useEffect(() => {
         placeholder="0"
         postfix={
           <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-            cFRM
+            FRM
           </FTypo>
         }
-      />
-      {approvedDone ? 
+      /> 
       <div className="btn-wrap f-mt-2">
-        <FButton title={"Mint"} className={"w-100"} onClick={() => onMintClick()}></FButton>
+        <FButton title={"Unwrap"} className={"w-100"} onClick={() => onUnWrapClick()}></FButton>
       </div>
-       :   
-      <div className="btn-wrap f-mt-2">
-        <FButton title={"Approve"} className={"w-100"} onClick={() => onApproveClick()}></FButton>
-      </div>
-       } 
+       
 
       <DialogTransitionStatus 
       transitionStatusDialog={transitionStatusDialog} 

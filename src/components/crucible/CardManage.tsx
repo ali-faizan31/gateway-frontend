@@ -27,7 +27,7 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
-            Crucible Farms Dashboard - {location.state.name}
+            Crucible Farms Dashboard  
           </FTypo>
         </FItem>
         <div className="network-icon-wrapper">
@@ -67,7 +67,7 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
           <FButton title={"Mint cFRMx"} outlined className={"w-100"} onClick={() => setDeposit(true)}></FButton>
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
-          <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"}></FButton>
+          <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"} onClick={() => setDeposit(true)}></FButton>
         </FGridItem>
       </FGrid>
     </FCard>
