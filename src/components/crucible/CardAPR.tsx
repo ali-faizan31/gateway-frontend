@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import Datatable from "react-bs-datatable";
 import { FButton, FCard, FInputText, FItem, FTable, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconNetworkCFrm } from "../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../assets/img/icon-network-bsc.svg";
+import { ReactComponent as IconNetworkBnb } from "../../assets/img/icon-network-bnb.svg";
 
 export const CardAPR = () => {
   const history = useHistory();
@@ -27,7 +27,7 @@ export const CardAPR = () => {
           <FItem data-label="Sustainable Crucible Farms" className={"col-crucible-farming"} display={"flex"} alignY="center">
             <span className="network-icon-wrap f-mr-1">
               <IconNetworkCFrm />
-              <IconNetworkBsc />
+              <IconNetworkBnb />
             </span>
             cFRM / BNB
           </FItem>

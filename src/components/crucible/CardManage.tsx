@@ -1,12 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { FButton, FCard, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system";
+import { FButton, FCard, FGrid, FGridItem, FItem, FSelect, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../assets/img/icon-go-back.svg";
-import { ReactComponent as IconNetworkCFrm } from "../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../assets/img/icon-network-bsc.svg";
+import { ReactComponent as IconNetworkFrm } from "../../assets/img/icon-network-frm.svg";
+import IconNetworkFrmx from "../../assets/img/icon-network-frmx.svg";
+import IconNetworkCFrm from "../../assets/img/icon-network-cfrm.svg";
+import IconNetworkCFrmx from "../../assets/img/icon-network-cfrmx.svg";
+import { ReactComponent as IconNetworkBnb } from "../../assets/img/icon-network-bnb.svg";
 
 export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) => {
   const history = useHistory();
+  const [selectedToken, setSelectedToken] = useState<any>();
+
+  const selectTokens = [
+    {
+      value: "frm",
+      label: (
+        <FItem display={"flex"} alignY="center">
+          <span className="icon-wrap">
+            <IconNetworkFrm />
+          </span>{" "}
+          <span>FRM</span>
+        </FItem>
+      ),
+    },
+    {
+      value: "frmx",
+      label: (
+        <FItem display={"flex"} alignY="center">
+          <span className="icon-wrap">
+            <img src={IconNetworkFrmx} alt="network-frmx" />
+          </span>{" "}
+          <span>FRMx</span>
+        </FItem>
+      ),
+    },
+    {
+      value: "cfrm",
+      label: (
+        <FItem display={"flex"} alignY="center">
+          <span className="icon-wrap">
+            <img src={IconNetworkCFrm} alt="network-cfrm" />
+          </span>{" "}
+          <span>cFRM</span>
+        </FItem>
+      ),
+    },
+    {
+      value: "cfrmx",
+      label: (
+        <FItem display={"flex"} alignY="center">
+          <span className="icon-wrap">
+            <img src={IconNetworkCFrmx} alt="network-cfrmx" />
+          </span>{" "}
+          <span>cFRMx</span>
+        </FItem>
+      ),
+    },
+    {
+      value: "bnb",
+      label: (
+        <FItem display={"flex"} alignY="center">
+          <span className="icon-wrap">
+            <IconNetworkBnb />
+          </span>{" "}
+          <span>BNB</span>
+        </FItem>
+      ),
+    },
+  ];
   return (
     <FCard variant={"secondary"} className="card-manage-crucible card-shadow">
       <div className="card-title">
@@ -20,8 +82,8 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
         </FItem>
         <div className="network-icon-wrapper">
           <span className="icon-wrap">
-            <IconNetworkCFrm />
-            <IconNetworkBsc />
+            <img src={IconNetworkCFrm} alt="network-cfrm" />
+            <IconNetworkBnb />
           </span>
         </div>
       </div>
@@ -49,7 +111,13 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
       </FGrid>
       <FGrid className="btn-wrap">
         <FGridItem size={[4, 4, 4]}>
-          <FButton title={"Buy Token"} outlined className={"w-100"}></FButton>
+          <FSelect
+            name={"selectOptions"}
+            placeholder="Buy Token"
+            options={selectTokens}
+            value={selectedToken}
+            onChange={(option: any) => setSelectedToken(option)}
+          />
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
           <FButton title={"Mint cFRMx"} outlined className={"w-100"} onClick={() => setDeposit(true)}></FButton>
