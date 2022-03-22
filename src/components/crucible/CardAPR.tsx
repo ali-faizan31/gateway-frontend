@@ -65,12 +65,7 @@ export const CardAPR = () => {
       }; 
   }); 
 
-  const renderComponent = (id: any, name: any) => {
-    //   if ( isConnected ) {
-    //     getStepToRender(id, true)
-    // } else {
-    //     getStepToRender(id, false)
-    // } 
+  const renderComponent = (id: any, name: any) => { 
     history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: {id, name}}) 
   }
 

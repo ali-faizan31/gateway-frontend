@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { FButton, FCard, FContainer, FInputCheckbox, FTypo } from "ferrum-design-system";
-import { ReactComponent as IconArrow } from "../../assets/img/icon-arrow-square.svg";
-import { useHistory, useLocation } from "react-router";
-import { PATH_DASHBOARD } from "../../routes/paths";
+import { ReactComponent as IconArrow } from "../../../assets/img/icon-arrow-square.svg";
+import { useHistory, useLocation } from "react-router"; 
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/rootReducer";
-import { MetaMaskConnector } from "../../container-components";
-import { ConnectWalletDialog } from "../../utils/connect-wallet/ConnectWalletDialog";
-import { getUserLatestStepFlowStepHistoryByStepFlowId, updateStepFlowStepHistoryByStepFlowStepHistoryId } from "../../_apis/StepFlowStepHistory";
-import { getLatestStepWithPendingStatus } from "../../utils/global.utils";
-
-
-export const CrucibleGetStarted = () => {
+import { MetaMaskConnector } from "../../../container-components";
+import { RootState } from "../../../redux/rootReducer";
+import { PATH_DASHBOARD } from "../../../routes/paths";
+import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
+import { getLatestStepWithPendingStatus } from "../../../utils/global.utils";
+import { updateStepFlowStepHistoryByStepFlowStepHistoryId } from "../../../_apis/StepFlowStepHistory";
+ 
+const Introduction = () => {
   const history = useHistory();
   const location: any = useLocation();
 
@@ -22,20 +21,28 @@ export const CrucibleGetStarted = () => {
   const { isConnected } = useSelector((state: RootState) => state.walletConnector);
 
   useEffect(() => { 
-    console.log(location.state)
-    if (location.state.id === undefined) {
+    console.log(location.state, 'loc state')
+    if ( location.state === undefined) {
       history.push(PATH_DASHBOARD.crucible.index)
     }
   }, [location])
-  
-  useEffect(() => { 
-    if ( stepFlowStepHistory?.length ){
-        const step: any = getLatestStepWithPendingStatus(stepFlowStepHistory); // undefined check implement to reatrt sequence  
-      if (tokenV2 && location.state.id && step?.step?.name !== "Introduction") {  
-        history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
+
+  useEffect(() => {
+      console.log(meV2 , 'going')
+      if ( isConnected && meV2._id){
+        history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state}) 
       }
-    }
-  }, [tokenV2, location, stepFlowStepHistory])
+  }, [isConnected, meV2])
+  
+  
+//   useEffect(() => { 
+//     if ( stepFlowStepHistory?.length ){
+//         const step: any = getLatestStepWithPendingStatus(stepFlowStepHistory); // undefined check implement to reatrt sequence  
+//       if (tokenV2 && location.state.id && step?.step?.name !== "Introduction") {  
+//         history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
+//       }
+//     }
+//   }, [tokenV2, location, stepFlowStepHistory])
 
 
   const onGetStartedClick = async () => {
@@ -59,7 +66,7 @@ export const CrucibleGetStarted = () => {
     <FContainer width={950} className="f-mr-0 f-mb-2">
       <FCard variant={"secondary"} className="card-get-started">
         <FTypo className="card-title" size={22} color="#DAB46E">
-          Welcome To The Crucible by Ferrum Network
+          Welcome To The Crucible by Ferrum Network New
         </FTypo>
         <FTypo>
           Watch the explainer video below for a step-by-step tutorial on how to mint, add liquidity, farm, trade, and earn rewards through the
@@ -87,7 +94,7 @@ export const CrucibleGetStarted = () => {
           <li>Built-in Token Burn</li>
           <li>Mint, Add Liquidity, Farm, Trade, and Earn Rewards</li>
         </ul>
-        {meV2._id ?
+        { (meV2._id && isConnected) ?
           <FButton title={"Get Started"} postfix={<IconArrow />} className="w-100 f-mt-2" onClick={() => onGetStartedClick()} />
           :
           <MetaMaskConnector.WalletConnector
@@ -98,7 +105,8 @@ export const CrucibleGetStarted = () => {
           />
         }
       </FCard>
-      <FInputCheckbox onClick={() => onNeverShowClick(!neverShowAgain) } name="neverShowAgain" className="f-mb-1 f-mt-1" label={"Don’t show the intro guide again."} /> 
     </FContainer>
   );
 };
+
+export default Introduction

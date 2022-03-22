@@ -88,5 +88,27 @@ export const PATH_DASHBOARD = {
     mintAndStake: path(ROOTS_DASHBOARD, "/crucible/mint"),
     manage: path(ROOTS_DASHBOARD, "/crucible/manage"),
     deployer: path(ROOTS_DASHBOARD, "/crucible/deployer"),
+    public: path(ROOTS_DASHBOARD, "/crucible/public"),
+    cFRM: {
+      introduction: path(ROOTS_DASHBOARD, "/crucible/cFRM/introduction"),
+      manage: path(ROOTS_DASHBOARD, "/crucible/cFRM/manage"),
+      steps: path(ROOTS_DASHBOARD, "/crucible/cFRM/liquidity"),
+    },
+    cFRMx: {
+      introduction: path(ROOTS_DASHBOARD, "/crucible/cFRMx/introduction"),
+      manage: path(ROOTS_DASHBOARD, "/crucible/cFRMx/manage"),
+    },
+    cFRM_BNB: {
+      introduction: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/introduction"),
+      manage: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/manage"),
+      mint: {
+      steps: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/mint/liquidity"),
+      mint: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/mint/deposit"),
+      }
+    },
+    cFRMx_BNB: {
+      introduction: path(ROOTS_DASHBOARD, "/crucible/cFRMx-BNB/introduction"),
+      manage: path(ROOTS_DASHBOARD, "/crucible/cFRMx-BNB/manage"),
+    }
   },
 };

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { FButton, FDialog, FItem, FLoader, FTypo } from "ferrum-design-system";
-import { ReactComponent as IconApprove } from "../../assets/img/icon-transaction-approved.svg";
-import { ReactComponent as IconSubmitted } from "../../assets/img/icon-transaction-submitted.svg";
-import Loader from "../../assets/gif/loader.svg";
+import { ReactComponent as IconApprove } from "../../../../../assets/img/icon-transaction-approved.svg";
+import { ReactComponent as IconSubmitted } from "../../../../../assets/img/icon-transaction-submitted.svg";
+import Loader from "../../../../../assets/gif/loader.svg";
+import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionStatusDialog, isProcessing, setapprovedDone, setIsProcessing }: any) => {
   const history = useHistory();
@@ -98,7 +99,7 @@ const onclose = () => {
               <FButton title={"Add Token to Metamask"} outlined variant={"secondary"} className="f-mt-1 f-mb-1" />
             </FItem>
             <FItem>
-              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => history.push("/dashboard/crucible/steps")} />
+              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.mint.steps})} />
             </FItem>
           </FItem>
         </React.Fragment>

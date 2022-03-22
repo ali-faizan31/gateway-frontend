@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { FButton, FCard, FContainer, FInputCheckbox, FTypo } from "ferrum-design-system";
-import { ReactComponent as IconArrow } from "../../assets/img/icon-arrow-square.svg";
-import { useHistory, useLocation } from "react-router";
-import { PATH_DASHBOARD } from "../../routes/paths";
+import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
+import { useHistory, useLocation } from "react-router"; 
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/rootReducer";
-import { MetaMaskConnector } from "../../container-components";
-import { ConnectWalletDialog } from "../../utils/connect-wallet/ConnectWalletDialog";
-import { getUserLatestStepFlowStepHistoryByStepFlowId, updateStepFlowStepHistoryByStepFlowStepHistoryId } from "../../_apis/StepFlowStepHistory";
-import { getLatestStepWithPendingStatus } from "../../utils/global.utils";
+import { MetaMaskConnector } from "../../../../../container-components";
+import { RootState } from "../../../../../redux/rootReducer";
+import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
+import { getLatestStepWithPendingStatus } from "../../../../../utils/global.utils";
+import { updateStepFlowStepHistoryByStepFlowStepHistoryId } from "../../../../../_apis/StepFlowStepHistory";
+ 
 
-
-export const CrucibleGetStarted = () => {
+export const Introduction = () => {
   const history = useHistory();
   const location: any = useLocation();
 
@@ -59,7 +59,7 @@ export const CrucibleGetStarted = () => {
     <FContainer width={950} className="f-mr-0 f-mb-2">
       <FCard variant={"secondary"} className="card-get-started">
         <FTypo className="card-title" size={22} color="#DAB46E">
-          Welcome To The Crucible by Ferrum Network
+          Welcome To The Crucible by Ferrum Network New
         </FTypo>
         <FTypo>
           Watch the explainer video below for a step-by-step tutorial on how to mint, add liquidity, farm, trade, and earn rewards through the
