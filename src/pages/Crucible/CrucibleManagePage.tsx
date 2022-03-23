@@ -16,7 +16,7 @@ const CrucibleManagePage = () => {
       <FContainer width={650}>
         <FCard className="card-crucible-token-info">
           <FTypo size={24}>Crucible Token Info</FTypo>
-          <FGrid>
+          <FGrid className={"info-bar"}>
             <FGridItem size={[4, 4, 4]}>
               <FItem align={"center"}>
                 <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
@@ -44,7 +44,7 @@ const CrucibleManagePage = () => {
           </FGrid>
           <FCard className={"styled-card align-v your-crucible"}>
             <FGrid>
-              <FGridItem size={[6, 6, 6]}>
+              <FGridItem size={[6, 6, 6]} dir="column">
                 <FTypo className="f-pb--2">Your Crucible LP Deposits</FTypo>
                 <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
                   13.929
@@ -66,14 +66,14 @@ const CrucibleManagePage = () => {
             </FGrid>
           </FCard>
           <FCard className={"your-claimed-rewards"}>
-            <FGrid>
-              <FGridItem size={[8, 8, 6]}>
+            <FGrid alignY={"center"}>
+              <FGridItem size={[6]} dir="column">
                 <FTypo className="f-pb--2">Your unclaimed Rewards</FTypo>
                 <FTypo size={22} weight={700}>
                   7.292 cFRMx
                 </FTypo>
               </FGridItem>
-              <FGridItem size={[4, 4, 6]} alignX="center" alignY={"end"}>
+              <FGridItem size={[6]} alignY="center" alignX={"end"}>
                 <FButton title={"Claim"}></FButton>
               </FGridItem>
             </FGrid>

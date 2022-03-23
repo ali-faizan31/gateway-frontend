@@ -177,12 +177,14 @@ const LeaderboardManagement = () => {
   const publicUrlActions = (params) => (
     <>
       <div data-label="Public URL">
-        <FButton
-          prefix={<RiFileCopy2Fill />}
-          // title="Copy"
-          className="f-mr-1"
-          onClick={() => copyPublicUrl(params)}></FButton>
-        <FButton prefix={<RiMailOpenLine />} label="Open" className={"f-mt--2"} onClick={() => openPublicUrl(params)}></FButton>
+        <FItem display={"flex"}>
+          <FButton
+            prefix={<RiFileCopy2Fill />}
+            // title="Copy"
+            className="f-mr-1"
+            onClick={() => copyPublicUrl(params)}></FButton>
+          <FButton prefix={<RiMailOpenLine />} label="Open" className={"f-mt--2"} onClick={() => openPublicUrl(params)}></FButton>
+        </FItem>
       </div>
     </>
   );

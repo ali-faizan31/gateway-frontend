@@ -55,7 +55,6 @@ const CrucibleStepsPage = () => {
                 className="f-mb-1 f-mt-1"
                 label={"I have added liquidity of cFRM / BNB pair and have the LP tokens. I’m ready to stake my cFRM LP tokens now."}
               />
-              <FButton title="Add Liquidity" postfix={<IconArrow />} className="w-100" disabled={!stepThreeCheck} />
             </span>
           </li>
           <li className="step-last">

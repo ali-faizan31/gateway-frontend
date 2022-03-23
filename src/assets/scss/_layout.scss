@@ -1,15 +1,5 @@
 @import "./variables";
 .f-layout {
-  // &.f-layout-expanded {
-  //   padding-left: 280px;
-  // }
-  // .f-sider {
-  //   &.sider-expanded {
-  //     max-width: 280px;
-  //     min-width: 280px;
-  //   }
-  // }
-
   .f-main {
     width: 100%;
     .page-title {
@@ -25,19 +15,19 @@
     .f-main {
       .f-container {
         &.fluid {
-          padding: 0 2rem;
+          padding-top: 0;
           padding-right: 16rem;
           .f-container {
             max-width: 700px;
           }
         }
+        &.crucible-dashboard {
+          max-width: 100% !important;
+        }
       }
     }
   }
   @media screen and (max-width: 991px) {
-    &.f-layout-expanded {
-      padding-left: 0;
-    }
     &.layout-crucible {
       .f-main {
         .f-container {

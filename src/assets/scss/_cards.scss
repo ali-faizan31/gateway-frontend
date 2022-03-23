@@ -132,6 +132,9 @@ $cardSecondary: #242b35;
   .scrollbar-container {
     max-height: max-content !important;
   }
+  .f-input-control {
+    font-size: 0.9rem;
+  }
   .f-table {
     // min-width: 1000px;
     padding-bottom: 4rem;
@@ -341,28 +344,38 @@ $cardSecondary: #242b35;
       }
     }
   }
+  .card-manage-crucible {
+    .f-item {
+      margin-bottom: 1.5rem;
+    }
+  }
   .card-crucible-token-info {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 0 0 10px 10px;
-  }
-  .your-crucible {
-    padding: 0 2rem;
-    &:before {
-      height: 40px;
+    .info-bar {
+      .f-item {
+        margin: 1rem 0;
+      }
     }
-    &:after {
-      height: 60px;
+    .your-crucible {
+      padding: 1rem 2.75rem;
+      &:before {
+        height: 40px;
+      }
+      &:after {
+        height: 60px;
+      }
     }
-  }
-  .your-claimed-rewards {
-    background: #313740;
-    max-width: 95% !important;
-    border-radius: 0 0 10px 10px;
-    padding: 0.5rem 2rem;
-    .f-btn {
-      font-size: 1.1rem;
-      padding: 0.5rem 2rem;
-      font-weight: 300;
+    .your-claimed-rewards {
+      background: #313740;
+      max-width: 92% !important;
+      border-radius: 0 0 10px 10px;
+      padding: 1rem 1.5rem;
+      .f-btn {
+        font-size: 1.1rem;
+        padding: 0.5rem 2rem;
+        font-weight: 300;
+      }
     }
   }
 }
@@ -502,6 +515,7 @@ $cardSecondary: #242b35;
     perspective: 1000px;
     border-radius: 5px;
     height: 200px;
+    margin-bottom: 1.5rem;
     &:hover .card-whats-next-inner {
       transform: rotateY(180deg);
     }
@@ -513,6 +527,7 @@ $cardSecondary: #242b35;
       text-align: center;
       transition: transform 0.6s;
       transform-style: preserve-3d;
+
       .card-whats-next-front,
       .card-whats-next-back {
         position: absolute;

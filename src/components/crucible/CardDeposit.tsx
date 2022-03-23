@@ -73,7 +73,9 @@ export const CrucibleDeposit = () => {
       <div className="btn-wrap f-mt-2">
         <FButton title={"Approve"} className={"w-100"} onClick={() => setTransitionStatusDialog(true)}></FButton>
       </div>
-      <DialogTransitionStatus transitionStatusDialog={transitionStatusDialog} setTransitionStatusDialog={setTransitionStatusDialog} />
+      {transitionStatusDialog && (
+        <DialogTransitionStatus transitionStatusDialog={transitionStatusDialog} setTransitionStatusDialog={setTransitionStatusDialog} />
+      )}
     </FCard>
   );
 };
