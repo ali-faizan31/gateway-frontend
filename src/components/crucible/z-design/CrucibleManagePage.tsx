@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTypo } from "ferrum-design-system";
-import { CrucibleMyBalance } from "../../components/crucible/CardMyBalance";
-import { CrucibleManage } from "../../components/crucible/CardManage";
-import { CrucibleDeposit } from "../../components/crucible/CardDeposit";
+import { CrucibleMyBalance } from "./CardMyBalance";
+import { CrucibleDeposit } from "./CardDeposit";
+import { CrucibleManage } from "./CardManage"; 
 
 const CrucibleManagePage = () => {
   const [deposit, setDeposit] = useState(false);

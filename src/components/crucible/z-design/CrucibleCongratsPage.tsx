@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FCard, FContainer, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system";
-import { CrucibleMyBalance } from "../../components/crucible/CardMyBalance";
+import { CrucibleMyBalance } from "./CardMyBalance";
 import { ReactComponent as IconCongrats } from "../../assets/img/icon-check-congrats.svg";
 import { ReactComponent as IconNetworkCFrm } from "../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkBsc } from "../../assets/img/icon-network-bsc.svg";

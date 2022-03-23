@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FCard, FContainer, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system"; 
 import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-check-congrats.svg";
-import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg";
-import { CrucibleMyBalance } from "../../../CardMyBalance";
+import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cFRM.svg";
+import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cFRMx.svg";
+import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
+import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
+import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 
 export const Success = () => {
   return (
@@ -31,7 +33,7 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={" item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                  <IconNetworkCFrm />
+                  <IconNetworkcFRMx /> 
                   <IconNetworkBsc />
                 </span>
               </div>
@@ -44,8 +46,7 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={" item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                  <IconNetworkCFrm />
-                  <IconNetworkBsc />
+                <IconNetworkLeaderboard />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
@@ -57,7 +58,7 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                  <IconNetworkCFrm />
+                <IconNetworkcFRM />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
@@ -69,7 +70,7 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                  <IconNetworkCFrm />
+                  <IconNetworkcFRM />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>

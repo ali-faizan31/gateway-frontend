@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
-import { FButton, FCard, FContainer, FInputCheckbox, FItem, FTypo } from "ferrum-design-system";
-import { CrucibleMyBalance } from "../../components/crucible/CardMyBalance";
+import { FButton, FCard, FContainer, FInputCheckbox, FItem, FTypo } from "ferrum-design-system"; 
 import { ReactComponent as IconArrow } from "../../assets/img/icon-arrow-square.svg";
+import { CrucibleMyBalance } from "./CardMyBalance";
 
 const CrucibleStepsPage = () => {
   const history = useHistory();
@@ -44,7 +44,7 @@ const CrucibleStepsPage = () => {
           </li>
           <li>
             <span className="step-info">
-              <FTypo className={"f-mb-1"}>Step 1</FTypo>
+              <FTypo className={"f-mb-1"}>Step 3</FTypo>
               <FTypo>
                 Congratulations! You have successfully added liquidity. You are now able to stake your cFRM LP tokens to start earning rewards!
               </FTypo>

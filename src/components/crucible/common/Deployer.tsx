@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
-import { ClipLoader } from 'react-spinners';
-import { RootState } from '../../redux/rootReducer';
-import { PATH_DASHBOARD } from '../../routes/paths';
-import { getLatestStepWithPendingStatus } from '../../utils/global.utils';
-import { getStepFlowStepByStepFlowIdForPublic } from '../../_apis/StepFlowStepCrud';
-import { getUserLatestStepFlowStepHistoryByStepFlowId, startNewSequenceForStepFlowStepHistoryByStepFlowId } from '../../_apis/StepFlowStepHistory';
-import * as CrucibleActions from "./redux/CrucibleActions";
+import { ClipLoader } from 'react-spinners'; 
+import { RootState } from '../../../redux/rootReducer';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+import { getLatestStepWithPendingStatus } from '../../../utils/global.utils';
+import { getStepFlowStepByStepFlowIdForPublic } from '../../../_apis/StepFlowStepCrud';
+import { getUserLatestStepFlowStepHistoryByStepFlowId, startNewSequenceForStepFlowStepHistoryByStepFlowId } from '../../../_apis/StepFlowStepHistory';
+import * as CrucibleActions from "../redux/CrucibleActions";
 
 export const Deployer = () => {
     const location: any = useLocation();

@@ -1,10 +1,10 @@
 import { FCard, FContainer, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system";
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { CardAPR } from "../../components/crucible/CardAPR";
-import { CrucibleMyBalance } from "../../components/crucible/CardMyBalance";
-import { CruciblePrice } from "../../components/crucible/CardPrice";
-import { RootState } from "../../redux/rootReducer";
+import { useSelector } from "react-redux"; 
+import { RootState } from "../../../redux/rootReducer";
+import { CardAPR } from "./CardAPR";
+import { CrucibleMyBalance } from "./CardMyBalance";
+import { CruciblePrice } from "./CardPrice";
 
 const CrucibleDashboardPage = () => {
   const { isConnected } = useSelector((state: RootState) => state.walletConnector);

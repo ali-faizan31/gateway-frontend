@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTypo } from "ferrum-design-system"; 
 import { UnWrap as CrucibleUnWrap } from "./UnWrapCard";
-import CrucibleFeeCard  from "../common/CrucibleFeeCard";
-import { CrucibleMyBalance } from "../../../CardMyBalance";  
+import CrucibleFeeCard  from "../common/CrucibleFeeCard"; 
+import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 
 export const UnWrap = () => {
   const [dashboardAction, setDashboardAction] = useState(false);

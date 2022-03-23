@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { FCard, FContainer } from 'ferrum-design-system';
-import { jsonTemplate } from './steps-render-engine/ExampleJson'
-import RenderStep from './steps-render-engine/RenderStep'
-import { useParams, useLocation } from "react-router-dom";
-import { getStepFlowStepByAssociatedOrganizationByStepFlowStepId } from '../../_apis/StepFlowStepCrud';
-import { TOKEN_TAG } from '../../utils/const.utils';
-
+import { FCard, FContainer } from 'ferrum-design-system'; 
+import { useParams } from 'react-router';
+import { TOKEN_TAG } from '../../../utils/const.utils';
+import { getStepFlowStepByAssociatedOrganizationByStepFlowStepId } from '../../../_apis/StepFlowStepCrud';
+import RenderStep from './RenderStep';
 
 const Index = () => {
     const { id }: any = useParams();

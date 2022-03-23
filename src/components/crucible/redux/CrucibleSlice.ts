@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CRUCIBLE_STATE, defaultCrucibleState } from "../CrucibleInterfaces";
+import { CRUCIBLE_STATE, defaultCrucibleState } from "./CrucibleInterfaces";
 
 const initialCrucibleState: CRUCIBLE_STATE = {
     ...defaultCrucibleState

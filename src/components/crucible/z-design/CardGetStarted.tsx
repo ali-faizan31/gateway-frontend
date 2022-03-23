@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { FButton, FCard, FContainer, FInputCheckbox, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../assets/img/icon-arrow-square.svg";
-import { useHistory, useLocation } from "react-router";
-import { PATH_DASHBOARD } from "../../routes/paths";
+import { useHistory, useLocation } from "react-router"; 
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/rootReducer";
-import { MetaMaskConnector } from "../../container-components";
-import { ConnectWalletDialog } from "../../utils/connect-wallet/ConnectWalletDialog";
-import { getUserLatestStepFlowStepHistoryByStepFlowId, updateStepFlowStepHistoryByStepFlowStepHistoryId } from "../../_apis/StepFlowStepHistory";
-import { getLatestStepWithPendingStatus } from "../../utils/global.utils";
+import { MetaMaskConnector } from "../../../container-components";
+import { RootState } from "../../../redux/rootReducer";
+import { PATH_DASHBOARD } from "../../../routes/paths";
+import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
+import { getLatestStepWithPendingStatus } from "../../../utils/global.utils";
+import { updateStepFlowStepHistoryByStepFlowStepHistoryId } from "../../../_apis/StepFlowStepHistory";
 
 
 export const CrucibleGetStarted = () => {

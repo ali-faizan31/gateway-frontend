@@ -11,11 +11,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import moment from "moment-timezone";
 import { WalletApplicationWrapper } from "./container-components";
 import { PATH_DASHBOARD } from "./routes/paths";
-import { TOKEN_TAG } from "./utils/const.utils";
-import { CrucibleGetStarted } from "./components/crucible/CardGetStarted";
-import CrucibleStepsPage from "./pages/Crucible/CrucibleStepsPage";
-import CrucibleCongratsPage from "./pages/Crucible/CrucibleCongratsPage";
-import { Deployer as CrucibleDeployer } from "./components/crucible/Deployer";
+import { TOKEN_TAG } from "./utils/const.utils"; 
+import { Deployer as CrucibleDeployer } from "./components/crucible/common/Deployer";
 import { useSelector } from "react-redux";
 import { WalletAuthencationOnSignIn } from "./components/common/wallet-authentication/WalletAuthenticationSignIn";
 import { RootState } from "./redux/rootReducer";
@@ -53,14 +50,7 @@ const ResendEmailVerification = Loadable(lazy(() => import("./components/common/
 const StakingLeaderboard = Loadable(lazy(() => import("./components/leaderboard-staking/StakingLeaderboard")));
 const Dashboard = Loadable(lazy(() => import("./components/dashboard/dashboard")));
 const ProfileSettings = Loadable(lazy(() => import("./components/profile-management")));
-const CrucibleDashboardPage = Loadable(lazy(() => import("./components/crucible/dashboard/CrucibleDashboardPage")));
-const CrucibleManagePage = Loadable(lazy(() => import("./pages/Crucible/CrucibleManagePage")));
-const CrucibleIntroduction = Loadable(lazy(() => import("./components/crucible/Intro")));
-const MintAndStake = Loadable(lazy(() => import("./components/crucible/MintAndStake")));
-const Crucible = Loadable(lazy(() => import("./components/crucible/index")));
-// const CrucibleDeployer =  Loadable(lazy(() => import("./components/crucible/Deployer")));
-
-// const cFRMFarmingDashboardFlowIntroduction = Loadable(lazy(() => import("./components/crucible/farms/index")));
+const CrucibleDashboardPage = Loadable(lazy(() => import("./components/crucible/dashboard/CrucibleDashboardPage"))); 
 const CruciblePublic = Loadable(lazy(() => import("./components/crucible/public/Introduction")));
 
 
@@ -268,7 +258,7 @@ function App() {
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          {/* <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.intro}
             component={CrucibleIntroduction}
             auth={isAuthenticated}
@@ -281,16 +271,16 @@ function App() {
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
-          />
+          /> */}
 
-          <UnGuardedRoute
+          {/* <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.getStarted}
             component={CrucibleGetStarted}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
-          />
-          <UnGuardedRoute
+          /> */}
+          {/* <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.steps}
             component={CrucibleStepsPage}
             auth={isAuthenticated}
@@ -310,7 +300,7 @@ function App() {
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
-          />
+          /> */}
           <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.index}
             component={CrucibleDashboardPage}

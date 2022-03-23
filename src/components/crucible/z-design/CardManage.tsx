@@ -4,8 +4,8 @@ import { FButton, FCard, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-sy
 import { ReactComponent as IconGoBack } from "../../assets/img/icon-go-back.svg";
 import { ReactComponent as IconNetworkCFrm } from "../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkBsc } from "../../assets/img/icon-network-bsc.svg";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/rootReducer";
+import { useSelector } from "react-redux"; 
+import { RootState } from "../../../redux/rootReducer";
 
 export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) => {
   const history = useHistory();

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTypo } from "ferrum-design-system"; 
 import { CrucibleDeposit as DepositAndMint } from "./DepositAndMintCard";
 import CrucibleFeeCard  from "../common/CrucibleFeeCard";
-import { CrucibleMyBalance } from "../../../CardMyBalance";  
+import { CrucibleMyBalance } from "../../../common/CardMyBalance"; 
 
 export const Mint = () => {
   const [dashboardAction, setDashboardAction] = useState(false);

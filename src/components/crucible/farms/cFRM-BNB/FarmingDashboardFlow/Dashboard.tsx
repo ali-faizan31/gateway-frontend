@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTypo } from "ferrum-design-system";
-// import { CrucibleDeposit } from "../pages/CardDeposit";
-import { CrucibleDeposit as DepositAndMint } from "../MintFlow/DepositAndMintCard";
+import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTypo } from "ferrum-design-system"; 
 import { CrucibleManage } from "../common/CardManage";
-import { CrucibleMyBalance } from "../../../CardMyBalance"; 
+import { CrucibleMyBalance } from "../../../common/CardMyBalance"; 
 import { useHistory } from "react-router";
-import { PATH_DASHBOARD } from "../../../../../routes/paths";
-// import { CrucibleDeposit } from "../../../CardDeposit";
-// import { CrucibleManage } from "../../../CardManage";
+import { PATH_DASHBOARD } from "../../../../../routes/paths"; 
 
 export const Manage = () => {
   const history = useHistory()
@@ -104,7 +100,7 @@ export const Manage = () => {
           </FGrid>
         </FCard>
       </FCard>
-      <FContainer width={850}>
+      <FContainer width={850}> 
         <FGrid className="btn-wrap f-mt-2 f-mb-2">
           <FGridItem size={[4, 4, 4]}>
             <FButton title={"Stake"} className={"w-100"} onClick={()=>onStakeClick()}></FButton>

@@ -5,11 +5,8 @@ import { FButton, FCard, FInputText, FItem, FTable, FTypo } from "ferrum-design-
 import { ReactComponent as IconNetworkCFrm } from "../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkBsc } from "../../assets/img/icon-network-bsc.svg";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/rootReducer";  
-import { PATH_DASHBOARD } from "../../routes/paths";
-import { Deployer } from "./Deployer";
-import { CrucibleDeposit } from "./CardDeposit";
-import { getStepFlowStepByStepFlowIdForPublic } from "../../_apis/StepFlowStepCrud";
+import { RootState } from "../../../redux/rootReducer";  
+import { PATH_DASHBOARD } from "../../../routes/paths"; 
 
 export const CardAPR = () => {
   const history = useHistory();
@@ -23,10 +20,7 @@ export const CardAPR = () => {
     { prop: "totalDeposited", title: "Total Deposited" },
     { prop: "yourDeposit", title: "Your Deposit" },
     { prop: "yourRewards", title: "Your Rewards" },
-    {
-      prop: "apr",
-      title: <FTypo color="#DAB46E">APR</FTypo>,
-    },
+    { prop: "apr", title: <FTypo color="#DAB46E">APR</FTypo>, },
     { prop: "action", title: <></> },
   ];
 
@@ -51,15 +45,11 @@ export const CardAPR = () => {
         totalDeposited: <FTypo className={"col-amount"}>{stepFlow.totalDeposited}</FTypo>,
         yourDeposit: <FTypo className={"col-amount"}>{stepFlow.yourDeposit}</FTypo>,
         yourRewards: <FTypo className={"col-amount"}>{stepFlow.yourRewards}</FTypo>,
-        apr: (
-          <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}>
-            {stepFlow.apr}
-          </FTypo>
-        ),
+        apr: ( <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}> {stepFlow.apr} </FTypo> ),
         action: (
           <div className="col-action">
             <FButton title={"Manage"} onClick={()=> renderComponent(stepFlow.id, stepFlow.sustainableCrucibleFarms)} />
-            <FButton title={"Deposit"} onClick={() => history.push({pathname: "/dashboard/crucible/get-started", state: stepFlow.id})}></FButton>
+            <FButton title={"Deposit"} onClick={() => renderComponent(stepFlow.id, stepFlow.sustainableCrucibleFarms)}></FButton>
           </div>
         ),
       }; 
@@ -67,17 +57,7 @@ export const CardAPR = () => {
 
   const renderComponent = (id: any, name: any) => { 
     history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: {id, name}}) 
-  }
-
-  const getStepToRender = async (id: any, isConnected: any) => {
-    let stepResponse: any = [];
-    if ( isConnected ){
-         console.log('connected') 
-    } else {
-        stepResponse = await getStepFlowStepByStepFlowIdForPublic(id);
-        console.log(stepResponse.data.body); 
-    }
-}
+  } 
 
   return (
     <> 
