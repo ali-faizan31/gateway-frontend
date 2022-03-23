@@ -32,7 +32,7 @@ useEffect(() => {
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title">
         <FItem display={"flex"} alignY="center">
-          <Link to="/dashboard/crucible/cFRM-BNB/manage" className="btn-back">
+          <Link to="/dashboard/crucible/cFRMx-BNB/manage" className="btn-back">
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
@@ -44,7 +44,7 @@ useEffect(() => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              FRM Price (USD)
+              FRMx Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -54,7 +54,7 @@ useEffect(() => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              cFRM Price (USD)
+              cFRMx Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -86,7 +86,7 @@ useEffect(() => {
         placeholder="0"
         postfix={
           <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-            cFRM
+            cFRMx
           </FTypo>
         }
       />

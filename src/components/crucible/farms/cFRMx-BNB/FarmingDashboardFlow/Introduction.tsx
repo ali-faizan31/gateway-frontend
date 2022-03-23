@@ -45,16 +45,16 @@ export const Introduction = () => {
   }, [tokenV2, location, stepFlowStepHistory])
 
 
-  const onGetStartedClick = async () => {
-    console.log(neverShowAgain)
+  const onGetStartedClick = async () => { 
     if ( neverShowAgain === true ){
-      let data = { status: "completed" }
-      let updateResponse: any = await updateStepFlowStepHistoryByStepFlowStepHistoryId(currentStep._id, data, tokenV2);
-      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      console.log(updateResponse, '------------------')
-      history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
+      history.push({pathname:PATH_DASHBOARD.crucible.cFRMx_BNB.manage, state: location.state})
+      // let data = { status: "completed" }
+      // let updateResponse: any = await updateStepFlowStepHistoryByStepFlowStepHistoryId(currentStep._id, data, tokenV2);
+      // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      // console.log(updateResponse, '------------------')
+      // history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
     } else {
-      history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.manage, state: location.state}) 
+      history.push({pathname:PATH_DASHBOARD.crucible.cFRMx_BNB.manage, state: location.state}) 
     }
   }
 

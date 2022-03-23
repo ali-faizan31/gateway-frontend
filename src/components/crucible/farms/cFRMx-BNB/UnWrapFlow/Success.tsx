@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FCard, FContainer, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system"; 
 import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-check-congrats.svg";
-import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cFRM.svg";
-import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cFRMx.svg";
+import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
+import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
 import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
 import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
@@ -22,7 +22,7 @@ export const Success = () => {
             Crucible Token Sustainable Liquidity Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-          Congrats! You have successfully unwraped your cFRM tokens. You can now use the unwraped FRM tokens to Mint and Stake cFRM, buy cFRM, or simply HODL.          </FTypo>
+          Congrats! You have successfully unwraped your cFRMx tokens. You can now use the unwraped FRM tokens to Mint and Stake cFRMx, buy cFRMx, or simply HODL.          </FTypo>
         </FItem>
         <FTypo size={20} weight={500} className="f-mt-3 f-mb-3" align={"center"}>
           Whats next?
@@ -49,7 +49,7 @@ export const Success = () => {
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Go to cFRM Leaderboard Competition
+              Go to cFRMx Leaderboard Competition
               </FTypo>
             </FItem>
           </FGridItem>
@@ -57,11 +57,11 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                   <IconNetworkcFRM/>
+                   <IconNetworkcFRMx/>
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-                Mint cFRM
+                Mint cFRMx
               </FTypo>
             </FItem>
           </FGridItem>
@@ -69,11 +69,11 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                   <IconNetworkcFRM/>
+                   <IconNetworkcFRMx/>
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-                Trade cFRM
+                Trade cFRMx
               </FTypo>
             </FItem>
           </FGridItem>

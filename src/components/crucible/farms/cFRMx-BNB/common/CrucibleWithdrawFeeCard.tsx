@@ -30,7 +30,7 @@ const CrucibleWithdrawFeeCard = () => {
           <FGridItem size={[4, 4, 4]}>
             <FItem align={"center"}>
               <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                cFRM
+                cFRMx
               </FTypo>
               <FTypo size={20}>Crucible Token</FTypo>
             </FItem>
@@ -43,7 +43,7 @@ const CrucibleWithdrawFeeCard = () => {
               <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
                 13.929
                 <FTypo size={14} weight={300} className={"f-pl--7 f-pb--1"}>
-                cFRM
+                cFRMx
                 </FTypo>
               </FTypo>
             </FGridItem>

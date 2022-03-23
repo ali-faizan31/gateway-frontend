@@ -27,11 +27,11 @@ useEffect(() => {
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title">
         <FItem display={"flex"} alignY="center">
-          <Link to="/dashboard/crucible/cFRM-BNB/manage" className="btn-back">
+          <Link to="/dashboard/crucible/cFRMx-BNB/manage" className="btn-back">
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
-          Unstake cFRM / BNB LP Token
+          Unstake cFRMx / BNB LP Token
           </FTypo>
         </FItem>
       </div>
@@ -39,7 +39,7 @@ useEffect(() => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              FRM Price (USD)
+              FRMx Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -69,7 +69,7 @@ useEffect(() => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-      You have 2.000  cFRM / BNB LP available to unstake.
+      You have 2.000  cFRMx / BNB LP available to unstake.
       </FTypo>
       
       <div className="btn-wrap f-mt-2">

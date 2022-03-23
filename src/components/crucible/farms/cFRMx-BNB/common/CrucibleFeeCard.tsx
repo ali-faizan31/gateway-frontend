@@ -4,13 +4,10 @@ import { useHistory } from 'react-router'
 import { PATH_DASHBOARD } from '../../../../../routes/paths';
 
 const CrucibleFeeCard = () => {
-  const history = useHistory();
-    useEffect(() => { 
-        console.log('test')
-    }, [])
+  const history = useHistory(); 
     
     const onClaimRewardsClick = () => {
-      history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.withdraw})
+      history.push({pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.withdraw.withdraw})
     }
 
   return (
@@ -37,7 +34,7 @@ const CrucibleFeeCard = () => {
           <FGridItem size={[4, 4, 4]}>
             <FItem align={"center"}>
               <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                cFRM
+                cFRMx
               </FTypo>
               <FTypo size={20}>Crucible Token</FTypo>
             </FItem>
@@ -50,7 +47,7 @@ const CrucibleFeeCard = () => {
               <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
                 13.929
                 <FTypo size={14} weight={300} className={"f-pl--7 f-pb--1"}>
-                  APE-LP cFRM-BNB
+                  APE-LP cFRMx-BNB
                 </FTypo>
               </FTypo>
             </FGridItem>
@@ -71,7 +68,7 @@ const CrucibleFeeCard = () => {
             <FGridItem size={[8, 8, 6]}>
               <FTypo className="f-pb--2">Your unclaimed Rewards</FTypo>
               <FTypo size={24} weight={500}>
-                7.292 cFRM
+                7.292 cFRMx
               </FTypo>
             </FGridItem>
             <FGridItem size={[4, 4, 6]} alignX="center" alignY={"end"}>

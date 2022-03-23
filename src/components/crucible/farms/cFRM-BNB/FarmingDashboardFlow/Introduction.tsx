@@ -48,11 +48,12 @@ export const Introduction = () => {
   const onGetStartedClick = async () => {
     console.log(neverShowAgain)
     if ( neverShowAgain === true ){
-      let data = { status: "completed" }
-      let updateResponse: any = await updateStepFlowStepHistoryByStepFlowStepHistoryId(currentStep._id, data, tokenV2);
-      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      console.log(updateResponse, '------------------')
-      history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
+      // let data = { status: "completed" }
+      // let updateResponse: any = await updateStepFlowStepHistoryByStepFlowStepHistoryId(currentStep._id, data, tokenV2);
+      // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      // console.log(updateResponse, '------------------')
+      // history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
+      history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.manage, state: location.state})
     } else {
       history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.manage, state: location.state}) 
     }

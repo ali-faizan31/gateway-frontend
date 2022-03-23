@@ -20,12 +20,12 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
   // }, [isConnected])
   
   
-  const onMintcFRMClick = () => { 
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint});
+  const onMintcFRMxClick = () => { 
+    history.push({pathname:PATH_DASHBOARD.crucible.cFRMx_BNB.mint.mint});
   }
 
   const onWrapClick = () => { 
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.unwrap});
+    history.push({pathname:PATH_DASHBOARD.crucible.cFRMx_BNB.unwrap.unwrap});
   }
 
 
@@ -37,7 +37,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
-            Crucible Farms Dashboard - cFRM / BNB
+            Crucible Farms Dashboard - cFRMx / BNB
           </FTypo>
         </FItem>
         <div className="network-icon-wrapper">
@@ -51,7 +51,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              FRM Price (USD)
+              FRMx Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -61,7 +61,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              cFRM Price (USD)
+              cFRMx Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -74,7 +74,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <FButton title={"Buy Token"} outlined className={"w-100"}></FButton>
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
-          <FButton title={"Mint cFRM"} outlined className={"w-100"} onClick={() => onMintcFRMClick()}></FButton>
+          <FButton title={"Mint cFRMx"} outlined className={"w-100"} onClick={() => onMintcFRMxClick()}></FButton>
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
           <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"} onClick={() => onWrapClick()}></FButton>
