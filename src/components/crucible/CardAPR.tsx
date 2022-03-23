@@ -39,8 +39,8 @@ export const CardAPR = () => {
       yourDeposit: <FTypo className={"col-your"}>$13.{rd}</FTypo>,
       yourRewards: <FTypo className={"col-your"}>$.{rd}</FTypo>,
       apr: (
-        <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}>
-          {rd}
+        <FTypo className={"col-apr"} size={24} color="#DAB46E" weight={500}>
+          {rd}%
         </FTypo>
       ),
       action: (
@@ -53,7 +53,7 @@ export const CardAPR = () => {
   });
 
   return (
-    <FCard className="card-apr f-mt-2">
+    <FCard className="card-apr f-mt-2 f-mb-2">
       <FItem display={"flex"} alignX="between" alignY={"center"} className="f-pb-1 f-m-0">
         <FTypo className="card-title f-pl-1">APR</FTypo>
         <FInputText type={"text"} placeholder="Search by Farm Name, Token Name, Token Contract Address" />

@@ -7,19 +7,26 @@ import Loader from "../../assets/gif/loader.svg";
 
 export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionStatusDialog }: any) => {
   const history = useHistory();
-  const [approved, setApproved] = useState(true);
-  const [submitted, setSubmitted] = useState(true);
-  const [processed, setProcessed] = useState(true);
+  const [approved, setApproved] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [processed, setProcessed] = useState(false);
 
   useEffect(() => {
     setApproved(true);
     setTimeout(() => {
       setApproved(false);
     }, 3000);
+  }, []);
+
+  const transactionContinue = () => {
+    setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
+      setProcessed(true);
     }, 6000);
-  }, []);
+  };
+
+  console.log(approved);
   return (
     <FDialog
       size={"medium"}
@@ -55,7 +62,7 @@ export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionSt
       ) : processed === true ? (
         <React.Fragment>
           <FItem align="center">
-            <IconSubmitted />
+            <IconApprove />
             <FTypo color="#DAB46E" size={22} weight={600} className="f-mt-1">
               Transaction Processed
             </FTypo>
@@ -78,7 +85,7 @@ export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionSt
               Approved
             </FTypo>
             <FTypo size={20} className="f-mt-1 f-pb-3">
-              <span onClick={() => setApproved(true)}>Continue.</span>
+              <span onClick={() => transactionContinue()}>Continue.</span>
             </FTypo>
           </FItem>
         </React.Fragment>

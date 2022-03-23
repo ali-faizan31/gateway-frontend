@@ -91,8 +91,8 @@ $cardSecondary: #242b35;
     margin-right: 1rem;
     flex: auto;
     position: relative;
-    padding: 2rem 1.5rem;
-    min-width: 200px;
+    padding: 1.5rem 1.25rem;
+    min-width: 180px;
     &:last-child {
       margin-right: 0;
     }
@@ -104,10 +104,11 @@ $cardSecondary: #242b35;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  max-width: 250px;
+  max-width: 220px;
   max-height: 460px;
   border-radius: 10px 0 0 10px;
   padding-left: 3rem;
+  padding-right: 0;
   .card-title {
     margin-left: -1rem;
     margin-bottom: 2rem;
@@ -131,6 +132,9 @@ $cardSecondary: #242b35;
   .scrollbar-container {
     max-height: max-content !important;
   }
+  .f-input-control {
+    font-size: 0.9rem;
+  }
   .f-table {
     // min-width: 1000px;
     padding-bottom: 4rem;
@@ -143,13 +147,13 @@ $cardSecondary: #242b35;
 
       .thead-th {
         color: #7d7d7d !important;
-        font-size: 0.9rem !important;
+        font-size: 0.8rem !important;
         font-weight: 400;
         height: auto;
         word-break: keep-all;
         padding: 0 0.5rem;
         &:first-child {
-          padding-left: 2rem;
+          padding-left: 1.5rem;
         }
       }
     }
@@ -158,11 +162,23 @@ $cardSecondary: #242b35;
         background: #242b35 !important;
         margin-bottom: 1rem;
         position: relative;
-
         .tbody-td {
           padding: 1rem 0.5rem;
+          font-size: 0.9rem !important;
+          background: transparent !important;
+          span {
+            font-size: 0.9rem !important;
+            margin: 0;
+          }
+          .f-item {
+            .network-icon-wrap {
+              display: flex;
+              align-items: center;
+              margin-right: 0.5rem;
+            }
+          }
           &:first-child {
-            padding-left: 2rem;
+            padding-left: 1.5rem;
             &:after,
             &:before {
               content: "";
@@ -188,22 +204,27 @@ $cardSecondary: #242b35;
             }
           }
           .col-crucible-farming {
-            min-width: 100px;
+            width: 160px;
           }
-          // .col-amount {
-          //   width: 80px;
-          // }
-          // .col-your {
-          //   width: 60px;
-          // }
+          .col-amount {
+            width: 80px;
+          }
+          .col-apr {
+            width: 70px;
+            font-size: 1.5rem !important;
+            font-weight: 500;
+          }
+          .col-your {
+            width: 70px;
+          }
           .col-action {
             display: flex;
-            // justify-content: center;
-            min-width: 200px;
+            justify-content: center;
             .f-btn {
-              margin: 0 0.5rem;
-              padding: 0.15rem 0.5rem;
+              margin: 0 0.25rem;
+              padding: 0.15rem 0.25rem;
               min-height: 35px;
+              min-width: 80px;
             }
           }
         }
@@ -258,7 +279,7 @@ $cardSecondary: #242b35;
                 display: flex;
                 align-items: center;
                 .icon-wrap {
-                  min-width: 35px;
+                  min-width: 30px;
                   img,
                   svg {
                     margin-right: 0.5rem !important;
@@ -323,28 +344,38 @@ $cardSecondary: #242b35;
       }
     }
   }
+  .card-manage-crucible {
+    .f-item {
+      margin-bottom: 1.5rem;
+    }
+  }
   .card-crucible-token-info {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 0 0 10px 10px;
-  }
-  .your-crucible {
-    padding: 0.5rem 2rem;
-    &:before {
-      height: 40px;
+    .info-bar {
+      .f-item {
+        margin: 1rem 0;
+      }
     }
-    &:after {
-      height: 60px;
+    .your-crucible {
+      padding: 1rem 2.75rem;
+      &:before {
+        height: 40px;
+      }
+      &:after {
+        height: 60px;
+      }
     }
-  }
-  .your-claimed-rewards {
-    background: #313740;
-    max-width: 95% !important;
-    border-radius: 0 0 10px 10px;
-    padding: 0.5rem 2rem;
-    .f-btn {
-      font-size: 1.1rem;
-      padding: 0.5rem 2rem;
-      font-weight: 300;
+    .your-claimed-rewards {
+      background: #313740;
+      max-width: 92% !important;
+      border-radius: 0 0 10px 10px;
+      padding: 1rem 1.5rem;
+      .f-btn {
+        font-size: 1.1rem;
+        padding: 0.5rem 2rem;
+        font-weight: 300;
+      }
     }
   }
 }
@@ -484,6 +515,7 @@ $cardSecondary: #242b35;
     perspective: 1000px;
     border-radius: 5px;
     height: 200px;
+    margin-bottom: 1.5rem;
     &:hover .card-whats-next-inner {
       transform: rotateY(180deg);
     }
@@ -495,6 +527,7 @@ $cardSecondary: #242b35;
       text-align: center;
       transition: transform 0.6s;
       transform-style: preserve-3d;
+
       .card-whats-next-front,
       .card-whats-next-back {
         position: absolute;
@@ -513,6 +546,7 @@ $cardSecondary: #242b35;
       .card-whats-next-front {
         .f-typo {
           min-height: 50px;
+          padding: 0 1.5rem;
         }
       }
       .card-whats-next-back {

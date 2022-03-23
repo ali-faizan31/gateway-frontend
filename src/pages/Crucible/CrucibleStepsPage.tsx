@@ -10,7 +10,7 @@ const CrucibleStepsPage = () => {
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
 
   return (
-    <FContainer className="f-mr-0" width={900}>
+    <FContainer className="f-mr-0">
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-crucible-steps">
         <FTypo size={20} className={"card-title w-100"} display="flex">
@@ -55,7 +55,6 @@ const CrucibleStepsPage = () => {
                 className="f-mb-1 f-mt-1"
                 label={"I have added liquidity of cFRM / BNB pair and have the LP tokens. I’m ready to stake my cFRM LP tokens now."}
               />
-              <FButton title="Add Liquidity" postfix={<IconArrow />} className="w-100" disabled={!stepThreeCheck} />
             </span>
           </li>
           <li className="step-last">

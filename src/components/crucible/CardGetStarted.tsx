@@ -2,11 +2,13 @@ import React from "react";
 import { FButton, FCard, FContainer, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../assets/img/icon-arrow-square.svg";
 import { useHistory } from "react-router";
+import { CrucibleMyBalance } from "./CardMyBalance";
 
 export const CrucibleGetStarted = () => {
   const history = useHistory();
   return (
-    <FContainer width={950} className="f-mr-0 f-mb-2">
+    <FContainer className="f-mb-2 f-mr-0">
+      <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-get-started">
         <FTypo className="card-title" size={22} color="#DAB46E">
           Welcome To The Crucible by Ferrum Network

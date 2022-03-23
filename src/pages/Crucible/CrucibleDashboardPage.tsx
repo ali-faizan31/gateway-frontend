@@ -6,7 +6,7 @@ import { CruciblePrice } from "../../components/crucible/CardPrice";
 
 const CrucibleDashboardPage = () => {
   return (
-    <FContainer className="f-ml-0">
+    <FContainer className="f-ml-0 crucible-dashboard">
       <CrucibleMyBalance />
       <FTypo className="page-title">Dashboard</FTypo>
       <CruciblePrice />

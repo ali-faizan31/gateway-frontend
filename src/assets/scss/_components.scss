@@ -1,0 +1,31 @@
+@import "./variables";
+
+.f-loader {
+  img {
+    animation: loaderAnimate 2s infinite linear;
+    transform-origin: center;
+    @keyframes loaderAnimate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(359deg);
+      }
+    }
+  }
+}
+
+.f-btn {
+  min-width: max-content;
+}
+
+.f-dialog {
+  .f-loader {
+    position: relative;
+    margin-bottom: 2rem;
+
+    &:before {
+      background: none;
+    }
+  }
+}

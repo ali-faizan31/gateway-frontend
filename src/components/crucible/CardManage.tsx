@@ -76,7 +76,7 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
           <Link to="/dashboard/crucible" className="btn-back">
             <IconGoBack />
           </Link>
-          <FTypo size={30} weight={600}>
+          <FTypo size={24} weight={700}>
             Crucible Farm Dashboard - cFRMx / BNB
           </FTypo>
         </FItem>
@@ -90,26 +90,26 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
       <FGrid>
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
-            <FTypo size={24} className="f-mb-1">
+            <FTypo size={20} className="f-mb-1">
               FRMx Price (USD)
             </FTypo>
-            <FTypo size={36} weight={500}>
+            <FTypo size={30} weight={500}>
               $0.072
             </FTypo>
           </FItem>
         </FGridItem>
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
-            <FTypo size={24} className="f-mb-1">
+            <FTypo size={20} className="f-mb-1">
               FRMx Price (USD)
             </FTypo>
-            <FTypo size={36} weight={500}>
+            <FTypo size={30} weight={500}>
               $0.072
             </FTypo>
           </FItem>
         </FGridItem>
       </FGrid>
-      <FGrid className="btn-wrap">
+      <FGrid className="btn-wrap" spacing={5}>
         <FGridItem size={[4, 4, 4]}>
           <FSelect
             name={"selectOptions"}
