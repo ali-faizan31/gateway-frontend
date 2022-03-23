@@ -12,8 +12,8 @@ import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 export const Success = () => {
   const history = useHistory()
 
-  const onAddLiquityClick = () => {
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.steps})
+  const onRemoveLiquityClick = () => {
+    history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.unstake.steps})
   }
 
   return (
@@ -23,39 +23,39 @@ export const Success = () => {
         <FItem align="center">
           <IconCongrats />
           <FTypo color="#DAB46E" size={30} weight={600}>
-            Congratulations!  
+            Congratulations!
           </FTypo>
           <FTypo size={20} weight={500} className="f-mt-1">
             Crucible Token Sustainable Liquidity Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-          Congrats! You have successfully withdrawn your cFRM reward tokens. You can now use the tokens to generate even more rewards by compounding or trading them. </FTypo>        </FItem>
+          Congrats! You have successfully unstaked your APE-LP cFRM - BNB tokens. You can now use the tokens to generate even more rewards by compounding or trading them. You can also unwrap the APE-LP cFRM - BNB tokens.          </FTypo>
+        </FItem>
         <FTypo size={20} weight={500} className="f-mt-3 f-mb-3" align={"center"}>
           Whats next?
         </FTypo>
         <FGrid>
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={" item-whats-next"}>
-              <div className="network-icon-wrapper text-center f-mb-1" onClick={()=>onAddLiquityClick()}>
+              <div className="network-icon-wrapper text-center f-mb-1" onClick={()=>onRemoveLiquityClick()}>
                 <span className="icon-wrap">
-                  <IconNetworkcFRM />
-                  <IconNetworkBsc />
+                <IconNetworkcFRM/>
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Add Liquidity and Compound Rewards
+              Remove Liquidity and Unwrap
               </FTypo>
             </FItem>
           </FGridItem>
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={" item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
-                <span className="icon-wrap">
-                  <IconNetworkLeaderboard /> 
+                <span className="icon-wrap"> 
+                  <IconNetworkLeaderboard />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Go to cFRMLeaderboard Competition
+              Go to cFRM Leaderboard Competition
               </FTypo>
             </FItem>
           </FGridItem>
@@ -63,7 +63,7 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                  <IconNetworkcFRM />
+                   <IconNetworkcFRM/>
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
@@ -75,7 +75,7 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                  <IconNetworkcFRM />
+                   <IconNetworkcFRM/>
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>

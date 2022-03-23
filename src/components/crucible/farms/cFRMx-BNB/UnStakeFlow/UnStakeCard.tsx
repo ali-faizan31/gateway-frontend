@@ -6,23 +6,18 @@ import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/ico
 import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
 
-export const CrucibleDeposit = () => {
+export const UnStake = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [approvedDone, setapprovedDone] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const onApproveClick = () => {
-    setTransitionStatusDialog(true);
-    setIsApproving(true);
-  }
+  const [isProcessing, setIsProcessing] = useState(false); 
 
 useEffect(() => {
   console.log("approvedDone", approvedDone)
 }, [approvedDone])
 
 
-  const onMintClick = () => {
+  const onUnStakeClick = () => {
     setIsProcessing(true);
     setIsApproving(false);
     setTransitionStatusDialog(true);
@@ -36,7 +31,7 @@ useEffect(() => {
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
-            Deposit and Mint Crucible Token
+          Unstake cFRM / BNB LP Token
           </FTypo>
         </FItem>
       </div>
@@ -54,7 +49,7 @@ useEffect(() => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              cFRM Price (USD)
+              cFRMx Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -66,7 +61,7 @@ useEffect(() => {
         className={"f-mt-1"}
         inputSize="input-lg"
         type={"text"}
-        placeholder="0"
+        placeholder="Amount to unstake"
         postfix={
           <FTypo color="#DAB46E" className={"f-pr-1"}>
             Max
@@ -74,31 +69,12 @@ useEffect(() => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-        You have 100000.000 available in Base Token FRM.
+      You have 2.000  cFRM / BNB LP available to unstake.
       </FTypo>
-      <FTypo size={15} className={"f-mt-2 f-pl--5"}>
-        Amount you will receive
-      </FTypo>
-      <FInputText
-        className={"f-mt-1"}
-        inputSize="input-lg"
-        type={"text"}
-        placeholder="0"
-        postfix={
-          <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-            cFRM
-          </FTypo>
-        }
-      />
-      {approvedDone ? 
+      
       <div className="btn-wrap f-mt-2">
-        <FButton title={"Mint Crucible"} className={"w-100"} onClick={() => onMintClick()}></FButton>
-      </div>
-       :   
-      <div className="btn-wrap f-mt-2">
-        <FButton title={"Approve"} className={"w-100"} onClick={() => onApproveClick()}></FButton>
-      </div>
-       } 
+        <FButton title={"Unstake Crucible"} className={"w-100"} onClick={() => onUnStakeClick()}></FButton>
+      </div> 
 
       <DialogTransitionStatus 
       transitionStatusDialog={transitionStatusDialog} 

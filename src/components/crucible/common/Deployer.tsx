@@ -31,7 +31,7 @@ export const Deployer = () => {
     useEffect(() => {
         setIsLoading(true);
         if (isConnected && tokenV2) {
-            getStepToRender(location.state.id, tokenV2)
+            getStepToRender(location.state.id, location.state.name, tokenV2)
         } else if (isConnected === false) {
             history.push({ pathname: PATH_DASHBOARD.crucible.public, state: location.state })
         }
@@ -39,10 +39,18 @@ export const Deployer = () => {
 
 
 
-    const getStepToRender = async (id: any, tokenV2: any) => {
+    const getStepToRender = async (id: any, name: any, tokenV2: any) => {
         let stepResponse: any = [];
         if (tokenV2) {
-            history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.introduction, state: location.state })
+            switch(name){
+                case "cFRM / BNB": history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.introduction, state: location.state }); break;
+                case "cFRMx / BNB": history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.introduction, state: location.state }); break;
+                case "cFRM": history.push({ pathname: PATH_DASHBOARD.crucible.cFRM.introduction, state: location.state }); break;
+                case "cFRMx": history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx.introduction, state: location.state }); break;
+                default: history.push(PATH_DASHBOARD.crucible.index); break;
+            }
+
+            // history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.introduction, state: location.state })
             // stepResponse = await getUserLatestStepFlowStepHistoryByStepFlowId(id, tokenV2);
             // stepResponse = stepResponse.data.body.stepFlowStepsHistory;
             // dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: stepResponse }));

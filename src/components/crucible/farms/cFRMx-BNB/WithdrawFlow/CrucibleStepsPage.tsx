@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { FButton, FCard, FContainer, FInputCheckbox, FItem, FTypo } from "ferrum-design-system"; 
-import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
-import { CrucibleMyBalance } from "../../../common/CardMyBalance";
+import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg"; 
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 
-export const AddLiquidity = () => {
+export const CrucibleStepsPage = () => {
   const history = useHistory();
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
@@ -15,13 +15,13 @@ export const AddLiquidity = () => {
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-crucible-steps">
         <FTypo size={20} className={"card-title w-100"} display="flex">
-        Crucible Token Sustainable Liquidity Farming 
+        Crucible Token Sustainable Liquidity Farming teste
         </FTypo>
         <ul>
           <li className="step step-success">
             <span className="step-info">
               <FTypo className={"f-mb-1"}>Step 1</FTypo>
-              <FTypo>Congratulations! You have successfully minted your cFRM reward tokens! Please proceed to step 2.
+              <FTypo>Congratulations! You have successfully withdrawn your cFRM reward tokens! Please proceed to step 2.
 
 </FTypo>
             </span>
@@ -31,7 +31,11 @@ export const AddLiquidity = () => {
               <FTypo className={"f-mb-1"}>Step 2</FTypo>
               <FTypo>
 
-              In order to deposit LP tokens into the cFRM LP Farm (cFRM/BNB pair), you will first need to add liquidity.               
+              In order to deposit LP tokens into the cFRM LP Farm (cFRM/BNB pair), you will first need to add liquidity.
+
+
+
+               
                 <strong> Click ‘Add Liquidity’ to get started.</strong>
                 <br></br>
                 After you add liquidity, you will need to return to this screen and stake the cFRM LP tokens.              </FTypo>
@@ -49,14 +53,14 @@ export const AddLiquidity = () => {
             <span className="step-info">
               <FTypo className={"f-mb-1"}>Step 3</FTypo>
               <FTypo>
-              Congratulations! You have successfully added liquidity. You are now able to stake your APE-LP cFRM-BNB tokens to start earning rewards!
+              Congratulations! You have successfully added liquidity. You are now able to stake your cFRM LP tokens to start earning rewards!
               </FTypo>
               <br></br>
               <FInputCheckbox
                 onClick={() => setStepThreeCheck(!stepThreeCheck)}
                 name="step3Check"
                 className="f-mb-1 f-mt-1"
-                label={"I have added liquidity of APE-LP cFRM-BNB pair and have the LP Tokens. I’m ready to stake my APE-LP cFRM-BNB tokens now."}
+                label={"I have added liquidity of cFRM / BNB pair and have the LP tokens. I’m ready to stake my cFRM LP tokens now."}
               />
               {/* <FButton title="Add Liquidity" postfix={<IconArrow />} className="w-100" disabled={!stepThreeCheck} /> */}
             </span>
