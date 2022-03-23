@@ -6,7 +6,7 @@ import { useHistory } from "react-router";
 export const CrucibleGetStarted = () => {
   const history = useHistory();
   return (
-    <FContainer width={950} className="f-mr-0 f-mb-2">
+    <FContainer className="f-mb-2">
       <FCard variant={"secondary"} className="card-get-started">
         <FTypo className="card-title" size={22} color="#DAB46E">
           Welcome To The Crucible by Ferrum Network

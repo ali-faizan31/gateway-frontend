@@ -8,7 +8,7 @@ import Loader from "../../assets/gif/loader.svg";
 export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionStatusDialog }: any) => {
   const history = useHistory();
   const [approved, setApproved] = useState(true);
-  const [submitted, setSubmitted] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
   const [processed, setProcessed] = useState(true);
 
   useEffect(() => {
@@ -17,7 +17,8 @@ export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionSt
       setApproved(false);
     }, 3000);
     setTimeout(() => {
-      setSubmitted(false);
+      setProcessed(false);
+      setSubmitted(true);
     }, 6000);
   }, []);
   return (

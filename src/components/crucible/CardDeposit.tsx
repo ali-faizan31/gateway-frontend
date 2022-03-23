@@ -15,7 +15,7 @@ export const CrucibleDeposit = () => {
           <Link to="/dashboard/crucible/manage" className="btn-back">
             <IconGoBack />
           </Link>
-          <FTypo size={30} weight={600}>
+          <FTypo size={24} weight={700}>
             Deposit and Mint Crucible Token
           </FTypo>
         </FItem>
@@ -23,20 +23,20 @@ export const CrucibleDeposit = () => {
       <FGrid>
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
-            <FTypo size={24} className="f-mb-1">
+            <FTypo size={20} className="f-mb-1">
               FRMx Price (USD)
             </FTypo>
-            <FTypo size={36} weight={500}>
+            <FTypo size={30} weight={500}>
               $0.072
             </FTypo>
           </FItem>
         </FGridItem>
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
-            <FTypo size={24} className="f-mb-1">
+            <FTypo size={20} className="f-mb-1">
               FRMx Price (USD)
             </FTypo>
-            <FTypo size={36} weight={500}>
+            <FTypo size={30} weight={500}>
               $0.072
             </FTypo>
           </FItem>
