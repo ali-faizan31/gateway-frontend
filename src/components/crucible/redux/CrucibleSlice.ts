@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CRUCIBLE_STATE, defaultCrucibleState } from "../CrucibleInterfaces";
+import { CRUCIBLE_STATE, defaultCrucibleState } from "./CrucibleInterfaces";
 
 const initialCrucibleState: CRUCIBLE_STATE = {
     ...defaultCrucibleState
@@ -20,6 +20,16 @@ export const crucibleSlice = createSlice({
         disApprove: (state ) => {
             state.isApproved = false;
             state.isApproving = false;
+        },
+        updateStepFlowStepHistory: (state, action) => {
+            state.stepFlowStepHistory = action.payload.crucible.stepFlowStepHistory;
+        },
+        updateCurrentStep: (state, action) => {
+            state.currentStep = action.payload.crucible.currentStep;
+        },
+        resetCrucible: (state) => {
+            state.currentStep = {};
+            state.stepFlowStepHistory = [];
         },
     }
 })

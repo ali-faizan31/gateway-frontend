@@ -6,7 +6,7 @@ import { useHistory, useLocation, Link } from 'react-router-dom';
 import { PATH_AUTH, PATH_DASHBOARD } from '../../routes/paths';
 import { MetaMaskConnector } from "../../container-components";
 import { ConnectWalletDialog } from "../../utils/connect-wallet/ConnectWalletDialog";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "../../redux/rootReducer";
 import { logout } from "../../_apis/OnboardingCrud";
 import toast, { Toaster } from "react-hot-toast";
@@ -16,14 +16,22 @@ import { getFormattedBalance, getFormattedWalletAddress } from '../../utils/glob
 import FerrumJson from "../../utils/FerrumToken.json";
 import { AbiItem } from "web3-utils";
 import { Big } from "big.js";
+import * as CrucibleActions from '../../components/crucible/redux/CrucibleActions'
 
 const DashboardHeader = ({ title }: any) => {
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
   const history = useHistory();
   const isPublic = pathname.includes('pub');
   const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
   const { meV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const [tokenInfo, setTokenInfo] = useState({symbol:"", name:"", decimals:"", balance:""});
+
+  useEffect(() => {
+    if ( isConnected === false ){
+        dispatch(CrucibleActions.resetCrucible());
+    }
+}, [isConnected])
 
   useEffect(() => {
     if (meV2 && meV2.role === COMMUNITY_ROLE_TAG) {

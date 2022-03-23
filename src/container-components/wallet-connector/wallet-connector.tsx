@@ -195,7 +195,7 @@ useEffect(() => {
         }}
         onHide={() => setShowWalletDialog(false)}
       />
-      { isAuthenticationNeeded && <WalletAuthencationOnSignIn account={account} networkClient={networkClient} isAuthenticationNeeded={isAuthenticationNeeded} /> }
+      {/* { isAuthenticationNeeded && <WalletAuthencationOnSignIn account={account} networkClient={networkClient} isAuthenticationNeeded={isAuthenticationNeeded} /> } */}
     </>
   );
 };

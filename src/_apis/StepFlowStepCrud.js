@@ -11,4 +11,7 @@ export function getStepFlowStepByAssociatedOrganizationByStepFlowStepId( id, tok
     },
   });
 }
-  
+
+export function getStepFlowStepByStepFlowIdForPublic( id ) {
+  return axios.get(`${baseUrl}/api/v1/stepFlowSteps/${id}`);
+}

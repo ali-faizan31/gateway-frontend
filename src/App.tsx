@@ -11,10 +11,12 @@ import ClipLoader from "react-spinners/ClipLoader";
 import moment from "moment-timezone";
 import { WalletApplicationWrapper } from "./container-components";
 import { PATH_DASHBOARD } from "./routes/paths";
-import { TOKEN_TAG } from "./utils/const.utils";
-import { CrucibleGetStarted } from "./components/crucible/CardGetStarted";
-import CrucibleStepsPage from "./pages/Crucible/CrucibleStepsPage";
-import CrucibleCongratsPage from "./pages/Crucible/CrucibleCongratsPage";
+import { TOKEN_TAG } from "./utils/const.utils"; 
+import { Deployer as CrucibleDeployer } from "./components/crucible/common/Deployer";
+import { useSelector } from "react-redux";
+import { WalletAuthencationOnSignIn } from "./components/common/wallet-authentication/WalletAuthenticationSignIn";
+import { RootState } from "./redux/rootReducer";
+import { cFRMModule, cFRMBNBModule } from "./components/crucible/farms";
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -48,17 +50,17 @@ const ResendEmailVerification = Loadable(lazy(() => import("./components/common/
 const StakingLeaderboard = Loadable(lazy(() => import("./components/leaderboard-staking/StakingLeaderboard")));
 const Dashboard = Loadable(lazy(() => import("./components/dashboard/dashboard")));
 const ProfileSettings = Loadable(lazy(() => import("./components/profile-management")));
-const CrucibleDashboardPage = Loadable(lazy(() => import("./pages/Crucible/CrucibleDashboardPage")));
-const CrucibleManagePage = Loadable(lazy(() => import("./pages/Crucible/CrucibleManagePage")));
-const CrucibleIntroduction = Loadable(lazy(() => import("./components/crucible/Intro")));
-const MintAndStake = Loadable(lazy(() => import("./components/crucible/MintAndStake")));
-const Crucible = Loadable(lazy(() => import("./components/crucible/index")));
+const CrucibleDashboardPage = Loadable(lazy(() => import("./components/crucible/dashboard/CrucibleDashboardPage"))); 
+const CruciblePublic = Loadable(lazy(() => import("./components/crucible/public/Introduction")));
+
 
 function App() {
   const isAuthenticated = localStorage.getItem(TOKEN_TAG);
   moment.tz.setDefault("UTC");
+  const { networkClient, walletAddress } = useSelector((state: RootState) => state.walletConnector);
+  
 
-  return (
+  return ( 
     <WalletApplicationWrapper.ApplicationWrapper>
       <>
         <Switch>
@@ -66,6 +68,137 @@ function App() {
             {" "}
             <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" />{" "}
           </Route>
+           {/* new routes ---------------------- */}
+
+           <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM.introduction}
+            component={cFRMModule.cFRMFarmingDashboardFlowIntroduction}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM.manage}
+            component={cFRMModule.cFRMFarmingDashboardFlowManage}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.introduction}
+            component={cFRMBNBModule.cFRMBNBFarmingDashboardFlowIntroduction}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.manage}
+            component={cFRMBNBModule.cFRMBNBFarmingDashboardFlowManage}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.mint.steps}
+            component={cFRMBNBModule.cFRMBNBFarmingMintFlowSteps}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint}
+            component={cFRMBNBModule.cFRMBNBFarmingMintFlowMint}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.stake.success}
+            component={cFRMBNBModule.cFRMBNBFarmingStakeFlowSucess}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake}
+            component={cFRMBNBModule.cFRMBNBFarmingStakeFlowStake}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.unstake.success}
+            component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowSucess}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.unstake.unstake}
+            component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowUnStake}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+           <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.unstake.steps}
+            component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowSteps}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.liquidity}
+            component={cFRMBNBModule.cFRMBNBFarmingLiquidityFlow}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.success}
+            component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowSucess}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.withdraw}
+            component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowWithdraw}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+           <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.steps}
+            component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowSteps}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+           <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.unwrap}
+            component={cFRMBNBModule.cFRMBNBFarmingUnWrapFlowUnWrap}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+           <GuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.success}
+            component={cFRMBNBModule.cFRMBNBFarmingUnWrapFlowSuccess}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <UnGuardedRoute
+            path={PATH_DASHBOARD.crucible.public}
+            component={CruciblePublic}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+
+
+          {/* end */}
           <UnGuardedRoute path="/home" component={Dashboard} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" />
           <UnGuardedRoute path="/auth/forgot-password" component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />
           <UnGuardedRoute path="/auth/verify" component={EmailVerification} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />
@@ -118,7 +251,14 @@ function App() {
             headerTitle="My Profile"
           />
           {/* <UnGuardedRoute path={PATH_DASHBOARD.crucible.index} component={CrucibleDashboard} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" /> */}
-          <UnGuardedRoute
+         <UnGuardedRoute
+            path={PATH_DASHBOARD.crucible.deployer}
+            component={CrucibleDeployer}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          {/* <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.intro}
             component={CrucibleIntroduction}
             auth={isAuthenticated}
@@ -131,16 +271,16 @@ function App() {
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
-          />
+          /> */}
 
-          <UnGuardedRoute
+          {/* <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.getStarted}
             component={CrucibleGetStarted}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
-          />
-          <UnGuardedRoute
+          /> */}
+          {/* <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.steps}
             component={CrucibleStepsPage}
             auth={isAuthenticated}
@@ -160,7 +300,7 @@ function App() {
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
-          />
+          /> */}
           <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.index}
             component={CrucibleDashboardPage}
@@ -168,16 +308,35 @@ function App() {
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
+
+          {/* new routes ---------------------- */}
+
+          <UnGuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM.introduction}
+            component={cFRMModule.cFRMFarmingDashboardFlowIntroduction}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <UnGuardedRoute
+            path={PATH_DASHBOARD.crucible.cFRM.manage}
+            component={cFRMModule.cFRMFarmingDashboardFlowManage}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          
+
           <Route path="*" component={Page404}></Route>
         </Switch>
+      <WalletAuthencationOnSignIn account={walletAddress} networkClient={networkClient} />
       </>
     </WalletApplicationWrapper.ApplicationWrapper>
+
   );
 }
 
 export default App;
 
 ///pub/multi/leaderboard/61b6d48337f5125acbbfddeb
-
-//stepflowsetep 6230f64e4ed3666984f7c765
-//622f88547a0cc65e0dee6462
+ 
