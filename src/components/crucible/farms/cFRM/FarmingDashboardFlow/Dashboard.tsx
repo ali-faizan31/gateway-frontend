@@ -12,19 +12,19 @@ export const Manage = () => {
   const [flowType, setFlowType] = useState("");
 
   const onUnStakeClick = () => {
-    history.push({pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.unstake.unstake})
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRM.unstake.unstake})
   }
 
   const onStakeClick = () => {
-    history.push({pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.stake.stake})
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRM.stake.stake})
   }
 
   const onClaimRewardsClick = () => {
-    history.push({pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.withdraw.withdraw})
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRM.withdraw.withdraw})
   }
 
   const onAddLiquidityClick = () => {
-    history.push({pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.liquidity})
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRM.liquidity})
   }
 
   
@@ -101,7 +101,7 @@ export const Manage = () => {
         </FCard>
       </FCard>
       <FContainer width={850}> 
-        <FGrid className="btn-wrap f-mt-2 f-mb-2">
+        <FGrid className="btn-wrap f-mt-2 f-mb-2 d justify-content-center" >
           <FGridItem size={[4, 4, 4]}>
             <FButton title={"Stake"} className={"w-100"} onClick={()=>onStakeClick()}></FButton>
           </FGridItem>

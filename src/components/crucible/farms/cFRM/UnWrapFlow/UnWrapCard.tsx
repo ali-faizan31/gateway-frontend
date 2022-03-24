@@ -44,7 +44,7 @@ useEffect(() => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              FRMx Price (USD)
+              FRM Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -54,7 +54,7 @@ useEffect(() => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              cFRMx Price (USD)
+              cFRM Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -74,7 +74,7 @@ useEffect(() => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-      You have 100000.000 available in Base Token cFRMx.
+      You have 100000.000 available in Base Token cFRM.
       </FTypo>
       <FTypo size={15} className={"f-mt-2 f-pl--5"}>
         Amount you will receive
@@ -86,7 +86,7 @@ useEffect(() => {
         placeholder="0"
         postfix={
           <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-            FRMx
+            FRM
           </FTypo>
         }
       /> 

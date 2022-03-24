@@ -12,8 +12,8 @@ import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 export const Success = () => {
   const history = useHistory()
 
-  const onRemoveLiquityClick = () => {
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRMx_BNB.unstake.steps})
+  const onAddLiquityClick = () => {
+    history.push({pathname:PATH_DASHBOARD.crucible.cFRM.unstake.steps})
   }
 
   return (
@@ -29,7 +29,7 @@ export const Success = () => {
             Crucible Token Sustainable Liquidity Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-          Congrats! You have successfully unstaked your APE-LP cFRMx - BNB tokens. You can now use the tokens to generate even more rewards by compounding or trading them. You can also unwrap the APE-LP cFRMx - BNB tokens.          </FTypo>
+          Congrats! You have successfully unstaked your cFRM tokens. You can now use the tokens to generate even more rewards by adding liquidity for the cFRM - BNB pair and staking it. You can also generate rewards by trading the tokens or unwrap the tokens.               </FTypo>
         </FItem>
         <FTypo size={20} weight={500} className="f-mt-3 f-mb-3" align={"center"}>
           Whats next?
@@ -37,13 +37,14 @@ export const Success = () => {
         <FGrid>
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={" item-whats-next"}>
-              <div className="network-icon-wrapper text-center f-mb-1" onClick={()=>onRemoveLiquityClick()}>
+              <div className="network-icon-wrapper text-center f-mb-1" onClick={()=>onAddLiquityClick()}>
                 <span className="icon-wrap">
                 <IconNetworkcFRMx/>
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Remove Liquidity and Unwrap
+              Add Liquidity &
+Compound Rewards
               </FTypo>
             </FItem>
           </FGridItem>
@@ -55,7 +56,7 @@ export const Success = () => {
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Go to cFRMx Leaderboard Competition
+              Go to cFRM Leaderboard Competition
               </FTypo>
             </FItem>
           </FGridItem>
@@ -63,11 +64,11 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                   <IconNetworkcFRMx/>
+                   <IconNetworkcFRM/>
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-                Mint cFRMx
+                Unwrap cFRM
               </FTypo>
             </FItem>
           </FGridItem>
@@ -75,11 +76,11 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                   <IconNetworkcFRMx/>
+                   <IconNetworkcFRM/>
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-                Trade cFRMx
+                Trade cFRM
               </FTypo>
             </FItem>
           </FGridItem>

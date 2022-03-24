@@ -5,6 +5,7 @@ import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-
 import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
+import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 export const CrucibleDeposit = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
@@ -32,7 +33,7 @@ useEffect(() => {
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title">
         <FItem display={"flex"} alignY="center">
-          <Link to="/dashboard/crucible/cFRMx-BNB/manage" className="btn-back">
+          <Link to={PATH_DASHBOARD.crucible.cFRM.manage} className="btn-back">
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
@@ -44,7 +45,7 @@ useEffect(() => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              FRMx Price (USD)
+              FRM Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -54,7 +55,7 @@ useEffect(() => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              cFRMx Price (USD)
+              cFRM Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -86,7 +87,7 @@ useEffect(() => {
         placeholder="0"
         postfix={
           <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-            cFRMx
+            cFRM
           </FTypo>
         }
       />

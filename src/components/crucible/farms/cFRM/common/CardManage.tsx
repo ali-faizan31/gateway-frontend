@@ -3,7 +3,7 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 import { FButton, FCard, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
 import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg";
+import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { useSelector } from "react-redux"; 
 import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
@@ -20,12 +20,12 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
   // }, [isConnected])
   
   
-  const onMintcFRMxClick = () => { 
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRMx_BNB.mint.mint});
+  const onMintClick = () => { 
+    history.push({pathname:PATH_DASHBOARD.crucible.cFRM.mint.mint});
   }
 
   const onWrapClick = () => { 
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRMx_BNB.unwrap.unwrap});
+    history.push({pathname:PATH_DASHBOARD.crucible.cFRM.unwrap.unwrap});
   }
 
 
@@ -37,13 +37,12 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
-            Crucible Farms Dashboard - cFRMx / BNB
+            Crucible Farms Dashboard - cFRM
           </FTypo>
         </FItem>
         <div className="network-icon-wrapper">
           <span className="icon-wrap">
-            <IconNetworkCFrm />
-            <IconNetworkBsc />
+            <IconNetworkCFrm /> 
           </span>
         </div>
       </div>
@@ -51,7 +50,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              FRMx Price (USD)
+              FRM Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -61,7 +60,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              cFRMx Price (USD)
+              cFRM Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -74,7 +73,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <FButton title={"Buy Token"} outlined className={"w-100"}></FButton>
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
-          <FButton title={"Mint cFRMx"} outlined className={"w-100"} onClick={() => onMintcFRMxClick()}></FButton>
+          <FButton title={"Mint cFRM"} outlined className={"w-100"} onClick={() => onMintClick()}></FButton>
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
           <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"} onClick={() => onWrapClick()}></FButton>

@@ -11,7 +11,7 @@ export const UnStake = () => {
 
   return (
     <FContainer className="f-mr-0 card-manage" width={900}> 
-      <CrucibleMyBalance />
+      <CrucibleMyBalance /> 
 
       <CrucibleUnStake />
 

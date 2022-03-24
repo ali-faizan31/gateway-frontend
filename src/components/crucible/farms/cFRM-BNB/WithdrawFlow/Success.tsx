@@ -43,7 +43,7 @@ export const Success = () => {
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Add Liquidity and Compound Rewards
+              Add Liquidity & Compound Rewards
               </FTypo>
             </FItem>
           </FGridItem>

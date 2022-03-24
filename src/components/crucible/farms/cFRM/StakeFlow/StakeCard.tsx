@@ -32,11 +32,11 @@ useEffect(() => {
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title">
         <FItem display={"flex"} alignY="center">
-          <Link to="/dashboard/crucible/cFRMx-BNB/manage" className="btn-back">
+          <Link to="/dashboard/crucible/cFRM/manage" className="btn-back">
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
-          Stake cFRMx / BNB LP Token
+          Stake cFRMx 
           </FTypo>
         </FItem>
       </div>
@@ -44,7 +44,7 @@ useEffect(() => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              FRMx Price (USD)
+              FRM Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -54,7 +54,7 @@ useEffect(() => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              cFRMx Price (USD)
+              cFRM Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -74,7 +74,7 @@ useEffect(() => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-      You have 100000.000  available in cFRMx / BNB LP
+      You have 100000.000  available in cFRM 
       </FTypo>
       {approvedDone ? 
       <div className="btn-wrap f-mt-2">

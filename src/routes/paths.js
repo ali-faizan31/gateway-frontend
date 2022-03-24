@@ -99,8 +99,10 @@ export const PATH_DASHBOARD = {
       introduction: path(ROOTS_DASHBOARD, "/crucible/cFRM/introduction"),
       manage: path(ROOTS_DASHBOARD, "/crucible/cFRM/manage"),
       mint: {
-        steps: path(ROOTS_DASHBOARD, "/crucible/cFRM/mint/add-liquidity"),
+        checks: path(ROOTS_DASHBOARD, "/crucible/cFRM/mint/steps"),
         mint: path(ROOTS_DASHBOARD, "/crucible/cFRM/mint/deposit"),
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRM/mint/success"),
+        steps: path(ROOTS_DASHBOARD, "/crucible/cFRM/mint/add-liquidity"),
       },
       stake: {
         success: path(ROOTS_DASHBOARD, "/crucible/cFRM/stake/success"),
@@ -109,7 +111,7 @@ export const PATH_DASHBOARD = {
       unstake: {
         success: path(ROOTS_DASHBOARD, "/crucible/cFRM/unstake/success"),
         unstake: path(ROOTS_DASHBOARD, "/crucible/cFRM/unstake/deposit"),
-        steps: path( ROOTS_DASHBOARD, "/crucible/cFRM/unstake/remove-liquidity" ),
+        steps: path( ROOTS_DASHBOARD, "/crucible/cFRM/unstake/add-liquidity" ),
       },
       withdraw: {
         success: path(ROOTS_DASHBOARD, "/crucible/cFRM/withdraw/success"),

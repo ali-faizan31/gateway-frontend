@@ -99,7 +99,7 @@ const onclose = () => {
               <FButton title={"Add Token to Metamask"} outlined variant={"secondary"} className="f-mt-1 f-mb-1" />
             </FItem>
             <FItem>
-              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => history.push({pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.stake.success})} />
+              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => history.push({pathname: PATH_DASHBOARD.crucible.cFRM.stake.success})} />
             </FItem>
           </FItem>
         </React.Fragment>

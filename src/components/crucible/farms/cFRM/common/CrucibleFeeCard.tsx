@@ -7,7 +7,7 @@ const CrucibleFeeCard = () => {
   const history = useHistory(); 
     
     const onClaimRewardsClick = () => {
-      history.push({pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.withdraw.withdraw})
+      history.push({pathname: PATH_DASHBOARD.crucible.cFRM.withdraw.withdraw})
     }
 
   return (
@@ -34,7 +34,7 @@ const CrucibleFeeCard = () => {
           <FGridItem size={[4, 4, 4]}>
             <FItem align={"center"}>
               <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                cFRMx
+                cFRM
               </FTypo>
               <FTypo size={20}>Crucible Token</FTypo>
             </FItem>
@@ -43,11 +43,11 @@ const CrucibleFeeCard = () => {
         <FCard className={"styled-card align-v your-crucible"}>
           <FGrid>
             <FGridItem size={[6, 6, 6]}>
-              <FTypo className="f-pb--2">Your Crucible LP Deposits</FTypo>
+              <FTypo className="f-pb--2">Your Crucible Deposits</FTypo>
               <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
                 13.929
                 <FTypo size={14} weight={300} className={"f-pl--7 f-pb--1"}>
-                  APE-LP cFRMx-BNB
+                  cFRM
                 </FTypo>
               </FTypo>
             </FGridItem>
@@ -68,7 +68,7 @@ const CrucibleFeeCard = () => {
             <FGridItem size={[8, 8, 6]}>
               <FTypo className="f-pb--2">Your unclaimed Rewards</FTypo>
               <FTypo size={24} weight={500}>
-                7.292 cFRMx
+                7.292 cFRM
               </FTypo>
             </FGridItem>
             <FGridItem size={[4, 4, 6]} alignX="center" alignY={"end"}>

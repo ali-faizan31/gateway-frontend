@@ -5,7 +5,7 @@ import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-c
 import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
 import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
+import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg"; 
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 
@@ -13,7 +13,7 @@ export const Success = () => {
   const history = useHistory()
 
   const onAddLiquityClick = () => {
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRMx_BNB.withdraw.steps})
+    history.push({pathname:PATH_DASHBOARD.crucible.cFRM.withdraw.steps})
   }
 
   return (
@@ -29,7 +29,7 @@ export const Success = () => {
             Crucible Token Sustainable Liquidity Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-          Congrats! You have successfully withdrawn your cFRMx reward tokens. You can now use the tokens to generate even more rewards by compounding or trading them. </FTypo>        </FItem>
+          Congrats! You have successfully withdrawn your cFRM reward tokens. You can now use the tokens to generate even more rewards by compounding or trading them.           </FTypo>        </FItem>
         <FTypo size={20} weight={500} className="f-mt-3 f-mb-3" align={"center"}>
           Whats next?
         </FTypo>
@@ -43,7 +43,7 @@ export const Success = () => {
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Add Liquidity and Compound Rewards
+              Add Liquidity & Compound Rewards
               </FTypo>
             </FItem>
           </FGridItem>
@@ -55,7 +55,7 @@ export const Success = () => {
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Go to cFRMxLeaderboard Competition
+              Go to cFRM Leaderboard Competition
               </FTypo>
             </FItem>
           </FGridItem>
@@ -63,11 +63,11 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                  <IconNetworkcFRMx />
+                  <IconNetworkcFRM />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-                Mint cFRMx
+                Mint cFRM
               </FTypo>
             </FItem>
           </FGridItem>
@@ -75,11 +75,11 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                  <IconNetworkcFRMx />
+                  <IconNetworkcFRM />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-                Trade cFRMx
+                Trade cFRM
               </FTypo>
             </FItem>
           </FGridItem>
