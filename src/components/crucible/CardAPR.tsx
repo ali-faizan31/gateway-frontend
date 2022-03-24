@@ -18,7 +18,11 @@ export const CardAPR = () => {
     { prop: "yourRewards", title: "Your Rewards" },
     {
       prop: "apr",
-      title: <FTypo color="#DAB46E">APR</FTypo>,
+      title: (
+        <FTypo color="#DAB46E" align={"center"}>
+          APR
+        </FTypo>
+      ),
     },
     { prop: "action", title: <></> },
   ];
@@ -39,7 +43,7 @@ export const CardAPR = () => {
       yourDeposit: <FTypo className={"col-your"}>$13.{rd}</FTypo>,
       yourRewards: <FTypo className={"col-your"}>$.{rd}</FTypo>,
       apr: (
-        <FTypo className={"col-apr"} size={24} color="#DAB46E" weight={500}>
+        <FTypo className={"col-apr"} size={24} color="#DAB46E" weight={500} align={"center"}>
           {rd}%
         </FTypo>
       ),

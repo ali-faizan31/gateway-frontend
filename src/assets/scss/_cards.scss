@@ -7,9 +7,11 @@ $cardSecondary: #242b35;
   position: relative;
   &.f-card-primary {
     background: $cardPrimary;
+    border-radius: 15px;
   }
   &.f-card-secondary {
     background: $cardSecondary;
+    border-radius: 15px;
   }
   .card-title {
     display: flex;
@@ -102,8 +104,8 @@ $cardSecondary: #242b35;
 .card-my-balance {
   position: fixed;
   right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 195px;
+  // transform: translateY(-50%);
   max-width: 220px;
   max-height: 460px;
   border-radius: 10px 0 0 10px;
@@ -112,6 +114,7 @@ $cardSecondary: #242b35;
   .card-title {
     margin-left: -1rem;
     margin-bottom: 2rem;
+    font-weight: 500;
   }
   .f-list-item {
     background: none !important;
@@ -129,15 +132,16 @@ $cardSecondary: #242b35;
 
 .card-apr {
   position: relative;
+  padding-bottom: 0;
   .scrollbar-container {
     max-height: max-content !important;
   }
   .f-input-control {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
   .f-table {
     // min-width: 1000px;
-    padding-bottom: 4rem;
+    padding-bottom: 3.5rem;
     table {
       border-collapse: separate;
       border-spacing: 0 1em;
@@ -208,14 +212,17 @@ $cardSecondary: #242b35;
           }
           .col-amount {
             width: 80px;
+            text-align: center;
           }
           .col-apr {
-            width: 70px;
+            width: 100%;
             font-size: 1.5rem !important;
             font-weight: 500;
+            text-align: center;
           }
           .col-your {
             width: 70px;
+            text-align: center;
           }
           .col-action {
             display: flex;
@@ -243,12 +250,16 @@ $cardSecondary: #242b35;
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     .btn-back {
       margin-right: 1rem;
       line-height: 0;
     }
   }
   .f-input-group {
+    .f-input-wrap {
+      background: #1c2229 !important;
+    }
     &.input-lg {
       .f-input-control {
         width: 100%;
@@ -291,6 +302,9 @@ $cardSecondary: #242b35;
                   font-weight: 500;
                 }
               }
+            }
+            .f-select__indicator {
+              filter: invert(20%) sepia(4%) saturate(5224%) hue-rotate(343deg) brightness(90%) contrast(88%);
             }
             .f-select__placeholder {
               color: #dab46e;
@@ -344,21 +358,27 @@ $cardSecondary: #242b35;
       }
     }
   }
-  .card-manage-crucible {
-    .f-item {
-      margin-bottom: 1.5rem;
-    }
-  }
+  // .card-manage-crucible {
+  //   .f-item {
+  //     margin-bottom: 1.5rem;
+  //   }
+  //   .card-title {
+  //     .f-item {
+
+  //     }
+  //   }
+  // }
   .card-crucible-token-info {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 0 0 10px 10px;
     .info-bar {
       .f-item {
-        margin: 1rem 0;
+        margin: 1.25rem 0;
       }
     }
     .your-crucible {
       padding: 1rem 2.75rem;
+      border-radius: 10px;
       &:before {
         height: 40px;
       }
@@ -453,6 +473,7 @@ $cardSecondary: #242b35;
         transform: translateX(-50%);
       }
       &:nth-last-child(2) {
+        margin-bottom: 1rem;
         &::after {
           display: none;
         }
@@ -495,6 +516,31 @@ $cardSecondary: #242b35;
         &:disabled {
           background: #1d232b;
           border: 1px solid #1d232b;
+        }
+      }
+      .f-input-checkbox {
+        input[type="checkbox"] {
+          + label {
+            padding-left: 2.25rem;
+            &::before {
+              border-color: #ffffff;
+              background: #1c2229 !important;
+              border-radius: 5px;
+              width: 25px;
+              height: 25px;
+              top: -5px !important;
+              left: 1px !important;
+            }
+          }
+          &:checked + label::before {
+            border-color: #dab46e !important;
+          }
+          &:checked + label::after {
+            top: -3px;
+            left: 9px;
+            border-bottom-color: #dab46e !important;
+            border-right-color: #dab46e !important;
+          }
         }
       }
     }

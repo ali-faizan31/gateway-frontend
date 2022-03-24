@@ -13,22 +13,27 @@ const CrucibleStepsPage = () => {
     <FContainer className="f-mr-0">
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-crucible-steps">
-        <FTypo size={20} className={"card-title w-100"} display="flex">
+        <FTypo size={25} weight={700} className={"card-title w-100"} display="flex">
           Crucible Token Sustainable Liquidity Farming
         </FTypo>
         <ul>
           <li className="step step-success">
             <span className="step-info">
-              <FTypo className={"f-mb-1"}>Step 1</FTypo>
-              <FTypo>Congratulations! You have successfully minted your cFRM tokens! Please proceed to step 2.</FTypo>
+              <FTypo className={"f-mb-1"} size={22}>
+                Step 1
+              </FTypo>
+              <FTypo size={18}>Congratulations! You have successfully minted your cFRM tokens! Please proceed to step 2.</FTypo>
             </span>
           </li>
           <li>
             <span className="step-info">
-              <FTypo className={"f-mb-1"}>Step 2</FTypo>
-              <FTypo>
+              <FTypo className={"f-mb-1"} size={22}>
+                Step 2
+              </FTypo>
+              <FTypo size={18}>
                 In order to deposit LP tokens into the cFRM LP Farm (cFRM/BNB pair), you will first need to add liquidity.
-                <strong>Click ‘Add Liquidity’ to get started.</strong>
+                <strong> Click ‘Add Liquidity’ to get started.</strong>
+                <br></br>
                 <br></br>
                 After you add liquidity, you will need to return to this screen and stake the cFRM LP tokens.
               </FTypo>
@@ -44,8 +49,10 @@ const CrucibleStepsPage = () => {
           </li>
           <li>
             <span className="step-info">
-              <FTypo className={"f-mb-1"}>Step 1</FTypo>
-              <FTypo>
+              <FTypo className={"f-mb-1"} size={22}>
+                Step 3
+              </FTypo>
+              <FTypo size={18}>
                 Congratulations! You have successfully added liquidity. You are now able to stake your cFRM LP tokens to start earning rewards!
               </FTypo>
               <br></br>

@@ -71,7 +71,7 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
   ];
   return (
     <FCard variant={"secondary"} className="card-manage-crucible card-shadow">
-      <div className="card-title">
+      <div className="card-title f-mb-2">
         <FItem display={"flex"} alignY="center">
           <Link to="/dashboard/crucible" className="btn-back">
             <IconGoBack />
@@ -109,7 +109,7 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
           </FItem>
         </FGridItem>
       </FGrid>
-      <FGrid className="btn-wrap" spacing={5}>
+      <FGrid className="btn-wrap f-mt-1" spacing={5}>
         <FGridItem size={[4, 4, 4]}>
           <FSelect
             name={"selectOptions"}
@@ -120,7 +120,7 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
           />
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
-          <FButton title={"Mint cFRMx"} outlined className={"w-100"} onClick={() => setDeposit(true)}></FButton>
+          <FButton title={"Mint cFRMx"} className={"w-100 f-btn-gradiant"} onClick={() => setDeposit(true)}></FButton>
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
           <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"}></FButton>
