@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FButton, FCard, FContainer, FInputCheckbox, FTypo } from "ferrum-design-system";
-import { ReactComponent as IconArrow } from "../../assets/img/icon-arrow-square.svg";
+import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { useHistory, useLocation } from "react-router"; 
 import { useSelector } from "react-redux";
 import { MetaMaskConnector } from "../../../../../container-components";
@@ -11,7 +11,7 @@ import { getLatestStepWithPendingStatus } from "../../../../../utils/global.util
 import { updateStepFlowStepHistoryByStepFlowStepHistoryId } from "../../../../../_apis/StepFlowStepHistory";
  
 
-export const CrucibleGetStarted = () => {
+export const Introduction = () => {
   const history = useHistory();
   const location: any = useLocation();
 
@@ -23,10 +23,17 @@ export const CrucibleGetStarted = () => {
 
   useEffect(() => { 
     console.log(location.state)
-    if (location.state.id === undefined) {
+    if (location.state === undefined) {
       history.push(PATH_DASHBOARD.crucible.index)
     }
   }, [location])
+
+  useEffect(() => {
+    if (isConnected === false){
+      history.push(PATH_DASHBOARD.crucible.index)
+    }
+  }, [isConnected])
+  
   
   useEffect(() => { 
     if ( stepFlowStepHistory?.length ){
@@ -38,16 +45,16 @@ export const CrucibleGetStarted = () => {
   }, [tokenV2, location, stepFlowStepHistory])
 
 
-  const onGetStartedClick = async () => {
-    console.log(neverShowAgain)
+  const onGetStartedClick = async () => { 
     if ( neverShowAgain === true ){
-      let data = { status: "completed" }
-      let updateResponse: any = await updateStepFlowStepHistoryByStepFlowStepHistoryId(currentStep._id, data, tokenV2);
-      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      console.log(updateResponse, '------------------')
-      history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
+      history.push({pathname:PATH_DASHBOARD.crucible.cFRMx.manage, state: location.state})
+      // let data = { status: "completed" }
+      // let updateResponse: any = await updateStepFlowStepHistoryByStepFlowStepHistoryId(currentStep._id, data, tokenV2);
+      // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      // console.log(updateResponse, '------------------')
+      // history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
     } else {
-      history.push({pathname:"/dashboard/crucible/manage", state: location.state}) 
+      history.push({pathname:PATH_DASHBOARD.crucible.cFRMx.manage, state: location.state}) 
     }
   }
 

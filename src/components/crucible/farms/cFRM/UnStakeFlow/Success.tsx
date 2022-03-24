@@ -39,7 +39,7 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={" item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1" onClick={()=>onAddLiquityClick()}>
                 <span className="icon-wrap">
-                <IconNetworkcFRMx/>
+                <IconNetworkcFRM/>
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>

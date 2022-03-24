@@ -6,7 +6,7 @@ import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/ico
 import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
 
-export const Stake = () => {
+export const UnWrap = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [approvedDone, setapprovedDone] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
@@ -22,7 +22,7 @@ useEffect(() => {
 }, [approvedDone])
 
 
-  const onStakeClick = () => {
+  const onUnWrapClick = () => {
     setIsProcessing(true);
     setIsApproving(false);
     setTransitionStatusDialog(true);
@@ -36,7 +36,7 @@ useEffect(() => {
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
-          Stake cFRM
+          Unwrap Crucible Token
           </FTypo>
         </FItem>
       </div>
@@ -44,7 +44,7 @@ useEffect(() => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              FRM Price (USD)
+              FRMx Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -54,7 +54,7 @@ useEffect(() => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              cFRM Price (USD)
+              cFRMx Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
               $0.072
@@ -66,7 +66,7 @@ useEffect(() => {
         className={"f-mt-1"}
         inputSize="input-lg"
         type={"text"}
-        placeholder="Amount to Stake"
+        placeholder="0"
         postfix={
           <FTypo color="#DAB46E" className={"f-pr-1"}>
             Max
@@ -74,17 +74,26 @@ useEffect(() => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-      You have 100000.000  available in cFRM 
+      You have 100000.000 available in Base Token cFRMx.
       </FTypo>
-      {approvedDone ? 
+      <FTypo size={15} className={"f-mt-2 f-pl--5"}>
+        Amount you will receive
+      </FTypo>
+      <FInputText
+        className={"f-mt-1"}
+        inputSize="input-lg"
+        type={"text"}
+        placeholder="0"
+        postfix={
+          <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
+            FRMx
+          </FTypo>
+        }
+      /> 
       <div className="btn-wrap f-mt-2">
-        <FButton title={"Stake Crucible"} className={"w-100"} onClick={() => onStakeClick()}></FButton>
+        <FButton title={"Unwrap"} className={"w-100"} onClick={() => onUnWrapClick()}></FButton>
       </div>
-       :   
-      <div className="btn-wrap f-mt-2">
-        <FButton title={"Approve"} className={"w-100"} onClick={() => onApproveClick()}></FButton>
-      </div>
-       } 
+       
 
       <DialogTransitionStatus 
       transitionStatusDialog={transitionStatusDialog} 
