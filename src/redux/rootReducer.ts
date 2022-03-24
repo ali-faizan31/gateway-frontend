@@ -11,6 +11,7 @@ import { crucibleSlice } from '../components/crucible/redux/CrucibleSlice';
 // slices
 import competitionReducer from './slices/competition';
 import leaderboardReducer from './slices/leaderboard';
+import phraseReducer from './slices/phrase';
 
 const walletConnectorPersistConfig = {
   key: "walletConnector",
@@ -54,7 +55,8 @@ const rootReducer = combineReducers({
   ),
   crucible: persistReducer(cruciblePersistConfig, crucibleSlice.reducer),
   competition: competitionReducer,
-  leaderboard: leaderboardReducer 
+  leaderboard: leaderboardReducer,
+  phrase: phraseReducer, 
 });
   
 export type RootState = ReturnType<typeof rootReducer>;
