@@ -7,6 +7,7 @@ import {
   WalletApplicationWrapper 
 } from "../container-components";
 import { walletConnectorSlice } from "../components/common/wallet-authentication/redux/walletAuthenticationSlice";
+import { crucibleSlice } from '../components/crucible/redux/CrucibleSlice';
 // slices
 import competitionReducer from './slices/competition';
 import leaderboardReducer from './slices/leaderboard';
@@ -24,6 +25,12 @@ const walletConnectorPersistConfig = {
 //   whitelist: ["tokenList" ],
 //   timeout: 172800,
 // };
+
+const cruciblePersistConfig = {
+  key: "crucible",
+  storage: storageSession,
+  whitelist: [ "stepFlowStepHistory", "currentStep"] 
+};
 
 const walletAutheticatorPersistConfig = {
     key: "walletAutheticator",
@@ -46,6 +53,7 @@ const rootReducer = combineReducers({
     walletAutheticatorPersistConfig,
      walletConnectorSlice.reducer
   ),
+  crucible: persistReducer(cruciblePersistConfig, crucibleSlice.reducer),
   competition: competitionReducer,
   leaderboard: leaderboardReducer,
   phrase: phraseReducer, 

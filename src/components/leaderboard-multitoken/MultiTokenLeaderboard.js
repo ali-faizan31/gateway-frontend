@@ -16,26 +16,17 @@ import { useLocation } from "react-router-dom";
 import eitherConverter from "ether-converter";
 import { CSVLink } from "react-csv";
 import moment from "moment";
-import {
-  getCovalenthqResponse,
-  getTokenHolderListByContractAddressAndChainID,
-  getTokenHolderlistByContractAddressBSC
-} from "../../_apis/LeaderboardCrud";
+import { getTokenHolderlistByCABNId } from "../../_apis/LeaderboardCrud";
 import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 import { filterList } from "../leaderboard/LeaderboardHelper";
-import {
-  tokenFRMxBSCMainnet,
-  tokenFRMBSCMainnet,
-  TOKEN_TAG,
-  ME_TAG,
-} from "../../utils/const.utils";
-import { arraySortByKeyDescending } from "../../utils/global.utils";
+import { TOKEN_TAG, ME_TAG, PUBLIC_TAG, } from "../../utils/const.utils";
+import { arraySortByKeyDescending, getFormattedWalletAddress } from "../../utils/global.utils";
 
 const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboardData}) => {
   const exportRef = useRef();
   const { pathname } = useLocation();
   let token = localStorage.getItem(TOKEN_TAG);
-  const isPublicUser = pathname.includes("/pub");
+  const isPublicUser = pathname.includes(PUBLIC_TAG);
   const user = localStorage.getItem(ME_TAG);
   const parsedUser = user && JSON.parse(user); 
   const [query, setQuery] = useState("");
@@ -46,10 +37,7 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
   const [showExportModal, setShowExportModal] = useState(false);
 
   useEffect(() => {
-    if ( leaderboardData &&
-      leaderboardData.frmCabn &&
-      leaderboardData.frmCabn.chainId !== undefined
-    ) {
+    if ( leaderboardData && leaderboardData.frmCabn && leaderboardData.frmCabn.chainId !== undefined ) {
       setIsLoading(true);
       getTokensHolderList(leaderboardData);
     }
@@ -70,10 +58,11 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
 
   const getTokensHolderList = async (leaderboard) => {
     try{
-      let res = await getTokenHolderlistByContractAddressBSC(leaderboard?.frmCabn?.tokenContractAddress);
-      let FRMHoldersList = filterList(res?.data?.result, leaderboard?.exclusionWalletAddressList);
-      let resp = await getTokenHolderlistByContractAddressBSC(leaderboard?.frmxCabn?.tokenContractAddress);
-      let FRMxHoldersList = filterList(resp?.data?.result, leaderboard?.exclusionWalletAddressList); 
+      let res = await getTokenHolderlistByCABNId(leaderboard?.frmCabn?.id);
+      let FRMHoldersList = filterList(res?.data?.body?.result, leaderboard?.exclusionWalletAddressList);
+      let resp = await getTokenHolderlistByCABNId(leaderboard?.frmxCabn?.id);
+      let FRMxHoldersList = filterList(resp?.data?.body?.result, leaderboard?.exclusionWalletAddressList);
+      console.log(FRMxHoldersList, FRMHoldersList) 
       mapTokenHolderData(FRMxHoldersList, FRMHoldersList, leaderboard);
       setIsLoading(false);
     } catch (e) {
@@ -90,54 +79,32 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
     for (let i = 0; i < list.length; i += 1) {
       if (list[i].address) {
         list[i].rank = i + 1;
-        list[i].formattedAddress = `${list[i].address.substr(0, 6)}...${list[
-          i
-        ].address.substr(list[i].address.length - 4)}`;
-        list[i].formattedCombinedValue = `$ ${TruncateWithoutRounding(
-          list[i].combinedValue,
-          2
-        )}`;
+        list[i].formattedAddress = getFormattedWalletAddress(list[i].address);
+        list[i].formattedCombinedValue = `$ ${TruncateWithoutRounding( list[i].combinedValue, 2 )}`;
         if (list[i].frmBalance) {
-          list[i].formattedFRMBalance = TruncateWithoutRounding(
-            list[i].frmBalance,
-            2
-          ).toLocaleString("en-US");
+          list[i].formattedFRMBalance = TruncateWithoutRounding( list[i].frmBalance, 2 ).toLocaleString("en-US");
         }
         if (list[i].frmxBalance) {
-          list[i].formattedFRMxBalance = TruncateWithoutRounding(
-            list[i].frmxBalance,
-            2
-          ).toLocaleString("en-US");
+          list[i].formattedFRMxBalance = TruncateWithoutRounding( list[i].frmxBalance, 2 ).toLocaleString("en-US");
         }
         if (i === 0) {
           list[i].formattedLevelUpAmount = "You are the leader";
           list[i].levelUpFRMUrl = frmLevelUpSwapUrl + "0";
           list[i].levelUpFRMxUrl = frmxLevelUpSwapUrl + "0";
         } else {
-          list[i].combinedDiff = calculateLevelUpAmount(
-            list[i - 1].combinedValue,
-            list[i].combinedValue
-          );
+          list[i].combinedDiff = calculateLevelUpAmount( list[i - 1].combinedValue, list[i].combinedValue );
           if (list[i].frmBalance) {
-            list[i].frmLevelUp = forceRounding(
-              list[i].combinedDiff / frmUsdcValue,
-              2
-            );
+            list[i].frmLevelUp = forceRounding( list[i].combinedDiff / frmUsdcValue, 2 );
             list[i].levelUpFRMUrl = frmLevelUpSwapUrl + list[i].frmLevelUp;
             list[i].formattedLevelUpAmount = `${list[i].frmLevelUp} FRM`;
           }
           if (list[i].frmxBalance) {
-            list[i].frmxLevelUp = forceRounding(
-              list[i].combinedDiff / frmxUsdcValue,
-              2
-            );
+            list[i].frmxLevelUp = forceRounding( list[i].combinedDiff / frmxUsdcValue, 2 );
             list[i].levelUpFRMxUrl = frmxLevelUpSwapUrl + list[i].frmxLevelUp;
             list[i].formattedLevelUpAmount = `${list[i].frmxLevelUp} FRM`;
           }
           if (list[i].frmxBalance && list[i].frmBalance) {
-            list[
-              i
-            ].formattedLevelUpAmount = `${list[i].frmLevelUp} FRM or ${list[i].frmxLevelUp} FRMx`;
+            list[i].formattedLevelUpAmount = `${list[i].frmLevelUp} FRM or ${list[i].frmxLevelUp} FRMx`;
           }
         }
       }
@@ -155,14 +122,14 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
     const onlyInLeft = (frmxList, frmList) =>
       frmxList.map((frmx) => {
         const sameEntry = frmList.filter(
-          (frm) => frmx.TokenHolderAddress === frm.TokenHolderAddress
+          (frm) => frmx.tokenHolderAddress === frm.tokenHolderAddress
         )[0];
         let tempObj = {};
         if (!sameEntry || undefined) {
-          const etherBalance = eitherConverter(frmx?.TokenHolderQuantity, "wei").ether;
+          const etherBalance = eitherConverter(frmx?.tokenHolderQuantity, "wei").ether;
           const combinedValue = etherBalance * frmxUsdcValue;
           tempObj = {
-            address: frmx?.TokenHolderAddress,
+            address: frmx?.tokenHolderAddress,
             frmxBalance: etherBalance,
             frmBalance: "0",
             combinedValue,
@@ -175,19 +142,19 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
     const inBoth = (frmList, frmxList) =>
       frmList.map((frm) => {
         const sameEntry = frmxList.filter(
-          (frmx) => frm.TokenHolderAddress === frmx.TokenHolderAddress
+          (frmx) => frm.tokenHolderAddress === frmx.tokenHolderAddress
         )[0];
         let tempObj = {};
         if (sameEntry) {
-          const frmEtherBalance = eitherConverter(frm?.TokenHolderQuantity, "wei").ether;
+          const frmEtherBalance = eitherConverter(frm?.tokenHolderQuantity, "wei").ether;
           const frmxEtherBalance = eitherConverter(
-            sameEntry?.TokenHolderQuantity,
+            sameEntry?.tokenHolderQuantity,
             "wei"
           ).ether;
           const combinedValue =
             frmEtherBalance * frmUsdcValue + frmxEtherBalance * frmxUsdcValue;
           tempObj = {
-            address: frm?.TokenHolderAddress,
+            address: frm?.tokenHolderAddress,
             frmBalance: frmEtherBalance,
             frmxBalance: frmxEtherBalance,
             combinedValue,
@@ -195,10 +162,10 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
           }; // both
         } else {
           let temp = {};
-          const etherBalance = eitherConverter(frm?.TokenHolderQuantity, "wei").ether;
+          const etherBalance = eitherConverter(frm?.tokenHolderQuantity, "wei").ether;
           const combinedValue = etherBalance * frmUsdcValue;
           temp = {
-            address: frm?.TokenHolderAddress,
+            address: frm?.tokenHolderAddress,
             frmBalance: etherBalance,
             frmxBalance: "0",
             combinedValue,
@@ -417,8 +384,7 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
               {(!isPublicUser && parsedUser.role === "organizationAdmin") && (
                 <FButton
                   type="button"
-                  className="btn-create"
-                  className={"f-ml-1"}
+                  className="btn-create f-ml-1" 
                   disabled={isLoading}
                   onClick={onExportClick}
                   title={" Export to CSV"}

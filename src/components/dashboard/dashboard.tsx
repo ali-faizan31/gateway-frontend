@@ -1,14 +1,14 @@
-import React from 'react'
-import { FContainer } from "ferrum-design-system";
+import React from "react";
+import { FContainer, FTypo } from "ferrum-design-system";
 
 const dashboard = () => {
   return (
     <>
       <FContainer type="fluid">
-        <h1>Dashboard</h1>
+        <FTypo size={20}>Dashboard</FTypo>
       </FContainer>
     </>
-  )
-}
+  );
+};
 
-export default dashboard
+export default dashboard;

@@ -58,20 +58,18 @@ const CompetitionManagement = () => {
   };
 
   const onEditStatusClick = (params) => {
+    console.log(params)
     setSelectedCompetitionData(params);
     setShowDialog(true);
   }
 
-  const actionFormatter = (params) => {
-    const wesehi = 10;
-    return (
+  const actionFormatter = (params) => (
       <>
       <div data-label="Action"> 
-        <FButton type="button" title={" Details"} onClick={() => onDetailClick(params)}></FButton>
+        <FButton type="button" title={" Details"} disabled={params.status === "pending" || params.status ===  "cancelled"} onClick={() => onDetailClick(params)}></FButton>
         </div>
       </>
-    );
-  };
+    ); 
 
   const startDateFormatter = (params) => {
     let date = ''; 
