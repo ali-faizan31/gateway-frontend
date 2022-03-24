@@ -114,18 +114,14 @@ const DashboardSidebar = () => {
 
   const getSideMenuInformation = async () => {
     try {
-      let siteName = getSiteName(pathname, "/", "/");
-      let response =
-        await getSubscriptionInformationForAssociatedOrganizationBySiteName(
-          siteName
-        );
-      let subscriptionResponse =
-        response && response.data && response.data.body;
-      let productList =
-        getSubscriptionListAgainstOrganization(subscriptionResponse);
-      setSideMenuItems(productList);
-    } catch (e: any) {
-      toast.error(`Error occured: ${e.response.data.status.message}`);
+      let siteName = getSiteName(pathname, '/', '/');
+      let response = await getSubscriptionInformationForAssociatedOrganizationBySiteName(siteName); 
+      let subscriptionResponse = response && response.data && response.data.body;
+      let productList = getSubscriptionListAgainstOrganization(subscriptionResponse); 
+      setSideMenuItems(productList); 
+    } catch (e: any) { 
+      console.log(`Error occured: ${e?.response?.data?.status?.message}`)
+      // toast.error(`Error occured: ${e.response.data.status.message}`)
     }
   };
 
@@ -275,16 +271,16 @@ const DashboardSidebar = () => {
 
   const renderContent = (items: any) => {
     return items.map((item: any, index: any) => (
-      <FSiderItem
+      <> 
+      {<FSiderItem
         to={item.path}
         title={item.title}
         prefix={item.icon}
         key={index}
         target={item.target && item.target}
       >
-        <>
-          {" "}
-          {item.children && (
+         
+          {item?.children?.length && (
             <FSiderSubMenuItem>
               {item.children.map((subItem: any, index: any) => (
                 <FSiderItem
@@ -297,8 +293,9 @@ const DashboardSidebar = () => {
               ))}
             </FSiderSubMenuItem>
           )}
-        </>
-      </FSiderItem>
+        
+      </FSiderItem>}
+      </>
     ));
   };
 
@@ -309,12 +306,11 @@ const DashboardSidebar = () => {
       {localStorageHelper.load(ME_TAG)?.role === "organizationAdmin" &&
         renderContent(sidebarConfig)}
       {/* {(isPublicLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig)}  */}
-      {/* {isStakingLeaderboard && renderContent(sideConfig)} 
+      {isStakingLeaderboard && renderContent(sideConfig)} 
        {renderContent(communityLeaderboardSidebarConfig)}
       {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
-      {renderContent(crucibleConfig)} */}
-      <FSiderItem to="/dashboard/crucible" title={"Crucible"}></FSiderItem>
+      {renderContent(crucibleConfig)}  
     </FSider>
   );
 };

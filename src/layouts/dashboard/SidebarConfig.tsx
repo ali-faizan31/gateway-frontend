@@ -157,7 +157,7 @@ export const profileConfig = [
 export const crucibleConfig = [
   {
     title: "Crucible",
-    path: PATH_DASHBOARD.crucible.intro,
+    path: PATH_DASHBOARD.crucible.index,
     icon: ICONS.crucible
   },
 ];

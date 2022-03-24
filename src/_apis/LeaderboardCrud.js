@@ -92,3 +92,6 @@ export function getStakingBalancesByCABNBSC(tokenContractAddress, stakingContrac
   return axios.get(`https://api.bscscan.com/api?module=account&action=tokentx&contractaddress=${tokenContractAddress}&address=${stakingContractAddress}&apikey=${BSC_api_key}`);
 }
  
+export function getTokenHolderlistByCABNId(id, isPagination=false, offset=0, limit=10) {
+  return axios.get(`${baseUrl}/api/v1/cabn/token-holders/list?cabnId=${id}&offset=${offset}&limit=${limit}&isPagination=${isPagination}`);
+}
