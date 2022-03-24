@@ -6,26 +6,25 @@ import { ReactComponent as IconSubmitted } from "../../../../../assets/img/icon-
 import Loader from "../../../../../assets/gif/loader.svg";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
-export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionStatusDialog, isProcessing, setapprovedDone, setIsProcessing }: any) => {
+export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionStatusDialog, isProcessing, isProcessed,setapprovedDone, setIsProcessing,isSubmitted }: any) => {
   const history = useHistory();
   const [approved, setApproved] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [processed, setProcessed] = useState(false); 
+  //const [submitted, setSubmitted] = useState(false);
 
 
   useEffect(() => {
-  setApproved(true);
-  setTimeout(() => {
-    setApproved(false);
-    setapprovedDone(true); 
-    if (isProcessing === false){
-    setTransitionStatusDialog(false)
-    }
-  }, 3000);
-  setTimeout(() => {
-    setSubmitted(false);
-    setProcessed(true);
-  }, 6000);
+  // setApproved(true);
+  // setTimeout(() => {
+  //   setApproved(false);
+  //   setapprovedDone(true); 
+  //   if (isProcessing === false){
+  //   setTransitionStatusDialog(false)
+  //   }
+  // }, 3000);
+  // setTimeout(() => {
+  //   setSubmitted(false);
+  //   setProcessed(true);
+  // }, 6000);
 }, []);
 
   // useEffect(() => {
@@ -60,14 +59,14 @@ const onclose = () => {
       onHide={() => onclose()}
       className="transaction-status text-center"
       showClose={true}>
-      {approved ? (
+      {isProcessing ? (
         <React.Fragment>
           <FItem align="center">
             <FLoader loading={true} width={100} loaderImage={Loader} />
             <FTypo size={20}>Confirm This Transaction in your Wallet.</FTypo>
           </FItem>
         </React.Fragment>
-      ) : submitted === true ? (
+      ) : isSubmitted === true ? (
         <React.Fragment>
           <FItem align="center">
             <IconSubmitted />
@@ -85,7 +84,7 @@ const onclose = () => {
             </FItem>
           </FItem>
         </React.Fragment>
-      ) : processed === true ? (
+      ) : isProcessed === true ? (
         <React.Fragment>
           <FItem align="center">
             <IconSubmitted />

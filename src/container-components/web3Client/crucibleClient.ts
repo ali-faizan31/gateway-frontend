@@ -11,6 +11,32 @@ export class CrucibleClient {
 
 	__name__() { return 'CrucibleClient'; }
 
+    async getContractAllocation(userAddress: string, contractAddress: string, currency: string):Promise<any>{
+        const Api = new crucibleApi()
+        await Api.signInToServer(userAddress)
+		return  Api.crucibleApi({
+            command: 'getContractAllocation', data: {userAddress, contractAddress, currency},
+			params: [] });
+	}
+
+	async setContractAllocation(dispatch:any,userAddress: string, contractAddress: string, currency: string,network:string, amount?: string)
+	: Promise<string> {
+        const Api = new crucibleApi()
+        await Api.signInToServer(userAddress)
+		const requests = await Api.crucibleApi({
+			command: 'approveAllocationGetTransaction',
+			data: {currency, amount: amount || '1', userAddress, contractAddress}, params: [] });
+		console.log('About to submit request', {requests});
+
+        if(requests.data){
+            const requestId = await this.web3Client.sendTransactionAsync(dispatch,requests.data,{currency, amount, userAddress, contractAddress})            
+            return requestId.split('|')[0]; // Convert the requestId to transction Id. TODO: Do this a better way
+            //showmodal          
+        }
+		return ''
+
+	}
+
 	async mintCrucible(
         dispatch: Dispatch<AnyAction>,
 		currency: string,
@@ -30,7 +56,10 @@ export class CrucibleClient {
             })
 
             if(request.data.data){
-                const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])  
+                console.log(request.data,'datataatat')
+                const web3Helper = await this.web3Client.sendTransactionAsync(dispatch,[request.data]) 
+                console.log(web3Helper,'web3helepep')
+                return web3Helper 
                 //showmodal          
             }
            
@@ -196,8 +225,9 @@ export class CrucibleClient {
         dispatch: Dispatch<AnyAction>,
 		LPorCruciblecurrency: string,
 		amount: string,
-		stakingAddress: boolean,
-        userAddress:string
+		stakingAddress: string,
+        userAddress:string,
+        network:string
     ) {
 		try {
             
@@ -208,12 +238,14 @@ export class CrucibleClient {
                 data:  {
 					currency: LPorCruciblecurrency,
 					stake: (stakingAddress),
+                    network,
 					amount,
 				}, params: []
             })
 
             if(request.data.data){
-                const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])            
+                const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])    
+                return web3Helper        
             }
            
 			return

@@ -30,7 +30,7 @@ export class Web3Helper {
             //   console.log("confirmation", part1, part2);
             // })
             .on("transactionHash", (transactionHash) => {
-              dispatch(transactionHash);
+              //dispatch(transactionHash);
             })
             .then((h: any) => {
               resolve(h);
