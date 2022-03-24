@@ -11,7 +11,7 @@ const DATA_MY_BAL = [
 
 export const CrucibleMyBalance = () => {
   return (
-    <FCard variant={"secondary"} className="card-my-balance styled-card align-v">
+    <FCard className="card-my-balance styled-card align-v">
       <FTypo className="card-title" size={20} color="#DAB46E">
         My Balance
       </FTypo>

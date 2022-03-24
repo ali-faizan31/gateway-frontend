@@ -12,7 +12,9 @@ const CrucibleCongratsPage = () => {
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-congrats">
         <FItem align="center">
-          <IconCongrats />
+          <FItem display={"flex"} alignX="center" className={"f-mb-1"}>
+            <IconCongrats width={150} />
+          </FItem>
           <FTypo color="#DAB46E" size={30} weight={600}>
             Congratulations!
           </FTypo>

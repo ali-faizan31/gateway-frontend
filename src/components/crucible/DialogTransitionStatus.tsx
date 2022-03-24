@@ -38,7 +38,9 @@ export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionSt
         <React.Fragment>
           <FItem align="center">
             <FLoader loading={true} width={100} loaderImage={Loader} />
-            <FTypo size={20}>Confirm This Transaction in your Wallet.</FTypo>
+            <FTypo size={20} className="f-mt-1 f-pb-3">
+              Confirm This Transaction in your Wallet.
+            </FTypo>
           </FItem>
         </React.Fragment>
       ) : submitted === true ? (

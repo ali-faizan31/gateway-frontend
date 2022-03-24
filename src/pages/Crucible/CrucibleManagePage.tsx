@@ -15,7 +15,7 @@ const CrucibleManagePage = () => {
       {deposit ? <CrucibleDeposit /> : <CrucibleManage deposit={deposit} setDeposit={setDeposit} />}
       <FContainer width={650}>
         <FCard className="card-crucible-token-info">
-          <FTypo size={24}>Crucible Token Info</FTypo>
+          <FTypo size={20}>Crucible Token Info</FTypo>
           <FGrid className={"info-bar"}>
             <FGridItem size={[4, 4, 4]}>
               <FItem align={"center"}>
@@ -69,7 +69,7 @@ const CrucibleManagePage = () => {
             <FGrid alignY={"center"}>
               <FGridItem size={[6]} dir="column">
                 <FTypo className="f-pb--2">Your unclaimed Rewards</FTypo>
-                <FTypo size={22} weight={700}>
+                <FTypo color="#DAB46E" size={22} weight={700}>
                   7.292 cFRMx
                 </FTypo>
               </FGridItem>
@@ -79,9 +79,9 @@ const CrucibleManagePage = () => {
             </FGrid>
           </FCard>
         </FCard>
-        <FGrid className="btn-wrap f-mt-1 f-mb-1" spacing={15}>
+        <FGrid className="btn-wrap f-mt-2 f-mb-2" spacing={15}>
           <FGridItem size={[4, 4, 4]}>
-            <FButton title={"Stake"} className={"w-100"}></FButton>
+            <FButton title={"Stake"} className={"w-100 f-btn-gradiant"}></FButton>
           </FGridItem>
           <FGridItem size={[4, 4, 4]}>
             <FButton variant={"secondary"} title={"Unstake"} outlined className={"w-100"}></FButton>

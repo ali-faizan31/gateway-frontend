@@ -10,10 +10,10 @@ export const CrucibleGetStarted = () => {
     <FContainer className="f-mb-2 f-mr-0">
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-get-started">
-        <FTypo className="card-title" size={22} color="#DAB46E">
+        <FTypo className="card-title" size={25} weight={700} color="#DAB46E">
           Welcome To The Crucible by Ferrum Network
         </FTypo>
-        <FTypo>
+        <FTypo size={18}>
           Watch the explainer video below for a step-by-step tutorial on how to mint, add liquidity, farm, trade, and earn rewards through the
           Crucible!
         </FTypo>

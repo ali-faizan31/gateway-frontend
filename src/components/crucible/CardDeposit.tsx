@@ -10,7 +10,7 @@ export const CrucibleDeposit = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
-      <div className="card-title">
+      <div className="card-title f-mb-2">
         <FItem display={"flex"} alignY="center">
           <Link to="/dashboard/crucible/manage" className="btn-back">
             <IconGoBack />
@@ -65,7 +65,7 @@ export const CrucibleDeposit = () => {
         type={"text"}
         placeholder="0"
         postfix={
-          <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
+          <FTypo color="#DAB46E" className={"f-pr-1"}>
             Max
           </FTypo>
         }
