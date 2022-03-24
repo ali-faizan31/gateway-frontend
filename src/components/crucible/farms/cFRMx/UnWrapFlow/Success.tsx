@@ -19,7 +19,7 @@ export const Success = () => {
             Congratulations!
           </FTypo>
           <FTypo size={20} weight={500} className="f-mt-1">
-            Crucible Token Sustainable Liquidity Farming
+            Crucible Token Sustainable Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
           Congrats! You have successfully unwraped your cFRMx tokens. You can now use the unwraped FRMx tokens to Mint and Stake cFRMx, buy cFRMx, or simply HODL.                </FTypo>

@@ -19,7 +19,7 @@ export const Success = () => {
             Congratulations!
           </FTypo>
           <FTypo size={20} weight={500} className="f-mt-1">
-            Crucible Token Sustainable Liquidity Farming
+            Crucible Token Sustainable Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
           Congrats! You have successfully staked cFRMx tokens. You will now earn rewards for every cFRMx transaction that generates a fee. To amplify your rewards by ~4x, consider Adding Liquidity for cFRMx / BNB and staking the LP tokens. The reward distribution is proportional to your share of the pool.          </FTypo>
