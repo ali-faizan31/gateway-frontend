@@ -5,7 +5,7 @@ import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-c
 import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
 import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg"; 
+import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 
@@ -13,7 +13,7 @@ export const Success = () => {
   const history = useHistory()
 
   const onAddLiquityClick = () => {
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.steps})
+    history.push({pathname:PATH_DASHBOARD.crucible.cFRM.unstake.steps})
   }
 
   return (
@@ -23,13 +23,14 @@ export const Success = () => {
         <FItem align="center">
           <IconCongrats />
           <FTypo color="#DAB46E" size={30} weight={600}>
-            Congratulations!  
+            Congratulations!
           </FTypo>
           <FTypo size={20} weight={500} className="f-mt-1">
             Crucible Token Sustainable Liquidity Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-          Congrats! You have successfully withdrawn your cFRM reward tokens. You can now use the tokens to generate even more rewards by compounding or trading them. </FTypo>        </FItem>
+          Congrats! You have successfully unstaked your cFRM tokens. You can now use the tokens to generate even more rewards by adding liquidity for the cFRM - BNB pair and staking it. You can also generate rewards by trading the tokens or unwrap the tokens.               </FTypo>
+        </FItem>
         <FTypo size={20} weight={500} className="f-mt-3 f-mb-3" align={"center"}>
           Whats next?
         </FTypo>
@@ -38,24 +39,24 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={" item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1" onClick={()=>onAddLiquityClick()}>
                 <span className="icon-wrap">
-                  <IconNetworkcFRM />
-                  <IconNetworkBsc />
+                <IconNetworkcFRMx/>
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Add Liquidity & Compound Rewards
+              Add Liquidity &
+Compound Rewards
               </FTypo>
             </FItem>
           </FGridItem>
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={" item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
-                <span className="icon-wrap">
-                  <IconNetworkLeaderboard /> 
+                <span className="icon-wrap"> 
+                  <IconNetworkLeaderboard />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Go to cFRMLeaderboard Competition
+              Go to cFRM Leaderboard Competition
               </FTypo>
             </FItem>
           </FGridItem>
@@ -63,11 +64,11 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                  <IconNetworkcFRM />
+                   <IconNetworkcFRM/>
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-                Mint cFRM
+                Unwrap cFRM
               </FTypo>
             </FItem>
           </FGridItem>
@@ -75,7 +76,7 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                  <IconNetworkcFRM />
+                   <IconNetworkcFRM/>
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>

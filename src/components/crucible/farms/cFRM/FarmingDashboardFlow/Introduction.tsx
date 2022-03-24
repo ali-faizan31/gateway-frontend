@@ -23,10 +23,17 @@ export const Introduction = () => {
 
   useEffect(() => { 
     console.log(location.state)
-    if (location.state.id === undefined) {
+    if (location.state === undefined) {
       history.push(PATH_DASHBOARD.crucible.index)
     }
   }, [location])
+
+  useEffect(() => {
+    if (isConnected === false){
+      history.push(PATH_DASHBOARD.crucible.index)
+    }
+  }, [isConnected])
+  
   
   useEffect(() => { 
     if ( stepFlowStepHistory?.length ){
@@ -38,16 +45,16 @@ export const Introduction = () => {
   }, [tokenV2, location, stepFlowStepHistory])
 
 
-  const onGetStartedClick = async () => {
-    console.log(neverShowAgain)
+  const onGetStartedClick = async () => { 
     if ( neverShowAgain === true ){
-      let data = { status: "completed" }
-      let updateResponse: any = await updateStepFlowStepHistoryByStepFlowStepHistoryId(currentStep._id, data, tokenV2);
-      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      console.log(updateResponse, '------------------')
-      history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
+      history.push({pathname:PATH_DASHBOARD.crucible.cFRM.manage, state: location.state})
+      // let data = { status: "completed" }
+      // let updateResponse: any = await updateStepFlowStepHistoryByStepFlowStepHistoryId(currentStep._id, data, tokenV2);
+      // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      // console.log(updateResponse, '------------------')
+      // history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
     } else {
-      history.push({pathname:"/dashboard/crucible/manage", state: location.state}) 
+      history.push({pathname:PATH_DASHBOARD.crucible.cFRM.manage, state: location.state}) 
     }
   }
 
@@ -59,7 +66,7 @@ export const Introduction = () => {
     <FContainer width={950} className="f-mr-0 f-mb-2">
       <FCard variant={"secondary"} className="card-get-started">
         <FTypo className="card-title" size={22} color="#DAB46E">
-          Welcome To The Crucible by Ferrum Network New
+          Welcome To The Crucible by Ferrum Network
         </FTypo>
         <FTypo>
           Watch the explainer video below for a step-by-step tutorial on how to mint, add liquidity, farm, trade, and earn rewards through the

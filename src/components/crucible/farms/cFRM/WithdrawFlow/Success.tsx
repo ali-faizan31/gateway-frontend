@@ -13,7 +13,7 @@ export const Success = () => {
   const history = useHistory()
 
   const onAddLiquityClick = () => {
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.steps})
+    history.push({pathname:PATH_DASHBOARD.crucible.cFRM.withdraw.steps})
   }
 
   return (
@@ -29,7 +29,7 @@ export const Success = () => {
             Crucible Token Sustainable Liquidity Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-          Congrats! You have successfully withdrawn your cFRM reward tokens. You can now use the tokens to generate even more rewards by compounding or trading them. </FTypo>        </FItem>
+          Congrats! You have successfully withdrawn your cFRM reward tokens. You can now use the tokens to generate even more rewards by compounding or trading them.           </FTypo>        </FItem>
         <FTypo size={20} weight={500} className="f-mt-3 f-mb-3" align={"center"}>
           Whats next?
         </FTypo>
@@ -55,7 +55,7 @@ export const Success = () => {
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Go to cFRMLeaderboard Competition
+              Go to cFRM Leaderboard Competition
               </FTypo>
             </FItem>
           </FGridItem>

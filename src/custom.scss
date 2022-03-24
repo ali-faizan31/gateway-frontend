@@ -79,6 +79,11 @@ body>div {
     justify-content: end;
 }
 
+.justify-content-center {
+    display: flex;
+    justify-content: center;
+}
+
 .custom-label {
     background: red;
     padding: 2px 3px;

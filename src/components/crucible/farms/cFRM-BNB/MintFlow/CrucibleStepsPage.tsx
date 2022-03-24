@@ -15,7 +15,7 @@ export const CrucibleStepsPage = () => {
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-crucible-steps">
         <FTypo size={20} className={"card-title w-100"} display="flex">
-        Crucible Token Sustainable Liquidity Farming teste
+        Crucible Token Sustainable Liquidity Farming
         </FTypo>
         <ul>
           <li className="step step-success">
