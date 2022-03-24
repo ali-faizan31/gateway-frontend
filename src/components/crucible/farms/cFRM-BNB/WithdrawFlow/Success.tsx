@@ -5,7 +5,7 @@ import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-c
 import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
 import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
+import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg"; 
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 

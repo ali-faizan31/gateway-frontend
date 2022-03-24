@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { FButton, FCard, FGrid, FGridItem, FInputText, FItem, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
 import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
+import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg"; 
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
 
 export const Stake = () => {
