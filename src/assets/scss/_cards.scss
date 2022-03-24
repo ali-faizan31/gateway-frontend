@@ -105,6 +105,7 @@ $cardSecondary: #242b35;
   top: 50%;
   transform: translateY(-50%);
   max-width: 250px;
+  max-height: 460px;
   border-radius: 10px 0 0 10px;
   padding-left: 3rem;
   .card-title {
@@ -126,22 +127,27 @@ $cardSecondary: #242b35;
 }
 
 .card-apr {
+  position: relative;
   .scrollbar-container {
     max-height: max-content !important;
   }
   .f-table {
     // min-width: 1000px;
+    padding-bottom: 4rem;
     table {
       border-collapse: separate;
       border-spacing: 0 1em;
     }
     .thead {
       background: none !important;
+
       .thead-th {
         color: #7d7d7d !important;
         font-size: 0.9rem !important;
         font-weight: 400;
         height: auto;
+        word-break: keep-all;
+        padding: 0 0.5rem;
         &:first-child {
           padding-left: 2rem;
         }
@@ -154,7 +160,7 @@ $cardSecondary: #242b35;
         position: relative;
 
         .tbody-td {
-          padding: 1rem 1rem;
+          padding: 1rem 0.5rem;
           &:first-child {
             padding-left: 2rem;
             &:after,
@@ -182,22 +188,32 @@ $cardSecondary: #242b35;
             }
           }
           .col-crucible-farming {
-            min-width: 200px;
+            min-width: 100px;
           }
-          .col-amount {
-            min-width: 120px;
-          }
+          // .col-amount {
+          //   width: 80px;
+          // }
+          // .col-your {
+          //   width: 60px;
+          // }
           .col-action {
             display: flex;
-            justify-content: center;
+            // justify-content: center;
             min-width: 200px;
             .f-btn {
               margin: 0 0.5rem;
+              padding: 0.15rem 0.5rem;
+              min-height: 35px;
             }
           }
         }
       }
     }
+  }
+  .controlRow__root {
+    position: absolute;
+    right: 0;
+    bottom: 1.5rem;
   }
 }
 
@@ -208,6 +224,7 @@ $cardSecondary: #242b35;
     justify-content: space-between;
     .btn-back {
       margin-right: 1rem;
+      line-height: 0;
     }
   }
   .f-input-group {
@@ -227,6 +244,84 @@ $cardSecondary: #242b35;
       font-weight: 500;
       padding: 1rem !important;
     }
+    .f-input-group {
+      .f-input-wrap {
+        border-color: #dab46e !important;
+        .f-select {
+          .f-select__control {
+            .f-select__value-container {
+              padding: 0.75rem 1rem !important;
+              height: calc(1.75em + 1.1rem + 2px);
+              color: #dab46e;
+              font-size: 1.25rem;
+              .f-select__single-value {
+                display: flex;
+                align-items: center;
+                .icon-wrap {
+                  min-width: 35px;
+                  img,
+                  svg {
+                    margin-right: 0.5rem !important;
+                    vertical-align: -5px;
+                  }
+                }
+                span {
+                  color: #dab46e;
+                  font-weight: 500;
+                }
+              }
+            }
+            .f-select__placeholder {
+              color: #dab46e;
+              font-size: 1.25rem;
+              font-weight: 500;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              position: relative;
+              top: auto;
+              left: auto;
+            }
+          }
+          .f-select__menu {
+            z-index: 100;
+            transform: translateY(4px) !important;
+            .f-select__menu-list {
+              border: 1px solid #dab46e;
+              border-radius: 0 0 5px 5px;
+              padding: 0;
+              background: #242b35 !important;
+              .f-select__option {
+                background: none !important;
+                font-size: 1.25rem;
+                margin-bottom: 0;
+                &.f-select__option--is-focused,
+                &.f-select__option--is-selected {
+                  background: #161c24 !important;
+                }
+              }
+            }
+            .f-item {
+              display: flex;
+              align-items: center;
+              line-height: 1.75 !important;
+              .icon-wrap {
+                min-width: 35px;
+                img,
+                svg {
+                  margin-right: 0.5rem !important;
+                  vertical-align: -5px;
+                }
+              }
+              span {
+                position: relative;
+                top: 2px;
+              }
+            }
+          }
+        }
+      }
+    }
   }
   .card-crucible-token-info {
     background: rgba(255, 255, 255, 0.05);
@@ -234,6 +329,12 @@ $cardSecondary: #242b35;
   }
   .your-crucible {
     padding: 0.5rem 2rem;
+    &:before {
+      height: 40px;
+    }
+    &:after {
+      height: 60px;
+    }
   }
   .your-claimed-rewards {
     background: #313740;
@@ -379,18 +480,58 @@ $cardSecondary: #242b35;
     margin: 2rem 0 0;
     color: white;
   }
-  .item-whats-next {
-    padding: 2rem;
-    .network-icon-wrapper {
-      .icon-wrap {
-        svg {
-          width: 40px;
-          height: 40px;
+  .card-whats-next {
+    perspective: 1000px;
+    border-radius: 5px;
+    height: 200px;
+    &:hover .card-whats-next-inner {
+      transform: rotateY(180deg);
+    }
+    .card-whats-next-inner {
+      padding: 2rem 7rem;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      .card-whats-next-front,
+      .card-whats-next-back {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border-radius: 5px;
+      }
+      .card-whats-next-front {
+        .f-typo {
+          min-height: 50px;
         }
       }
-    }
-    .f-typo {
-      min-height: 50px;
+      .card-whats-next-back {
+        background: linear-gradient(180deg, #dab46e 0%, #c69749 100%);
+        color: white;
+        transform: rotateY(180deg);
+        .f-typo {
+          max-width: 250px;
+          margin: 0 auto;
+        }
+      }
+      .network-icon-wrapper {
+        .icon-wrap {
+          svg {
+            width: 40px;
+            height: 40px;
+          }
+        }
+      }
     }
   }
 }

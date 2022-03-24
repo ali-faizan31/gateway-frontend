@@ -190,11 +190,11 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
     .controlRow__root {
         .ButtonGroup__root {
             button:disabled {
-                background: #161c24 !important;
+                // background: #161c24 !important;
                 color: white !important;
             }
             button:not([disabled]):nth-last-child(-n + 7) {
-                background: #212b36 !important;
+                // background: #212b36 !important;
                 color: white !important;
             }
             .btn:hover,
