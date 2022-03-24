@@ -98,7 +98,29 @@ export const PATH_DASHBOARD = {
     cFRM: {
       introduction: path(ROOTS_DASHBOARD, "/crucible/cFRM/introduction"),
       manage: path(ROOTS_DASHBOARD, "/crucible/cFRM/manage"),
-      steps: path(ROOTS_DASHBOARD, "/crucible/cFRM/liquidity"),
+      mint: {
+        steps: path(ROOTS_DASHBOARD, "/crucible/cFRM/mint/add-liquidity"),
+        mint: path(ROOTS_DASHBOARD, "/crucible/cFRM/mint/deposit"),
+      },
+      stake: {
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRM/stake/success"),
+        stake: path(ROOTS_DASHBOARD, "/crucible/cFRM/stake/deposit"),
+      },
+      unstake: {
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRM/unstake/success"),
+        unstake: path(ROOTS_DASHBOARD, "/crucible/cFRM/unstake/deposit"),
+        steps: path( ROOTS_DASHBOARD, "/crucible/cFRM/unstake/remove-liquidity" ),
+      },
+      withdraw: {
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRM/withdraw/success"),
+        withdraw: path(ROOTS_DASHBOARD, "/crucible/cFRM/withdraw/deposit"),
+        steps: path( ROOTS_DASHBOARD, "/crucible/cFRM/withdraw/add-liquidity" ),
+      },
+      unwrap: {
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRM/unwrap/success"),
+        unwrap: path(ROOTS_DASHBOARD, "/crucible/cFRM/unwrap/deposit"), 
+      },
+      liquidity : path(ROOTS_DASHBOARD, "/crucible/cFRM/add-liquidity"),
     },
     cFRMx: {
       introduction: path(ROOTS_DASHBOARD, "/crucible/cFRMx/introduction"),
