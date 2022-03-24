@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { Switch, Route, useLocation, Redirect } from "react-router-dom";
 import DashboardLayout from "./layouts/dashboard";
 import "./custom.scss";
@@ -12,6 +12,8 @@ import moment from "moment-timezone";
 import { WalletApplicationWrapper } from "./container-components";
 import { PATH_DASHBOARD } from "./routes/paths";
 import { TOKEN_TAG } from "./utils/const.utils";
+import { useDispatch } from "react-redux";
+import { getPhraseDataDispatch } from "./redux/slices/phrase";
 import { Deployer as CrucibleDeployer } from "./components/crucible/common/Deployer";
 import { useSelector } from "react-redux";
 import { WalletAuthencationOnSignIn } from "./components/common/wallet-authentication/WalletAuthenticationSignIn";
@@ -55,10 +57,15 @@ const CruciblePublic = Loadable(lazy(() => import("./components/crucible/public/
 
 
 function App() {
+  const dispatch = useDispatch();
   const isAuthenticated = localStorage.getItem(TOKEN_TAG);
   moment.tz.setDefault("UTC");
-  const { networkClient, walletAddress } = useSelector((state: RootState) => state.walletConnector);
 
+  useEffect(()=>{
+    dispatch(getPhraseDataDispatch())
+  },[])
+
+  const { networkClient, walletAddress } = useSelector((state: RootState) => state.walletConnector);
 
   return (
     <WalletApplicationWrapper.ApplicationWrapper>
