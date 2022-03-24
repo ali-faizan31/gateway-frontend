@@ -1,3 +1,18 @@
+## Raise PR Steps
+ 
+1. git flow feature finish featureName
+2. git push origin develop
+3. git flow feature start merge-develop
+4. git fetch upstream
+5. git pull upstream develop
+6. resolve the conflicts
+7. git add .
+8. git commit - m “message”
+9. git flow feature finish featureName
+10. git push origin develop
+11. Create PR from forked:develop to ferrumnet:develop
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -44,3 +59,4 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+

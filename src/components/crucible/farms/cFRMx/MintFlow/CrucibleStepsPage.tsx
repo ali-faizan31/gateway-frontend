@@ -68,7 +68,7 @@ export const CrucibleStepsPage = () => {
               className="w-100"
               style={{ marginRight: "10px" }}
               disabled={!stepThreeCheck}
-              onClick={() => history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx.stake.stake })}
+              onClick={() => history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.stake.stake })}
             /> 
           </li>
         </ul>
