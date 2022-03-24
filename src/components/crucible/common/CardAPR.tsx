@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import Datatable from "react-bs-datatable";
 import { FButton, FCard, FInputText, FItem, FTable, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconNetworkcFRM } from "../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../assets/img/icon-network-bsc.svg";
+import { ReactComponent as IconNetworkBsc } from "../../../assets/img/icon-network-bnb.svg";
 import { useSelector } from "react-redux"; 
 import { RootState } from "../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../routes/paths";
