@@ -24,14 +24,14 @@ const DashboardHeader = ({ title }: any) => {
   const history = useHistory();
   const isPublic = pathname.includes('pub');
   const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
-  const { meV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const [tokenInfo, setTokenInfo] = useState({symbol:"", name:"", decimals:"", balance:""});
 
-  useEffect(() => {
-    if ( isConnected === false ){
-        dispatch(CrucibleActions.resetCrucible());
-    }
-}, [isConnected])
+//   useEffect(() => {
+//     if ( isConnected === false && tokenV2 ){
+//         dispatch(CrucibleActions.resetCrucible());
+//     }
+// }, [isConnected])
 
   useEffect(() => {
     if (meV2 && meV2.role === COMMUNITY_ROLE_TAG) {

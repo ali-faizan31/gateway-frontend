@@ -48,9 +48,9 @@ const DashboardSidebar = () => {
   const isPublicMultiLeaderboard = pathname.includes("/pub/multi/leaderboard");
   const isPublicCompetition = pathname.includes("/pub/competition");
 
-  useEffect(() => {
-    getSideMenuInformation();
-  }, []);
+  // useEffect(() => {
+  //   getSideMenuInformation();
+  // }, []);
 
   const getSiteName = (url: string, indexA: string, indexB: string) => {
     let substr = url.indexOf(indexA) + indexA.length;
@@ -82,23 +82,12 @@ const DashboardSidebar = () => {
         item[productName].length > 0 &&
           item[productName].forEach((child: any) => {
             child.title = child.name;
-            child.path = GET_PATHS(
-              productName,
-              child._id,
-              child.numberOfCurrencies
-            );
+            child.path = GET_PATHS( productName, child._id, child.numberOfCurrencies );
           });
-        subsciptionArray.push({
-          title: productName,
-          path: "",
-          icon: GET_ICONS(productName),
-          children: item[productName],
-        });
+        subsciptionArray.push({ title: productName, path: "", icon: GET_ICONS(productName), children: item[productName], });
       }
     });
-    let currencies = getCurrenciesAgainstOrganization(
-      subscriptionResponse.currencies
-    );
+    let currencies = getCurrenciesAgainstOrganization( subscriptionResponse.currencies );
     if (currencies.length && currencies.length > 1) {
       subsciptionArray.push({
         title: "Get Token",

@@ -9,6 +9,12 @@ export const crucibleSlice = createSlice({
     name: "crucible",
     initialState: initialCrucibleState,
     reducers: {
+        userCrucibleDetailsLoaded: (state, action) => {
+            state.userCrucibleDetails = action.payload.data
+        },
+        selectedCrucible: (state, action) => {
+            state.selectedCrucible = action.payload.data
+        },
         approved: (state ) => {
             state.isApproved = true;
             state.isApproving = false;
@@ -26,10 +32,12 @@ export const crucibleSlice = createSlice({
         },
         updateCurrentStep: (state, action) => {
             state.currentStep = action.payload.crucible.currentStep;
+            state.currentStepIndex = action.payload.crucible.currentStepIndex;
         },
         resetCrucible: (state) => {
             state.currentStep = {};
             state.stepFlowStepHistory = [];
+            state.currentStepIndex = null;
         },
     }
 })

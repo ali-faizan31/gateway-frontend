@@ -1,7 +1,7 @@
 import axios from "axios";
 import { baseUrl, apiKey } from "../utils/const.utils";
 
-export function getUserLatestStepFlowStepHistoryByStepFlowId( id, token ) {
+export function getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId( id, token ) {
     return axios.get(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/stepFlow/latest/${id}`, {
     headers: {
         "Access-Control-Allow-Origin": "*",
@@ -10,8 +10,18 @@ export function getUserLatestStepFlowStepHistoryByStepFlowId( id, token ) {
         },
     });
 }
-  
-export function updateStepFlowStepHistoryByStepFlowStepHistoryId( id, values, token ) {
+
+export function getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId( id, token ) {
+    return axios.get(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/stepFlow/${id}`, {
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "Application/json",
+        Authorization: `Bearer ${token}`,
+        },
+    });
+}
+
+export function updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId( id, values, token ) {
     return axios.put(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/update/status/${id}`, values, {
     headers: {
         "Access-Control-Allow-Origin": "*",
@@ -21,7 +31,7 @@ export function updateStepFlowStepHistoryByStepFlowStepHistoryId( id, values, to
     });
 }
 
-export function startNewSequenceForStepFlowStepHistoryByStepFlowId( id, token ) {
+export function startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId( id, token ) {
     return axios.get(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/restart/stepFlow/${id}`, {
     headers: {
         "Access-Control-Allow-Origin": "*",

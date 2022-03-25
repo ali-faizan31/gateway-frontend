@@ -5,8 +5,10 @@ import { ReactComponent as IconApprove } from "../../../../../assets/img/icon-tr
 import { ReactComponent as IconSubmitted } from "../../../../../assets/img/icon-transaction-submitted.svg";
 import Loader from "../../../../../assets/gif/loader.svg";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { linkForTransaction,addToken } from './../../../../../container-components/web3Client/types';
 
-export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionStatusDialog, isProcessing, setapprovedDone, setIsProcessing }: any) => {
+export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionStatusDialog, isProcessing, isProcessed,
+  setapprovedDone, setIsProcessing,isSubmitted,network, tx,crucible, onContinueToNextStepClick }: any) => {
   const history = useHistory();
   const [approved, setApproved] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -14,18 +16,18 @@ export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionSt
 
 
   useEffect(() => {
-  setApproved(true);
-  setTimeout(() => {
-    setApproved(false);
-    setapprovedDone(true); 
-    if (isProcessing === false){
-    setTransitionStatusDialog(false)
-    }
-  }, 3000);
-  setTimeout(() => {
-    setSubmitted(false);
-    setProcessed(true);
-  }, 6000);
+  // setApproved(true);
+  // setTimeout(() => {
+  //   setApproved(false);
+  //   setapprovedDone(true); 
+  //   if (isProcessing === false){
+  //   setTransitionStatusDialog(false)
+  //   }
+  // }, 3000);
+  // setTimeout(() => {
+  //   setSubmitted(false);
+  //   setProcessed(true);
+  // }, 6000);
 }, []);
 
   // useEffect(() => {
@@ -60,14 +62,14 @@ const onclose = () => {
       onHide={() => onclose()}
       className="transaction-status text-center"
       showClose={true}>
-      {approved ? (
+      {isProcessing ? (
         <React.Fragment>
           <FItem align="center">
             <FLoader loading={true} width={100} loaderImage={Loader} />
             <FTypo size={20}>Confirm This Transaction in your Wallet.</FTypo>
           </FItem>
         </React.Fragment>
-      ) : submitted === true ? (
+      ) : isSubmitted === true ? (
         <React.Fragment>
           <FItem align="center">
             <IconSubmitted />
@@ -85,7 +87,7 @@ const onclose = () => {
             </FItem>
           </FItem>
         </React.Fragment>
-      ) : processed === true ? (
+      ) : isProcessed === true ? (
         <React.Fragment>
           <FItem align="center">
             <IconSubmitted />
@@ -93,13 +95,29 @@ const onclose = () => {
               Transaction Processed
             </FTypo>
             <FTypo size={20} weight={600} className="f-mt-1">
-              View on Explorer
+              <span onClick={()=>
+                window.open(
+                  linkForTransaction(network, tx),
+                  "_blank"
+                )
+              }>
+              View on Explorer</span>
             </FTypo>
             <FItem>
-              <FButton title={"Add Token to Metamask"} outlined variant={"secondary"} className="f-mt-1 f-mb-1" />
+            <FButton 
+                title={"Add Token to Metamask"} 
+                outlined variant={"secondary"} 
+                onClick={()=>addToken({
+                  "currency": crucible?.contractAddress,
+                  "address": crucible?.contractAddress,
+                  "symbol": crucible?.symbol,
+                  "decimals": 18,
+                  "logoURI": ''
+                })}
+                className="f-mt-1 f-mb-1" />
             </FItem>
             <FItem>
-              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.success})} />
+              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => onContinueToNextStepClick()} />
             </FItem>
           </FItem>
         </React.Fragment>

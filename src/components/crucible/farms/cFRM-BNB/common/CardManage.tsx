@@ -4,24 +4,32 @@ import { FButton, FCard, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-sy
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
 import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
-import { useSelector } from "react-redux"; 
+import { useDispatch, useSelector } from "react-redux"; 
 import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper";
 
 export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowType, unwrap, setUnwrap }: any) => {
   const history = useHistory();
   const location: any = useLocation();
+  const dispatch = useDispatch();
   const { isConnected } = useSelector((state: RootState) => state.walletConnector);
+  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { currentStep, currentStepIndex, stepFlowStepHistory } = useSelector((state: RootState) => state.crucible);
 
-  // useEffect(() => { 
-  //   if ( isConnected === false ){
-  //     history.push('dashboard/crucible')
-  //   }
-  // }, [isConnected])
-  
+  useEffect(() => { 
+    if (location.state === undefined){
+      history.push({pathname: PATH_DASHBOARD.crucible.index});
+    }
+  }, []) 
   
   const onMintcFRMClick = () => { 
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint});
+    console.log(location.state.stepFlowName, "Mint")
+    let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Mint");
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name; 
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    // history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint}); 
   }
 
   const onWrapClick = () => { 

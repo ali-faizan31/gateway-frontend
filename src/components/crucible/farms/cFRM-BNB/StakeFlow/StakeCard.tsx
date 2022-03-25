@@ -5,28 +5,110 @@ import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-
 import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg"; 
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
+import {ApprovableButtonWrapper} from './../../../../../container-components/web3Client/approvalButtonWrapper';
+import { useHistory, useLocation } from "react-router"; 
+import {CRUCIBLE_CONTRACTS_V_0_1} from './../../../common/utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from "../../../../../redux/rootReducer";
+import { Web3Helper } from './../../../../../container-components/web3Client/web3Helper';
+import { CrucibleClient } from './../../../../../container-components/web3Client/crucibleClient';
+import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper"; 
+import * as CrucibleActions from "../../../redux/CrucibleActions";
+import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
+import toast from "react-hot-toast";
 
 export const Stake = () => {
+  const dispatch = useDispatch()
+  const location: any = useLocation(); 
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [approvedDone, setapprovedDone] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const history = useHistory();
+  const [isProcessed,setIsProcessed ] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  //@ts-ignore
+  const crucible =  useSelector((state)=> state.crucible.selectedCrucible)
+  const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
+  //@ts-ignore
+  const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
+  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
+ const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
   const onApproveClick = () => {
     setTransitionStatusDialog(true);
     setIsApproving(true);
   }
+  
+  useEffect(() => { 
+    setTimeout(() => {
+      if (currentStepIndex === 0) {
+        getStepCompleted();
+      }
+    }, 5000);
+  }, [currentStepIndex])
 
-useEffect(() => {
-  console.log("approvedDone", approvedDone)
-}, [approvedDone])
+  const getStepCompleted = async () => { 
+    try {
+      let updatedCurrentStep = { ...currentStep, status: "completed" };
+      let updHistory = stepFlowStepHistory.map((obj, index) => index === currentStepIndex ? { ...obj, status: "completed" } : obj);
+      let data = { status: "completed" };
 
+      dispatch(CrucibleActions.updateCurrentStep({ currentStep: updatedCurrentStep, currentStepIndex: currentStepIndex }));
+      dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: updHistory }));
 
-  const onStakeClick = () => {
-    setIsProcessing(true);
-    setIsApproving(false);
-    setTransitionStatusDialog(true);
+    let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    } catch (e: any) {
+      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
+      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+    }
   }
+
+  const onStakeClick = async (
+    currency: string,
+		stakingAddress: string,
+		amount: string,
+    isPublic: boolean,
+    network: string,
+    userAddress:string
+  ) => {
+    if(networkClient){
+
+      setTransitionStatusDialog(true)
+      setIsProcessing(true)
+      const web3Helper =  new Web3Helper(networkClient as any)
+      const client = new CrucibleClient(web3Helper)
+      
+      const response = await client.StakeCrucible(dispatch,currency,amount,stakingAddress,userAddress,network)
+      if(response){
+        setIsProcessing(false)
+        //setIsSubmitted(true)
+        setIsProcessed(true)
+        getStepCompleted();
+      }
+      //setIsApproving(false);
+      //setTransitionStatusDialog(true);
+      
+    }
+  }
+
+  const onContinueToNextStepClick = () => {
+    getStepCompleted();
+    let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Liquidity"); 
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+  }
+
+  // const onStakeClick = () => {
+  //   setIsProcessing(true);
+  //   setIsApproving(false);
+  //   setTransitionStatusDialog(true);
+  // }
 
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
@@ -66,32 +148,53 @@ useEffect(() => {
         className={"f-mt-1"}
         inputSize="input-lg"
         type={"text"}
+        value={amount}
+        onChange={(e:any)=>setAmount(e.target.value)}
         placeholder="Amount to Stake"
         postfix={
           <FTypo color="#DAB46E" className={"f-pr-1"}>
-            Max
+            <span onClick={()=>setAmount(Number(userCrucibleData?.balance||'0'))}>Max</span> 
           </FTypo>
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-      You have 100000.000  available in cFRM / BNB LP
+        You have {userCrucibleData?.balance||'0'} available in Token {userCrucibleData?.symbol} to Stake.
       </FTypo>
-      {approvedDone ? 
       <div className="btn-wrap f-mt-2">
-        <FButton title={"Stake Crucible"} className={"w-100"} onClick={() => onStakeClick()}></FButton>
+        <ApprovableButtonWrapper
+          View={
+            (ownProps) =>
+              <FButton 
+                title={ownProps.isApprovalMode ? "Approve" : "Stake Crucible"} 
+                className={"w-100"} 
+                onClick={ownProps.isApprovalMode ?
+                  () => ownProps.onApproveClick() :
+                  () => onStakeClick(
+                    crucible!.currency,
+                    (crucible?.staking||[])[0]?.address||'',
+                    amount.toString(),
+                    true,
+                    crucible?.network,
+                    walletAddress as string
+                  )}
+              ></FButton>
+          }
+          currency={crucible!.currency}
+          contractAddress={CRUCIBLE_CONTRACTS_V_0_1['BSC'].router}
+          userAddress={walletAddress as string}
+          amount={'0.0001'}
+        />  
       </div>
-       :   
-      <div className="btn-wrap f-mt-2">
-        <FButton title={"Approve"} className={"w-100"} onClick={() => onApproveClick()}></FButton>
-      </div>
-       } 
-
       <DialogTransitionStatus 
-      transitionStatusDialog={transitionStatusDialog} 
-      setTransitionStatusDialog={setTransitionStatusDialog} 
-       isProcessing = {isProcessing}
-       setIsProcessing = {setIsProcessing}
-       setapprovedDone = {setapprovedDone}
+       transitionStatusDialog={transitionStatusDialog} 
+       setTransitionStatusDialog={setTransitionStatusDialog} 
+        isProcessing = {isProcessing}
+        setIsProcessing = {setIsProcessing}
+        setapprovedDone = {setapprovedDone}
+        isSubmitted={isSubmitted}
+        isProcessed={isProcessed}
+        crucible={crucible}
+        onContinueToNextStepClick={()=>onContinueToNextStepClick()}
        />
     </FCard>
   );

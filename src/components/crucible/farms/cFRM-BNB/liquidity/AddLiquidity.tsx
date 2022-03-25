@@ -1,21 +1,37 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { FButton, FCard, FContainer, FInputCheckbox, FItem, FTypo } from "ferrum-design-system"; 
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper"; 
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../../redux/rootReducer";
 
 export const AddLiquidity = () => {
   const history = useHistory();
+  const dispatch = useDispatch()
+  const location: any = useLocation();
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
+  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
+  const { approveTransactionId } = useSelector((state: RootState) => state.approval);
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+
+  const onStakeClick = () => {
+    let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Stake"); 
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+  }
 
   return (
+
     <FContainer className="f-mr-0" width={900}>
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-crucible-steps">
         <FTypo size={20} className={"card-title w-100"} display="flex">
-        Crucible Token Sustainable Liquidity Farming 
+        Crucible Token Sustainable Liquidity Farming s
         </FTypo>
         <ul>
           <li className="step step-success">
@@ -67,7 +83,7 @@ export const AddLiquidity = () => {
               postfix={<IconArrow />}
               className="w-100"
               disabled={!stepThreeCheck}
-              onClick={() => history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake})}
+              onClick={() => onStakeClick()}
             /> 
           </li>
         </ul>

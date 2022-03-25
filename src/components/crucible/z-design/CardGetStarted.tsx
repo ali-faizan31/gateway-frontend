@@ -8,7 +8,7 @@ import { RootState } from "../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../routes/paths";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { getLatestStepWithPendingStatus } from "../../../utils/global.utils";
-import { updateStepFlowStepHistoryByStepFlowStepHistoryId } from "../../../_apis/StepFlowStepHistory";
+import { updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId } from "../../../_apis/StepFlowStepHistory";
 
 
 export const CrucibleGetStarted = () => {
@@ -23,7 +23,7 @@ export const CrucibleGetStarted = () => {
 
   useEffect(() => { 
     console.log(location.state)
-    if (location.state.id === undefined) {
+    if (location.state === undefined) {
       history.push(PATH_DASHBOARD.crucible.index)
     }
   }, [location])
@@ -42,7 +42,7 @@ export const CrucibleGetStarted = () => {
     console.log(neverShowAgain)
     if ( neverShowAgain === true ){
       let data = { status: "completed" }
-      let updateResponse: any = await updateStepFlowStepHistoryByStepFlowStepHistoryId(currentStep._id, data, tokenV2);
+      let updateResponse: any = await updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       console.log(updateResponse, '------------------')
       history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
