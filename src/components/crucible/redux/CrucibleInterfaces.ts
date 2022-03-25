@@ -4,7 +4,8 @@ export interface CRUCIBLE_STATE {
     stepFlowStepHistory: Array<any>;
     currentStep: any;
     selectedCrucible: any;
-    userCrucibleDetails: any
+    userCrucibleDetails: any;
+    tokenPrices: any;
 }
 
 export const defaultCrucibleState: CRUCIBLE_STATE = {
@@ -13,5 +14,6 @@ export const defaultCrucibleState: CRUCIBLE_STATE = {
     stepFlowStepHistory: [],
     currentStep: {},
     selectedCrucible: {},
-    userCrucibleDetails: {}
+    userCrucibleDetails: {},
+    tokenPrices: {}
 }

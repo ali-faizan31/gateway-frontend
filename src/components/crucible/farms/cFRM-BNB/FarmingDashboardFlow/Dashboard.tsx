@@ -30,6 +30,9 @@ export const Manage = () => {
   const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
   let userStake = (userCrucibleData.stakes||[]).find((e:any)=>e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd")
   console.log(userStake)
+  //@ts-ignore
+  const tokenPrices =  useSelector((state)=> state.crucible.tokenPrices)
+  console.log(tokenPrices,"tokenPricestokenPrices")
 
   const onUnStakeClick = () => {
     history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.unstake.unstake})
@@ -58,6 +61,42 @@ export const Manage = () => {
       }
   });
 
+  const loadPricingInfo = createAsyncThunk('crucible/loadUserInfo',
+    async (payload: { crucible: any }, ctx) => {
+      const actions = crucibleSlice.actions;
+      const web3Helper =  new Web3Helper(networkClient as any)
+      const client = new CrucibleClient(web3Helper)
+      const tokens = [
+        {
+          "token": "FRMX",
+          "currency": "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0"
+        },
+        {
+          "token": "FRM",
+          "currency": "BSC:0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc"
+        },
+        {
+          "token": "cFRM-BNB-LP",
+          "currency": "BSC:0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc"
+        },
+        {
+          "token": "cFRM",
+          "currency": "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0"
+        },
+      ]
+      
+      for (let item of tokens){
+        const priceDetails = await client.getPairPrice(ctx.dispatch,  item.currency, item.currency, walletAddress as string) as any
+        if(!!priceDetails){
+          dispatch(actions.priceDataLoaded({data: {"token" : item.token ,"price" : Number(priceDetails.basePrice.usdtPrice).toFixed(3) }}))
+          console.log(priceDetails)
+        }
+      }
+     
+    }
+  )
+	
+
   useEffect(() => { 
     if (location.state.id === undefined) {
       history.push(PATH_DASHBOARD.crucible.index)
@@ -80,6 +119,7 @@ export const Manage = () => {
     const crucibleData = await client.getCrucibleDetails(dispatch,location.state.network,location.state.contract,walletAddress as string)
     dispatch(actions.selectedCrucible({data: crucibleData.data }))
     if(crucibleData.data){
+      dispatch(loadPricingInfo({crucible: crucibleData.data}))
       setIsLoading(false)
     }
   }

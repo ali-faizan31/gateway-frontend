@@ -12,7 +12,8 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
   const history = useHistory();
   const location: any = useLocation();
   const { isConnected } = useSelector((state: RootState) => state.walletConnector);
-
+  //@ts-ignore
+  const tokenPrices =  useSelector((state)=> state.crucible.tokenPrices)
   // useEffect(() => { 
   //   if ( isConnected === false ){
   //     history.push('dashboard/crucible')
@@ -54,7 +55,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
               FRM Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
-              $0.072
+              ${tokenPrices['FRM']}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -64,7 +65,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
               cFRM Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
-              $0.072
+              ${tokenPrices['cFRM']}
             </FTypo>
           </FItem>
         </FGridItem>
