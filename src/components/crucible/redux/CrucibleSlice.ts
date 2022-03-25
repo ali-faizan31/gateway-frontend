@@ -9,6 +9,9 @@ export const crucibleSlice = createSlice({
     name: "crucible",
     initialState: initialCrucibleState,
     reducers: {
+        selectedCrucible: (state, action) => {
+            state.selectedCrucible = action.payload.data
+        },
         approved: (state ) => {
             state.isApproved = true;
             state.isApproving = false;

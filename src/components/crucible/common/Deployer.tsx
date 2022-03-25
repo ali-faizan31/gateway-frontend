@@ -6,17 +6,16 @@ import { useHistory, useLocation } from 'react-router';
 import { ClipLoader } from 'react-spinners'; 
 import { RootState } from '../../../redux/rootReducer';
 import { PATH_DASHBOARD } from '../../../routes/paths';
-import { getLatestStepWithPendingStatus } from '../../../utils/global.utils';
-import { getStepFlowStepByStepFlowIdForPublic } from '../../../_apis/StepFlowStepCrud';
-import { getUserLatestStepFlowStepHistoryByStepFlowId, startNewSequenceForStepFlowStepHistoryByStepFlowId } from '../../../_apis/StepFlowStepHistory';
-import * as CrucibleActions from "../redux/CrucibleActions";
+import Web3 from "web3";
+import { useWeb3React } from "@web3-react/core";
+import {CrucibleClient} from './../../../container-components/web3Client/crucibleClient';
+import {Web3Helper} from './../../../container-components/web3Client/web3Helper';
 
 export const Deployer = () => {
     const location: any = useLocation();
     const dispatch = useDispatch();
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(false);
-
     const { isConnected, isConnecting } = useSelector((state: RootState) => state.walletConnector);
     const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
@@ -26,7 +25,6 @@ export const Deployer = () => {
     //         history.push(PATH_DASHBOARD.crucible.index)
     //     }
     // }, [isConnected])
-
 
     useEffect(() => {
         setIsLoading(true);
@@ -38,14 +36,13 @@ export const Deployer = () => {
     }, [location])
 
 
-
     const getStepToRender = async (id: any, name: any, tokenV2: any) => {
         let stepResponse: any = [];
         if (tokenV2) {
             switch(name){
-                case "cFRM / BNB": history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.introduction, state: location.state }); break;
+                case "cFRM / BNB": history.push({ pathname: `/dashboard/crucible/cFRM-BNB/${location.state.contract}/introduction`, state: location.state }); break;
                 case "cFRMx / BNB": history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.introduction, state: location.state }); break;
-                case "cFRM": history.push({ pathname: PATH_DASHBOARD.crucible.cFRM.introduction, state: location.state }); break;
+                case "cFRM": history.push({ pathname:`/dashboard/crucible/cFRM/${location.state.contract}/introduction`, state: location.state }); break;
                 case "cFRMx": history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx.introduction, state: location.state }); break;
                 default: history.push(PATH_DASHBOARD.crucible.index); break;
             }
@@ -107,6 +104,7 @@ export const Deployer = () => {
             default: return history.push(PATH_DASHBOARD.crucible.index);
         }
     }
+
 
     return (
         <>

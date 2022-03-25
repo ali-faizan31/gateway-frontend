@@ -5,11 +5,11 @@ import { RootState } from "../../../redux/rootReducer";
 import { CardAPR } from "../common/CardAPR";
 import { CrucibleMyBalance } from "../common/CardMyBalance";
 import { CruciblePrice } from "../common/CardPrice"; 
+import { useHistory, useLocation } from "react-router"; 
 
 const CrucibleDashboardPage = () => {
   const { isConnected } = useSelector((state: RootState) => state.walletConnector); 
-  
-  
+
   return (
     <FContainer className="f-ml-0">
       <CrucibleMyBalance />

@@ -96,24 +96,24 @@ export const PATH_DASHBOARD = {
     deployer: path(ROOTS_DASHBOARD, "/crucible/deployer"),
     public: path(ROOTS_DASHBOARD, "/crucible/public"),
     cFRM: {
-      introduction: path(ROOTS_DASHBOARD, "/crucible/cFRM/introduction"),
-      manage: path(ROOTS_DASHBOARD, "/crucible/cFRM/manage"),
-      steps: path(ROOTS_DASHBOARD, "/crucible/cFRM/liquidity"),
+      introduction: path(ROOTS_DASHBOARD, "/crucible/cFRM/:contract/introduction"),
+      manage: path(ROOTS_DASHBOARD, "/crucible/cFRM/:contract/manage"),
+      steps: path(ROOTS_DASHBOARD, "/crucible/cFRM/:contract/liquidity"),
     },
     cFRMx: {
-      introduction: path(ROOTS_DASHBOARD, "/crucible/cFRMx/introduction"),
-      manage: path(ROOTS_DASHBOARD, "/crucible/cFRMx/manage"),
+      introduction: path(ROOTS_DASHBOARD, "/crucible/cFRMx/:contract/introduction"),
+      manage: path(ROOTS_DASHBOARD, "/crucible/cFRMx/:contract/manage"),
     },
     cFRM_BNB: {
-      introduction: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/introduction"),
-      manage: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/manage"),
+      introduction: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/:contract/introduction"),
+      manage: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/:contract/manage"),
       mint: {
-        steps: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/mint/add-liquidity"),
-        mint: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/mint/deposit"),
+        steps: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/:contract/mint/add-liquidity"),
+        mint: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/:contract/mint/deposit"),
       },
       stake: {
-        success: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/stake/success"),
-        stake: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/stake/deposit"),
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/:contract/stake/success"),
+        stake: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/:contract/stake/deposit"),
       },
       unstake: {
         success: path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/unstake/success"),
