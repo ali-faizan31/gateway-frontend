@@ -9,46 +9,11 @@ import { linkForTransaction,addToken } from './../../../../../container-componen
 
 export const DialogTransitionStatus = ({
    transitionStatusDialog, setTransitionStatusDialog, isProcessing, 
-   isProcessed,setapprovedDone, setIsProcessing,isSubmitted, network, tx,crucible}: any) => {
+   isProcessed,setapprovedDone, setIsProcessing,isSubmitted, network, tx,crucible, onContinueToNextStepClick}: any) => {
   const history = useHistory();
   const [approved, setApproved] = useState(false);
   //const [submitted, setSubmitted] = useState(false);
-
-
-  useEffect(() => {
-  // setApproved(true);
-  // setTimeout(() => {
-  //   setApproved(false);
-  //   setapprovedDone(true); 
-  //   if (isProcessing === false){
-  //   setTransitionStatusDialog(false)
-  //   }
-  // }, 3000);
-  // setTimeout(() => {
-  //   setSubmitted(false);
-  //   setProcessed(true);
-  // }, 6000);
-}, []);
-
-  // useEffect(() => {
-  //   if (isProcessing === false){
-  //     setApproved(true);
-
-  //     setTimeout(() => {
-  //       setApproved(false);
-  //       setapprovedDone(true)
-  //     }, 3000);
-  //   }
-
-  //   if ( isProcessing ){ 
-  //     setSubmitted(true); 
-    
-  //   setTimeout(() => {
-  //     setSubmitted(false);
-  //     setProcessed(true);
-  //   }, 3000);
-  // }
-  // }, []);
+ 
 
 const onclose = () => {
   setTransitionStatusDialog(false);
@@ -116,7 +81,7 @@ const onclose = () => {
                 className="f-mt-1 f-mb-1" />
             </FItem>
             <FItem>
-              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.mint.steps})} />
+              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => onContinueToNextStepClick()} />
             </FItem>
           </FItem>
         </React.Fragment>
