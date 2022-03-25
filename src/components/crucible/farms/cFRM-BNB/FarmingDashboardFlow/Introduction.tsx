@@ -2,76 +2,75 @@ import React, { useEffect, useState } from "react";
 import { FButton, FCard, FContainer, FInputCheckbox, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { useHistory, useLocation } from "react-router"; 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
-import { getLatestStepWithPendingStatus } from "../../../../../utils/global.utils";
-import { updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId } from "../../../../../_apis/StepFlowStepHistory";
+import { getLatestStepToRender, getLatestStepWithPendingStatus, renderComponent } from "../../../common/Helper";
+import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import Web3 from "web3";
 import { useWeb3React } from "@web3-react/core";
 import {CrucibleClient} from './../../../../../container-components/web3Client/crucibleClient';
 import {Web3Helper} from './../../../../../container-components/web3Client/web3Helper';
+import toast, { Toaster } from "react-hot-toast";
+import * as CrucibleActions from "../../../redux/CrucibleActions";
 
 
 export const Introduction = () => {
   const history = useHistory();
   const location: any = useLocation();
+  const dispatch = useDispatch();
 
   const [neverShowAgain, setNeverShowAgain] = useState(false);
-  const [stepFlowResponse, setStepFlowResponse]  = useState<any>(undefined);
+  const [pendingStepInfo, setpendingStepInfo]  = useState<any>(undefined);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
-  const { stepFlowStepHistory, currentStep } = useSelector((state: RootState) => state.crucible);
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const { isConnected } = useSelector((state: RootState) => state.walletConnector);
 
   const [networkClient, setNetworkClient] = useState<Web3 | undefined>(undefined);
   const { active, activate, deactivate, library, account, chainId, error } =  useWeb3React();
-
-  useEffect(() => { 
-    console.log(location.state)
-    if (location.state.id === undefined) {
-      history.push(PATH_DASHBOARD.crucible.index)
-    }
-  }, [location])
-
+  
   useEffect(() => {
-    if (isConnected === false){
-      history.push(PATH_DASHBOARD.crucible.index)
-    }
-  }, [isConnected])
-
-  useEffect(() => {
-    if (library && !networkClient) {
-        console.log("web3 react connect set network client");
+    if (library && !networkClient) { 
         setNetworkClient(library);
-    }
-    console.log(networkClient)
+    } 
+  }, [active, library, networkClient]); 
 
-  }, [active, library, networkClient]);
-  
-  
   useEffect(() => { 
-    if ( stepFlowStepHistory?.length ){
-        const step: any = getLatestStepWithPendingStatus(stepFlowStepHistory); // undefined check implement to reatrt sequence  
-      if (tokenV2 && location.state.id && step?.step?.name !== "Introduction") {  
-        history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
-      }
-    }
-  }, [tokenV2, location, stepFlowStepHistory])
+   if ( isConnected && tokenV2 && stepFlowStepHistory.length){
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+   }
+  }, [tokenV2, stepFlowStepHistory])
+   
+  const onGetStartedClick = async () => { 
+    try {
+      let updatedCurrentStep: any = {};
+      let updHistory: any = [];
+      let data: any = {};
+      let updateResponse: any = {};
 
+      if ( neverShowAgain === true ){
+          updatedCurrentStep = { ...currentStep, status : "completed"};
+          updHistory = stepFlowStepHistory.map((obj, index) => 
+          index === currentStepIndex ? { ...obj, status : "completed" } : obj ); 
+          data = { status: "completed" }
+      } else {
+        updatedCurrentStep = { ...currentStep, status : "started"};
+        updHistory = stepFlowStepHistory.map((obj, index) => 
+        index === currentStepIndex ? { ...obj, status : "started" } : obj ); 
+        data = { status: "started" }
+      } 
 
-  const onGetStartedClick = async () => {
-    console.log(neverShowAgain,location.state)
-    if ( neverShowAgain === true ){
-      // let data = { status: "completed" }
-      // let updateResponse: any = await updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
-      // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      // console.log(updateResponse, '------------------')
-      // history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
-      history.push({pathname:`/dashboard/crucible/cFRM-BNB/${location.state.contract}/manage`, state: location.state})
-    } else {
-      history.push({pathname:`/dashboard/crucible/cFRM-BNB/${location.state.contract}/manage`, state: location.state}) 
+      dispatch(CrucibleActions.updateCurrentStep({ currentStep : updatedCurrentStep, currentStepIndex: currentStepIndex }));
+      dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: updHistory })); 
+      updateResponse = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      updateResponse.length && getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history); 
+
+    } catch (e:any) {
+      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
+      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`); 
     }
   }
 
@@ -80,6 +79,8 @@ export const Introduction = () => {
   }
 
   return (
+    <>
+    <Toaster/>
     <FContainer width={950} className="f-mr-0 f-mb-2">
       <FCard variant={"secondary"} className="card-get-started">
         <FTypo className="card-title" size={22} color="#DAB46E">
@@ -111,7 +112,7 @@ export const Introduction = () => {
           <li>Built-in Token Burn</li>
           <li>Mint, Add Liquidity, Farm, Trade, and Earn Rewards</li>
         </ul>
-        {meV2._id ?
+        { (meV2._id && isConnected) ?
           <FButton title={"Get Started"} postfix={<IconArrow />} className="w-100 f-mt-2" onClick={() => onGetStartedClick()} />
           :
           <MetaMaskConnector.WalletConnector
@@ -124,5 +125,6 @@ export const Introduction = () => {
       </FCard>
       <FInputCheckbox onClick={() => onNeverShowClick(!neverShowAgain) } name="neverShowAgain" className="f-mb-1 f-mt-1" label={"Don’t show the intro guide again."} /> 
     </FContainer>
+    </>
   );
 };

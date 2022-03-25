@@ -19,7 +19,7 @@ export const CruciblePrice = () => {
         {DATA_PRICE.length
           ? DATA_PRICE.map((item, index) => {
               return (
-                <FCard variant={"secondary"} className="card-price styled-card align-h">
+                <FCard variant={"secondary"} className="card-price styled-card align-h" key={index}>
                   <FItem display={"flex"} alignX="between" alignY={"center"}>
                     <FItem display={"flex"} alignY={"center"} className="w-100">
                       <span className="icon-network f-pr--5">

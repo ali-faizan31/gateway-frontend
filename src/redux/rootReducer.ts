@@ -31,7 +31,7 @@ const walletConnectorPersistConfig = {
 const cruciblePersistConfig = {
   key: "crucible",
   storage: storageSession,
-  whitelist: [ "stepFlowStepHistory", "currentStep"] 
+  // whitelist: [ "stepFlowStepHistory", "currentStep", "currentStepIndex"] 
 };
 
 const walletAutheticatorPersistConfig = {

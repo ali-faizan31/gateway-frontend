@@ -23,7 +23,7 @@ export const CrucibleGetStarted = () => {
 
   useEffect(() => { 
     console.log(location.state)
-    if (location.state.id === undefined) {
+    if (location.state === undefined) {
       history.push(PATH_DASHBOARD.crucible.index)
     }
   }, [location])

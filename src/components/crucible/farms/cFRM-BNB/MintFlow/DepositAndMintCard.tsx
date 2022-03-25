@@ -14,6 +14,10 @@ import { useHistory, useLocation } from "react-router";
 import { useWeb3React } from "@web3-react/core";
 import {CRUCIBLE_CONTRACTS_V_0_1} from './../../../common/utils';
 import { RootState } from "../../../../../redux/rootReducer";
+import * as CrucibleActions from "../../../redux/CrucibleActions";
+import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
+import toast from "react-hot-toast";
+import { getLatestStepToRender } from "../../../common/Helper";
 
 export const CrucibleDeposit = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
@@ -28,6 +32,8 @@ export const CrucibleDeposit = () => {
   const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
 
   const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
   useEffect(() => { 
     console.log(location,crucible)
@@ -46,9 +52,29 @@ export const CrucibleDeposit = () => {
   }
 
 useEffect(() => {
-  console.log("approvedDone", approvedDone)
+  // console.log("approvedDone", ownProps.isApprovalMode)
 }, [approvedDone])
+ 
+  const onPropChange = async (props: any) => { 
+    try { 
+      let status = props.isApprovalMode ? "pending" : "completed";
+      console.log(status, currentStep, stepFlowStepHistory)
+      // let updatedCurrentStep = { ...currentStep, status : status};
+      // let updHistory = stepFlowStepHistory.map((obj, index) => 
+      // index === currentStepIndex ? { ...obj, status : status } : obj ); 
+      // let data = { status: status }
+      
+      // dispatch(CrucibleActions.updateCurrentStep({ currentStep : updatedCurrentStep, currentStepIndex: currentStepIndex }));
+      // dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: updHistory })); 
+      // let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      // updateResponse.length && getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history); 
 
+    } catch (e:any) {
+      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
+      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`); 
+    }
+  }
 
   const onMintClick = async (
     currency: string,
@@ -145,8 +171,9 @@ useEffect(() => {
       />
       {  
         <ApprovableButtonWrapper
-            View={
-              (ownProps) => <div className="btn-wrap f-mt-2">
+            View={(ownProps) => {
+              onPropChange(ownProps);
+            return <div className="btn-wrap f-mt-2">
                 <FButton 
                   title={ownProps.isApprovalMode ? "Approve" : "Mint"}
                   className={"w-100"} 
@@ -161,9 +188,10 @@ useEffect(() => {
                       walletAddress as string
                     )
                   }></FButton>
-              </div>
+              </div>}
             }
-            currency={crucible!.currency}
+            
+            currency={crucible!.baseCurrency}
             contractAddress={CRUCIBLE_CONTRACTS_V_0_1['BSC'].router}
             userAddress={walletAddress as string}
             amount={'0.0001'}

@@ -11,6 +11,16 @@ export function getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId( 
     });
 }
 
+export function getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId( id, token ) {
+    return axios.get(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/stepFlow/${id}`, {
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "Application/json",
+        Authorization: `Bearer ${token}`,
+        },
+    });
+}
+
 export function updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId( id, values, token ) {
     return axios.put(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/update/status/${id}`, values, {
     headers: {

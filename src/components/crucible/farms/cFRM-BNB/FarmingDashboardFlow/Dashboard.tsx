@@ -13,6 +13,7 @@ import {crucibleSlice} from "./../../../redux/CrucibleSlice";
 import { BigUtils } from './../../../../../container-components/web3Client/types';
 import { RootState } from "../../../../../redux/rootReducer";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export const Manage = () => {
   const history = useHistory()
@@ -59,7 +60,7 @@ export const Manage = () => {
   });
 
   useEffect(() => { 
-    if (location.state.id === undefined) {
+    if (location.state=== undefined) {
       history.push(PATH_DASHBOARD.crucible.index)
     }
   }, [location])
@@ -88,9 +89,7 @@ export const Manage = () => {
     <FContainer className="f-mr-0 card-manage" width={900}> 
       {
         isLoading ?
-          <>
-            Loading...
-          </>
+        <ClipLoader color="#cba461" loading={true} size={150} />
         :
           <>
             <CrucibleMyBalance />
