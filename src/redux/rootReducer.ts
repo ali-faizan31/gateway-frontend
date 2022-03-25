@@ -11,12 +11,15 @@ import { crucibleSlice } from '../components/crucible/redux/CrucibleSlice';
 // slices
 import competitionReducer from './slices/competition';
 import leaderboardReducer from './slices/leaderboard';
+import phraseReducer from './slices/phrase';
+import { approvableButtonSlice } from "../container-components/web3Client/approvalButtonWrapper";
 
 const walletConnectorPersistConfig = {
   key: "walletConnector",
   storage: storageSession,
   blacklist: ["error", "isConnecting",   "networkClient", "isWeb3Initialized"],
 };
+
 
 // const walletApplicationWrapperPersistConfig = {
 //   key: "walletApplicationWrapper",
@@ -52,9 +55,11 @@ const rootReducer = combineReducers({
     walletAutheticatorPersistConfig,
      walletConnectorSlice.reducer
   ),
+  approval: approvableButtonSlice.reducer,
   crucible: persistReducer(cruciblePersistConfig, crucibleSlice.reducer),
   competition: competitionReducer,
-  leaderboard: leaderboardReducer 
+  leaderboard: leaderboardReducer,
+  phrase: phraseReducer, 
 });
   
 export type RootState = ReturnType<typeof rootReducer>;

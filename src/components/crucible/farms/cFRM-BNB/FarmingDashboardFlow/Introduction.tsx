@@ -15,6 +15,10 @@ import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { getLatestStepWithPendingStatus } from "../../../../../utils/global.utils";
 import { updateStepFlowStepHistoryByStepFlowStepHistoryId } from "../../../../../_apis/StepFlowStepHistory";
+import Web3 from "web3";
+import { useWeb3React } from "@web3-react/core";
+import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
+import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 
 export const Introduction = () => {
@@ -33,6 +37,12 @@ export const Introduction = () => {
     (state: RootState) => state.walletConnector
   );
 
+  const [networkClient, setNetworkClient] = useState<Web3 | undefined>(
+    undefined
+  );
+  const { active, activate, deactivate, library, account, chainId, error } =
+    useWeb3React();
+
   useEffect(() => {
     console.log(location.state);
     if (location.state.id === undefined) {
@@ -47,6 +57,14 @@ export const Introduction = () => {
   }, [isConnected]);
 
   useEffect(() => {
+    if (library && !networkClient) {
+      console.log("web3 react connect set network client");
+      setNetworkClient(library);
+    }
+    console.log(networkClient);
+  }, [active, library, networkClient]);
+
+  useEffect(() => {
     if (stepFlowStepHistory?.length) {
       const step: any = getLatestStepWithPendingStatus(stepFlowStepHistory); // undefined check implement to reatrt sequence
       if (tokenV2 && location.state.id && step?.step?.name !== "Introduction") {
@@ -59,7 +77,7 @@ export const Introduction = () => {
   }, [tokenV2, location, stepFlowStepHistory]);
 
   const onGetStartedClick = async () => {
-    console.log(neverShowAgain);
+    console.log(neverShowAgain, location.state);
     if (neverShowAgain === true) {
       // let data = { status: "completed" }
       // let updateResponse: any = await updateStepFlowStepHistoryByStepFlowStepHistoryId(currentStep._id, data, tokenV2);
@@ -67,12 +85,12 @@ export const Introduction = () => {
       // console.log(updateResponse, '------------------')
       // history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
       history.push({
-        pathname: PATH_DASHBOARD.crucible.cFRM_BNB.manage,
+        pathname: `/dashboard/crucible/cFRM-BNB/${location.state.contract}/manage`,
         state: location.state,
       });
     } else {
       history.push({
-        pathname: PATH_DASHBOARD.crucible.cFRM_BNB.manage,
+        pathname: `/dashboard/crucible/cFRM-BNB/${location.state.contract}/manage`,
         state: location.state,
       });
     }

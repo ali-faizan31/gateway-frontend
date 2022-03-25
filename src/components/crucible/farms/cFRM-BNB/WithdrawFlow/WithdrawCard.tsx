@@ -10,25 +10,83 @@ import {
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
-import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
+import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
+import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
+import Web3 from "web3";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../../redux/rootReducer";
+import { ApprovableButtonWrapper } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
+import { CRUCIBLE_CONTRACTS_V_0_1 } from "./../../../common/utils";
 
 export const Withdraw = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [approvedDone, setapprovedDone] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessed, setIsProcessed] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  //@ts-ignore
+  const crucible = useSelector((state) => state.crucible.selectedCrucible);
+  const {
+    isConnected,
+    isConnecting,
+    walletAddress,
+    walletBalance,
+    networkClient,
+  } = useSelector((state: RootState) => state.walletConnector);
+  //@ts-ignore
+  const userCrucibleData = useSelector(
+    (state: RootState) => state.crucible.userCrucibleDetails
+  );
+  let userStake = (userCrucibleData.stakes || []).find(
+    (e: any) => e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd"
+  );
+  console.log(userStake);
 
   useEffect(() => {
     console.log("approvedDone", approvedDone);
   }, [approvedDone]);
 
-  const onWithdrawClick = () => {
-    setIsProcessing(true);
-    setIsApproving(false);
-    setTransitionStatusDialog(true);
+  const onWithdrawClick = async (
+    currency: string,
+    stakingAddress: string,
+    amount: string,
+    isPublic: boolean,
+    network: string,
+    userAddress: string
+  ) => {
+    if (networkClient) {
+      setTransitionStatusDialog(true);
+      setIsProcessing(true);
+      const web3Helper = new Web3Helper(networkClient as any);
+      const client = new CrucibleClient(web3Helper);
+
+      const response = await client.withdrawRewards(
+        dispatch,
+        network,
+        amount,
+        currency,
+        stakingAddress,
+        userAddress
+      );
+      if (response) {
+        setIsProcessing(false);
+        //setIsSubmitted(true)
+        setIsProcessed(true);
+      }
+      //setIsApproving(false);
+      //setTransitionStatusDialog(true);
+    }
   };
+
+  // const onWithdrawClick = () => {
+  //   setIsProcessing(true);
+  //   setIsApproving(false);
+  //   setTransitionStatusDialog(true);
+  // }
 
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
@@ -72,23 +130,43 @@ export const Withdraw = () => {
               Your unclaimed Rewards
             </FTypo>
             <FTypo
-              size={30}
+              size={36}
               weight={500}
               className="primary-color"
               align={"center"}
             >
-              99999999.999 cFRM
+              {userStake?.rewardOf || 0} {crucible.symbol}
             </FTypo>
           </FItem>
         </FGridItem>
       </FGrid>
 
       <div className="btn-wrap f-mt-2">
-        <FButton
-          title={"Withdraw Rewards"}
-          className={"w-100"}
-          onClick={() => onWithdrawClick()}
-        ></FButton>
+        <ApprovableButtonWrapper
+          View={(ownProps) => (
+            <FButton
+              title={"Withdraw Rewards"}
+              className={"w-100"}
+              onClick={
+                ownProps.isApprovalMode
+                  ? () => ownProps.onApproveClick()
+                  : () =>
+                      onWithdrawClick(
+                        crucible!.currency,
+                        (crucible?.staking || [])[0]?.address || "",
+                        userStake?.rewardOf || 0,
+                        true,
+                        crucible?.network,
+                        walletAddress as string
+                      )
+              }
+            ></FButton>
+          )}
+          currency={crucible!.currency}
+          contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
+          userAddress={walletAddress as string}
+          amount={"0.0001"}
+        />
       </div>
 
       <DialogTransitionStatus
@@ -97,6 +175,9 @@ export const Withdraw = () => {
         isProcessing={isProcessing}
         setIsProcessing={setIsProcessing}
         setapprovedDone={setapprovedDone}
+        isSubmitted={isSubmitted}
+        isProcessed={isProcessed}
+        crucible={crucible}
       />
     </FCard>
   );
