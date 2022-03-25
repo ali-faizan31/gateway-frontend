@@ -25,10 +25,10 @@ export const CardAPR = () => {
   ];
 
   const stepFlowsMock = [
-    {sustainableCrucibleFarms: "cFRM / BNB", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.1", apr: "10%", id: "6238314dd292da2db05524dd" },
-    {sustainableCrucibleFarms: "cFRM", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.2", apr: "20%", id: "6238386bd292da2db05524f9" },
-    {sustainableCrucibleFarms: "cFRMx / BNB", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.3", apr: "20%", id: "62383841d292da2db05524f3" },
-    {sustainableCrucibleFarms: "cFRMx", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.4", apr: "40%", id: "62383865d292da2db05524f6" }
+    {sustainableCrucibleFarms: "cFRM / BNB", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.1", apr: "10%", id: "6238314dd292da2db05524dd","contract": "0x5e767cadbd95e7b9f777ddd9e65eab1c29c487e6",network: 'BSC' },
+    {sustainableCrucibleFarms: "cFRM", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.2", apr: "20%", id: "6238386bd292da2db05524f9","contract": "0x5D8df66ea3e5c3C30A1dB4aFC6F17A917B201118",network: 'BSC' },
+    {sustainableCrucibleFarms: "cFRMx / BNB", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.3", apr: "20%", id: "62383841d292da2db05524f3","contract": "0x5D8df66ea3e5c3C30A1dB4aFC6F17A917B201118",network: 'BSC' },
+    {sustainableCrucibleFarms: "cFRMx", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.4", apr: "40%", id: "62383865d292da2db05524f6","contract": "0x5D8df66ea3e5c3C30A1dB4aFC6F17A917B201118",network: 'BSC' }
   ]
 
   const body = stepFlowsMock.map((stepFlow, index) => { 
@@ -48,15 +48,15 @@ export const CardAPR = () => {
         apr: ( <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}> {stepFlow.apr} </FTypo> ),
         action: (
           <div className="col-action">
-            <FButton title={"Manage"} onClick={()=> renderComponent(stepFlow.id, stepFlow.sustainableCrucibleFarms)} />
-            <FButton title={"Deposit"} onClick={() => renderComponent(stepFlow.id, stepFlow.sustainableCrucibleFarms)}></FButton>
+            <FButton title={"Manage"} onClick={()=> renderComponent(stepFlow.id, stepFlow.sustainableCrucibleFarms,stepFlow.contract,stepFlow.network)} />
+            <FButton title={"Deposit"} onClick={() => renderComponent(stepFlow.id, stepFlow.sustainableCrucibleFarms,stepFlow.contract,stepFlow.network)}></FButton>
           </div>
         ),
       }; 
   }); 
 
-  const renderComponent = (id: any, name: any) => { 
-    history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: {id, name}}) 
+  const renderComponent = (id: any, name: any,contract:string,network:string) => { 
+    history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: {id, name,contract,network}}) 
   } 
 
   return (

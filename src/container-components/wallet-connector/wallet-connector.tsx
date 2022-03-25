@@ -87,7 +87,7 @@ useEffect(() => {
         .getBalance(account?.toString())
         .then((balance: String) => {
           console.log(
-            "newtork ping completed successfully update redux with wallet and network client information"
+            "newtork ping completed successfully update redux with wallet and network client information",balance,account?.toString()
           );
           dispatch(
             walletConnectorActions.walletConnected({
