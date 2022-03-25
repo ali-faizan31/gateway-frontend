@@ -26,6 +26,9 @@ export const CrucibleDeposit = () => {
   const crucible =  useSelector((state)=> state.crucible.selectedCrucible)
   //@ts-ignore
   const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
+  //@ts-ignore
+  const tokenPrices =  useSelector((state)=> state.crucible.tokenPrices)
+  console.log(tokenPrices,"tokenPricestokenPrices")
 
   const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
 
@@ -67,6 +70,7 @@ useEffect(() => {
       
       const response = await client.mintCrucible(dispatch,currency,crucibleAddress,amount,isPublic,network,userAddress)
       if(response){
+        //step updated
         setIsProcessing(false)
         //setIsSubmitted(true)
         setIsProcessed(true)
@@ -96,7 +100,7 @@ useEffect(() => {
               FRM Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
-              $0.072
+              ${tokenPrices['FRM']||'0'}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -106,7 +110,7 @@ useEffect(() => {
               cFRM Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
-              $0.072
+              ${tokenPrices['cFRM']||'0'}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -163,7 +167,7 @@ useEffect(() => {
                   }></FButton>
               </div>
             }
-            currency={crucible!.currency}
+            currency={crucible!.baseCurrency}
             contractAddress={CRUCIBLE_CONTRACTS_V_0_1['BSC'].router}
             userAddress={walletAddress as string}
             amount={'0.0001'}
