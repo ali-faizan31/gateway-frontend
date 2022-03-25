@@ -8,7 +8,7 @@ import { RootState } from '../../../redux/rootReducer';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { getLatestStepWithPendingStatus } from '../../../utils/global.utils';
 import { getStepFlowStepByStepFlowIdForPublic } from '../../../_apis/StepFlowStepCrud';
-import { getUserLatestStepFlowStepHistoryByStepFlowId, startNewSequenceForStepFlowStepHistoryByStepFlowId } from '../../../_apis/StepFlowStepHistory';
+import { getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId, startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId } from '../../../_apis/StepFlowStepHistory';
 import * as CrucibleActions from "../redux/CrucibleActions";
 
 export const Deployer = () => {
@@ -51,13 +51,13 @@ export const Deployer = () => {
             }
 
             // history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.introduction, state: location.state })
-            // stepResponse = await getUserLatestStepFlowStepHistoryByStepFlowId(id, tokenV2);
+            // stepResponse = await getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(id, tokenV2);
             // stepResponse = stepResponse.data.body.stepFlowStepsHistory;
             // dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: stepResponse }));
             // if (stepResponse.length > 0) {
             //     const step: any = getLatestStepWithPendingStatus(stepResponse); // undefined check implement to reatrt sequence 
             //     if (step === undefined) {
-            //         let restartResponse = await startNewSequenceForStepFlowStepHistoryByStepFlowId(id, tokenV2);
+            //         let restartResponse = await startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(id, tokenV2);
             //         //restart flow
             //     }
             //     dispatch(CrucibleActions.updateCurrentStep({ currentStep: step }));
