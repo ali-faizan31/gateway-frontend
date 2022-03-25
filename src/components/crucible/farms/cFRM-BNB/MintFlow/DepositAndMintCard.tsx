@@ -24,6 +24,9 @@ export const CrucibleDeposit = () => {
   const history = useHistory();
   //@ts-ignore
   const crucible =  useSelector((state)=> state.crucible.selectedCrucible)
+  //@ts-ignore
+  const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
+
   const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
 
   useEffect(() => { 
@@ -117,12 +120,12 @@ useEffect(() => {
         onChange={(e:any)=>setMintAmount(e.target.value)}
         postfix={
           <FTypo color="#DAB46E" className={"f-pr-1"}>
-            Max
+           <span onClick={()=>setMintAmount(Number(userCrucibleData?.baseBalance||'0'))}>Max</span> 
           </FTypo>
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-        You have 100000.000 available in Base Token FRM.
+        You have {Number(userCrucibleData?.baseBalance||'0').toFixed(3)} available in Token Base {userCrucibleData?.baseSymbol}.
       </FTypo>
       <FTypo size={15} className={"f-mt-2 f-pl--5"}>
         Amount you will receive
@@ -136,7 +139,7 @@ useEffect(() => {
         value={mintAmount}
         postfix={
           <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-            cFRM
+            <span onClick={()=>setMintAmount(userCrucibleData?.baseBalance)}>cFRM</span>
           </FTypo>
         }
       />
@@ -176,6 +179,7 @@ useEffect(() => {
        setapprovedDone = {setapprovedDone}
        isSubmitted={isSubmitted}
        isProcessed={isProcessed}
+       crucible={crucible}
        />
     </FCard>
   );

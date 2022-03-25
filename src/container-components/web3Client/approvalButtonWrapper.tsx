@@ -7,7 +7,7 @@ import {CrucibleClient} from './../../container-components/web3Client/crucibleCl
 import {Web3Helper} from './../../container-components/web3Client/web3Helper';
 import Web3 from "web3";
 import { useWeb3React } from "@web3-react/core";
-
+import {ChainEventBase,ChainEventItem} from './chainEventItem';
 export interface IApprovableButtonWrapperViewProps {
 	isApprovalMode: boolean;
 	pendingApproval: boolean;
@@ -23,6 +23,7 @@ export interface IApprovableButtonWrapperOwnProps {
 	amount: string;
     View: (props: IApprovableButtonWrapperViewProps) => any;
 }
+
 
 function mapStateToProps(state:any): ApprovalState {
 	return state.approval;
@@ -110,24 +111,23 @@ export const approvableButtonSlice = createSlice({
 	}
 });
 
-// async function updateEvent(dispatch: Dispatch<AnyAction>, e: ChainEventBase): Promise<ChainEventBase> {
-// 	try {
-// 		const connect = inject<UnifyreExtensionWeb3Client>(UnifyreExtensionKitClient);
-// 		const t = await connect.getTransaction(e.id);
-// 		console.log('Checking the transloota ', t)
-// 		if (t &&t.blockNumber) {
-// 			console.log('Translo iso componte ', t)
-// 			dispatch(approvableButtonSlice.actions.transactionCompleted({transactionId: e.id}));
-// 			return {...e, status: 'completed'}; // TODO: Check for failed
-// 		}
-// 		console.log('Noting inderezding ', e)
-// 		return {...e, status: 'pending'};
-// 	} catch(ex) {
-// 		console.error('ApprovableButton.updateEvent', ex, e);
-// 		dispatch(approvableButtonSlice.actions.transactionFailed({message: (ex as any).message}));
-// 		return {...e, status: 'failed'};
-// 	}
-// }
+async function updateEvent(dispatch: Dispatch<AnyAction>, e: ChainEventBase,networkClient:any): Promise<ChainEventBase> {
+	try {
+		const t = await networkClient.getProvider()!.web3()!.eth.getTransaction(e.id);
+		console.log('Checking the transloota ', t)
+		if (t &&t.blockNumber) {
+			console.log('Translo iso componte ', t)
+			dispatch(approvableButtonSlice.actions.transactionCompleted({transactionId: e.id}));
+			return {...e, status: 'completed'}; // TODO: Check for failed
+		}
+		console.log('Noting inderezding ', e)
+		return {...e, status: 'pending'};
+	} catch(ex) {
+		console.error('ApprovableButton.updateEvent', ex, e);
+		dispatch(approvableButtonSlice.actions.transactionFailed({message: (ex as any).message}));
+		return {...e, status: 'failed'};
+	}
+}
 
 export function ApprovableButtonWrapper(ownProps: IApprovableButtonWrapperOwnProps) {
     const dispatch = useDispatch();
@@ -153,12 +153,19 @@ export function ApprovableButtonWrapper(ownProps: IApprovableButtonWrapperOwnPro
 	return (
 		<>
 		<div>
-			<ownProps.View
-				isApprovalMode={BigUtils.safeParse(currentApproval).lt(BigUtils.safeParse(ownProps.amount || '0.0001'))}
-				pendingApproval={props.status === 'pending'}
-				approvalTransactionId={props.approveTransactionId}
-				onApproveClick={() => dispatch(doApprove({ networkClient,...ownProps }))}
-			/>
+			<ChainEventItem
+				id={props.approveTransactionId}
+				network={network as any}
+				initialStatus={'pending'}
+				eventType={'approval'}
+				updater={(e:any) => updateEvent(dispatch, e,networkClient)}>
+					<ownProps.View
+						isApprovalMode={BigUtils.safeParse(currentApproval).lt(BigUtils.safeParse(ownProps.amount || '0.0001'))}
+						pendingApproval={props.status === 'pending'}
+						approvalTransactionId={props.approveTransactionId}
+						onApproveClick={() => dispatch(doApprove({ networkClient,...ownProps }))}
+					/>
+			</ChainEventItem>
 		</div>
 		</>
 	);

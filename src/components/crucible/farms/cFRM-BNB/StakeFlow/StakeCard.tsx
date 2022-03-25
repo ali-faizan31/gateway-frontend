@@ -27,6 +27,8 @@ export const Stake = () => {
   const crucible =  useSelector((state)=> state.crucible.selectedCrucible)
   const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
   const dispatch = useDispatch()
+  //@ts-ignore
+  const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
 
   const onApproveClick = () => {
     setTransitionStatusDialog(true);
@@ -113,12 +115,12 @@ useEffect(() => {
         placeholder="Amount to Stake"
         postfix={
           <FTypo color="#DAB46E" className={"f-pr-1"}>
-            Max
+            <span onClick={()=>setAmount(Number(userCrucibleData?.balance||'0'))}>Max</span> 
           </FTypo>
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-      You have 100000.000  available in cFRM / BNB LP
+        You have {userCrucibleData?.balance||'0'} available in Token {userCrucibleData?.symbol} to Stake.
       </FTypo>
       <div className="btn-wrap f-mt-2">
         <ApprovableButtonWrapper
@@ -135,13 +137,13 @@ useEffect(() => {
                     amount.toString(),
                     true,
                     crucible?.network,
-                    '0x0Bdb79846e8331A19A65430363f240Ec8aCC2A52'
+                    walletAddress as string
                   )}
               ></FButton>
           }
           currency={crucible!.currency}
           contractAddress={CRUCIBLE_CONTRACTS_V_0_1['BSC'].router}
-          userAddress={'0x0Bdb79846e8331A19A65430363f240Ec8aCC2A52'}
+          userAddress={walletAddress as string}
           amount={'0.0001'}
         />  
       </div>
@@ -153,6 +155,7 @@ useEffect(() => {
         setapprovedDone = {setapprovedDone}
         isSubmitted={isSubmitted}
         isProcessed={isProcessed}
+        crucible={crucible}
        />
     </FCard>
   );

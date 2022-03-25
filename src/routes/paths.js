@@ -100,6 +100,7 @@ export const PATH_DASHBOARD = {
       manage: path(ROOTS_DASHBOARD, "/crucible/cFRM/:contract/manage"),
       steps: path(ROOTS_DASHBOARD, "/crucible/cFRM/:contract/liquidity"),
     },
+    //crucible/cFRM/0x5D8df66ea3e5c3C30A1dB4aFC6F17A917B201118/introduction
     cFRMx: {
       introduction: path(ROOTS_DASHBOARD, "/crucible/cFRMx/:contract/introduction"),
       manage: path(ROOTS_DASHBOARD, "/crucible/cFRMx/:contract/manage"),

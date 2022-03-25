@@ -73,6 +73,42 @@ export class CrucibleClient {
 	
 	}
 
+    async unwrapCrucible(
+        dispatch: Dispatch<AnyAction>,
+		currency: string,
+		crucibleAddress: string,
+		amount: string,
+		isPublic: boolean,
+        network: string,
+        userAddress:string
+    ) {
+		try {
+            
+            const Api = new crucibleApi()
+            await Api.signInToServer(userAddress)
+            const request = await Api.crucibleApi({
+                command: "withdrawGetTransaction",
+                data: {network, currency, crucible:crucibleAddress, amount}
+            })
+
+            if(request.data.data){
+                console.log(request.data,'datataatat')
+                const web3Helper = await this.web3Client.sendTransactionAsync(dispatch,[request.data]) 
+                console.log(web3Helper,'web3helepep')
+                return web3Helper 
+                //showmodal          
+            }
+           
+			return
+		} catch (e) {
+            console.log(e)
+            // UI handle Errors
+		}finally{
+            // Handle Modal Close
+		}
+	
+	}
+
     async getConfiguredCrucibleRouters(
         dispatch: Dispatch<AnyAction>,
         userAddress:string
@@ -106,13 +142,15 @@ export class CrucibleClient {
             
             const Api = new crucibleApi()
             await Api.signInToServer(userAddress)
-            
-            const userCrucibleInfo = await Api.crucibleApi({
-                command: 'getConfiguredRouters',data: {crucible:crucibleAddress, userAddress},params: [],
-			})
-
-			return userCrucibleInfo
-
+			const userCrucibleInfo = await Api.crucibleApi({
+				command: 'getUserCrucibleInfo',
+				data: {crucible:crucibleAddress, userAddress},
+				params: [],
+			} );
+			if (!!userCrucibleInfo) {
+                return userCrucibleInfo;
+			}
+			return 
 		} catch (e) {
             console.log(e)
             // UI handle Errors
@@ -260,11 +298,11 @@ export class CrucibleClient {
 
     async UnStakeCrucible(
         dispatch: Dispatch<AnyAction>,
-		network: string,
-		amount: string,
 		LPorCruciblecurrency: string,
-        stakingAddress:string,
+		amount: string,
+		stakingAddress: string,
         userAddress:string,
+        network:string
     ) {
 		try {
             
@@ -273,14 +311,16 @@ export class CrucibleClient {
             const request = await Api.crucibleApi({
                 command: 'unStakeGetTransaction',
                 data:  {
-                    crucible:`${network}:${LPorCruciblecurrency}`,
-					stake: (stakingAddress),
+                    crucible: LPorCruciblecurrency,
+					staking: (stakingAddress),
+                    network,
 					amount,
 				}, params: []
             })
 
             if(request.data.data){
-                const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])            
+                const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])    
+                return web3Helper        
             }
            
 			return
@@ -308,14 +348,15 @@ export class CrucibleClient {
             const request = await Api.crucibleApi({
                 command: 'withdrawRewardsGetTransaction',
                 data:  {
-                    crucible:`${network}:${LPorCruciblecurrency}`,
-					stake: (stakingAddress),
+                    crucible:`${LPorCruciblecurrency}`,
+					staking: (stakingAddress),
 					amount,
 				}, params: []
             })
 
             if(request.data.data){
-                const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])            
+                const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])
+                return web3Helper          
             }
            
 			return

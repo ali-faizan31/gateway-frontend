@@ -37,6 +37,66 @@ export const isCurrencyValid = (cur: string): boolean => {
     return true;
 }
 
+export const linkForTransaction = (network: string, tid: string) => {
+	switch (network.toLocaleLowerCase()) {
+		case 'rinkeby':
+			return `https://rinkeby.etherscan.io/tx/${tid}`;
+		case 'ethereum':
+			return `https://etherscan.io/tx/${tid}`;
+		case 'bsc':
+			return `https://bscscan.com/tx/${tid}`;
+		case 'bsc_testnet':
+			return `https://testnet.bscscan.com/tx/${tid}`;
+		case 'mumbai_testnet':
+			return `https://mumbai.polygonscan.com/tx/${tid}`;
+		case 'polygon':
+			return `https://polygonscan.com/tx/${tid}`;
+		case 'avax_testnet':
+			return `https://testnet.snowtrace.io//tx/${tid}`;
+		case 'moon_moonbase':
+			return `https://moonbase.moonscan.io/tx/${tid}`;
+		case 'avax_mainnnet':
+			return `https://snowtrace.io//tx/${tid}`;
+		case 'moon_moonriver':
+			return `https://moonriver.moonscan.io/tx/${tid}`;
+		case 'ftm_testnet':
+			return `https://testnet.ftmscan.com/tx/${tid}`;
+		case 'harmony_testnet_0':
+			return `https://explorer.pops.one/tx/${tid}`;
+		case 'ftm_mainnet':
+			return `https://ftmscan.com/tx/${tid}`;
+		case 'shiden_testnet':
+			 return `https://shibuya.subscan.io/tx/${tid}`;
+		default:
+			return ''
+	}
+	return '';
+}
+
+export const addToken = async (tokenChainData:any) => {
+    console.log(tokenChainData,'tokenChain')
+    //@ts-ignore
+	let ethereum = window.ethereum;
+    try {
+        // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+        await ethereum.request({
+            method: 'wallet_watchAsset',
+            params: {
+            type: 'ERC20',
+            options: {
+                address: tokenChainData.address, 
+                symbol: tokenChainData.symbol,
+                decimals: tokenChainData.decimals,
+                image: tokenChainData.logoURI,
+            },
+            },
+        });
+    } catch (e) {
+		console.error('Add token', e);
+    }
+}
+
+
 export class ParseBigError extends Error { }
 
 export class BigUtils {
