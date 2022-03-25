@@ -1,9 +1,29 @@
 import React from "react";
-import { PATH_PUBLIC_USER, PATH_ADMIN, PATH_DASHBOARD } from "../../routes/paths";
+import {
+  PATH_PUBLIC_USER,
+  PATH_ADMIN,
+  PATH_DASHBOARD,
+} from "../../routes/paths";
 
-const getSideMenuIcon = (name: any) => <img src={`/ferrum/${name}`} height="22px" width="22px" max-height="22px" max-width="22px" />;
+const getSideMenuIcon = (name: any) => (
+  <img
+    src={`/ferrum/${name}`}
+    height="22px"
+    width="22px"
+    max-height="22px"
+    max-width="22px"
+  />
+);
 
-export const getCurrencyIcon = (src: any) => <img src={`${src}`} height="22px" width="22px" max-height="22px" max-width="22px" />;
+export const getCurrencyIcon = (src: any) => (
+  <img
+    src={`${src}`}
+    height="22px"
+    width="22px"
+    max-height="22px"
+    max-width="22px"
+  />
+);
 
 export const ICONS = {
   leaderboard: getSideMenuIcon("Leaderboard.svg"),
@@ -34,7 +54,11 @@ export const GET_ICONS = (element: any) => {
 export const GET_PATHS = (element: any, id: any, count: any = null) => {
   switch (element) {
     case "Leaderboard":
-      return count === 1 ? `${PATH_PUBLIC_USER.leaderboard.root}/${id}` : count === 2 ? `${PATH_PUBLIC_USER.multiLeaderboard.root}/${id}` : "";
+      return count === 1
+        ? `${PATH_PUBLIC_USER.leaderboard.root}/${id}`
+        : count === 2
+        ? `${PATH_PUBLIC_USER.multiLeaderboard.root}/${id}`
+        : "";
     case "Competition":
       return `${PATH_PUBLIC_USER.competition.root}/${id}`;
     case "Bridge":
@@ -126,7 +150,11 @@ export const tokensSidebarConfig = [
     icon: ICONS.getFrmAndFrmx,
     children: [
       { title: "Buy FRM", path: PATH_DASHBOARD.token.buyFRM, target: "_blank" },
-      { title: "Buy FRMx", path: PATH_DASHBOARD.token.buyFRMx, target: "_blank" },
+      {
+        title: "Buy FRMx",
+        path: PATH_DASHBOARD.token.buyFRMx,
+        target: "_blank",
+      },
     ],
   },
 ];

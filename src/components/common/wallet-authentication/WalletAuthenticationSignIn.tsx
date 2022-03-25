@@ -28,15 +28,15 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
   const [connectedAndVerifiedWallet, setConnectedAndVerifiedWallet] = useState("");
 
   useEffect(() => {
-    console.log(isConnecting, currentWalletNetwork, walletAddress, networkClient, isAuthenticationNeeded);
+    console.log("isConnect", isConnecting, currentWalletNetwork, walletAddress, networkClient, isAuthenticationNeeded);
   }, [isConnecting, currentWalletNetwork, walletAddress, networkClient, isAuthenticationNeeded]);
 
   useEffect(() => {
-    if (isConnected && !applicationUserToken) {
+    if (isConnected && !applicationUserToken && isConnecting === false) {
       getUserAccessToken();
     }
 
-    if (isConnected && currentWalletNetwork && applicationUserToken) {
+    if (isConnected && currentWalletNetwork && applicationUserToken && isConnecting === false) {
       if (tokenV2 && meV2.addresses[0].network.ferrumNetworkIdentifier.toString() !== currentWalletNetwork.toString()) {
         console.log(tokenV2, meV2, meV2.addresses[0].network.ferrumNetworkIdentifier, currentWalletNetwork);
         dispatch(walletAuthenticatorActions.saveSignature({ signature: "" }));
@@ -49,7 +49,7 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
         checkAllowedIdentifier(currentWalletNetwork, applicationUserToken);
       }
     }
-  }, [currentWalletNetwork, applicationUserToken, isConnected]);
+  }, [currentWalletNetwork, applicationUserToken, isConnected, isConnecting]);
 
   useEffect(() => {
     if (isAllowedonGateway === false) {

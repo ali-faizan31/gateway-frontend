@@ -2,7 +2,7 @@ import React from "react";
 import { FButton, FCard, FContainer, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../assets/img/icon-arrow-square.svg";
 import { useHistory } from "react-router";
-import { CrucibleMyBalance } from "./CardMyBalance";
+import { CrucibleMyBalance } from "./z-design/CardMyBalance";
 
 export const CrucibleGetStarted = () => {
   const history = useHistory();
@@ -14,7 +14,8 @@ export const CrucibleGetStarted = () => {
           Welcome To The Crucible by Ferrum Network
         </FTypo>
         <FTypo size={18}>
-          Watch the explainer video below for a step-by-step tutorial on how to mint, add liquidity, farm, trade, and earn rewards through the
+          Watch the explainer video below for a step-by-step tutorial on how to
+          mint, add liquidity, farm, trade, and earn rewards through the
           Crucible!
         </FTypo>
         <div className="video-wrapper f-mt-1 f-mb-1">
@@ -25,7 +26,8 @@ export const CrucibleGetStarted = () => {
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             frameBorder="0"
-            allowFullScreen></iframe>
+            allowFullScreen
+          ></iframe>
         </div>
         <FTypo size={22} weight={500} className="f-mb-1">
           Crucible Benefits
@@ -39,7 +41,12 @@ export const CrucibleGetStarted = () => {
           <li>Built-in Token Burn</li>
           <li>Mint, Add Liquidity, Farm, Trade, and Earn Rewards</li>
         </ul>
-        <FButton title={"Get Started"} postfix={<IconArrow />} className="w-100 f-mt-2" onClick={() => history.push("/dashboard/crucible/manage")} />
+        <FButton
+          title={"Get Started"}
+          postfix={<IconArrow />}
+          className="w-100 f-mt-2"
+          onClick={() => history.push("/dashboard/crucible/manage")}
+        />
       </FCard>
     </FContainer>
   );

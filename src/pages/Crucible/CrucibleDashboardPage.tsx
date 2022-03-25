@@ -1,8 +1,15 @@
-import { FCard, FContainer, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system";
+import {
+  FCard,
+  FContainer,
+  FGrid,
+  FGridItem,
+  FItem,
+  FTypo,
+} from "ferrum-design-system";
 import React from "react";
 import { CardAPR } from "../../components/crucible/CardAPR";
-import { CrucibleMyBalance } from "../../components/crucible/CardMyBalance";
-import { CruciblePrice } from "../../components/crucible/CardPrice";
+import { CrucibleMyBalance } from "../../components/crucible/z-design/CardMyBalance";
+import { CruciblePrice } from "../../components/crucible/z-design/CardPrice";
 
 const CrucibleDashboardPage = () => {
   return (
