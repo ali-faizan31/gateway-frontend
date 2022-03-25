@@ -84,8 +84,6 @@ export const CrucibleDeposit = () => {
 
       setTransitionStatusDialog(true);
       setIsProcessing(true);
-      const web3Helper = new Web3Helper(networkClient as any);
-      const client = new CrucibleClient(web3Helper);
 
       const response = await client.mintCrucible(
         dispatch,
