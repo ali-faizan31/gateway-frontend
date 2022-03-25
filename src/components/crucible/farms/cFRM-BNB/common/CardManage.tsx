@@ -34,7 +34,8 @@ export const CrucibleManage = ({
   const { isConnected } = useSelector(
     (state: RootState) => state.walletConnector
   );
-
+  //@ts-ignore
+  const tokenPrices = useSelector((state) => state.crucible.tokenPrices);
   // useEffect(() => {
   //   if ( isConnected === false ){
   //     history.push('dashboard/crucible')
@@ -134,7 +135,7 @@ export const CrucibleManage = ({
               FRMx Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              $0.072
+              ${tokenPrices["FRM"]}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -144,7 +145,7 @@ export const CrucibleManage = ({
               FRMx Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              $0.072
+              ${tokenPrices["cFRM"]}
             </FTypo>
           </FItem>
         </FGridItem>

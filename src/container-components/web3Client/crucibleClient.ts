@@ -160,6 +160,25 @@ export class CrucibleClient {
 	
 	}
 
+    async getPairPrice(dispatch:Dispatch,crucible:string,base:string,userAddress: string){
+		try {
+            const Api = new crucibleApi()
+            await Api.signInToServer(userAddress)
+			const cruciblePairPrice = await Api.crucibleApi({
+				command: 'getCruciblePricing',
+				data: {crucible, base },
+				params: [],
+			});
+			if(!!cruciblePairPrice){
+				console.log(cruciblePairPrice)
+				return cruciblePairPrice.data
+			}
+            return cruciblePairPrice
+		} catch (e) {
+			console.log(e)
+		}
+	}
+
     async getAllCruciblesFromDb(
         dispatch: Dispatch<AnyAction>,
         network: string,

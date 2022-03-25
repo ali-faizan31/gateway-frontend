@@ -37,6 +37,9 @@ export const CrucibleDeposit = () => {
   const userCrucibleData = useSelector(
     (state: RootState) => state.crucible.userCrucibleDetails
   );
+  //@ts-ignore
+  const tokenPrices = useSelector((state) => state.crucible.tokenPrices);
+  console.log(tokenPrices, "tokenPricestokenPrices");
 
   const {
     isConnected,
@@ -79,6 +82,11 @@ export const CrucibleDeposit = () => {
       const web3Helper = new Web3Helper(networkClient as any);
       const client = new CrucibleClient(web3Helper);
 
+      setTransitionStatusDialog(true);
+      setIsProcessing(true);
+      const web3Helper = new Web3Helper(networkClient as any);
+      const client = new CrucibleClient(web3Helper);
+
       const response = await client.mintCrucible(
         dispatch,
         currency,
@@ -89,6 +97,7 @@ export const CrucibleDeposit = () => {
         userAddress
       );
       if (response) {
+        //step updated
         setIsProcessing(false);
         //setIsSubmitted(true)
         setIsProcessed(true);
@@ -117,7 +126,7 @@ export const CrucibleDeposit = () => {
               FRM Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              $0.072
+              ${tokenPrices["FRM"] || "0"}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -127,7 +136,7 @@ export const CrucibleDeposit = () => {
               cFRM Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              $0.072
+              ${tokenPrices["cFRM"] || "0"}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -196,7 +205,7 @@ export const CrucibleDeposit = () => {
               ></FButton>
             </div>
           )}
-          currency={crucible!.currency}
+          currency={crucible!.baseCurrency}
           contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
           userAddress={walletAddress as string}
           amount={"0.0001"}
