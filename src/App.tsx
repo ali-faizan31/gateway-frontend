@@ -18,7 +18,7 @@ import { Deployer as CrucibleDeployer } from "./components/crucible/common/Deplo
 import { useSelector } from "react-redux";
 import { WalletAuthencationOnSignIn } from "./components/common/wallet-authentication/WalletAuthenticationSignIn";
 import { RootState } from "./redux/rootReducer";
-import { cFRMModule, cFRMBNBModule, cFRMxBNBModule } from "./components/crucible/farms";
+import { cFRMModule, cFRMBNBModule, cFRMxBNBModule, cFRMxModule } from "./components/crucible/farms";
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -128,6 +128,24 @@ function App() {
           <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM.unwrap.unwrap} component={cFRMModule.cFRMFarmingUnWrapFlowUnWrap} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
           <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM.unwrap.success} component={cFRMModule.cFRMFarmingUnWrapFlowSuccess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
           {/* cfrm routes end */}
+           {/* cfrmx routes */}
+           <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.introduction} component={cFRMxModule.cFRMxFarmingDashboardFlowIntroduction} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.manage} component={cFRMxModule.cFRMxFarmingDashboardFlowManage} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.mint.checks} component={cFRMxModule.cFRMxFarmingMintFlowCheckSteps} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.mint.mint} component={cFRMxModule.cFRMxFarmingMintFlowMint} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.mint.success} component={cFRMxModule.cFRMxFarmingMintFlowSucess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.mint.steps} component={cFRMxModule.cFRMxFarmingMintFlowSteps} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.stake.success} component={cFRMxModule.cFRMxFarmingStakeFlowSucess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.stake.stake} component={cFRMxModule.cFRMxFarmingStakeFlowStake} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.unstake.success} component={cFRMxModule.cFRMxFarmingUnStakeFlowSucess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.unstake.unstake} component={cFRMxModule.cFRMxFarmingUnStakeFlowUnStake} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.unstake.steps} component={cFRMxModule.cFRMxFarmingUnStakeFlowSteps} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.withdraw.success} component={cFRMxModule.cFRMxFarmingWithdrawFlowSucess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.withdraw.withdraw} component={cFRMxModule.cFRMxFarmingWithdrawFlowWithdraw} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.withdraw.steps} component={cFRMxModule.cFRMxFarmingWithdrawFlowSteps} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.unwrap.unwrap} component={cFRMxModule.cFRMxFarmingUnWrapFlowUnWrap} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx.unwrap.success} component={cFRMxModule.cFRMxFarmingUnWrapFlowSuccess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          {/* cfrmx routes end */}
           <UnGuardedRoute path={PATH_DASHBOARD.crucible.public} component={CruciblePublic} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
 
 

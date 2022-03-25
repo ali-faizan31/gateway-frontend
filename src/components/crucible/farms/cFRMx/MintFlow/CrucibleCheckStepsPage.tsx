@@ -11,11 +11,11 @@ export const CrucibleStepsPage = () => {
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
 
   const onStakeClick = () => {
-    history.push({ pathname: PATH_DASHBOARD.crucible.cFRM.stake.stake });
+    history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx.stake.stake });
   }
 
   const onWhatElseClick = () => {
-    history.push({ pathname: PATH_DASHBOARD.crucible.cFRM.mint.success });
+    history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx.mint.success });
   }
 
   const disableCheck = () => {
@@ -33,7 +33,7 @@ export const CrucibleStepsPage = () => {
           <li className="step step-success">
             <span className="step-info">
               <FTypo className={"f-mb-1"}>Step 1</FTypo>
-              <FTypo>Congratulations! You have successfully minted your cFRM tokens! Please proceed to step 2.
+              <FTypo>Congratulations! You have successfully minted your cFRMx tokens! Please proceed to step 2.
               </FTypo>
             </span>
           </li>
@@ -41,26 +41,26 @@ export const CrucibleStepsPage = () => {
             <span className="step-info">
               <FTypo className={"f-mb-1"}>Step 2</FTypo>
               <FTypo>
-                You are now able to stake your cFRM tokens to start earning rewards!
+                You are now able to stake your cFRMx tokens to start earning rewards!
               </FTypo>
               <br></br>
               <FInputCheckbox
                 onClick={() => setStepTwoCheck(!stepTwoCheck)}
                 name="step2Check"
                 className="f-mb-1 f-mt-1"
-                label={"I understand that I have to stake my cFRM tokens to earn cFRM rewards."}
+                label={"I understand that I have to stake my cFRMx tokens to earn cFRMx rewards."}
               />
               <FInputCheckbox
                 onClick={() => setStepThreeCheck(!stepThreeCheck)}
                 name="step3Check"
                 className="f-mb-1 f-mt-1"
-                label={"I understand that rewards are generated from cFRM trading volume. To participate in generating rewards for my staked tokens, it is recommended that some of the cFRM tokens should be staked, while others should be used to create trading volume which generates rewards."}
+                label={"I understand that rewards are generated from cFRMx trading volume. To participate in generating rewards for my staked tokens, it is recommended that some of the cFRMx tokens should be staked, while others should be used to create trading volume which generates rewards."}
               />
             </span>
           </li>
           <li className="step-last">
             <FItem>
-              <FButton title="Stake cFRM" postfix={<IconArrow />} className="w-100" disabled={disableCheck()} onClick={() => onStakeClick()} />
+              <FButton title="Stake cFRMx" postfix={<IconArrow />} className="w-100" disabled={disableCheck()} onClick={() => onStakeClick()} />
             </FItem>
             <FItem>
               <FButton title="What Else Can I Do?" postfix={<IconArrow />} className="w-100" disabled={disableCheck()} onClick={() => onWhatElseClick()} />

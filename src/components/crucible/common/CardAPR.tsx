@@ -63,7 +63,7 @@ export const CardAPR = () => {
     <> 
       <FCard className="card-apr f-mt-2">
         <FItem display={"flex"} alignX="between" alignY={"center"} className="f-pb-1 f-m-0">
-          <FTypo className="card-title f-pl-1">APRCommon</FTypo>
+          <FTypo className="card-title f-pl-1">APR</FTypo>
           <FInputText type={"text"} placeholder="Search by Farm Name, Token Name, Token Contract Address" />
         </FItem>
         <FTable>

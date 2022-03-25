@@ -27,7 +27,7 @@ export const Success = () => {
             Congratulations!
           </FTypo>
           <FTypo size={20} weight={500} className="f-mt-1">
-            Crucible Token Sustainable Liquidity Farming
+            Crucible Token Sustainable Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
           Congratulations! You have successfully minted your cFRM tokens. You can use cFRM to earn rewards, generate rewards, take advantage of arbitrage opportunities between cFRM, FRM many more tokens. Check out the benefits highlighted below and choose your path.

@@ -22,7 +22,7 @@ export const CrucibleStepsPage = () => {
             <span className="step-info">
               <FTypo className={"f-mb-1"}>Step 1</FTypo>
               <FTypo>
-                Congratulations! You have successfully minted your cFRM tokens! Please proceed to step 2.
+                Congratulations! You have successfully minted your cFRMx tokens! Please proceed to step 2.
               </FTypo>
             </span>
           </li>
@@ -30,10 +30,10 @@ export const CrucibleStepsPage = () => {
             <span className="step-info">
               <FTypo className={"f-mb-1"}>Step 2</FTypo>
               <FTypo>
-                In order to deposit LP tokens into the cFRM LP Farm (cFRM/BNB pair), you will first need to add liquidity.
+                In order to deposit LP tokens into the cFRMx LP Farm (cFRMx/BNB pair), you will first need to add liquidity.
                 <strong>Click ‘Add Liquidity’ to get started.</strong>
                 <br></br>
-                After you add liquidity, you will need to return to this screen and stake the cFRM LP tokens.
+                After you add liquidity, you will need to return to this screen and stake the cFRMx LP tokens.
               </FTypo>
               <br></br>
               <FInputCheckbox
@@ -49,26 +49,26 @@ export const CrucibleStepsPage = () => {
             <span className="step-info">
               <FTypo className={"f-mb-1"}>Step 3</FTypo>
               <FTypo>
-              Congratulations! You have successfully added liquidity. You are now able to stake your cFRM LP tokens to start earning rewards!
+              Congratulations! You have successfully added liquidity. You are now able to stake your cFRMx LP tokens to start earning rewards!
               </FTypo>
               <br></br>
               <FInputCheckbox
                 onClick={() => setStepThreeCheck(!stepThreeCheck)}
                 name="step3Check"
                 className="f-mb-1 f-mt-1"
-                label={"I have added liquidity of cFRM / BNB pair and have the LP tokens. I’m ready to stake my cFRM LP tokens now."}
+                label={"I have added liquidity of cFRMx / BNB pair and have the LP tokens. I’m ready to stake my cFRMx LP tokens now."}
               />
               {/* <FButton title="Add Liquidity" postfix={<IconArrow />} className="w-100" disabled={!stepThreeCheck} /> */}
             </span>
           </li>
           <li className="step-last">
             <FButton
-              title="Stake cFRM LP"
+              title="Stake cFRMx LP"
               postfix={<IconArrow />}
               className="w-100"
               style={{ marginRight: "10px" }}
               disabled={!stepThreeCheck}
-              onClick={() => history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake })}
+              onClick={() => history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.stake.stake })}
             /> 
           </li>
         </ul>
