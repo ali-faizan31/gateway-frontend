@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {crucibleSlice} from "./../../../redux/CrucibleSlice";
 import { BigUtils } from './../../../../../container-components/web3Client/types';
 import { RootState } from "../../../../../redux/rootReducer";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const Manage = () => {
   const history = useHistory()
@@ -25,6 +26,10 @@ export const Manage = () => {
   //@ts-ignore
   const crucible =  useSelector((state)=> state.crucible.selectedCrucible)
   const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
+  //@ts-ignore
+  const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
+  let userStake = (userCrucibleData.stakes||[]).find((e:any)=>e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd")
+  console.log(userStake)
 
   const onUnStakeClick = () => {
     history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.unstake.unstake})
@@ -41,6 +46,17 @@ export const Manage = () => {
   const onAddLiquidityClick = () => {
     history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.liquidity})
   }
+
+  const loadCrucibleUserInfo = createAsyncThunk('crucible/loadUserInfo',
+    async (payload: { crucibleCurrency: string }, ctx) => {
+      const actions = crucibleSlice.actions;
+      const web3Helper =  new Web3Helper(networkClient as any)
+      const client = new CrucibleClient(web3Helper)
+      const userCrucibleDetails = await client.getUserCrucibleInfo(ctx.dispatch, payload.crucibleCurrency,walletAddress as string);
+      if(!!userCrucibleDetails){
+        dispatch(actions.userCrucibleDetailsLoaded({data: userCrucibleDetails.data }))
+      }
+  });
 
   useEffect(() => { 
     if (location.state.id === undefined) {
@@ -60,7 +76,7 @@ export const Manage = () => {
     const web3Helper =  new Web3Helper(networkClient as any)
     const client = new CrucibleClient(web3Helper)
     const actions = crucibleSlice.actions;
-    console.log(location.state,'location1234',walletBalance)
+    dispatch(loadCrucibleUserInfo({crucibleCurrency:`${location.state.network.toUpperCase()}:${(location.state.contract || '').toLowerCase()}`}))
     const crucibleData = await client.getCrucibleDetails(dispatch,location.state.network,location.state.contract,walletAddress as string)
     dispatch(actions.selectedCrucible({data: crucibleData.data }))
     if(crucibleData.data){
@@ -113,7 +129,7 @@ export const Manage = () => {
                   <FGridItem size={[6, 6, 6]}>
                     <FTypo className="f-pb--2">Your Crucible LP Deposits</FTypo>
                     <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
-                      13.929
+                      {Number(userStake?.stakeOf||'0').toFixed(3)}
                       <FTypo size={14} weight={300} className={"f-pl--7 f-pb--1"}>
                         APE-LP cFRM-BNB
                       </FTypo>
@@ -136,7 +152,7 @@ export const Manage = () => {
                   <FGridItem size={[8, 8, 6]}>
                     <FTypo className="f-pb--2">Your unclaimed Rewards</FTypo>
                     <FTypo size={24} weight={500}>
-                      7.292 cFRM
+                     {Number(userStake?.rewardOf||'0').toFixed(3)} cFRM
                     </FTypo>
                   </FGridItem>
                   <FGridItem size={[4, 4, 6]} alignX="center" alignY={"end"}>

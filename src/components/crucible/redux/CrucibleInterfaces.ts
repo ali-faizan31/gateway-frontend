@@ -3,7 +3,8 @@ export interface CRUCIBLE_STATE {
     isApproving: boolean;
     stepFlowStepHistory: Array<any>;
     currentStep: any;
-    selectedCrucible: any
+    selectedCrucible: any;
+    userCrucibleDetails: any
 }
 
 export const defaultCrucibleState: CRUCIBLE_STATE = {
@@ -11,5 +12,6 @@ export const defaultCrucibleState: CRUCIBLE_STATE = {
     isApproving: false,
     stepFlowStepHistory: [],
     currentStep: {},
-    selectedCrucible: {}
+    selectedCrucible: {},
+    userCrucibleDetails: {}
 }

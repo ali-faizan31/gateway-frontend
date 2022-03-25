@@ -9,6 +9,9 @@ export const crucibleSlice = createSlice({
     name: "crucible",
     initialState: initialCrucibleState,
     reducers: {
+        userCrucibleDetailsLoaded: (state, action) => {
+            state.userCrucibleDetails = action.payload.data
+        },
         selectedCrucible: (state, action) => {
             state.selectedCrucible = action.payload.data
         },

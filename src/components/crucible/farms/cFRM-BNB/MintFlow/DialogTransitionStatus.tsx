@@ -5,8 +5,11 @@ import { ReactComponent as IconApprove } from "../../../../../assets/img/icon-tr
 import { ReactComponent as IconSubmitted } from "../../../../../assets/img/icon-transaction-submitted.svg";
 import Loader from "../../../../../assets/gif/loader.svg";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { linkForTransaction,addToken } from './../../../../../container-components/web3Client/types';
 
-export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionStatusDialog, isProcessing, isProcessed,setapprovedDone, setIsProcessing,isSubmitted }: any) => {
+export const DialogTransitionStatus = ({
+   transitionStatusDialog, setTransitionStatusDialog, isProcessing, 
+   isProcessed,setapprovedDone, setIsProcessing,isSubmitted, network, tx,crucible}: any) => {
   const history = useHistory();
   const [approved, setApproved] = useState(false);
   //const [submitted, setSubmitted] = useState(false);
@@ -91,11 +94,26 @@ const onclose = () => {
             <FTypo color="#DAB46E" size={22} weight={600} className="f-mt-1">
               Transaction Processed
             </FTypo>
-            <FTypo size={20} weight={600} className="f-mt-1">
-              View on Explorer
+            <FTypo  size={20} weight={600} className="f-mt-1">
+              <span onClick={()=>
+                window.open(
+                  linkForTransaction(network, tx),
+                  "_blank"
+                )
+              }>View on Explorer</span>
             </FTypo>
             <FItem>
-              <FButton title={"Add Token to Metamask"} outlined variant={"secondary"} className="f-mt-1 f-mb-1" />
+              <FButton 
+                title={"Add Token to Metamask"} 
+                outlined variant={"secondary"} 
+                onClick={()=>addToken({
+                  "currency": crucible?.contractAddress,
+                  "address": crucible?.contractAddress,
+                  "symbol": crucible?.symbol,
+                  "decimals": 18,
+                  "logoURI": ''
+                })}
+                className="f-mt-1 f-mb-1" />
             </FItem>
             <FItem>
               <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.mint.steps})} />
