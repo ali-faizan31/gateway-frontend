@@ -7,6 +7,7 @@ import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper"; 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
+import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
 
 export const AddLiquidity = () => {
   const history = useHistory();
@@ -19,7 +20,8 @@ export const AddLiquidity = () => {
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
   const onStakeClick = () => {
-    let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Stake"); 
+    // let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Stake"); 
+    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.stake;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);

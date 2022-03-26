@@ -5,7 +5,7 @@ import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-
 import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg"; 
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
-import {ApprovableButtonWrapper} from './../../../../../container-components/web3Client/approvalButtonWrapper';
+import {ApprovableButtonWrapper, approvalKey} from './../../../../../container-components/web3Client/approvalButtonWrapper';
 import { useHistory, useLocation } from "react-router"; 
 import {CRUCIBLE_CONTRACTS_V_0_1} from './../../../common/utils';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +16,8 @@ import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/He
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
+import { MetaMaskConnector } from "../../../../../container-components";
+import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 
 export const Stake = () => {
   const dispatch = useDispatch()
@@ -36,6 +38,7 @@ export const Stake = () => {
   const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
   const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+ const { approveTransactionId, approvals } = useSelector((state: RootState) => state.approval);
 
   const onApproveClick = () => {
     setTransitionStatusDialog(true);
@@ -43,12 +46,12 @@ export const Stake = () => {
   }
   
   useEffect(() => { 
-    setTimeout(() => {
-      if (currentStepIndex === 0) {
-        getStepCompleted();
-      }
-    }, 5000);
-  }, [currentStepIndex])
+    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)]) > 0){
+     if (currentStep.step.name === "Approve"){
+       getStepCompleted();
+     }
+   }
+ }, [approvals])
 
   const getStepCompleted = async () => { 
     try {
@@ -99,6 +102,7 @@ export const Stake = () => {
   const onContinueToNextStepClick = () => {
     getStepCompleted();
     let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Liquidity"); 
+    console.log(nextStepInfo, "---------------Liquidity-----------------", location.state)
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
@@ -160,10 +164,10 @@ export const Stake = () => {
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
         You have {userCrucibleData?.balance||'0'} available in Token {userCrucibleData?.symbol} to Stake.
       </FTypo>
-      <div className="btn-wrap f-mt-2">
+      {(meV2._id && isConnected) ?
         <ApprovableButtonWrapper
           View={
-            (ownProps) =>
+            (ownProps) => <div className="btn-wrap f-mt-2">
               <FButton 
                 title={ownProps.isApprovalMode ? "Approve" : "Stake Crucible"} 
                 className={"w-100"} 
@@ -178,13 +182,22 @@ export const Stake = () => {
                     walletAddress as string
                   )}
               ></FButton>
+               </div>
           }
           currency={crucible!.currency}
           contractAddress={CRUCIBLE_CONTRACTS_V_0_1['BSC'].router}
           userAddress={walletAddress as string}
           amount={'0.0001'}
         />  
-      </div>
+         :
+        <MetaMaskConnector.WalletConnector
+          WalletConnectView={FButton}
+          WalletConnectModal={ConnectWalletDialog}
+          isAuthenticationNeeded={true}
+          WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
+        />
+      }
+     
       <DialogTransitionStatus 
        transitionStatusDialog={transitionStatusDialog} 
        setTransitionStatusDialog={setTransitionStatusDialog} 

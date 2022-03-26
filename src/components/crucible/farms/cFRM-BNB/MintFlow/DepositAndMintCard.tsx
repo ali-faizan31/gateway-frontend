@@ -9,15 +9,17 @@ import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
 import { Web3Helper } from './../../../../../container-components/web3Client/web3Helper';
 import { CrucibleClient } from './../../../../../container-components/web3Client/crucibleClient';
-import { ApprovableButtonWrapper } from './../../../../../container-components/web3Client/approvalButtonWrapper';
+import { ApprovableButtonWrapper, approvalKey } from './../../../../../container-components/web3Client/approvalButtonWrapper';
 import { useHistory, useLocation } from "react-router";
 import { useWeb3React } from "@web3-react/core";
-import { CRUCIBLE_CONTRACTS_V_0_1 } from './../../../common/utils';
+import { CFRM_BNB_STEP_FLOW_IDS, CRUCIBLE_CONTRACTS_V_0_1 } from './../../../common/utils';
 import { RootState } from "../../../../../redux/rootReducer";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
-import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper";
+import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper"; 
+import { MetaMaskConnector } from "../../../../../container-components";
+import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 
 export const CrucibleDeposit = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
@@ -33,13 +35,16 @@ export const CrucibleDeposit = () => {
 
   const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
   const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
-  const { approveTransactionId } = useSelector((state: RootState) => state.approval);
+  const { approveTransactionId, approvals } = useSelector((state: RootState) => state.approval);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
   useEffect(() => { 
-    // setTransitionStatusDialog(true)
-    // setIsProcessed(true);
-  }, [location])
+     if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)]) > 0){
+      if (currentStep.step.name === "Approve"){
+        getStepCompleted();
+      }
+    }
+  }, [approvals])
 
   const [approvedDone, setapprovedDone] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
@@ -53,14 +58,6 @@ export const CrucibleDeposit = () => {
     setTransitionStatusDialog(true);
     setIsApproving(true);
   }
-
-  useEffect(() => { 
-    setTimeout(() => {
-      if (currentStepIndex === 0) {
-        getStepCompleted();
-      }
-    }, 5000);
-  }, [currentStepIndex])
 
   const getStepCompleted = async () => { 
     try {
@@ -79,34 +76,7 @@ export const CrucibleDeposit = () => {
       errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
     }
   }
-
-  const onPropChange = async (props: any) => {
-    try {
-      // let status = props.isApprovalMode ? "pending" : "completed"; 
-      // setTimeout(() => {
-      //   let updatedCurrentStep = { ...currentStep, status : status};
-      //   let updHistory = stepFlowStepHistory.map((obj, index) => 
-      //   index === currentStepIndex ? { ...obj, status : status } : obj ); 
-      //   let data = { status: status }
-      //   console.log(status, currentStep, updatedCurrentStep, stepFlowStepHistory, updHistory)
-      // }, 3000);
-      // let updatedCurrentStep = { ...currentStep, status : status};
-      // let updHistory = stepFlowStepHistory.map((obj, index) => 
-      // index === currentStepIndex ? { ...obj, status : status } : obj ); 
-      // let data = { status: status }
-      // console.log(status, currentStep, stepFlowStepHistory, )
-      // dispatch(CrucibleActions.updateCurrentStep({ currentStep : updatedCurrentStep, currentStepIndex: currentStepIndex }));
-      // dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: updHistory })); 
-      // let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
-      // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      // updateResponse.length && getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history); 
-
-    } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
-    }
-  }
-
+ 
   const onMintClick = async (
     currency: string,
     crucibleAddress: string,
@@ -137,9 +107,9 @@ export const CrucibleDeposit = () => {
   }
 
   const onContinueToNextStepClick = () => {
-    let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Liquidity"); 
+    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.generalAddLiquidity;
     location.state.id = nextStepInfo.id;
-    location.state.stepFlowName = nextStepInfo.name;
+    location.state.stepFlowName = nextStepInfo.name; // getting no history againts this id
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
   }
 
@@ -209,10 +179,10 @@ export const CrucibleDeposit = () => {
           </FTypo>
         }
       />
-      {
+      {(meV2._id && isConnected) ?
         <ApprovableButtonWrapper
           View={(ownProps) => {
-            onPropChange(ownProps);
+            // onPropChange(ownProps);
             return <div className="btn-wrap f-mt-2">
               <FButton
                 title={ownProps.isApprovalMode ? "Approve" : "Mint"}
@@ -229,15 +199,20 @@ export const CrucibleDeposit = () => {
                   )
                 }></FButton>
             </div>
-          }
-          }
+          }}
 
           currency={crucible!.baseCurrency}
           contractAddress={CRUCIBLE_CONTRACTS_V_0_1['BSC'].router}
           userAddress={walletAddress as string}
           amount={'0.0001'}
         />
-
+        :
+        <MetaMaskConnector.WalletConnector
+          WalletConnectView={FButton}
+          WalletConnectModal={ConnectWalletDialog}
+          isAuthenticationNeeded={true}
+          WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
+        />
       }
 
       <DialogTransitionStatus
