@@ -1,14 +1,30 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { FButton, FCard, FContainer, FInputCheckbox, FItem, FTypo } from "ferrum-design-system"; 
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
+import { getLatestStepToRender } from "../../../common/Helper"; 
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../../redux/rootReducer";
 
 export const CrucibleStepsPage = () => {
   const history = useHistory();
+  const dispatch = useDispatch()
+  const location: any = useLocation(); 
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
+
+  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+
+  const onStakeClick = () => {
+    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.stake;
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name; 
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+  }
 
   return (
     <FContainer className="f-mr-0" width={900}>
@@ -66,7 +82,7 @@ export const CrucibleStepsPage = () => {
               postfix={<IconArrow />}
               className="w-100"
               disabled={!stepThreeCheck}
-              onClick={() => history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake})}
+              onClick={() => onStakeClick()}
             />
           </li>
         </ul>

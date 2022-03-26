@@ -39,18 +39,13 @@ export const Stake = () => {
   const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
  const { approveTransactionId, approvals } = useSelector((state: RootState) => state.approval);
-
-  const onApproveClick = () => {
-    setTransitionStatusDialog(true);
-    setIsApproving(true);
-  }
+ 
   
   useEffect(() => { 
-    console.log('appr val',  (approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)]))
+    console.log('appr val', approvals, walletAddress, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency, (approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)]))
     if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)]) > 0){
-     if (currentStep.step.name === "Approve"){
-       console.log('aprval done')
-       getStepCompleted(false);
+     if (currentStep.step.name === "Approve" && currentStep.status !== "completed"){
+        getStepCompleted(false);
      }
    }
  }, [approvals])
@@ -90,32 +85,21 @@ export const Stake = () => {
       
       const response = await client.StakeCrucible(dispatch,currency,amount,stakingAddress,userAddress,network)
       if(response){
-        setIsProcessing(false)
-        //setIsSubmitted(true)
+        setIsProcessing(false) 
         setIsProcessed(true)
         getStepCompleted(false);
-      }
-      //setIsApproving(false);
-      //setTransitionStatusDialog(true);
-      
+      } 
     }
   }
 
-  const onContinueToNextStepClick = () => { 
-    console.log(currentStep)
+  const onContinueToNextStepClick = () => {  
     if ( currentStep.status === "pending"){
-      location.state.id = currentStep.step._id;
+      location.state.id = currentStep.stepFlow;
       let splitted = currentStep.stepFlowStep.name.split("-");
       location.state.name = (splitted[0].trim() + " - " + splitted[1].trim());
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
     }
   }
-
-  // const onStakeClick = () => {
-  //   setIsProcessing(true);
-  //   setIsApproving(false);
-  //   setTransitionStatusDialog(true);
-  // }
 
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
@@ -187,7 +171,7 @@ export const Stake = () => {
               ></FButton>
                </div>
           }
-          currency={crucible!.currency}
+          currency={crucible!.baseCurrency}
           contractAddress={CRUCIBLE_CONTRACTS_V_0_1['BSC'].router}
           userAddress={walletAddress as string}
           amount={'0.0001'}

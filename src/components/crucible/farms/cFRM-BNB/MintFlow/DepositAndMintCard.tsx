@@ -17,9 +17,10 @@ import { RootState } from "../../../../../redux/rootReducer";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
-import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper"; 
+import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
+import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 export const CrucibleDeposit = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
@@ -38,12 +39,13 @@ export const CrucibleDeposit = () => {
   const { approveTransactionId, approvals } = useSelector((state: RootState) => state.approval);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
-  useEffect(() => { 
-    console.log('appr val',  (approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)]))
-
-     if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)]) > 0){
-      if (currentStep.step.name === "Approve"){
-        getStepCompleted();
+  useEffect(() => {
+    // if (approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)] === undefined) {
+    //   history.push({ pathname: PATH_DASHBOARD.crucible.index })
+    // }
+    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)]) > 0) {
+      if (currentStep.step.name === "Approve") {
+        getStepCompleted(false);
       }
     }
   }, [approvals])
@@ -53,15 +55,8 @@ export const CrucibleDeposit = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isProcessed, setIsProcessed] = useState(false);
-
-
-  const onApproveClick = () => {
-   
-    setTransitionStatusDialog(true);
-    setIsApproving(true);
-  }
-
-  const getStepCompleted = async () => { 
+ 
+  const getStepCompleted = async (renderNeeded: any) => {
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) => index === currentStepIndex ? { ...obj, status: "completed" } : obj);
@@ -70,15 +65,15 @@ export const CrucibleDeposit = () => {
       dispatch(CrucibleActions.updateCurrentStep({ currentStep: updatedCurrentStep, currentStepIndex: currentStepIndex }));
       dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: updHistory }));
 
-    let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, renderNeeded);
     } catch (e: any) {
       let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
       errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
     }
   }
- 
+
   const onMintClick = async (
     currency: string,
     crucibleAddress: string,
@@ -96,25 +91,20 @@ export const CrucibleDeposit = () => {
 
       const response = await client.mintCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress)
       if (response) {
-        setIsProcessing(false)
-        //setIsSubmitted(true)
-        setIsProcessed(true);
-
-        getStepCompleted();
-      }
-      //setIsApproving(false);
-      //setTransitionStatusDialog(true);
-
+        setIsProcessing(false) 
+        setIsProcessed(true); 
+        if (currentStep.step.name === "Mint"){
+          getStepCompleted(false);
+        }
+      } 
     }
   }
 
-  const onContinueToNextStepClick = () => {
-    if ( currentStep.status === "pending"){
-      location.state.id = currentStep.step._id;
-      let splitted = currentStep.stepFlowStep.name.split("-");
-      location.state.name = (splitted[0].trim() + " - " + splitted[1].trim());
+  const onContinueToNextStepClick = () => { 
+    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.generalAddLiquidity;
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name; 
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
-    }
   }
 
   return (
@@ -229,7 +219,7 @@ export const CrucibleDeposit = () => {
         isProcessed={isProcessed}
         crucible={crucible}
 
-        onContinueToNextStepClick={()=>onContinueToNextStepClick()}
+        onContinueToNextStepClick={() => onContinueToNextStepClick()}
       />
     </FCard>
   );
