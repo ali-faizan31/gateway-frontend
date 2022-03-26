@@ -1,45 +1,80 @@
 import React, { useState } from "react";
-import {
-  FButton,
-  FCard,
-  FContainer,
-  FGrid,
-  FGridItem,
-  FItem,
-  FResponseBar,
-  FTypo,
-} from "ferrum-design-system";
-import { CrucibleMyBalance } from "../../../common/CardMyBalance";
-// import { CrucibleDeposit } from "../../../CardDeposit";
-// import { CrucibleManage } from "../../../CardManage";
-// import { CrucibleMyBalance } from "../../../CardMyBalance";
+import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTypo } from "ferrum-design-system"; 
+import { CrucibleManage } from "../common/CardManage";
+import { CrucibleMyBalance } from "../../../common/CardMyBalance"; 
+import { useHistory } from "react-router";
+import { PATH_DASHBOARD } from "../../../../../routes/paths"; 
 
 export const Manage = () => {
-  const [deposit, setDeposit] = useState(false);
+  const history = useHistory()
+  const [dashboardAction, setDashboardAction] = useState(false);
   const [unwrap, setUnwrap] = useState(false);
+  const [flowType, setFlowType] = useState("");
+
+  const onUnStakeClick = () => {
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRM.unstake.unstake})
+  }
+
+  const onStakeClick = () => {
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRM.stake.stake})
+  }
+
+  const onClaimRewardsClick = () => {
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRM.withdraw.withdraw})
+  }
+
+  const onAddLiquidityClick = () => {
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRM.liquidity})
+  }
+
+  
 
   return (
-    <FContainer className="f-mr-0 card-manage" width={700}>
+    <FContainer className="f-mr-0 card-manage" width={900}> 
       <CrucibleMyBalance />
 
       {/* <FResponseBar variant="success" title={"Withdraw Transaction Successful. [ 0x06167934...5bvf645949c ]"} /> */}
-      {/* {deposit ? <CrucibleDeposit /> : <CrucibleManage deposit={deposit} setDeposit={setDeposit} />} */}
-      <FContainer width={650}>
-        <FCard className="card-crucible-token-info">
-          <FTypo size={20}>Crucible Token Info</FTypo>
-          <FGrid className={"info-bar"}>
-            <FGridItem size={[4, 4, 4]}>
-              <FItem align={"center"}>
-                <FTypo
-                  color="#DAB46E"
-                  size={20}
-                  weight={700}
-                  className="f-pb--2"
-                >
-                  2%
+      <CrucibleManage dashboardAction={dashboardAction} setDashboardAction={setDashboardAction} setFlowType={setFlowType}/> 
+      <FCard className="card-crucible-token-info" width={"95%"}>
+        <FTypo size={24}>Crucible Token Info</FTypo>
+        <FGrid className="btn-wrap">
+          <FGridItem size={[4, 4, 4]}>
+            <FItem align={"center"}>
+              <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
+                2%
+              </FTypo>
+              <FTypo size={20}>Transfer Fee</FTypo>
+            </FItem>
+          </FGridItem>
+          <FGridItem size={[4, 4, 4]}>
+            <FItem align={"center"}>
+              <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
+                4%
+              </FTypo>
+              <FTypo size={20}>Unwrap Fee</FTypo>
+            </FItem>
+          </FGridItem>
+          <FGridItem size={[4, 4, 4]}>
+            <FItem align={"center"}>
+              <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
+                cFRM
+              </FTypo>
+              <FTypo size={20}>Crucible Token</FTypo>
+            </FItem>
+          </FGridItem>
+        </FGrid>
+        </FCard>
+        <FCard className={"styled-card align-v your-crucible"}>
+          <FGrid>
+            <FGridItem size={[6, 6, 6]}>
+              <FTypo className="f-pb--2">Your Crucible Deposits</FTypo>
+              <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
+                13.929
+                <FTypo size={14} weight={300} className={"f-pl--7 f-pb--1"}>
+                  cFRM
                 </FTypo>
                 <FTypo size={20}>Transfer Fee</FTypo>
-              </FItem>
+              </FTypo>
             </FGridItem>
             <FGridItem size={[4, 4, 4]}>
               <FItem align={"center"}>
@@ -147,7 +182,6 @@ export const Manage = () => {
             ></FButton>
           </FGridItem>
         </FGrid>
-      </FContainer>
-    </FContainer>
+      </FContainer>  
   );
-};
+}; 

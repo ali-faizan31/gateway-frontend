@@ -14,7 +14,7 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { getLatestStepWithPendingStatus } from "../../../../../utils/global.utils";
-import { updateStepFlowStepHistoryByStepFlowStepHistoryId } from "../../../../../_apis/StepFlowStepHistory";
+import { updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId } from "../../../../../_apis/StepFlowStepHistory";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 
 export const Introduction = () => {
@@ -22,16 +22,18 @@ export const Introduction = () => {
   const location: any = useLocation();
 
   const [neverShowAgain, setNeverShowAgain] = useState(false);
-  const [stepFlowResponse, setStepFlowResponse] = useState<any>(undefined);
-  const { meV2, tokenV2 } = useSelector(
-    (state: RootState) => state.walletAuthenticator
-  );
-  const { stepFlowStepHistory, currentStep } = useSelector(
-    (state: RootState) => state.crucible
-  );
-  const { isConnected } = useSelector(
-    (state: RootState) => state.walletConnector
-  );
+  const [stepFlowResponse, setStepFlowResponse]  = useState<any>(undefined);
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { stepFlowStepHistory, currentStep } = useSelector((state: RootState) => state.crucible);
+  const { isConnected } = useSelector((state: RootState) => state.walletConnector);
+
+  useEffect(() => { 
+    console.log(location.state)
+    if (location.state === undefined) {
+      history.push(PATH_DASHBOARD.crucible.index)
+    }
+  }, [location]) 
+  
 
   useEffect(() => {
     console.log(location.state);
@@ -65,7 +67,7 @@ export const Introduction = () => {
         state: location.state,
       });
       // let data = { status: "completed" }
-      // let updateResponse: any = await updateStepFlowStepHistoryByStepFlowStepHistoryId(currentStep._id, data, tokenV2);
+      // let updateResponse: any = await updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       // console.log(updateResponse, '------------------')
       // history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})

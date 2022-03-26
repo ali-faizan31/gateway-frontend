@@ -96,12 +96,64 @@ export const PATH_DASHBOARD = {
     deployer: path(ROOTS_DASHBOARD, "/crucible/deployer"),
     public: path(ROOTS_DASHBOARD, "/crucible/public"),
     cFRM: {
+      // introduction: path(ROOTS_DASHBOARD, "/crucible/cFRM/introduction"),
+      // manage: path(ROOTS_DASHBOARD, "/crucible/cFRM/manage"),
+      mint: {
+        checks: path(ROOTS_DASHBOARD, "/crucible/cFRM/mint/steps"),
+        mint: path(ROOTS_DASHBOARD, "/crucible/cFRM/mint/deposit"),
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRM/mint/success"),
+        steps: path(ROOTS_DASHBOARD, "/crucible/cFRM/mint/add-liquidity"),
+      },
+      stake: {
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRM/stake/success"),
+        stake: path(ROOTS_DASHBOARD, "/crucible/cFRM/stake/deposit"),
+      },
+      unstake: {
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRM/unstake/success"),
+        unstake: path(ROOTS_DASHBOARD, "/crucible/cFRM/unstake/deposit"),
+        steps: path( ROOTS_DASHBOARD, "/crucible/cFRM/unstake/add-liquidity" ),
+      },
+      withdraw: {
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRM/withdraw/success"),
+        withdraw: path(ROOTS_DASHBOARD, "/crucible/cFRM/withdraw/deposit"),
+        steps: path( ROOTS_DASHBOARD, "/crucible/cFRM/withdraw/add-liquidity" ),
+      },
+      unwrap: {
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRM/unwrap/success"),
+        unwrap: path(ROOTS_DASHBOARD, "/crucible/cFRM/unwrap/deposit"), 
+      },
+      liquidity : path(ROOTS_DASHBOARD, "/crucible/cFRM/add-liquidity"),
       introduction: path(ROOTS_DASHBOARD, "/crucible/cFRM/:contract/introduction"),
       manage: path(ROOTS_DASHBOARD, "/crucible/cFRM/:contract/manage"),
       steps: path(ROOTS_DASHBOARD, "/crucible/cFRM/:contract/liquidity"),
     },
     //crucible/cFRM/0x5D8df66ea3e5c3C30A1dB4aFC6F17A917B201118/introduction
-    cFRMx: {
+    cFRMx: { 
+      mint: {
+        checks: path(ROOTS_DASHBOARD, "/crucible/cFRMx/mint/steps"),
+        mint: path(ROOTS_DASHBOARD, "/crucible/cFRMx/mint/deposit"),
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRMx/mint/success"),
+        steps: path(ROOTS_DASHBOARD, "/crucible/cFRMx/mint/add-liquidity"),
+      },
+      stake: {
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRMx/stake/success"),
+        stake: path(ROOTS_DASHBOARD, "/crucible/cFRMx/stake/deposit"),
+      },
+      unstake: {
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRMx/unstake/success"),
+        unstake: path(ROOTS_DASHBOARD, "/crucible/cFRMx/unstake/deposit"),
+        steps: path( ROOTS_DASHBOARD, "/crucible/cFRMx/unstake/add-liquidity" ),
+      },
+      withdraw: {
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRMx/withdraw/success"),
+        withdraw: path(ROOTS_DASHBOARD, "/crucible/cFRMx/withdraw/deposit"),
+        steps: path( ROOTS_DASHBOARD, "/crucible/cFRMx/withdraw/add-liquidity" ),
+      },
+      unwrap: {
+        success: path(ROOTS_DASHBOARD, "/crucible/cFRMx/unwrap/success"),
+        unwrap: path(ROOTS_DASHBOARD, "/crucible/cFRMx/unwrap/deposit"), 
+      },
+      liquidity : path(ROOTS_DASHBOARD, "/crucible/cFRMx/add-liquidity"),
       introduction: path(ROOTS_DASHBOARD, "/crucible/cFRMx/:contract/introduction"),
       manage: path(ROOTS_DASHBOARD, "/crucible/cFRMx/:contract/manage"),
     },

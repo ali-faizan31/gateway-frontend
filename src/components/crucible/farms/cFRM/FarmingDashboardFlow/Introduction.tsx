@@ -14,8 +14,9 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { getLatestStepWithPendingStatus } from "../../../../../utils/global.utils";
-import { updateStepFlowStepHistoryByStepFlowStepHistoryId } from "../../../../../_apis/StepFlowStepHistory";
+import { updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId } from "../../../../../_apis/StepFlowStepHistory";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
+ 
 
 export const Introduction = () => {
   const history = useHistory();
@@ -57,7 +58,7 @@ export const Introduction = () => {
     if (neverShowAgain === true) {
       let data = { status: "completed" };
       let updateResponse: any =
-        await updateStepFlowStepHistoryByStepFlowStepHistoryId(
+        await updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
           currentStep._id,
           data,
           tokenV2
@@ -84,7 +85,7 @@ export const Introduction = () => {
     <FContainer className="f-mb-2 f-mr-0">
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-get-started">
-        <FTypo className="card-title" size={25} weight={700} color="#DAB46E">
+        <FTypo className="card-title" size={22} color="#DAB46E">
           Welcome To The Crucible by Ferrum Network
         </FTypo>
         <FTypo size={18}>

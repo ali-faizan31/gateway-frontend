@@ -6,7 +6,7 @@ import {
   FInputCheckbox,
   FTypo,
 } from "ferrum-design-system";
-import { ReactComponent as IconArrow } from "../../assets/img/icon-arrow-square.svg";
+import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { useHistory, useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { MetaMaskConnector } from "../../../../../container-components";
@@ -14,10 +14,11 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { getLatestStepWithPendingStatus } from "../../../../../utils/global.utils";
-import { updateStepFlowStepHistoryByStepFlowStepHistoryId } from "../../../../../_apis/StepFlowStepHistory";
+import { updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId } from "../../../../../_apis/StepFlowStepHistory";
+  
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 
-export const CrucibleGetStarted = () => {
+export const Introduction = () => {
   const history = useHistory();
   const location: any = useLocation();
 
@@ -57,7 +58,7 @@ export const CrucibleGetStarted = () => {
     if (neverShowAgain === true) {
       let data = { status: "completed" };
       let updateResponse: any =
-        await updateStepFlowStepHistoryByStepFlowStepHistoryId(
+        await updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
           currentStep._id,
           data,
           tokenV2

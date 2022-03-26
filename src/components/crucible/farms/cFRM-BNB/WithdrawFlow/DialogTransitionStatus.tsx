@@ -8,7 +8,7 @@ import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { linkForTransaction,addToken  } from './../../../../../container-components/web3Client/types';
 
 export const DialogTransitionStatus = ({ transitionStatusDialog, setTransitionStatusDialog, isProcessing, isProcessed,
-  setapprovedDone, setIsProcessing,isSubmitted, network, tx,crucible}: any) => {
+  setapprovedDone, setIsProcessing,isSubmitted, network, tx,crucible, onContinueToNextStepClick}: any) => {
   const history = useHistory();
   const [approved, setApproved] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -117,7 +117,7 @@ const onclose = () => {
                 className="f-mt-1 f-mb-1" />
             </FItem>
             <FItem>
-              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.success})} />
+              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => onContinueToNextStepClick()} />
             </FItem>
           </FItem>
         </React.Fragment>

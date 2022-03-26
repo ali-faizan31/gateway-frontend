@@ -1,27 +1,34 @@
 import React, { useState } from "react";
-import {
-  FButton,
-  FCard,
-  FContainer,
-  FGrid,
-  FGridItem,
-  FItem,
-  FResponseBar,
-  FTypo,
-} from "ferrum-design-system";
-// import { CrucibleDeposit } from "../../../CardDeposit";
-// import { CrucibleManage } from "../../../CardManage";
-// import { CrucibleMyBalance } from "../../../CardMyBalance";
+import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTypo } from "ferrum-design-system"; 
+import { CrucibleManage } from "../common/CardManage";
+import { CrucibleMyBalance } from "../../../common/CardMyBalance"; 
+import { useHistory } from "react-router";
+import { PATH_DASHBOARD } from "../../../../../routes/paths"; 
 
-const CrucibleManagePage = () => {
-  const [deposit, setDeposit] = useState(false);
+export const Manage = () => {
+  const history = useHistory()
+  const [dashboardAction, setDashboardAction] = useState(false);
   const [unwrap, setUnwrap] = useState(false);
+  const [flowType, setFlowType] = useState("");
+
+  const onUnStakeClick = () => {
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRMx.unstake.unstake})
+  }
+
+  const onStakeClick = () => {
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRMx.stake.stake})
+  }
+
+  const onClaimRewardsClick = () => {
+    history.push({pathname: PATH_DASHBOARD.crucible.cFRMx.withdraw.withdraw})
+  }
+ 
   return (
     <FContainer className="f-mr-0 card-manage" width={700}>
       {/* <CrucibleMyBalance /> */}
 
       {/* <FResponseBar variant="success" title={"Withdraw Transaction Successful. [ 0x06167934...5bvf645949c ]"} /> */}
-      {/* {deposit ? <CrucibleDeposit /> : <CrucibleManage deposit={deposit} setDeposit={setDeposit} />} */}
+      <CrucibleManage dashboardAction={dashboardAction} setDashboardAction={setDashboardAction} setFlowType={setFlowType}/> 
       <FCard className="card-crucible-token-info" width={"95%"}>
         <FTypo size={24}>Crucible Token Info</FTypo>
         <FGrid className="btn-wrap">
@@ -63,7 +70,7 @@ const CrucibleManagePage = () => {
               >
                 13.929
                 <FTypo size={14} weight={300} className={"f-pl--7 f-pb--1"}>
-                  APE-LP cFRMx-BNB
+                  cFRMx
                 </FTypo>
               </FTypo>
             </FGridItem>
@@ -100,15 +107,15 @@ const CrucibleManagePage = () => {
               </FTypo>
             </FGridItem>
             <FGridItem size={[4, 4, 6]} alignX="center" alignY={"end"}>
-              <FButton title={"Claim"}></FButton>
+              <FButton title={"Claim"} onClick={()=>onClaimRewardsClick()}></FButton>
             </FGridItem>
           </FGrid>
         </FCard>
       </FCard>
-      <FContainer width={850}>
-        <FGrid className="btn-wrap f-mt-2 f-mb-2">
+      <FContainer width={850}> 
+        <FGrid className="btn-wrap f-mt-2 f-mb-2 d justify-content-center" >
           <FGridItem size={[4, 4, 4]}>
-            <FButton title={"Stake"} className={"w-100"}></FButton>
+            <FButton title={"Stake"} className={"w-100"} onClick={()=>onStakeClick()}></FButton>
           </FGridItem>
           <FGridItem size={[4, 4, 4]}>
             <FButton
@@ -127,8 +134,7 @@ const CrucibleManagePage = () => {
             ></FButton>
           </FGridItem>
         </FGrid>
-      </FContainer>
+      </FContainer> 
     </FContainer>
   );
-};
-export default CrucibleManagePage;
+}; 
