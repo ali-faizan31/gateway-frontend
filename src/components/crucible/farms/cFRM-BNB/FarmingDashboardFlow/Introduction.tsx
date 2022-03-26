@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { FButton, FCard, FContainer, FInputCheckbox, FTypo } from "ferrum-design-system";
+import {
+  FButton,
+  FCard,
+  FContainer,
+  FInputCheckbox,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { useHistory, useLocation } from "react-router"; 
 import { useDispatch, useSelector } from "react-redux";
@@ -72,22 +78,23 @@ export const Introduction = () => {
       let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
       errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`); 
     }
-  }
+  };
 
-  const onNeverShowClick = (value: any) => { 
-    setNeverShowAgain(value)
-  }
+  const onNeverShowClick = (value: any) => {
+    setNeverShowAgain(value);
+  };
 
   return (
     <>
     <Toaster/>
     <FContainer width={950} className="f-mr-0 f-mb-2">
       <FCard variant={"secondary"} className="card-get-started">
-        <FTypo className="card-title" size={22} color="#DAB46E">
+        <FTypo className="card-title" size={25} weight={700} color="#DAB46E">
           Welcome To The Crucible by Ferrum Network
         </FTypo>
-        <FTypo>
-          Watch the explainer video below for a step-by-step tutorial on how to mint, add liquidity, farm, trade, and earn rewards through the
+        <FTypo size={18}>
+          Watch the explainer video below for a step-by-step tutorial on how to
+          mint, add liquidity, farm, trade, and earn rewards through the
           Crucible!
         </FTypo>
         <div className="video-wrapper f-mt-1 f-mb-1">
@@ -98,7 +105,8 @@ export const Introduction = () => {
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             frameBorder="0"
-            allowFullScreen></iframe>
+            allowFullScreen
+          ></iframe>
         </div>
         <FTypo size={22} weight={500} className="f-mb-1">
           Crucible Benefits
@@ -123,7 +131,12 @@ export const Introduction = () => {
           />
         }
       </FCard>
-      <FInputCheckbox onClick={() => onNeverShowClick(!neverShowAgain) } name="neverShowAgain" className="f-mb-1 f-mt-1" label={"Don’t show the intro guide again."} /> 
+      <FInputCheckbox
+        onClick={() => onNeverShowClick(!neverShowAgain)}
+        name="neverShowAgain"
+        className="f-mb-1 f-mt-1"
+        label={"Don’t show the intro guide again."}
+      />
     </FContainer>
     </>
   );

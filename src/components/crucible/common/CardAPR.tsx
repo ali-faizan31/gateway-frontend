@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import Datatable from "react-bs-datatable";
-import { FButton, FCard, FInputText, FItem, FTable, FTypo } from "ferrum-design-system";
+import {
+  FButton,
+  FCard,
+  FInputText,
+  FItem,
+  FTable,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconNetworkcFRM } from "../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkBsc } from "../../../assets/img/icon-network-bnb.svg";
 import { useDispatch, useSelector } from "react-redux"; 
@@ -17,16 +24,27 @@ export const CardAPR = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isSet, setIsSet] = useState(false);
-  const { isConnected, isConnecting } = useSelector((state: RootState) => state.walletConnector);
-  
-
+  const { isConnected, isConnecting } = useSelector(
+    (state: RootState) => state.walletConnector
+  );
 
   const tableHeads: any[] = [
-    { width: 200, prop: "sustainableCrucibleFarms", title: "Sustainable Crucible Farms" },
+    {
+      width: 200,
+      prop: "sustainableCrucibleFarms",
+      title: "Sustainable Crucible Farms",
+    },
     { prop: "totalDeposited", title: "Total Deposited" },
     { prop: "yourDeposit", title: "Your Deposit" },
     { prop: "yourRewards", title: "Your Rewards" },
-    { prop: "apr", title: <FTypo color="#DAB46E">APR</FTypo>, },
+    {
+      prop: "apr",
+      title: (
+        <FTypo color="#DAB46E" align={"center"}>
+          APR
+        </FTypo>
+      ),
+    },
     { prop: "action", title: <></> },
   ];
 

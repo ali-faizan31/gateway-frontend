@@ -1,4 +1,11 @@
-import { FCard, FContainer, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system";
+import {
+  FCard,
+  FContainer,
+  FGrid,
+  FGridItem,
+  FItem,
+  FTypo,
+} from "ferrum-design-system";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../redux/rootReducer";
@@ -18,7 +25,7 @@ const CrucibleDashboardPage = () => {
   
 
   return (
-    <FContainer className="f-ml-0">
+    <FContainer className="f-ml-0 crucible-dashboard">
       <CrucibleMyBalance />
       <FTypo className="page-title">Dashboard</FTypo>
       <CruciblePrice />

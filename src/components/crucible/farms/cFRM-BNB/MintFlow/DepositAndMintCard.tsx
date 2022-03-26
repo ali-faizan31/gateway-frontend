@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Web3 from "web3";
-import { useDispatch, useSelector } from 'react-redux';
-import { FButton, FCard, FGrid, FGridItem, FInputText, FItem, FTypo } from "ferrum-design-system";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  FButton,
+  FCard,
+  FGrid,
+  FGridItem,
+  FInputText,
+  FItem,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
 import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
@@ -12,7 +20,7 @@ import { CrucibleClient } from './../../../../../container-components/web3Client
 import { ApprovableButtonWrapper, approvalKey } from './../../../../../container-components/web3Client/approvalButtonWrapper';
 import { useHistory, useLocation } from "react-router";
 import { useWeb3React } from "@web3-react/core";
-import { CFRM_BNB_STEP_FLOW_IDS, CRUCIBLE_CONTRACTS_V_0_1 } from './../../../common/utils';
+import { CFRM_BNB_STEP_FLOW_IDS, CRUCIBLE_CONTRACTS_V_0_1 } from './../../../common/utils'; 
 import { RootState } from "../../../../../redux/rootReducer";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
@@ -23,16 +31,7 @@ import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/Connect
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 export const CrucibleDeposit = () => {
-  const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
-  const { active, activate, deactivate, library, account, chainId, error } = useWeb3React();
-  const [mintAmount, setMintAmount] = useState(0)
-  const dispatch = useDispatch()
-  const location: any = useLocation();
-  const history = useHistory();
-  //@ts-ignore
-  const crucible = useSelector((state) => state.crucible.selectedCrucible)
-  //@ts-ignore
-  const userCrucibleData = useSelector((state) => state.crucible.userCrucibleDetails)
+  const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);  
 
   const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
   const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
@@ -49,6 +48,26 @@ export const CrucibleDeposit = () => {
       }
     }
   }, [approvals])
+  const { active, activate, deactivate, library, account, chainId, error } =
+    useWeb3React();
+  const [mintAmount, setMintAmount] = useState(0);
+  const dispatch = useDispatch();
+  const location: any = useLocation();
+  const history = useHistory();
+  //@ts-ignore
+  const crucible = useSelector((state) => state.crucible.selectedCrucible);
+  //@ts-ignore
+  const userCrucibleData = useSelector(
+    (state: RootState) => state.crucible.userCrucibleDetails
+  );
+  //@ts-ignore
+  const tokenPrices = useSelector((state) => state.crucible.tokenPrices);
+  console.log(tokenPrices, "tokenPricestokenPrices");
+ 
+
+  useEffect(() => {
+    console.log(location, crucible);
+  }, [location]);
 
   const [approvedDone, setapprovedDone] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
@@ -98,7 +117,7 @@ export const CrucibleDeposit = () => {
         }
       } 
     }
-  }
+  };
 
   const onContinueToNextStepClick = () => { 
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.generalAddLiquidity;
@@ -109,12 +128,12 @@ export const CrucibleDeposit = () => {
 
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
-      <div className="card-title">
+      <div className="card-title f-mb-2">
         <FItem display={"flex"} alignY="center">
           <Link to="/dashboard/crucible/cFRM-BNB/manage" className="btn-back">
             <IconGoBack />
           </Link>
-          <FTypo size={30} weight={600}>
+          <FTypo size={24} weight={700}>
             Deposit and Mint Crucible Token
           </FTypo>
         </FItem>
@@ -122,21 +141,21 @@ export const CrucibleDeposit = () => {
       <FGrid>
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
-            <FTypo size={24} className="f-mb-1">
+            <FTypo size={20} className="f-mb-1">
               FRM Price (USD)
             </FTypo>
-            <FTypo size={36} weight={500}>
-              $0.072
+            <FTypo size={30} weight={500}>
+              ${tokenPrices["FRM"] || "0"}
             </FTypo>
           </FItem>
         </FGridItem>
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
-            <FTypo size={24} className="f-mb-1">
+            <FTypo size={20} className="f-mb-1">
               cFRM Price (USD)
             </FTypo>
-            <FTypo size={36} weight={500}>
-              $0.072
+            <FTypo size={30} weight={500}>
+              ${tokenPrices["cFRM"] || "0"}
             </FTypo>
           </FItem>
         </FGridItem>

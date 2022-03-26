@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { FButton, FCard, FGrid, FGridItem, FItem, FSelect, FTypo } from "ferrum-design-system";
+import {
+  FButton,
+  FCard,
+  FGrid,
+  FGridItem,
+  FItem,
+  FSelect,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../assets/img/icon-go-back.svg";
 import { ReactComponent as IconNetworkFrm } from "../../assets/img/icon-network-frm.svg";
 import IconNetworkFrmx from "../../assets/img/icon-network-frmx.svg";
@@ -8,7 +16,12 @@ import IconNetworkCFrm from "../../assets/img/icon-network-cfrm.svg";
 import IconNetworkCFrmx from "../../assets/img/icon-network-cfrmx.svg";
 import { ReactComponent as IconNetworkBnb } from "../../assets/img/icon-network-bnb.svg";
 
-export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) => {
+export const CrucibleManage = ({
+  deposit,
+  setDeposit,
+  unwrap,
+  setUnwrap,
+}: any) => {
   const history = useHistory();
   const [selectedToken, setSelectedToken] = useState<any>();
 
@@ -71,13 +84,13 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
   ];
   return (
     <FCard variant={"secondary"} className="card-manage-crucible card-shadow">
-      <div className="card-title">
+      <div className="card-title f-mb-2">
         <FItem display={"flex"} alignY="center">
           <Link to="/dashboard/crucible" className="btn-back">
             <IconGoBack />
           </Link>
-          <FTypo size={30} weight={600}>
-            Crucible Farms Dashboard  
+          <FTypo size={24} weight={700}>
+            Crucible Farm Dashboard - cFRMx / BNB
           </FTypo>
         </FItem>
         <div className="network-icon-wrapper">
@@ -90,26 +103,26 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
       <FGrid>
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
-            <FTypo size={24} className="f-mb-1">
+            <FTypo size={20} className="f-mb-1">
               FRMx Price (USD)
             </FTypo>
-            <FTypo size={36} weight={500}>
+            <FTypo size={30} weight={500}>
               $0.072
             </FTypo>
           </FItem>
         </FGridItem>
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
-            <FTypo size={24} className="f-mb-1">
+            <FTypo size={20} className="f-mb-1">
               FRMx Price (USD)
             </FTypo>
-            <FTypo size={36} weight={500}>
+            <FTypo size={30} weight={500}>
               $0.072
             </FTypo>
           </FItem>
         </FGridItem>
       </FGrid>
-      <FGrid className="btn-wrap">
+      <FGrid className="btn-wrap f-mt-1" spacing={5}>
         <FGridItem size={[4, 4, 4]}>
           <FSelect
             name={"selectOptions"}
@@ -120,10 +133,20 @@ export const CrucibleManage = ({ deposit, setDeposit, unwrap, setUnwrap }: any) 
           />
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
-          <FButton title={"Mint cFRMx"} outlined className={"w-100"} onClick={() => setDeposit(true)}></FButton>
+          <FButton
+            title={"Mint cFRMx"}
+            className={"w-100 f-btn-gradiant"}
+            onClick={() => setDeposit(true)}
+          ></FButton>
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
-          <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"} onClick={() => setDeposit(true)}></FButton>
+          <FButton
+            variant={"secondary"}
+            title={"Unwrap"}
+            outlined
+            className={"w-100"}
+            onClick={() => setDeposit(true)}
+          ></FButton>
         </FGridItem>
       </FGrid>
     </FCard>

@@ -24,8 +24,8 @@ export const Manage = () => {
   }
  
   return (
-    <FContainer className="f-mr-0 card-manage" width={900}> 
-      <CrucibleMyBalance />
+    <FContainer className="f-mr-0 card-manage" width={700}>
+      {/* <CrucibleMyBalance /> */}
 
       {/* <FResponseBar variant="success" title={"Withdraw Transaction Successful. [ 0x06167934...5bvf645949c ]"} /> */}
       <CrucibleManage dashboardAction={dashboardAction} setDashboardAction={setDashboardAction} setFlowType={setFlowType}/> 
@@ -60,8 +60,14 @@ export const Manage = () => {
         <FCard className={"styled-card align-v your-crucible"}>
           <FGrid>
             <FGridItem size={[6, 6, 6]}>
-              <FTypo className="f-pb--2">Your Crucible Deposits</FTypo>
-              <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
+              <FTypo className="f-pb--2">Your Crucible LP Deposits</FTypo>
+              <FTypo
+                size={24}
+                weight={600}
+                align={"end"}
+                display="flex"
+                alignY={"end"}
+              >
                 13.929
                 <FTypo size={14} weight={300} className={"f-pl--7 f-pb--1"}>
                   cFRMx
@@ -70,8 +76,20 @@ export const Manage = () => {
             </FGridItem>
             <FGridItem size={[6, 6, 6]}>
               <FItem align="right">
-                <FTypo color="#DAB46E" size={50} weight={600} align={"end"} display="flex" alignY={"end"}>
-                  <FTypo size={16} weight={500} className={"f-pr--7 f-pb--3"} align="right">
+                <FTypo
+                  color="#DAB46E"
+                  size={50}
+                  weight={600}
+                  align={"end"}
+                  display="flex"
+                  alignY={"end"}
+                >
+                  <FTypo
+                    size={16}
+                    weight={500}
+                    className={"f-pr--7 f-pb--3"}
+                    align="right"
+                  >
                     APR
                   </FTypo>
                   192%
@@ -100,8 +118,21 @@ export const Manage = () => {
             <FButton title={"Stake"} className={"w-100"} onClick={()=>onStakeClick()}></FButton>
           </FGridItem>
           <FGridItem size={[4, 4, 4]}>
-            <FButton variant={"secondary"} title={"Unstake"} outlined className={"w-100"} onClick={()=>onUnStakeClick()}></FButton>
-          </FGridItem> 
+            <FButton
+              variant={"secondary"}
+              title={"Unstake"}
+              outlined
+              className={"w-100"}
+            ></FButton>
+          </FGridItem>
+          <FGridItem size={[4, 4, 4]}>
+            <FButton
+              variant={"secondary"}
+              title={"Add Liquidity"}
+              outlined
+              className={"w-100"}
+            ></FButton>
+          </FGridItem>
         </FGrid>
       </FContainer> 
     </FContainer>
