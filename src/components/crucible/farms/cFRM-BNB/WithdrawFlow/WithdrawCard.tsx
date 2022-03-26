@@ -83,7 +83,7 @@ export const Withdraw = () => {
   }
   const onContinueToNextStepClick = () => {
     if ( currentStep.status === "pending"){
-      location.state.id = currentStep.step._id;
+      location.state.id = currentStep.stepFlow;
       let splitted = currentStep.stepFlowStep.name.split("-");
       location.state.name = (splitted[0].trim() + " - " + splitted[1].trim());
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
