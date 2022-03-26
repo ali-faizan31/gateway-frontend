@@ -8,7 +8,7 @@ import {
 } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { useHistory, useLocation } from "react-router";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
@@ -16,15 +16,17 @@ import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/Connect
 import { getLatestStepWithPendingStatus } from "../../../../../utils/global.utils";
 import { updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId } from "../../../../../_apis/StepFlowStepHistory";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
+import { getLatestStepToRender, renderComponent } from "../../../common/Helper";
 
 export const Introduction = () => {
   const history = useHistory();
   const location: any = useLocation();
+  const dispatch = useDispatch();
 
   const [neverShowAgain, setNeverShowAgain] = useState(false);
   const [stepFlowResponse, setStepFlowResponse]  = useState<any>(undefined);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
-  const { stepFlowStepHistory, currentStep } = useSelector((state: RootState) => state.crucible);
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const { isConnected } = useSelector((state: RootState) => state.walletConnector);
 
   useEffect(() => { 
@@ -36,7 +38,6 @@ export const Introduction = () => {
   
 
   useEffect(() => {
-    console.log(location.state);
     if (location.state.id === undefined) {
       history.push(PATH_DASHBOARD.crucible.index);
     }
@@ -48,17 +49,11 @@ export const Introduction = () => {
     }
   }, [isConnected]);
 
-  useEffect(() => {
-    if (stepFlowStepHistory?.length) {
-      const step: any = getLatestStepWithPendingStatus(stepFlowStepHistory); // undefined check implement to reatrt sequence
-      if (tokenV2 && location.state.id && step?.step?.name !== "Introduction") {
-        history.push({
-          pathname: PATH_DASHBOARD.crucible.deployer,
-          state: location.state,
-        });
-      }
+  useEffect(() => { 
+    if ( isConnected && tokenV2 && stepFlowStepHistory.length){
+     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
     }
-  }, [tokenV2, location, stepFlowStepHistory]);
+   }, [tokenV2, stepFlowStepHistory])
 
   const onGetStartedClick = async () => {
     if (neverShowAgain === true) {

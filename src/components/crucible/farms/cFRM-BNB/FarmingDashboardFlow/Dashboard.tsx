@@ -215,42 +215,23 @@ export const Manage = () => {
               <FGrid className="btn-wrap">
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
-                    <FTypo
-                      color="#DAB46E"
-                      size={20}
-                      weight={700}
-                      className="f-pb--2"
-                    >
-                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0")
-                        .times(100)
-                        .toString()}%`}
+                    <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
+                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate|| '0').times(100).toString()}%`}
                     </FTypo>
                     <FTypo size={20}>Transfer Fee</FTypo>
                   </FItem>
                 </FGridItem>
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
-                    <FTypo
-                      color="#DAB46E"
-                      size={20}
-                      weight={700}
-                      className="f-pb--2"
-                    >
-                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0")
-                        .times(100)
-                        .toString()}%`}
+                    <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
+                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate|| '0').times(100).toString()}%`}
                     </FTypo>
                     <FTypo size={20}>Unwrap Fee</FTypo>
                   </FItem>
                 </FGridItem>
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
-                    <FTypo
-                      color="#DAB46E"
-                      size={20}
-                      weight={700}
-                      className="f-pb--2"
-                    >
+                    <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
                       {crucible?.symbol}
                     </FTypo>
                     <FTypo size={20}>Crucible Token</FTypo>
@@ -259,7 +240,7 @@ export const Manage = () => {
               </FGrid>
               <FCard className={"styled-card align-v your-crucible"}>
                 <FGrid>
-                  <FGridItem size={[6, 6, 6]} dir="column">
+                  <FGridItem size={[6, 6, 6]}>
                     <FTypo className="f-pb--2">Your Crucible LP Deposits</FTypo>
                     <FTypo
                       size={24}

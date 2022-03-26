@@ -185,11 +185,11 @@ export const PATH_DASHBOARD = {
       liquidity : path(ROOTS_DASHBOARD, "/crucible/cFRM-BNB/add-liquidity"), 
     },
     cFRMx_BNB: {
-      introduction: path(ROOTS_DASHBOARD, "/crucible/cFRMx_BNB/introduction"),
-      manage: path(ROOTS_DASHBOARD, "/crucible/cFRMx_BNB/manage"),
+      introduction: path(ROOTS_DASHBOARD, "/crucible/cFRMx_BNB/:contract/introduction"),
+      manage: path(ROOTS_DASHBOARD, "/crucible/cFRMx_BNB/:contract/manage"),
       mint: {
-        steps: path(ROOTS_DASHBOARD, "/crucible/cFRMx_BNB/mint/add-liquidity"),
-        mint: path(ROOTS_DASHBOARD, "/crucible/cFRMx_BNB/mint/deposit"),
+        steps: path(ROOTS_DASHBOARD, "/crucible/cFRMx_BNB/:contract/mint/add-liquidity"),
+        mint: path(ROOTS_DASHBOARD, "/crucible/cFRMx_BNB/:contract/mint/deposit"),
       },
       stake: {
         success: path(ROOTS_DASHBOARD, "/crucible/cFRMx_BNB/stake/success"),

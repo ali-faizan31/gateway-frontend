@@ -190,100 +190,44 @@ export const Manage = () => {
         </FGrid>
         <FCard className={"styled-card align-v your-crucible"}>
           <FGrid>
-            <FGridItem size={[6, 6, 6]}>
+            <FGridItem size={[6, 6, 6]} dir="column">
               <FTypo className="f-pb--2">Your Crucible LP Deposits</FTypo>
-              <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
-                {LPStakingDetails['cFRMx_BNB_LP']?.stake||'0'}
-                <FTypo size={14} weight={300} className={"f-pl--7 f-pb--1"}>
+              <FTypo
+                size={24}
+                weight={600}
+                align={"end"}
+                display="flex"
+                alignY={"end"}
+              >
+                {LPStakingDetails['cFRMx_BNB_LP']?.stake || '0'}
+                <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
                   APE-LP cFRMx-BNB
                 </FTypo>
-                <FTypo size={20}>Transfer Fee</FTypo>
               </FTypo>
             </FGridItem>
-            <FGridItem size={[4, 4, 4]}>
-              <FItem align={"center"}>
+            <FGridItem size={[6, 6, 6]}>
+              <FItem align="right">
                 <FTypo
                   color="#DAB46E"
-                  size={20}
-                  weight={700}
-                  className="f-pb--2"
-                >
-                  4%
-                </FTypo>
-                <FTypo size={20}>Unwrap Fee</FTypo>
-              </FItem>
-            </FGridItem>
-            <FGridItem size={[4, 4, 4]}>
-              <FItem align={"center"}>
-                <FTypo
-                  color="#DAB46E"
-                  size={20}
-                  weight={700}
-                  className="f-pb--2"
-                >
-                  cFRMx
-                </FTypo>
-                <FTypo size={20}>Crucible Token</FTypo>
-              </FItem>
-            </FGridItem>
-          </FGrid>
-          <FCard className={"styled-card align-v your-crucible"}>
-            <FGrid>
-              <FGridItem size={[6, 6, 6]} dir="column">
-                <FTypo className="f-pb--2">Your Crucible LP Deposits</FTypo>
-                <FTypo
-                  size={24}
+                  size={40}
                   weight={600}
                   align={"end"}
                   display="flex"
                   alignY={"end"}
                 >
-                  13.929
-                  <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
-                    APE-LP cFRMx-BNB
-                  </FTypo>
-                </FTypo>
-              </FGridItem>
-              <FGridItem size={[6, 6, 6]}>
-                <FItem align="right">
                   <FTypo
-                    color="#DAB46E"
-                    size={40}
-                    weight={600}
-                    align={"end"}
-                    display="flex"
-                    alignY={"end"}
+                    size={16}
+                    weight={500}
+                    className={"f-pr--7 f-pb--3"}
+                    align="right"
                   >
-                    <FTypo
-                      size={16}
-                      weight={500}
-                      className={"f-pr--7 f-pb--3"}
-                      align="right"
-                    >
-                      APR
-                    </FTypo>
-                    192%
+                    APR
                   </FTypo>
-                </FItem>
-              </FGridItem>
-            </FGrid>
-          </FCard>
-          <FCard className={"your-claimed-rewards"}>
-            <FGrid alignY={"center"}>
-              <FGridItem size={[6]} dir="column">
-                <FTypo className="f-pb--2">Your unclaimed Rewards</FTypo>
-                <FTypo color="#DAB46E" size={22} weight={700}>
-                  7.292 cFRMx
+                  192%
                 </FTypo>
-              </FGridItem>
-              <FGridItem size={[6]} alignY="center" alignX={"end"}>
-                <FButton
-                  title={"Claim"}
-                  onClick={onClaimRewardsClick}
-                ></FButton>
-              </FGridItem>
-            </FGrid>
-          </FCard>
+              </FItem>
+            </FGridItem>
+          </FGrid>
         </FCard>
         <FCard className={"your-claimed-rewards"}>
           <FGrid>

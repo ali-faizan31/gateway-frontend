@@ -37,6 +37,19 @@ export const Introduction = () => {
   const [networkClient, setNetworkClient] = useState<Web3 | undefined>(undefined);
   const { active, activate, deactivate, library, account, chainId, error } =  useWeb3React();
   
+  useEffect(() => { 
+    console.log(location.state)
+    if (location.state === undefined) {
+      history.push(PATH_DASHBOARD.crucible.index)
+    }
+  }, [location]) 
+
+  useEffect(() => {
+    if (location.state.id === undefined) {
+      history.push(PATH_DASHBOARD.crucible.index);
+    }
+  }, [location]);
+
   useEffect(() => {
     if (library && !networkClient) { 
         setNetworkClient(library);
