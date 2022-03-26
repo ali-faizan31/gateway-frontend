@@ -5,7 +5,7 @@ export class crucibleApi {
   jwtToken = '';
   
   async signInToServer(userAddress) {
-    const res = await  await axios.post(`https://4ikenxgwge.execute-api.us-east-2.amazonaws.com/default/kb-staging-backend`,{
+    const res = await  await axios.post(`http://localhost:8080`,{
       command: 'signInUsingAddress', data: {userAddress}, params: [] });
     const { unsecureSession } = res.data;
     this.address = userAddress;
@@ -13,9 +13,9 @@ export class crucibleApi {
     console.log(res,'lores')
     return unsecureSession;
   }
-
+  //https://4ikenxgwge.execute-api.us-east-2.amazonaws.com/default/kb-staging-backend
   crucibleApi(data) { 
-    return axios.post(`https://4ikenxgwge.execute-api.us-east-2.amazonaws.com/default/kb-staging-backend`, 
+    return axios.post(`http://localhost:8080`, 
     data,
     {
       headers: {

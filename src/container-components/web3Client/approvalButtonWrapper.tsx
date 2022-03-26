@@ -64,6 +64,7 @@ export const doApprove = createAsyncThunk('approveButton/doApprove',
 	}
 });
 
+//Action.approvableButtonSlice/approveTransactionReceived
 export const approvableButtonSlice = createSlice({
 	name: 'approvableButton',
 	initialState: {

@@ -93,23 +93,32 @@ export const Manage = () => {
     "crucible/loadUserInfo",
     async (payload: { crucibleCurrency: string }, ctx) => {
       const actions = crucibleSlice.actions;
-      const web3Helper = new Web3Helper(networkClient as any);
-      const client = new CrucibleClient(web3Helper);
-      const userCrucibleDetails = await client.getUserCrucibleInfo(
-        ctx.dispatch,
-        payload.crucibleCurrency,
-        walletAddress as string
-      );
-      if (!!userCrucibleDetails) {
-        dispatch(
-          actions.userCrucibleDetailsLoaded({ data: userCrucibleDetails.data })
-        );
+      const web3Helper =  new Web3Helper(networkClient as any)
+      const client = new CrucibleClient(web3Helper)
+      const userCrucibleDetails = await client.getUserCrucibleInfo(ctx.dispatch, payload.crucibleCurrency,walletAddress as string);
+      const stakingType = 'LP';
+      if(!!userCrucibleDetails){
+        if(stakingType === 'LP'){
+
+        }
+        dispatch(actions.userCrucibleDetailsLoaded({data: userCrucibleDetails.data }))
       }
     }
   );
 
-  const loadPricingInfo = createAsyncThunk(
-    "crucible/loadUserInfo",
+
+  const loadLPStakingInfo = createAsyncThunk('crucible/loadUserInfo',
+  async (payload: { crucibleCurrency: string, userAddress:string,stakingAddress: string,network:string }, ctx) => {
+    const actions = crucibleSlice.actions;
+    const web3Helper =  new Web3Helper(networkClient as any)
+    const client = new CrucibleClient(web3Helper)
+    const userStakingDetails = await client.getLPStakingInfo(ctx.dispatch,location.state.LpCurrency,walletAddress as string,payload.stakingAddress,payload.network);
+    if(!!userStakingDetails){
+      dispatch(actions.userLpStakingDetailsLoaded({token: "cFRM_BNB_LP" ,data: {...userStakingDetails.data,stakingAddress:payload.stakingAddress,"LPaddress": location.state.LpCurrency} }))
+    }
+});
+
+  const loadPricingInfo = createAsyncThunk('crucible/loadUserInfo',
     async (payload: { crucible: any }, ctx) => {
       const actions = crucibleSlice.actions;
       const web3Helper = new Web3Helper(networkClient as any);
@@ -173,23 +182,20 @@ export const Manage = () => {
     const web3Helper = new Web3Helper(networkClient as any);
     const client = new CrucibleClient(web3Helper);
     const actions = crucibleSlice.actions;
-    dispatch(
-      loadCrucibleUserInfo({
-        crucibleCurrency: `${location.state.network.toUpperCase()}:${(
-          location.state.contract || ""
-        ).toLowerCase()}`,
-      })
-    );
-    const crucibleData = await client.getCrucibleDetails(
-      dispatch,
-      location.state.network,
-      location.state.contract,
-      walletAddress as string
-    );
-    dispatch(actions.selectedCrucible({ data: crucibleData.data }));
-    if (crucibleData.data) {
-      dispatch(loadPricingInfo({ crucible: crucibleData.data }));
-      setIsLoading(false);
+    dispatch(loadCrucibleUserInfo({crucibleCurrency:`${location.state.network.toUpperCase()}:${(location.state.contract || '').toLowerCase()}`}))
+    const crucibleData = await client.getCrucibleDetails(dispatch,location.state.network,location.state.contract,walletAddress as string)
+    const data =  await web3Helper.getTokenData(walletAddress as string,location.state.LpCurrency)
+    dispatch(actions.selectedCrucible({data: {...crucibleData.data,"LP_balance": data.balance,"LP_symbol": data.symbol} }))
+
+    if(crucibleData.data){
+      dispatch(loadLPStakingInfo({
+        "crucibleCurrency": `${(location.state.LpCurrency || '').toLowerCase()}`,
+        "userAddress": walletAddress as string,
+        "network": location.state.network,
+        "stakingAddress": location.state.LPstakingAddress
+      }))
+      dispatch(loadPricingInfo({crucible: crucibleData.data}))
+      setIsLoading(false)
     }
   };
 

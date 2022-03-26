@@ -39,15 +39,20 @@ export const ApplicationWrapper = ({ children }: any) => {
   }, []);
 
   useEffect(() => {
+    console.log('intiialalalal')
     if (isConnected && isWeb3Initialized && networkClient && walletWrapperInitialized  ) {
+       console.log('intiialalalal7')
        signIntoServer();
     } else if (!isConnected ||  !isWeb3Initialized || !networkClient ||  !walletWrapperInitialized  ) {
+       console.log('intiialalalal8')
        dispatch(applicationWrapperActions.resetUserProfile());
     } 
   }, [isConnected, walletWrapperInitialized]);
 
   const signIntoServer = async () => { 
+    console.log('tyuur')
     const user = await getUserProfile(); 
+    console.log(user,"intiialalalal3")
     // dispatch(applicationWrapperActions.getUserProfile(user));
   };
 
@@ -93,6 +98,7 @@ export const ApplicationWrapper = ({ children }: any) => {
             balance = await tokenContract.methods.balanceOf(walletAddress).call();
             const decimalFactor = 10 ** Number(decimals);
             balance = new Big(balance).div(decimalFactor).toFixed();
+            console.log("symbolsymbolsymbol",symbol)
           // }
         }
 
