@@ -1,14 +1,23 @@
 import React, { useState } from "react";
-import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTypo } from "ferrum-design-system";
+import {
+  FButton,
+  FCard,
+  FContainer,
+  FGrid,
+  FGridItem,
+  FItem,
+  FResponseBar,
+  FTypo,
+} from "ferrum-design-system";
 // import { CrucibleDeposit } from "../../../CardDeposit";
 // import { CrucibleManage } from "../../../CardManage";
-// import { CrucibleMyBalance } from "../../../CardMyBalance"; 
+// import { CrucibleMyBalance } from "../../../CardMyBalance";
 
 const CrucibleManagePage = () => {
   const [deposit, setDeposit] = useState(false);
   const [unwrap, setUnwrap] = useState(false);
   return (
-    <FContainer className="f-mr-0 card-manage" width={900}>
+    <FContainer className="f-mr-0 card-manage" width={700}>
       {/* <CrucibleMyBalance /> */}
 
       {/* <FResponseBar variant="success" title={"Withdraw Transaction Successful. [ 0x06167934...5bvf645949c ]"} /> */}
@@ -45,7 +54,13 @@ const CrucibleManagePage = () => {
           <FGrid>
             <FGridItem size={[6, 6, 6]}>
               <FTypo className="f-pb--2">Your Crucible LP Deposits</FTypo>
-              <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
+              <FTypo
+                size={24}
+                weight={600}
+                align={"end"}
+                display="flex"
+                alignY={"end"}
+              >
                 13.929
                 <FTypo size={14} weight={300} className={"f-pl--7 f-pb--1"}>
                   APE-LP cFRMx-BNB
@@ -54,8 +69,20 @@ const CrucibleManagePage = () => {
             </FGridItem>
             <FGridItem size={[6, 6, 6]}>
               <FItem align="right">
-                <FTypo color="#DAB46E" size={50} weight={600} align={"end"} display="flex" alignY={"end"}>
-                  <FTypo size={16} weight={500} className={"f-pr--7 f-pb--3"} align="right">
+                <FTypo
+                  color="#DAB46E"
+                  size={50}
+                  weight={600}
+                  align={"end"}
+                  display="flex"
+                  alignY={"end"}
+                >
+                  <FTypo
+                    size={16}
+                    weight={500}
+                    className={"f-pr--7 f-pb--3"}
+                    align="right"
+                  >
                     APR
                   </FTypo>
                   192%
@@ -84,10 +111,20 @@ const CrucibleManagePage = () => {
             <FButton title={"Stake"} className={"w-100"}></FButton>
           </FGridItem>
           <FGridItem size={[4, 4, 4]}>
-            <FButton variant={"secondary"} title={"Unstake"} outlined className={"w-100"}></FButton>
+            <FButton
+              variant={"secondary"}
+              title={"Unstake"}
+              outlined
+              className={"w-100"}
+            ></FButton>
           </FGridItem>
           <FGridItem size={[4, 4, 4]}>
-            <FButton variant={"secondary"} title={"Add Liquidity"} outlined className={"w-100"}></FButton>
+            <FButton
+              variant={"secondary"}
+              title={"Add Liquidity"}
+              outlined
+              className={"w-100"}
+            ></FButton>
           </FGridItem>
         </FGrid>
       </FContainer>

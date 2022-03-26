@@ -49,7 +49,7 @@ const DashboardSidebar = () => {
   const isPublicCompetition = pathname.includes("/pub/competition");
 
   useEffect(() => {
-    getSideMenuInformation();
+    // getSideMenuInformation();
   }, []);
 
   const getSiteName = (url: string, indexA: string, indexB: string) => {
@@ -114,13 +114,18 @@ const DashboardSidebar = () => {
 
   const getSideMenuInformation = async () => {
     try {
-      let siteName = getSiteName(pathname, '/', '/');
-      let response = await getSubscriptionInformationForAssociatedOrganizationBySiteName(siteName); 
-      let subscriptionResponse = response && response.data && response.data.body;
-      let productList = getSubscriptionListAgainstOrganization(subscriptionResponse); 
-      setSideMenuItems(productList); 
-    } catch (e: any) { 
-      console.log(`Error occured: ${e?.response?.data?.status?.message}`)
+      let siteName = getSiteName(pathname, "/", "/");
+      let response =
+        await getSubscriptionInformationForAssociatedOrganizationBySiteName(
+          siteName
+        );
+      let subscriptionResponse =
+        response && response.data && response.data.body;
+      let productList =
+        getSubscriptionListAgainstOrganization(subscriptionResponse);
+      setSideMenuItems(productList);
+    } catch (e: any) {
+      console.log(`Error occured: ${e?.response?.data?.status?.message}`);
       // toast.error(`Error occured: ${e.response.data.status.message}`)
     }
   };
@@ -271,30 +276,30 @@ const DashboardSidebar = () => {
 
   const renderContent = (items: any) => {
     return items.map((item: any, index: any) => (
-      <> 
-      {<FSiderItem
-        to={item.path}
-        title={item.title}
-        prefix={item.icon}
-        key={index}
-        target={item.target && item.target}
-      >
-         
-          {item?.children?.length && (
-            <FSiderSubMenuItem>
-              {item.children.map((subItem: any, index: any) => (
-                <FSiderItem
-                  to={subItem.path}
-                  title={subItem.title}
-                  prefix={<img src="/ferrum/bullet.png" height={"4px"} />}
-                  key={index}
-                  target={subItem.target && subItem.target}
-                ></FSiderItem>
-              ))}
-            </FSiderSubMenuItem>
-          )}
-        
-      </FSiderItem>}
+      <>
+        {
+          <FSiderItem
+            to={item.path}
+            title={item.title}
+            prefix={item.icon}
+            key={index}
+            target={item.target && item.target}
+          >
+            {item?.children?.length && (
+              <FSiderSubMenuItem>
+                {item.children.map((subItem: any, index: any) => (
+                  <FSiderItem
+                    to={subItem.path}
+                    title={subItem.title}
+                    prefix={<img src="/ferrum/bullet.png" height={"4px"} />}
+                    key={index}
+                    target={subItem.target && subItem.target}
+                  ></FSiderItem>
+                ))}
+              </FSiderSubMenuItem>
+            )}
+          </FSiderItem>
+        }
       </>
     ));
   };
@@ -306,11 +311,11 @@ const DashboardSidebar = () => {
       {localStorageHelper.load(ME_TAG)?.role === "organizationAdmin" &&
         renderContent(sidebarConfig)}
       {/* {(isPublicLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig)}  */}
-      {isStakingLeaderboard && renderContent(sideConfig)} 
-       {renderContent(communityLeaderboardSidebarConfig)}
+      {isStakingLeaderboard && renderContent(sideConfig)}
+      {renderContent(communityLeaderboardSidebarConfig)}
       {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
-      {renderContent(crucibleConfig)}  
+      {renderContent(crucibleConfig)}
     </FSider>
   );
 };
