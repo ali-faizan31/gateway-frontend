@@ -1,0 +1,68 @@
+@import "./variables";
+
+.f-sider {
+  .f-sider-items {
+    .f-sider-item {
+      .f-item-link {
+        .f-item-icon {
+          $iconSize: 30px;
+          min-width: $iconSize;
+          &:first-child {
+            img {
+              margin-right: 0.5rem;
+              // max-width: 30px;
+              width: $iconSize;
+              height: $iconSize;
+            }
+          }
+        }
+        .f-item-text {
+          font-size: 1.1rem;
+        }
+        &:hover {
+          .f-item-icon {
+            &:first-child {
+              img {
+                filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(132deg) brightness(200%) contrast(103%);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.f-loader {
+  img {
+    animation: loaderAnimate 2s infinite linear;
+    transform-origin: center;
+    @keyframes loaderAnimate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(359deg);
+      }
+    }
+  }
+}
+
+.f-btn {
+  min-width: max-content;
+  &.f-btn-gradiant {
+    background: linear-gradient(180deg, #dab46e 0%, #c69749 100%) !important;
+    color: white;
+  }
+}
+
+.f-dialog {
+  .f-loader {
+    position: relative;
+    margin-bottom: 2rem;
+
+    &:before {
+      background: none;
+    }
+  }
+}

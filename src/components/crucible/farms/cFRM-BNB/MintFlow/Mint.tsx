@@ -1,8 +1,17 @@
 import React, { useState } from "react";
-import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTypo } from "ferrum-design-system"; 
+import {
+  FButton,
+  FCard,
+  FContainer,
+  FGrid,
+  FGridItem,
+  FItem,
+  FResponseBar,
+  FTypo,
+} from "ferrum-design-system";
 import { CrucibleDeposit as DepositAndMint } from "./DepositAndMintCard";
-import CrucibleFeeCard  from "../common/CrucibleFeeCard";
-import { CrucibleMyBalance } from "../../../common/CardMyBalance"; 
+import CrucibleFeeCard from "../common/CrucibleFeeCard";
+import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 
 export const Mint = () => {
   const [dashboardAction, setDashboardAction] = useState(false);
@@ -10,12 +19,12 @@ export const Mint = () => {
   const [flowType, setFlowType] = useState("");
 
   return (
-    <FContainer className="f-mr-0 card-manage" width={900}> 
+    <FContainer className="f-mr-0 card-manage" width={700}>
       <CrucibleMyBalance />
 
       <DepositAndMint />
 
-      <CrucibleFeeCard /> 
+      <CrucibleFeeCard />
     </FContainer>
   );
-}; 
+};

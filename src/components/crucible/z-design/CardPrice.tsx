@@ -31,9 +31,9 @@ export const CruciblePrice = () => {
                       <IconArrowGreen width={15} /> {item.price_percentage}%
                     </FTypo>
                   </FItem>
-                  <FTypo size={30} weight={600} align={"end"} display="flex" alignY={"end"} className="f-mt-1">
+                  <FTypo size={25} weight={600} align={"end"} display="flex" alignY={"end"} className="f-mt--5">
                     {item.price}
-                    <FTypo size={14} weight={600} color="#DAB46E" className={"f-pl--7 f-pb--1"}>
+                    <FTypo size={12} weight={600} color="#DAB46E" className={"f-pl--7 f-pb--1"}>
                       USD
                     </FTypo>
                   </FTypo>

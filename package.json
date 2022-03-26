@@ -23,7 +23,7 @@
         "change-case": "^4.1.2",
         "date-fns": "2.28.0",
         "ether-converter": "^0.0.16",
-        "ferrum-design-system": "1.0.57",
+        "ferrum-design-system": "1.0.62",
         "font-awesome": "^4.7.0",
         "jsonwebtoken": "^8.5.1",
         "moment": "^2.29.1",
