@@ -45,7 +45,7 @@ export const UnWrap = () => {
   }
  
   
-  const getStepCompleted = async () => { 
+  const getStepCompleted = async (renderNeeded: any) => { 
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) => index === currentStepIndex ? { ...obj, status: "completed" } : obj);
@@ -56,7 +56,7 @@ export const UnWrap = () => {
 
     let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, renderNeeded);
     } catch (e: any) {
       let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
       errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
@@ -84,7 +84,7 @@ export const UnWrap = () => {
         setIsProcessing(false)
         //setIsSubmitted(true)
         setIsProcessed(true)
-        getStepCompleted();
+        getStepCompleted(false);
       }
       //setIsApproving(false);
       //setTransitionStatusDialog(true);
@@ -93,12 +93,14 @@ export const UnWrap = () => {
   }
 
   const onContinueToNextStepClick = () => {
-    getStepCompleted();
-    let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Liquidity"); 
-    console.log(nextStepInfo, "---------------Liquidity-----------------", location.state)
-    location.state.id = nextStepInfo.id;
-    location.state.stepFlowName = nextStepInfo.name;
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    if ( currentStep.status === "pending"){
+      
+      location.state.id = currentStep.stepFlow;
+      let splitted = currentStep.stepFlowStep.name.split("-");
+      location.state.name = (splitted[0].trim() + " - " + splitted[1].trim());
+      console.log(currentStep, location);
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    }
   } 
 
   return (

@@ -22,10 +22,10 @@ export const Success = () => {
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
   useEffect(() => {
-    getStepCompleted();
+    getStepCompleted(false);
   }, [])
 
-  const getStepCompleted = async () => { 
+  const getStepCompleted = async (renderNeeded: any) => { 
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) => index === currentStepIndex ? { ...obj, status: "completed" } : obj);
@@ -36,7 +36,7 @@ export const Success = () => {
 
     let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, renderNeeded);
     } catch (e: any) {
       let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
       errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);

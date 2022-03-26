@@ -37,33 +37,40 @@ export const Manage = () => {
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
   const onUnStakeClick = () => {
+    setIsLoading(true);
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.unstake;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    setIsLoading(false);
   }
 
   const onStakeClick = () => {
-    // history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake})
+    // history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake});
+    setIsLoading(true);
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.stake;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
-  
+    setIsLoading(false);
   }
 
   const onClaimRewardsClick = () => {
+    setIsLoading(true);
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.withdraw;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    setIsLoading(false);
   }
 
   const onAddLiquidityClick = () => { 
+    setIsLoading(true);
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.generalAddLiquidity;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name; // getting no history againts this id
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    setIsLoading(false);
   }
 
   const loadCrucibleUserInfo = createAsyncThunk('crucible/loadUserInfo',

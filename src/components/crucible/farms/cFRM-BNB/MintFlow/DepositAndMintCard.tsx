@@ -39,6 +39,8 @@ export const CrucibleDeposit = () => {
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
   useEffect(() => { 
+    console.log('appr val',  (approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)]))
+
      if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)]) > 0){
       if (currentStep.step.name === "Approve"){
         getStepCompleted();
@@ -107,10 +109,12 @@ export const CrucibleDeposit = () => {
   }
 
   const onContinueToNextStepClick = () => {
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.generalAddLiquidity;
-    location.state.id = nextStepInfo.id;
-    location.state.stepFlowName = nextStepInfo.name; // getting no history againts this id
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    if ( currentStep.status === "pending"){
+      location.state.id = currentStep.step._id;
+      let splitted = currentStep.stepFlowStep.name.split("-");
+      location.state.name = (splitted[0].trim() + " - " + splitted[1].trim());
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    }
   }
 
   return (

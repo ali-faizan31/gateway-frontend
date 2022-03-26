@@ -7,7 +7,7 @@ import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
 import {ApprovableButtonWrapper, approvalKey} from './../../../../../container-components/web3Client/approvalButtonWrapper';
 import { useHistory, useLocation } from "react-router"; 
-import {CRUCIBLE_CONTRACTS_V_0_1} from './../../../common/utils';
+import {CFRM_BNB_STEP_FLOW_IDS, CRUCIBLE_CONTRACTS_V_0_1} from './../../../common/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "../../../../../redux/rootReducer";
 import { Web3Helper } from './../../../../../container-components/web3Client/web3Helper';
@@ -46,14 +46,16 @@ export const Stake = () => {
   }
   
   useEffect(() => { 
+    console.log('appr val',  (approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)]))
     if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)]) > 0){
      if (currentStep.step.name === "Approve"){
-       getStepCompleted();
+       console.log('aprval done')
+       getStepCompleted(false);
      }
    }
  }, [approvals])
 
-  const getStepCompleted = async () => { 
+  const getStepCompleted = async ( renderNeeded: any) => { 
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) => index === currentStepIndex ? { ...obj, status: "completed" } : obj);
@@ -62,9 +64,9 @@ export const Stake = () => {
       dispatch(CrucibleActions.updateCurrentStep({ currentStep: updatedCurrentStep, currentStepIndex: currentStepIndex }));
       dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: updHistory }));
 
-    let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, renderNeeded);
     } catch (e: any) {
       let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
       errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
@@ -91,7 +93,7 @@ export const Stake = () => {
         setIsProcessing(false)
         //setIsSubmitted(true)
         setIsProcessed(true)
-        getStepCompleted();
+        getStepCompleted(false);
       }
       //setIsApproving(false);
       //setTransitionStatusDialog(true);
@@ -99,13 +101,14 @@ export const Stake = () => {
     }
   }
 
-  const onContinueToNextStepClick = () => {
-    getStepCompleted();
-    let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Liquidity"); 
-    console.log(nextStepInfo, "---------------Liquidity-----------------", location.state)
-    location.state.id = nextStepInfo.id;
-    location.state.stepFlowName = nextStepInfo.name;
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+  const onContinueToNextStepClick = () => { 
+    console.log(currentStep)
+    if ( currentStep.status === "pending"){
+      location.state.id = currentStep.step._id;
+      let splitted = currentStep.stepFlowStep.name.split("-");
+      location.state.name = (splitted[0].trim() + " - " + splitted[1].trim());
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    }
   }
 
   // const onStakeClick = () => {

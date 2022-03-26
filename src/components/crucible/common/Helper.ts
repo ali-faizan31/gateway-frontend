@@ -80,12 +80,17 @@ export const renderComponent = (stepFlowStepName: any, state: any, history: any)
   }
 }
 
-export const getLatestStepToRender = async (state: any, token: any, currentStep: any, currentStepIndex: any, stepFlowStepsHistory: any, dispatch: any, history: any) => {
+export const getLatestStepToRender = async (state: any, token: any, currentStep: any, currentStepIndex: any, stepFlowStepsHistory: any, dispatch: any, history: any, renderNeeded: any = true) => {
   try {
     let sequenceResponse = await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(state.id, token);
+    // sequenceResponse = sequenceResponse.data && sequenceResponse.data.body && sequenceResponse.data.body.stepFlowStepsHistory;
+    // let pendingStepInfo = getLatestStepWithPendingStatus(sequenceResponse);
+    // dispatch(CrucibleActions.updateCurrentStep({ currentStep: pendingStepInfo?.pendingStep, currentStepIndex: pendingStepInfo?.index }));
+    // dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: sequenceResponse }));
+    // renderNeeded && renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
   } catch (e: any) {
     let errorResponse = e && e.response && e.response.data.status;
-    if (errorResponse.code === 400) {
+    if (errorResponse?.code === 400) {
       try {
         console.log(state, currentStep, currentStepIndex, "line 51")
         let latestResponse = await SFSH_API.getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(state.id, token);
@@ -96,7 +101,7 @@ export const getLatestStepToRender = async (state: any, token: any, currentStep:
           console.log('last step condition')
           dispatch(CrucibleActions.updateCurrentStep({ currentStep: pendingStepInfo?.pendingStep, currentStepIndex: pendingStepInfo?.index }));
           dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: latestResponse }));
-          renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
+          renderNeeded && renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
         } else if (pendingStepInfo?.pendingStep.step.name === currentStep?.step?.name) { //same step rendered
           console.log('same step condition')
           dispatch(CrucibleActions.updateCurrentStep({ currentStep: pendingStepInfo?.pendingStep, currentStepIndex: pendingStepInfo?.index }));
@@ -104,9 +109,8 @@ export const getLatestStepToRender = async (state: any, token: any, currentStep:
           console.log('next step condition', pendingStepInfo)
           dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: latestResponse }));
           dispatch(CrucibleActions.updateCurrentStep({ currentStep: pendingStepInfo?.pendingStep, currentStepIndex: pendingStepInfo?.index }));
-          renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
-        }
-        console.log('j')
+          renderNeeded && renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
+        } 
       } catch (e: any) {
         let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
         errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
