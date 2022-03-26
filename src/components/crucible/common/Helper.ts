@@ -18,14 +18,46 @@ export const renderComponent = (stepFlowStepName: any, state: any, history: any)
         case "Mint": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint, state: state })
         default: return history.push(PATH_DASHBOARD.crucible.index);
       }
-      case "cFRM / BNB Crucible Farm - Stake Flow":
+    case "cFRM / BNB Crucible Farm - Stake Flow":
       switch (stepFlowStepName) {
         case "Approve": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake, state: state })
         case "Stake": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake, state: state })
         case "Success": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.success, state: state })
         default: return history.push(PATH_DASHBOARD.crucible.index);
       }
-    case "cFRM / BNB Crucible Farm - Add Liquidity": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.liquidity, state: state })
+    case "cFRM / BNB Crucible Farm - Unstake Flow":
+      switch (stepFlowStepName) {
+        case "Unstake": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.unstake.unstake, state: state })
+        case "Success": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.unstake.success, state: state })
+        default: return history.push(PATH_DASHBOARD.crucible.index);
+      }
+    case "cFRM / BNB Crucible Farm - Unwrap Flow":
+      switch (stepFlowStepName) {
+        case "Unwrap": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.unwrap, state: state })
+        case "Success": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.success, state: state })
+        default: return history.push(PATH_DASHBOARD.crucible.index);
+      }
+      case "cFRM / BNB Crucible Farm - Withdraw Flow":
+        switch (stepFlowStepName) {
+          case "Withdraw": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.withdraw, state: state })
+          case "Success": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.success, state: state })
+          default: return history.push(PATH_DASHBOARD.crucible.index);
+        }
+      case "cFRM / BNB Crucible Farm - Add Liquidity - General Flow": 
+        switch (stepFlowStepName) {
+          case "Introduction": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.liquidity, state: state })
+          default: return history.push(PATH_DASHBOARD.crucible.index);
+        }
+        case "cFRM / BNB Crucible Farm - Remove Liquidity - Unstake Flow": 
+        switch (stepFlowStepName) {
+          case "Introduction": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.unstake.steps, state: state })
+          default: return history.push(PATH_DASHBOARD.crucible.index);
+        }
+        case "cFRM / BNB Crucible Farm - Add Liquidity - Withdraw Flow": 
+        switch (stepFlowStepName) {
+          case "Introduction": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.steps, state: state })
+          default: return history.push(PATH_DASHBOARD.crucible.index);
+        }
     case "cFRMx / BNB":
       switch (stepFlowStepName) {
         case "Introduction": return history.push({ pathname: PATH_DASHBOARD.crucible.getStarted, state: state })
@@ -48,12 +80,17 @@ export const renderComponent = (stepFlowStepName: any, state: any, history: any)
   }
 }
 
-export const getLatestStepToRender = async (state: any, token: any, currentStep: any, currentStepIndex: any, stepFlowStepsHistory: any, dispatch: any, history: any) => {
+export const getLatestStepToRender = async (state: any, token: any, currentStep: any, currentStepIndex: any, stepFlowStepsHistory: any, dispatch: any, history: any, renderNeeded: any = true) => {
   try {
     let sequenceResponse = await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(state.id, token);
+    // sequenceResponse = sequenceResponse.data && sequenceResponse.data.body && sequenceResponse.data.body.stepFlowStepsHistory;
+    // let pendingStepInfo = getLatestStepWithPendingStatus(sequenceResponse);
+    // dispatch(CrucibleActions.updateCurrentStep({ currentStep: pendingStepInfo?.pendingStep, currentStepIndex: pendingStepInfo?.index }));
+    // dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: sequenceResponse }));
+    // renderNeeded && renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
   } catch (e: any) {
     let errorResponse = e && e.response && e.response.data.status;
-    if (errorResponse.code === 400) {
+    if (errorResponse?.code === 400) {
       try {
         console.log(state, currentStep, currentStepIndex, "line 51")
         let latestResponse = await SFSH_API.getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(state.id, token);
@@ -64,7 +101,7 @@ export const getLatestStepToRender = async (state: any, token: any, currentStep:
           console.log('last step condition')
           dispatch(CrucibleActions.updateCurrentStep({ currentStep: pendingStepInfo?.pendingStep, currentStepIndex: pendingStepInfo?.index }));
           dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: latestResponse }));
-          renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
+          renderNeeded && renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
         } else if (pendingStepInfo?.pendingStep.step.name === currentStep?.step?.name) { //same step rendered
           console.log('same step condition')
           dispatch(CrucibleActions.updateCurrentStep({ currentStep: pendingStepInfo?.pendingStep, currentStepIndex: pendingStepInfo?.index }));
@@ -72,9 +109,8 @@ export const getLatestStepToRender = async (state: any, token: any, currentStep:
           console.log('next step condition', pendingStepInfo)
           dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: latestResponse }));
           dispatch(CrucibleActions.updateCurrentStep({ currentStep: pendingStepInfo?.pendingStep, currentStepIndex: pendingStepInfo?.index }));
-          renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
-        }
-        console.log('j')
+          renderNeeded && renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
+        } 
       } catch (e: any) {
         let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
         errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
@@ -111,7 +147,7 @@ export const getLatestStepWithPendingStatus = (stepResponse: any) => {
 };
 
 export const getNextStepFlowStepId = (currentStepFlowName: any, stepFlowStepName: any) => {
-  console.log(currentStepFlowName)
+  console.log(currentStepFlowName, stepFlowStepName)
   switch (currentStepFlowName) {
     case "cFRM / BNB Crucible Farm - Farming Dashboard Flow":
       switch (stepFlowStepName) {

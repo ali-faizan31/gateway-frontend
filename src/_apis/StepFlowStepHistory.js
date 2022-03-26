@@ -2,7 +2,7 @@ import axios from "axios";
 import { baseUrl, apiKey } from "../utils/const.utils";
 
 export function getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId( id, token ) {
-    return axios.get(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/stepFlow/latest/${id}`, {
+    return axios.get(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/stepFlow/latest/${id}?isPagination=false`, {
     headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-type": "Application/json",
@@ -12,7 +12,7 @@ export function getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId( 
 }
 
 export function getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId( id, token ) {
-    return axios.get(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/stepFlow/${id}`, {
+    return axios.get(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/stepFlow/${id}?isPagination=false`, {
     headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-type": "Application/json",
@@ -32,7 +32,7 @@ export function updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowSt
 }
 
 export function startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId( id, token ) {
-    return axios.get(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/restart/stepFlow/${id}`, {
+    return axios.get(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/restart/stepFlow/${id}?isPagination=false`, {
     headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-type": "Application/json",

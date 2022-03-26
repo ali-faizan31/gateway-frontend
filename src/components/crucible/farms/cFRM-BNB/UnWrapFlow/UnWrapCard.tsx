@@ -14,34 +14,55 @@ import {CRUCIBLE_CONTRACTS_V_0_1} from './../../../common/utils';
 import { RootState } from "../../../../../redux/rootReducer";
 import { useDispatch, useSelector } from 'react-redux';
 import { BigUtils } from './../../../../../container-components/web3Client/types';
+import * as CrucibleActions from "../../../redux/CrucibleActions";
+import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
+import toast from "react-hot-toast";
+import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper";
 
 export const UnWrap = () => {
+  const location: any = useLocation();
+  const history = useHistory();
+  const dispatch = useDispatch()
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [approvedDone, setapprovedDone] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isProcessed,setIsProcessed ] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const location: any = useLocation();
-  const history = useHistory();
   //@ts-ignore
   const crucible =  useSelector((state)=> state.crucible.selectedCrucible)
   //@ts-ignore
   const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
   const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
-  const dispatch = useDispatch()
   const [amount,setAmount] = useState(0)
 
+  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+ 
   const onApproveClick = () => {
     setTransitionStatusDialog(true);
     setIsApproving(true);
   }
+ 
+  
+  const getStepCompleted = async (renderNeeded: any) => { 
+    try {
+      let updatedCurrentStep = { ...currentStep, status: "completed" };
+      let updHistory = stepFlowStepHistory.map((obj, index) => index === currentStepIndex ? { ...obj, status: "completed" } : obj);
+      let data = { status: "completed" };
 
-useEffect(() => {
-  console.log("approvedDone", approvedDone)
-}, [approvedDone])
+      dispatch(CrucibleActions.updateCurrentStep({ currentStep: updatedCurrentStep, currentStepIndex: currentStepIndex }));
+      dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: updHistory }));
 
-
+    let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, renderNeeded);
+    } catch (e: any) {
+      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
+      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+    }
+  }
+  
 
   const onUnWrapClick = async (
     currency: string,
@@ -63,6 +84,7 @@ useEffect(() => {
         setIsProcessing(false)
         //setIsSubmitted(true)
         setIsProcessed(true)
+        getStepCompleted(false);
       }
       //setIsApproving(false);
       //setTransitionStatusDialog(true);
@@ -70,11 +92,16 @@ useEffect(() => {
     }
   }
 
-  // const onUnWrapClick = () => {
-  //   setIsProcessing(true);
-  //   setIsApproving(false);
-  //   setTransitionStatusDialog(true);
-  // }
+  const onContinueToNextStepClick = () => {
+    if ( currentStep.status === "pending"){
+      
+      location.state.id = currentStep.stepFlow;
+      let splitted = currentStep.stepFlowStep.name.split("-");
+      location.state.name = (splitted[0].trim() + " - " + splitted[1].trim());
+      console.log(currentStep, location);
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    }
+  } 
 
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
@@ -177,6 +204,7 @@ useEffect(() => {
        isSubmitted={isSubmitted}
        isProcessed={isProcessed}
        crucible={crucible}
+       onContinueToNextStepClick ={()=>onContinueToNextStepClick()}
       />
     </FCard>
   );

@@ -77,21 +77,21 @@ function App() {
           </Route>
           {/* new routes ---------------------- */}
           {/* cfrm-bnb routes */}
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.introduction} component={cFRMBNBModule.cFRMBNBFarmingDashboardFlowIntroduction} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.manage} component={cFRMBNBModule.cFRMBNBFarmingDashboardFlowManage} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.mint.steps} component={cFRMBNBModule.cFRMBNBFarmingMintFlowSteps} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint} component={cFRMBNBModule.cFRMBNBFarmingMintFlowMint} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.stake.success} component={cFRMBNBModule.cFRMBNBFarmingStakeFlowSucess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake} component={cFRMBNBModule.cFRMBNBFarmingStakeFlowStake} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.unstake.success} component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowSucess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.unstake.unstake} component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowUnStake} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.unstake.steps} component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowSteps} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.liquidity} component={cFRMBNBModule.cFRMBNBFarmingLiquidityFlow} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.success} component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowSucess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.withdraw} component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowWithdraw} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.steps} component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowSteps} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.unwrap} component={cFRMBNBModule.cFRMBNBFarmingUnWrapFlowUnWrap} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
-          <GuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.success} component={cFRMBNBModule.cFRMBNBFarmingUnWrapFlowSuccess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.manage} component={cFRMBNBModule.cFRMBNBFarmingDashboardFlowManage} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.introduction} component={cFRMBNBModule.cFRMBNBFarmingDashboardFlowIntroduction} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.mint.steps} component={cFRMBNBModule.cFRMBNBFarmingMintFlowSteps} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint} component={cFRMBNBModule.cFRMBNBFarmingMintFlowMint} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.stake.success} component={cFRMBNBModule.cFRMBNBFarmingStakeFlowSucess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake} component={cFRMBNBModule.cFRMBNBFarmingStakeFlowStake} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.unstake.success} component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowSucess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.unstake.unstake} component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowUnStake} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.unstake.steps} component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowSteps} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.liquidity} component={cFRMBNBModule.cFRMBNBFarmingLiquidityFlow} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.success} component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowSucess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.withdraw} component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowWithdraw} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.steps} component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowSteps} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.unwrap} component={cFRMBNBModule.cFRMBNBFarmingUnWrapFlowUnWrap} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.success} component={cFRMBNBModule.cFRMBNBFarmingUnWrapFlowSuccess} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
           {/* cfrm-bnb routes end */}
            {/* cfrmx-bnb routes */}
           <GuardedRoute path={PATH_DASHBOARD.crucible.cFRMx_BNB.introduction} component={cFRMxBNBModule.cFRMxBNBFarmingDashboardFlowIntroduction} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />

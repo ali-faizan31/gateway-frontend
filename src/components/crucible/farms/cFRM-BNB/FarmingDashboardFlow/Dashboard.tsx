@@ -14,6 +14,8 @@ import { BigUtils } from './../../../../../container-components/web3Client/types
 import { RootState } from "../../../../../redux/rootReducer";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import ClipLoader from "react-spinners/ClipLoader";
+import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
+import { getLatestStepToRender } from "../../../common/Helper";
 
 export const Manage = () => {
   const history = useHistory()
@@ -30,22 +32,45 @@ export const Manage = () => {
   //@ts-ignore
   const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
   let userStake = (userCrucibleData.stakes||[]).find((e:any)=>e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd")
-  console.log(userStake)
+  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
+  const { approveTransactionId } = useSelector((state: RootState) => state.approval);
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
   const onUnStakeClick = () => {
-    history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.unstake.unstake})
+    setIsLoading(true);
+    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.unstake;
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    setIsLoading(false);
   }
 
-  const onStakeClick = () => {
-    history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake})
+  const onStakeClick = async () => {
+    // history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake});
+    setIsLoading(true);
+    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.stake;
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    setIsLoading(false);
   }
 
   const onClaimRewardsClick = () => {
-    history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.withdraw})
+    setIsLoading(true);
+    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.withdraw;
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    setIsLoading(false);
   }
 
-  const onAddLiquidityClick = () => {
-    history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.liquidity})
+  const onAddLiquidityClick = () => { 
+    setIsLoading(true);
+    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.generalAddLiquidity;
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name; // getting no history againts this id
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    setIsLoading(false);
   }
 
   const loadCrucibleUserInfo = createAsyncThunk('crucible/loadUserInfo',
@@ -89,7 +114,7 @@ export const Manage = () => {
     <FContainer className="f-mr-0 card-manage" width={900}> 
       {
         isLoading ?
-        <ClipLoader color="#cba461" loading={true} size={150} />
+        <FCard  ><FItem align={"center"}><ClipLoader color="#cba461" loading={true} size={150} /></FItem></FCard>
         :
           <>
             <CrucibleMyBalance />

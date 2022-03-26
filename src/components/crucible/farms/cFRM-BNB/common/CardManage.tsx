@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper";
+import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
 
 export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowType, unwrap, setUnwrap }: any) => {
   const history = useHistory();
@@ -25,15 +26,21 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
   
   const onMintcFRMClick = () => { 
     console.log(location.state.stepFlowName, "Mint")
-    let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Mint");
+    // let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Mint");
+    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.mint;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name; 
+    console.log(nextStepInfo, location.state)
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
     // history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint}); 
   }
 
   const onWrapClick = () => { 
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.unwrap});
+    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.unwrap;
+    console.log(nextStepInfo, location.state)
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
   }
 
 

@@ -10,7 +10,7 @@ import { linkForTransaction,addToken  } from './../../../../../container-compone
 export const DialogTransitionStatus = ({ 
   transitionStatusDialog, setTransitionStatusDialog, isProcessing, 
   isProcessed,setapprovedDone, setIsProcessing,isSubmitted,crucible
-  , network, tx
+  , network, tx, onContinueToNextStepClick
  }: any) => {
   const history = useHistory();
   const [approved, setApproved] = useState(false);
@@ -119,7 +119,7 @@ const onclose = () => {
                 className="f-mt-1 f-mb-1" />
             </FItem>
             <FItem>
-              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.mint.steps})} />
+              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() =>onContinueToNextStepClick()} />
             </FItem>
           </FItem>
         </React.Fragment>

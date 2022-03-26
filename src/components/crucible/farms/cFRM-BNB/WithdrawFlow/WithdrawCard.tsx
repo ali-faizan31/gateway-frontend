@@ -10,15 +10,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "../../../../../redux/rootReducer";
 import {ApprovableButtonWrapper} from './../../../../../container-components/web3Client/approvalButtonWrapper';
 import {CRUCIBLE_CONTRACTS_V_0_1} from './../../../common/utils';
+import * as CrucibleActions from "../../../redux/CrucibleActions";
+import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
+import toast from "react-hot-toast";
+import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper";
+import { useHistory, useLocation } from "react-router"; 
 
 export const Withdraw = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const location: any = useLocation();
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [approvedDone, setapprovedDone] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isProcessed,setIsProcessed ] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const dispatch = useDispatch()
+  const [isSubmitted, setIsSubmitted] = useState(false); 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   //@ts-ignore
   const crucible =  useSelector((state)=> state.crucible.selectedCrucible)
@@ -26,12 +33,26 @@ export const Withdraw = () => {
   //@ts-ignore
   const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
   let userStake = (userCrucibleData.stakes||[]).find((e:any)=>e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd")
-  console.log(userStake)
+  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+ 
+  const getStepCompleted = async (renderNeeded: any) => { 
+    try {
+      let updatedCurrentStep = { ...currentStep, status: "completed" };
+      let updHistory = stepFlowStepHistory.map((obj, index) => index === currentStepIndex ? { ...obj, status: "completed" } : obj);
+      let data = { status: "completed" };
 
-  useEffect(() => {
-    console.log("approvedDone", approvedDone)
-  }, [approvedDone])
+      dispatch(CrucibleActions.updateCurrentStep({ currentStep: updatedCurrentStep, currentStepIndex: currentStepIndex }));
+      dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: updHistory }));
 
+    let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, renderNeeded);
+    } catch (e: any) {
+      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
+      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+    }
+  }
 
   const onWithdrawClick = async (
     currency: string,
@@ -53,18 +74,21 @@ export const Withdraw = () => {
         setIsProcessing(false)
         //setIsSubmitted(true)
         setIsProcessed(true)
+        getStepCompleted(false);
       }
       //setIsApproving(false);
       //setTransitionStatusDialog(true);
       
     }
   }
-
-  // const onWithdrawClick = () => {
-  //   setIsProcessing(true);
-  //   setIsApproving(false);
-  //   setTransitionStatusDialog(true);
-  // }
+  const onContinueToNextStepClick = () => {
+    if ( currentStep.status === "pending"){
+      location.state.id = currentStep.stepFlow;
+      let splitted = currentStep.stepFlowStep.name.split("-");
+      location.state.name = (splitted[0].trim() + " - " + splitted[1].trim());
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    }
+  } 
 
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
@@ -151,6 +175,7 @@ export const Withdraw = () => {
         isSubmitted={isSubmitted}
         isProcessed={isProcessed}
         crucible={crucible}
+        onContinueToNextStepClick ={()=>onContinueToNextStepClick()}
        />
     </FCard>
   );

@@ -4,14 +4,19 @@ import { FButton, FCard, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-sy
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
 import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
-import { useSelector } from "react-redux"; 
+import { useDispatch, useSelector } from "react-redux"; 
 import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
 
 export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowType, unwrap, setUnwrap }: any) => {
   const history = useHistory();
+  const dispatch = useDispatch()
   const location: any = useLocation();
   const { isConnected } = useSelector((state: RootState) => state.walletConnector);
+  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { currentStep, currentStepIndex, stepFlowStepHistory } = useSelector((state: RootState) => state.crucible);
+
 
   // useEffect(() => { 
   //   if ( isConnected === false ){
@@ -24,8 +29,12 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
     history.push({pathname:PATH_DASHBOARD.crucible.cFRM.mint.mint});
   }
 
-  const onWrapClick = () => { 
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRM.unwrap.unwrap});
+  const onUnWrapClick = () => { 
+    // let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.wrap;
+    // location.state.id = nextStepInfo.id;
+    // location.state.stepFlowName = nextStepInfo.name;
+    // getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+  
   }
 
 
@@ -76,7 +85,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <FButton title={"Mint cFRM"} outlined className={"w-100"} onClick={() => onMintClick()}></FButton>
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
-          <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"} onClick={() => onWrapClick()}></FButton>
+          <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"} onClick={() => onUnWrapClick()}></FButton>
         </FGridItem>
       </FGrid>
     </FCard>
