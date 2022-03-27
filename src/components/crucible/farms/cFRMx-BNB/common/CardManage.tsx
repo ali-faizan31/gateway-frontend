@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import {
   FButton,
   FCard,
@@ -21,6 +21,7 @@ import IconNetworkCFrmStr from "../../../../../assets/img/icon-network-cfrm.svg"
 import IconNetworkFrmx from "../../../../../assets/img/icon-network-frmx.svg";
 import IconNetworkCFrmx from "../../../../../assets/img/icon-network-cfrmx.svg";
 import { ReactComponent as IconNetworkBnb } from "../../../../../assets/img/icon-network-bnb.svg";
+import { getActualRoute } from "../../../common/Helper";
 
 export const CrucibleManage = ({
   dashboardAction,
@@ -30,6 +31,7 @@ export const CrucibleManage = ({
   setUnwrap,
 }: any) => {
   const history = useHistory();
+  const { farm } = useParams<{ farm?: string }>();
   // const location: any = useLocation();
   // const { isConnected } = useSelector((state: RootState) => state.walletConnector);
   //@ts-ignore
@@ -41,11 +43,21 @@ export const CrucibleManage = ({
   // }, [isConnected])
 
   const onMintcFRMxClick = () => {
-    history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.mint.mint });
+    history.push({
+      pathname: getActualRoute(
+        farm,
+        PATH_DASHBOARD.crucible.crucibleActionRoutes.mint.mint
+      ),
+    });
   };
 
   const onWrapClick = () => {
-    history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.unwrap.unwrap });
+    history.push({
+      pathname: getActualRoute(
+        farm,
+        PATH_DASHBOARD.crucible.crucibleActionRoutes.unwrap.unwrap
+      ),
+    });
   };
 
   const [selectedToken, setSelectedToken] = useState<any>();

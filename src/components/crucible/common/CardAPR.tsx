@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { useHistory } from "react-router";
 import Datatable from "react-bs-datatable";
 import {
   FButton,
@@ -27,8 +27,6 @@ export const CardAPR = () => {
   // const { isConnected, isConnecting } = useSelector(
   //   (state: RootState) => state.walletConnector
   // );
-
-  const { farm } = useParams<{ farm?: string }>();
 
   const tableHeads: any[] = [
     {
@@ -63,6 +61,7 @@ export const CardAPR = () => {
       network: "BSC",
       LpCurrency: "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224",
       LPstakingAddress: "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd",
+      internalName: "cFRM-BNB",
     },
     {
       sustainableCrucibleFarms: "cFRM",
@@ -74,6 +73,7 @@ export const CardAPR = () => {
       id: "6238386bd292da2db05524f9",
       contract: "0x5D8df66ea3e5c3C30A1dB4aFC6F17A917B201118",
       network: "BSC",
+      internalName: "cFRM",
     },
     {
       sustainableCrucibleFarms: "cFRMx / BNB",
@@ -87,6 +87,7 @@ export const CardAPR = () => {
       network: "BSC",
       LpCurrency: "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224",
       LPstakingAddress: "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd",
+      internalName: "cFRMx-BNB",
     },
     {
       sustainableCrucibleFarms: "cFRMx",
@@ -98,6 +99,7 @@ export const CardAPR = () => {
       id: "62383865d292da2db05524f6",
       contract: "0x5D8df66ea3e5c3C30A1dB4aFC6F17A917B201118",
       network: "BSC",
+      internalName: "cFRMx",
     },
   ];
 
@@ -144,7 +146,8 @@ export const CardAPR = () => {
                 stepFlow.contract,
                 stepFlow.network,
                 stepFlow.LpCurrency,
-                stepFlow.LPstakingAddress
+                stepFlow.LPstakingAddress,
+                stepFlow.internalName
               )
             }
           />
@@ -157,7 +160,8 @@ export const CardAPR = () => {
                 stepFlow.contract,
                 stepFlow.network,
                 stepFlow.LpCurrency,
-                stepFlow.LPstakingAddress
+                stepFlow.LPstakingAddress,
+                stepFlow.internalName
               )
             }
           ></FButton>
@@ -172,8 +176,10 @@ export const CardAPR = () => {
     contract: string,
     network: string,
     LpCurrency?: string,
-    LPstakingAddress?: string
+    LPstakingAddress?: string,
+    farm?: any
   ) => {
+    console.log("getStepToRender");
     // history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: {id, name,contract,network}})
     setIsLoading(true);
     let stepResponse = await getStepFlowStepByStepFlowIdForPublic(id);

@@ -15,15 +15,17 @@ import { useWeb3React } from "@web3-react/core";
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
 import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
 // import Web3 from "web3";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { crucibleSlice } from "./../../../redux/CrucibleSlice";
 import { BigUtils } from "./../../../../../container-components/web3Client/types";
 import { RootState } from "../../../../../redux/rootReducer";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { getActualRoute } from "../../../common/Helper";
 
 export const Manage = () => {
   const history = useHistory();
+  const { farm } = useParams<{ farm?: string }>();
   const [dashboardAction, setDashboardAction] = useState(false);
   // const [unwrap, setUnwrap] = useState(false);
   // const [flowType, setFlowType] = useState("");
@@ -50,22 +52,38 @@ export const Manage = () => {
 
   const onUnStakeClick = () => {
     history.push({
-      pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.unstake.unstake,
+      pathname: getActualRoute(
+        farm,
+        PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.unstake
+      ),
     });
   };
 
   const onStakeClick = () => {
-    history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.stake.stake });
+    history.push({
+      pathname: getActualRoute(
+        farm,
+        PATH_DASHBOARD.crucible.crucibleActionRoutes.stake.stake
+      ),
+    });
   };
 
   const onClaimRewardsClick = () => {
     history.push({
-      pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.withdraw.withdraw,
+      pathname: getActualRoute(
+        farm,
+        PATH_DASHBOARD.crucible.crucibleActionRoutes.withdraw.withdraw
+      ),
     });
   };
 
   const onAddLiquidityClick = () => {
-    history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.liquidity });
+    history.push({
+      pathname: getActualRoute(
+        farm,
+        PATH_DASHBOARD.crucible.crucibleActionRoutes.liquidity
+      ),
+    });
   };
 
   const loadCrucibleUserInfo = createAsyncThunk(

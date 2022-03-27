@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import {
   FButton,
   FCard,
@@ -10,12 +10,13 @@ import {
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { getActualRoute } from "../../../common/Helper";
 
 export const AddLiquidity = () => {
   const history = useHistory();
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
-
+  const { farm } = useParams<{ farm?: string }>();
   return (
     <FContainer className="f-mr-0" width={700}>
       <CrucibleMyBalance />
@@ -89,7 +90,10 @@ export const AddLiquidity = () => {
               disabled={!stepThreeCheck}
               onClick={() =>
                 history.push({
-                  pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.stake.stake,
+                  pathname: getActualRoute(
+                    farm,
+                    PATH_DASHBOARD.crucible.crucibleActionRoutes.stake.stake
+                  ),
                 })
               }
             />

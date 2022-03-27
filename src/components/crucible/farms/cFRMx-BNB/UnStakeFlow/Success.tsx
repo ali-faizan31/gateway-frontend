@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import {
   FCard,
   FContainer,
@@ -15,12 +15,18 @@ import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/
 // import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
+import { getActualRoute } from "../../../common/Helper";
 
 export const Success = () => {
   const history = useHistory();
-
+  const { farm } = useParams<{ farm?: string }>();
   const onRemoveLiquityClick = () => {
-    history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.unstake.steps });
+    history.push({
+      pathname: getActualRoute(
+        farm,
+        PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.steps
+      ),
+    });
   };
 
   return (

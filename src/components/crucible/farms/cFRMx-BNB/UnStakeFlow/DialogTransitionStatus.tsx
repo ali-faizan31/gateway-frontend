@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { FButton, FDialog, FItem, FLoader, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconApprove } from "../../../../../assets/img/icon-transaction-approved.svg";
 import { ReactComponent as IconSubmitted } from "../../../../../assets/img/icon-transaction-submitted.svg";
@@ -9,6 +9,7 @@ import {
   linkForTransaction,
   addToken,
 } from "./../../../../../container-components/web3Client/types";
+import { getActualRoute } from "../../../common/Helper";
 
 export const DialogTransitionStatus = ({
   transitionStatusDialog,
@@ -23,6 +24,7 @@ export const DialogTransitionStatus = ({
   crucible,
 }: any) => {
   const history = useHistory();
+  const { farm } = useParams<{ farm?: string }>();
   // const [approved, setApproved] = useState(false);
   // const [submitted, setSubmitted] = useState(false);
   // const [processed, setProcessed] = useState(false);
@@ -148,7 +150,10 @@ export const DialogTransitionStatus = ({
                 className="btn-step f-mt-1 f-mb-1"
                 onClick={() =>
                   history.push({
-                    pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.success,
+                    pathname: getActualRoute(
+                      farm,
+                      PATH_DASHBOARD.crucible.crucibleActionRoutes.stake.success
+                    ),
                   })
                 }
               />

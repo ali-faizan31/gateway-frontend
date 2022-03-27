@@ -19,10 +19,10 @@ import { useSelector } from "react-redux";
 import { WalletAuthencationOnSignIn } from "./components/common/wallet-authentication/WalletAuthenticationSignIn";
 import { RootState } from "./redux/rootReducer";
 import {
-  cFRMModule,
+  // cFRMModule,
   cFRMBNBModule,
-  cFRMxBNBModule,
-  cFRMxModule,
+  // cFRMxBNBModule,
+  // cFRMxModule,
 } from "./components/crucible/farms";
 
 const Loadable = (Component: any) => (props: any) => {
@@ -231,6 +231,7 @@ function App() {
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
+
           {/* cfrm-bnb routes end */}
           {/* cfrmx-bnb routes */}
           {/* <GuardedRoute
@@ -567,7 +568,7 @@ function App() {
             headerTitle="Crucible"
           /> */}
           {/* cfrmx routes end */}
-          {/* <UnGuardedRoute
+          <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.public}
             component={CruciblePublic}
             auth={isAuthenticated}
@@ -616,7 +617,7 @@ function App() {
             auth={isAuthenticated}
             layout={AuthLayout}
             headerTitle=""
-          /> */}
+          />
           {/* <UnGuardedRoute path='/auth/login' component={CommunityLogin} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/register' component={CommunityRegister} auth={isAuthenticated} layout={AuthLayout}/> */}
           <UnGuardedRoute

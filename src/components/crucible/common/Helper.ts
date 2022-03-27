@@ -26,7 +26,8 @@ export const renderComponent = (
   history: any,
   farm: any
 ) => {
-  console.log(state, stepFlowStepName, "render");
+  // console.log(state, stepFlowStepName, "render");
+  console.log(stepFlowStepName, farm, getHumanReadableFarmName(farm));
   switch (state.stepFlowName) {
     case `${getHumanReadableFarmName(
       farm
@@ -225,6 +226,7 @@ export const getLatestStepToRender = async (
 ) => {
   try {
     // let sequenceResponse =
+    console.log("Creating sequence");
     await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(
       state.id,
       token
@@ -235,12 +237,13 @@ export const getLatestStepToRender = async (
     // dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: sequenceResponse }));
     // renderNeeded && renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
   } catch (e: any) {
+    console.log("restart failed");
     let errorResponse = e && e.response && e.response.data.status;
     if (errorResponse?.code === 400) {
       try {
-        console.log(state, currentStep, currentStepIndex, "line 51");
+        // console.log(state, currentStep, currentStepIndex, "line 51");
         let latestResponse =
-          await SFSH_API.getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
+          await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
             state.id,
             token
           );
@@ -313,14 +316,14 @@ export const getLatestStepToRender = async (
           ? toast.error(`Error Occured: ${errorResponse}`)
           : toast.error(`Error Occured: ${e}`);
       }
-      let errorResponse =
-        e &&
-        e.response &&
-        e.response.data.status &&
-        e.response.data.status.message;
-      errorResponse
-        ? toast.error(`Error Occured: ${errorResponse}`)
-        : toast.error(`Error Occured: ${e}`);
+      // let errorResponse =
+      //   e &&
+      //   e.response &&
+      //   e.response.data.status &&
+      //   e.response.data.status.message;
+      // errorResponse
+      // ? toast.error(`Error Occured: ${errorResponse}`)
+      // : toast.error(`Error Occured: ${e}`);
     } else {
       let errorResponse =
         e &&
@@ -342,14 +345,17 @@ export const getLatestStepWithPendingStatus = (stepResponse: any) => {
     if (i === 0) {
       previous = stepResponse[i];
       current = stepResponse[i];
-      if (previous.status === "pending") {
+      if (previous.status === "pending" || "started") {
         return { pendingStep: previous, index: i };
       }
     } else {
       previous = stepResponse[i - 1];
       current = stepResponse[i];
 
-      if (previous.status !== "pending" && current.status === "pending") {
+      if (
+        previous.status !== "pending" &&
+        (current.status === "pending" || current.status === "started")
+      ) {
         return { pendingStep: current, index: i };
       }
     }

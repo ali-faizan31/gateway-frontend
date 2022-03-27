@@ -7,7 +7,7 @@ import {
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { RootState } from "../../../../../redux/rootReducer";
@@ -16,12 +16,14 @@ import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/Connect
 // import { getLatestStepWithPendingStatus } from "../../../../../utils/global.utils";
 // import { updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId } from "../../../../../_apis/StepFlowStepHistory";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
-import { getLatestStepToRender } from "../../../common/Helper";
+import { getActualRoute, getLatestStepToRender } from "../../../common/Helper";
 
 export const Introduction = () => {
   const history = useHistory();
   const location: any = useLocation();
   const dispatch = useDispatch();
+
+  const { farm } = useParams<{ farm?: string }>();
 
   const [neverShowAgain, setNeverShowAgain] = useState(false);
   // const [stepFlowResponse, setStepFlowResponse]  = useState<any>(undefined);
@@ -66,7 +68,9 @@ export const Introduction = () => {
         currentStepIndex,
         stepFlowStepHistory,
         dispatch,
-        history
+        history,
+        false,
+        farm
       );
     }
     // eslint-disable-next-line
@@ -75,7 +79,10 @@ export const Introduction = () => {
   const onGetStartedClick = async () => {
     if (neverShowAgain === true) {
       history.push({
-        pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.manage,
+        pathname: getActualRoute(
+          farm,
+          PATH_DASHBOARD.crucible.crucibleActionRoutes.manage
+        ),
         state: location.state,
       });
       // let data = { status: "completed" }
@@ -85,7 +92,10 @@ export const Introduction = () => {
       // history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: location.state})
     } else {
       history.push({
-        pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.manage,
+        pathname: getActualRoute(
+          farm,
+          PATH_DASHBOARD.crucible.crucibleActionRoutes.manage
+        ),
         state: location.state,
       });
     }

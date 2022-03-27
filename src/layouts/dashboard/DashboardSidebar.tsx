@@ -288,7 +288,7 @@ const DashboardSidebar = () => {
           >
             {item?.children?.length && (
               <FSiderSubMenuItem>
-                {item.children.map((subItem: any, index: any) => (
+                {item.children.map((subItem: any, sudIndex: any) => (
                   <FSiderItem
                     to={subItem.path}
                     title={subItem.title}
@@ -299,7 +299,7 @@ const DashboardSidebar = () => {
                         alt="side menut item"
                       />
                     }
-                    key={index}
+                    key={sudIndex}
                     target={subItem.target && subItem.target}
                   ></FSiderItem>
                 ))}

@@ -88,6 +88,7 @@ export const Introduction = () => {
   }, [tokenV2, stepFlowStepHistory]);
 
   const onGetStartedClick = async () => {
+    console.log("I am at onGetStartedClick");
     try {
       let updatedCurrentStep: any = {};
       let updHistory: any = [];
@@ -108,17 +109,6 @@ export const Introduction = () => {
         data = { status: "started" };
       }
 
-      dispatch(
-        CrucibleActions.updateCurrentStep({
-          currentStep: updatedCurrentStep,
-          currentStepIndex: currentStepIndex,
-        })
-      );
-      dispatch(
-        CrucibleActions.updateStepFlowStepHistory({
-          stepFlowStepHistory: updHistory,
-        })
-      );
       updateResponse =
         await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
           currentStep._id,
@@ -126,18 +116,31 @@ export const Introduction = () => {
           tokenV2
         );
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      updateResponse.length &&
-        getLatestStepToRender(
-          location.state,
-          tokenV2,
-          currentStep,
-          currentStepIndex,
-          stepFlowStepHistory,
-          dispatch,
-          history,
-          false,
-          farm
+      // console.log(updateResponse);
+      if (updateResponse?.status === "started") {
+        dispatch(
+          CrucibleActions.updateCurrentStep({
+            currentStep: updatedCurrentStep,
+            currentStepIndex: currentStepIndex,
+          })
         );
+        dispatch(
+          CrucibleActions.updateStepFlowStepHistory({
+            stepFlowStepHistory: updHistory,
+          })
+        );
+      }
+      // getLatestStepToRender(
+      //   location.state,
+      //   tokenV2,
+      //   currentStep,
+      //   currentStepIndex,
+      //   stepFlowStepHistory,
+      //   dispatch,
+      //   history,
+      //   false,
+      //   farm
+      // );
     } catch (e: any) {
       let errorResponse =
         e &&

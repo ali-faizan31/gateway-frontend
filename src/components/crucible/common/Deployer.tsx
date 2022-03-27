@@ -126,6 +126,12 @@ export const Deployer = () => {
   //   };
 
   const renderComponent = (stepFlowName: any, stepName: any, farm: any) => {
+    console.log(
+      "renderComponent : stepFlowName : ",
+      stepFlowName,
+      "\n stepName : ",
+      stepName
+    );
     switch (stepFlowName) {
       case `${getHumanReadableFarmName(farm)}`:
         switch (stepName) {
