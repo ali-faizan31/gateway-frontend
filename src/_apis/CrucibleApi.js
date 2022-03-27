@@ -13,7 +13,7 @@ export class crucibleApi {
     console.log(res,'lores')
     return unsecureSession;
   }
-
+  //https://4ikenxgwge.execute-api.us-east-2.amazonaws.com/default/kb-staging-backend
   crucibleApi(data) { 
     return axios.post(`https://4ikenxgwge.execute-api.us-east-2.amazonaws.com/default/kb-staging-backend`, 
     data,

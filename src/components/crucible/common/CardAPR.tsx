@@ -49,9 +49,9 @@ export const CardAPR = () => {
   ];
 
   const stepFlowsMock = [
-    {sustainableCrucibleFarms: "cFRM / BNB", stepFlowName: "cFRM / BNB Crucible Farm - Farming Dashboard Flow", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.1", apr: "10%", id: "6238314dd292da2db05524dd","contract": "0x5e767cadbd95e7b9f777ddd9e65eab1c29c487e6",network: 'BSC' },
+    {sustainableCrucibleFarms: "cFRM / BNB", stepFlowName: "cFRM / BNB Crucible Farm - Farming Dashboard Flow", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.1", apr: "10%", id: "6238314dd292da2db05524dd","contract": "0x5e767cadbd95e7b9f777ddd9e65eab1c29c487e6",network: 'BSC' ,"LpCurrency": "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224","LPstakingAddress":"0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd" },
     {sustainableCrucibleFarms: "cFRM", stepFlowName: "cFRM Crucible Farm - Farming Dashboard Flow", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.2", apr: "20%", id: "6238386bd292da2db05524f9","contract": "0x5D8df66ea3e5c3C30A1dB4aFC6F17A917B201118",network: 'BSC' },
-    {sustainableCrucibleFarms: "cFRMx / BNB", stepFlowName: "cFRMx / BNB Crucible Farm - Farming Dashboard Flow", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.3", apr: "20%", id: "62383841d292da2db05524f3","contract": "0x5D8df66ea3e5c3C30A1dB4aFC6F17A917B201118",network: 'BSC' },
+    {sustainableCrucibleFarms: "cFRMx / BNB", stepFlowName: "cFRMx / BNB Crucible Farm - Farming Dashboard Flow", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.3", apr: "20%", id: "62383841d292da2db05524f3","contract": "0x5D8df66ea3e5c3C30A1dB4aFC6F17A917B201118",network: 'BSC' ,"LpCurrency": "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224","LPstakingAddress":"0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd" },
     {sustainableCrucibleFarms: "cFRMx", stepFlowName: "cFRMx Crucible Farm - Farming Dashboard Flow", totalDeposited: "127", yourDeposit: "$13", yourRewards:"$.4", apr: "40%", id: "62383865d292da2db05524f6","contract": "0x5D8df66ea3e5c3C30A1dB4aFC6F17A917B201118",network: 'BSC' }
   ]
 
@@ -73,14 +73,14 @@ export const CardAPR = () => {
         apr: ( <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}> {stepFlow.apr} </FTypo> ),
         action: (
           <div className="col-action">
-            <FButton title={"Manage"} onClick={()=> getStepToRender(stepFlow.id, stepFlow.stepFlowName ,stepFlow.contract,stepFlow.network)} />
-            <FButton title={"Deposit"} onClick={() => getStepToRender(stepFlow.id, stepFlow.stepFlowName ,stepFlow.contract,stepFlow.network)}></FButton>
+            <FButton title={"Manage"} onClick={()=> getStepToRender(stepFlow.id, stepFlow.stepFlowName ,stepFlow.contract,stepFlow.network,stepFlow.LpCurrency,stepFlow.LPstakingAddress)} />
+            <FButton title={"Deposit"} onClick={() => getStepToRender(stepFlow.id, stepFlow.stepFlowName ,stepFlow.contract,stepFlow.network,stepFlow.LpCurrency,stepFlow.LPstakingAddress)}></FButton>
           </div>
         ),
       }; 
   }); 
 
-  const getStepToRender = async (id: any, stepFlowName: any,contract:string,network:string) => { 
+  const getStepToRender = async (id: any, stepFlowName: any,contract:string,network:string,LpCurrency?:string,LPstakingAddress?:string) => { 
     // history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: {id, name,contract,network}}) 
     setIsLoading(true);
     let stepResponse = await getStepFlowStepByStepFlowIdForPublic(id);
@@ -89,7 +89,7 @@ export const CardAPR = () => {
     dispatch(CrucibleActions.updateCurrentStep({ currentStep : stepFlowStep, currentStepIndex: 0 }));
     // let stepFlowName = stepFlowStep.name.split("-");
     //  stepFlowName = (splitted[0].trim() + " - " + splitted[1].trim());
-    renderComponent(stepFlowStep.step.name, {id, stepFlowName , contract, network}, history);
+    renderComponent(stepFlowStep.step.name, {id, stepFlowName , contract, network,LpCurrency,LPstakingAddress}, history);
     setIsLoading(false);
   } 
  

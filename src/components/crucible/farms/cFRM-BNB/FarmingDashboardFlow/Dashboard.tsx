@@ -93,23 +93,32 @@ export const Manage = () => {
     "crucible/loadUserInfo",
     async (payload: { crucibleCurrency: string }, ctx) => {
       const actions = crucibleSlice.actions;
-      const web3Helper = new Web3Helper(networkClient as any);
-      const client = new CrucibleClient(web3Helper);
-      const userCrucibleDetails = await client.getUserCrucibleInfo(
-        ctx.dispatch,
-        payload.crucibleCurrency,
-        walletAddress as string
-      );
-      if (!!userCrucibleDetails) {
-        dispatch(
-          actions.userCrucibleDetailsLoaded({ data: userCrucibleDetails.data })
-        );
+      const web3Helper =  new Web3Helper(networkClient as any)
+      const client = new CrucibleClient(web3Helper)
+      const userCrucibleDetails = await client.getUserCrucibleInfo(ctx.dispatch, payload.crucibleCurrency,walletAddress as string);
+      const stakingType = 'LP';
+      if(!!userCrucibleDetails){
+        if(stakingType === 'LP'){
+
+        }
+        dispatch(actions.userCrucibleDetailsLoaded({data: userCrucibleDetails.data }))
       }
     }
   );
 
-  const loadPricingInfo = createAsyncThunk(
-    "crucible/loadUserInfo",
+
+  const loadLPStakingInfo = createAsyncThunk('crucible/loadUserInfo',
+  async (payload: { crucibleCurrency: string, userAddress:string,stakingAddress: string,network:string }, ctx) => {
+    const actions = crucibleSlice.actions;
+    const web3Helper =  new Web3Helper(networkClient as any)
+    const client = new CrucibleClient(web3Helper)
+    const userStakingDetails = await client.getLPStakingInfo(ctx.dispatch,location.state.LpCurrency,walletAddress as string,payload.stakingAddress,payload.network);
+    if(!!userStakingDetails){
+      dispatch(actions.userLpStakingDetailsLoaded({token: "cFRM_BNB_LP" ,data: {...userStakingDetails.data,stakingAddress:payload.stakingAddress,"LPaddress": location.state.LpCurrency} }))
+    }
+});
+
+  const loadPricingInfo = createAsyncThunk('crucible/loadUserInfo',
     async (payload: { crucible: any }, ctx) => {
       const actions = crucibleSlice.actions;
       const web3Helper = new Web3Helper(networkClient as any);
@@ -173,23 +182,20 @@ export const Manage = () => {
     const web3Helper = new Web3Helper(networkClient as any);
     const client = new CrucibleClient(web3Helper);
     const actions = crucibleSlice.actions;
-    dispatch(
-      loadCrucibleUserInfo({
-        crucibleCurrency: `${location.state.network.toUpperCase()}:${(
-          location.state.contract || ""
-        ).toLowerCase()}`,
-      })
-    );
-    const crucibleData = await client.getCrucibleDetails(
-      dispatch,
-      location.state.network,
-      location.state.contract,
-      walletAddress as string
-    );
-    dispatch(actions.selectedCrucible({ data: crucibleData.data }));
-    if (crucibleData.data) {
-      dispatch(loadPricingInfo({ crucible: crucibleData.data }));
-      setIsLoading(false);
+    dispatch(loadCrucibleUserInfo({crucibleCurrency:`${location.state.network.toUpperCase()}:${(location.state.contract || '').toLowerCase()}`}))
+    const crucibleData = await client.getCrucibleDetails(dispatch,location.state.network,location.state.contract,walletAddress as string)
+    const data =  await web3Helper.getTokenData(walletAddress as string,location.state.LpCurrency)
+    dispatch(actions.selectedCrucible({data: {...crucibleData.data,"LP_balance": data.balance,"LP_symbol": data.symbol} }))
+
+    if(crucibleData.data){
+      dispatch(loadLPStakingInfo({
+        "crucibleCurrency": `${(location.state.LpCurrency || '').toLowerCase()}`,
+        "userAddress": walletAddress as string,
+        "network": location.state.network,
+        "stakingAddress": location.state.LPstakingAddress
+      }))
+      dispatch(loadPricingInfo({crucible: crucibleData.data}))
+      setIsLoading(false)
     }
   };
 
@@ -209,42 +215,23 @@ export const Manage = () => {
               <FGrid className="btn-wrap">
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
-                    <FTypo
-                      color="#DAB46E"
-                      size={20}
-                      weight={700}
-                      className="f-pb--2"
-                    >
-                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0")
-                        .times(100)
-                        .toString()}%`}
+                    <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
+                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate|| '0').times(100).toString()}%`}
                     </FTypo>
                     <FTypo size={20}>Transfer Fee</FTypo>
                   </FItem>
                 </FGridItem>
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
-                    <FTypo
-                      color="#DAB46E"
-                      size={20}
-                      weight={700}
-                      className="f-pb--2"
-                    >
-                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0")
-                        .times(100)
-                        .toString()}%`}
+                    <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
+                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate|| '0').times(100).toString()}%`}
                     </FTypo>
                     <FTypo size={20}>Unwrap Fee</FTypo>
                   </FItem>
                 </FGridItem>
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
-                    <FTypo
-                      color="#DAB46E"
-                      size={20}
-                      weight={700}
-                      className="f-pb--2"
-                    >
+                    <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
                       {crucible?.symbol}
                     </FTypo>
                     <FTypo size={20}>Crucible Token</FTypo>
@@ -253,7 +240,7 @@ export const Manage = () => {
               </FGrid>
               <FCard className={"styled-card align-v your-crucible"}>
                 <FGrid>
-                  <FGridItem size={[6, 6, 6]} dir="column">
+                  <FGridItem size={[6, 6, 6]}>
                     <FTypo className="f-pb--2">Your Crucible LP Deposits</FTypo>
                     <FTypo
                       size={24}

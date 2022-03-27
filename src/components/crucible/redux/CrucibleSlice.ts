@@ -18,6 +18,9 @@ export const crucibleSlice = createSlice({
         selectedCrucible: (state, action) => {
             state.selectedCrucible = action.payload.data
         },
+        userLpStakingDetailsLoaded: (state, action) => {
+            state.userLpStakingDetails[action.payload.token] = action.payload.data
+        },
         approved: (state ) => {
             state.isApproved = true;
             state.isApproving = false;

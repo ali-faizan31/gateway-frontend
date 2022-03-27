@@ -12,6 +12,12 @@ export const renderComponent = (stepFlowStepName: any, state: any, history: any)
         case "Crucible Farming Dashboard": return history.push({ pathname: `/dashboard/crucible/cFRM-BNB/${state.contract}/manage`, state: state })
         default: return history.push(PATH_DASHBOARD.crucible.index);
       }
+    case "cFRMx / BNB Crucible Farm - Farming Dashboard Flow":
+      switch (stepFlowStepName) {
+        case "Introduction": return history.push({ pathname:`/dashboard/crucible/cFRMx_BNB/${state.contract}/introduction`, state: state })
+        case "Crucible Farming Dashboard": return history.push({ pathname: `/dashboard/crucible/cFRMx_BNB/${state.contract}/manage`, state: state })
+        default: return history.push(PATH_DASHBOARD.crucible.index);
+      }
     case "cFRM / BNB Crucible Farm - Mint Flow":
       switch (stepFlowStepName) {
         case "Approve": return history.push({ pathname: PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint, state: state })

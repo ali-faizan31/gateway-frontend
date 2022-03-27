@@ -31,11 +31,10 @@ export const CrucibleManage = ({
 }: any) => {
   const history = useHistory();
   const location: any = useLocation();
-  const { isConnected } = useSelector(
-    (state: RootState) => state.walletConnector
-  );
-
-  // useEffect(() => {
+  const { isConnected } = useSelector((state: RootState) => state.walletConnector);
+  //@ts-ignore
+  const tokenPrices =  useSelector((state)=> state.crucible.tokenPrices)
+  // useEffect(() => { 
   //   if ( isConnected === false ){
   //     history.push('dashboard/crucible')
   //   }
@@ -122,8 +121,8 @@ export const CrucibleManage = ({
         </FItem>
         <div className="network-icon-wrapper">
           <span className="icon-wrap">
-            <IconNetworkCFrm />
-            <IconNetworkBsc />
+            <img src={IconNetworkCFrmStr} alt="network-cfrm" />
+            <IconNetworkBnb />
           </span>
         </div>
       </div>
@@ -134,7 +133,7 @@ export const CrucibleManage = ({
               cFRMx Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              $0.072
+              ${tokenPrices['FRM']||0}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -143,8 +142,8 @@ export const CrucibleManage = ({
             <FTypo size={20} className="f-mb-1">
               cFRMx Price (USD)
             </FTypo>
-            <FTypo size={30} weight={500}>
-              $0.072
+            <FTypo size={36} weight={500}>
+              ${tokenPrices['cFRMx']||0}
             </FTypo>
           </FItem>
         </FGridItem>
