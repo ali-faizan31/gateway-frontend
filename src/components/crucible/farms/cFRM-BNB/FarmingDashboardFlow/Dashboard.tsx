@@ -297,7 +297,7 @@ export const Manage = () => {
   };
 
   return (
-    <FContainer className="f-mr-0 card-manage" width={900}>
+    <FContainer className="f-mr-0 card-manage" width={700}>
       {isLoading ? (
         <FCard>
           <FItem align={"center"}>
@@ -313,7 +313,7 @@ export const Manage = () => {
             setDashboardAction={setDashboardAction}
           />
           <FContainer width={650}>
-            <FCard className="card-crucible-token-info" width={"95%"}>
+            <FCard className="card-crucible-token-info">
               <FTypo size={24}>Crucible Token Info</FTypo>
               <FGrid className="btn-wrap">
                 <FGridItem size={[4, 4, 4]}>
