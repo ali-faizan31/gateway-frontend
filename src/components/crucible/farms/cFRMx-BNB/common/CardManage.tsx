@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import {
   FButton,
   FCard,
@@ -10,10 +10,10 @@ import {
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
-import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
+// import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
+// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../../../redux/rootReducer";
+// import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 import { ReactComponent as IconNetworkFrm } from "../../../../../assets/img/icon-network-frm.svg";
@@ -30,11 +30,11 @@ export const CrucibleManage = ({
   setUnwrap,
 }: any) => {
   const history = useHistory();
-  const location: any = useLocation();
-  const { isConnected } = useSelector((state: RootState) => state.walletConnector);
+  // const location: any = useLocation();
+  // const { isConnected } = useSelector((state: RootState) => state.walletConnector);
   //@ts-ignore
-  const tokenPrices =  useSelector((state)=> state.crucible.tokenPrices)
-  // useEffect(() => { 
+  const tokenPrices = useSelector((state) => state.crucible.tokenPrices);
+  // useEffect(() => {
   //   if ( isConnected === false ){
   //     history.push('dashboard/crucible')
   //   }
@@ -133,7 +133,7 @@ export const CrucibleManage = ({
               cFRMx Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              ${tokenPrices['FRM']||0}
+              ${tokenPrices["FRM"] || 0}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -143,7 +143,7 @@ export const CrucibleManage = ({
               cFRMx Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
-              ${tokenPrices['cFRMx']||0}
+              ${tokenPrices["cFRMx"] || 0}
             </FTypo>
           </FItem>
         </FGridItem>

@@ -5,7 +5,6 @@ import {
   FCard,
   FContainer,
   FInputCheckbox,
-  FItem,
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";

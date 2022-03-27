@@ -31,28 +31,39 @@ export const ApplicationWrapper = ({ children }: any) => {
     walletWrapperInitialized,
     // supportedCurrencies,
     groupInfo,
-  } = useSelector((state: RootState) => state.walletApplicationWrapper); 
+  } = useSelector((state: RootState) => state.walletApplicationWrapper);
 
   useEffect(() => {
     console.log("Attempt to intialize app");
-    // dispatch(applicationWrapperActions.loadWalletDefaults("frm", tokenList)); 
+    // dispatch(applicationWrapperActions.loadWalletDefaults("frm", tokenList));
   }, []);
 
   useEffect(() => {
-    console.log('intiialalalal')
-    if (isConnected && isWeb3Initialized && networkClient && walletWrapperInitialized  ) {
-       console.log('intiialalalal7')
-       signIntoServer();
-    } else if (!isConnected ||  !isWeb3Initialized || !networkClient ||  !walletWrapperInitialized  ) {
-       console.log('intiialalalal8')
-       dispatch(applicationWrapperActions.resetUserProfile());
-    } 
+    console.log("intiialalalal");
+    if (
+      isConnected &&
+      isWeb3Initialized &&
+      networkClient &&
+      walletWrapperInitialized
+    ) {
+      console.log("intiialalalal7");
+      signIntoServer();
+    } else if (
+      !isConnected ||
+      !isWeb3Initialized ||
+      !networkClient ||
+      !walletWrapperInitialized
+    ) {
+      console.log("intiialalalal8");
+      dispatch(applicationWrapperActions.resetUserProfile());
+    }
+    // eslint-disable-next-line
   }, [isConnected, walletWrapperInitialized]);
 
-  const signIntoServer = async () => { 
-    console.log('tyuur')
-    const user = await getUserProfile(); 
-    console.log(user,"intiialalalal3")
+  const signIntoServer = async () => {
+    console.log("tyuur");
+    const user = await getUserProfile();
+    console.log(user, "intiialalalal3");
     // dispatch(applicationWrapperActions.getUserProfile(user));
   };
 
@@ -64,7 +75,7 @@ export const ApplicationWrapper = ({ children }: any) => {
       const currentNetwork = userTokens[0]?.currency.split(":")[0];
       const currencies = groupInfo.bridgeCurrencies.filter(
         (currency: any) => currency.split(":")[0] === currentNetwork
-      ); 
+      );
       const addressesF = currencies.map(async (c: any) => {
         const [network, tokenAddr] = c.split(":");
         let symbol: string = "";
@@ -86,19 +97,19 @@ export const ApplicationWrapper = ({ children }: any) => {
           //     balance = "0";
           //   }
           // } else {
-            // const token = TokenInfo[c];
-            // symbol = token.tokenSymbol;
-            const tokenContract = new networkClient.eth.Contract(
-              FerrumJson.abi as AbiItem[],
-              tokenAddr
-            );
-            symbol = await tokenContract.methods.symbol().call();
-            decimals = (await tokenContract.methods.decimals().call()) as any;
-            name = await tokenContract.methods.name().call();
-            balance = await tokenContract.methods.balanceOf(walletAddress).call();
-            const decimalFactor = 10 ** Number(decimals);
-            balance = new Big(balance).div(decimalFactor).toFixed();
-            console.log("symbolsymbolsymbol",symbol)
+          // const token = TokenInfo[c];
+          // symbol = token.tokenSymbol;
+          const tokenContract = new networkClient.eth.Contract(
+            FerrumJson.abi as AbiItem[],
+            tokenAddr
+          );
+          symbol = await tokenContract.methods.symbol().call();
+          decimals = (await tokenContract.methods.decimals().call()) as any;
+          name = await tokenContract.methods.name().call();
+          balance = await tokenContract.methods.balanceOf(walletAddress).call();
+          const decimalFactor = 10 ** Number(decimals);
+          balance = new Big(balance).div(decimalFactor).toFixed();
+          console.log("symbolsymbolsymbol", symbol);
           // }
         }
 

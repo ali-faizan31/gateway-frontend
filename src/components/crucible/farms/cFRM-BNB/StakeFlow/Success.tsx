@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { FCard, FContainer, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system";  
+import {
+  FCard,
+  FContainer,
+  FGrid,
+  FGridItem,
+  FItem,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
-import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
+// import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
+// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-check-congrats.svg";
 
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
@@ -16,34 +23,69 @@ import toast from "react-hot-toast";
 import { getLatestStepToRender } from "../../../common/Helper";
 
 export const Success = () => {
-  const dispatch = useDispatch()
-  const location: any = useLocation(); 
+  const dispatch = useDispatch();
+  const location: any = useLocation();
   const history = useHistory();
-  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
-  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
+    (state: RootState) => state.crucible
+  );
+  const { tokenV2 } = useSelector(
+    (state: RootState) => state.walletAuthenticator
+  );
 
   useEffect(() => {
     getStepCompleted(false);
-  }, [])
-  
+    // eslint-disable-next-line
+  }, []);
 
-  const getStepCompleted = async (renderNeeded: any) => { 
+  const getStepCompleted = async (renderNeeded: any) => {
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
-      let updHistory = stepFlowStepHistory.map((obj, index) => index === currentStepIndex ? { ...obj, status: "completed" } : obj);
+      let updHistory = stepFlowStepHistory.map((obj, index) =>
+        index === currentStepIndex ? { ...obj, status: "completed" } : obj
+      );
       let data = { status: "completed" };
 
-      dispatch(CrucibleActions.updateCurrentStep({ currentStep: updatedCurrentStep, currentStepIndex: currentStepIndex }));
-      dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: updHistory }));
+      dispatch(
+        CrucibleActions.updateCurrentStep({
+          currentStep: updatedCurrentStep,
+          currentStepIndex: currentStepIndex,
+        })
+      );
+      dispatch(
+        CrucibleActions.updateStepFlowStepHistory({
+          stepFlowStepHistory: updHistory,
+        })
+      );
 
-    let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
-      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, renderNeeded);
+      // let updateResponse: any =
+      await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
+        currentStep._id,
+        data,
+        tokenV2
+      );
+      // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      getLatestStepToRender(
+        location.state,
+        tokenV2,
+        currentStep,
+        currentStepIndex,
+        stepFlowStepHistory,
+        dispatch,
+        history,
+        renderNeeded
+      );
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      let errorResponse =
+        e &&
+        e.response &&
+        e.response.data.status &&
+        e.response.data.status.message;
+      errorResponse
+        ? toast.error(`Error Occured: ${errorResponse}`)
+        : toast.error(`Error Occured: ${e}`);
     }
-  }
+  };
 
   return (
     <FContainer className="f-mr-0">

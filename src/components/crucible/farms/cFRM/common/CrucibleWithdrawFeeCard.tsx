@@ -1,14 +1,14 @@
-import { FCard, FTypo, FGrid, FGridItem, FItem, FButton } from 'ferrum-design-system'
-import React, { useEffect } from 'react'
+import { FCard, FTypo, FGrid, FGridItem, FItem } from "ferrum-design-system";
+import React, { useEffect } from "react";
 
 const CrucibleWithdrawFeeCard = () => {
-    useEffect(() => { 
-        console.log('test')
-    }, [])
-    
+  useEffect(() => {
+    console.log("test");
+  }, []);
+
   return (
     <>
-    <FCard className="card-crucible-token-info" width={"95%"}>
+      <FCard className="card-crucible-token-info" width={"95%"}>
         <FTypo size={24}>Crucible Token Info</FTypo>
         <FGrid className="btn-wrap">
           <FGridItem size={[4, 4, 4]}>
@@ -39,18 +39,36 @@ const CrucibleWithdrawFeeCard = () => {
         <FCard className={"styled-card align-v your-crucible"}>
           <FGrid>
             <FGridItem size={[6, 6, 6]}>
-              <FTypo className="f-pb--2">Your Crucible  Deposits</FTypo>
-              <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
+              <FTypo className="f-pb--2">Your Crucible Deposits</FTypo>
+              <FTypo
+                size={24}
+                weight={600}
+                align={"end"}
+                display="flex"
+                alignY={"end"}
+              >
                 13.929
                 <FTypo size={14} weight={300} className={"f-pl--7 f-pb--1"}>
-                cFRM
+                  cFRM
                 </FTypo>
               </FTypo>
             </FGridItem>
             <FGridItem size={[6, 6, 6]}>
               <FItem align="right">
-                <FTypo color="#DAB46E" size={50} weight={600} align={"end"} display="flex" alignY={"end"}>
-                  <FTypo size={16} weight={500} className={"f-pr--7 f-pb--3"} align="right">
+                <FTypo
+                  color="#DAB46E"
+                  size={50}
+                  weight={600}
+                  align={"end"}
+                  display="flex"
+                  alignY={"end"}
+                >
+                  <FTypo
+                    size={16}
+                    weight={500}
+                    className={"f-pr--7 f-pb--3"}
+                    align="right"
+                  >
                     APR
                   </FTypo>
                   192%
@@ -58,10 +76,10 @@ const CrucibleWithdrawFeeCard = () => {
               </FItem>
             </FGridItem>
           </FGrid>
-        </FCard> 
+        </FCard>
       </FCard>
     </>
-  )
-}
+  );
+};
 
-export default CrucibleWithdrawFeeCard
+export default CrucibleWithdrawFeeCard;

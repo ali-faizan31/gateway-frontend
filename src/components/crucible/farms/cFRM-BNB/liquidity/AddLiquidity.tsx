@@ -1,31 +1,55 @@
 import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router";
-import { FButton, FCard, FContainer, FInputCheckbox, FItem, FTypo } from "ferrum-design-system"; 
+import {
+  FButton,
+  FCard,
+  FContainer,
+  FInputCheckbox,
+  // FItem,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
-import { PATH_DASHBOARD } from "../../../../../routes/paths";
-import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper"; 
+// import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import {
+  getLatestStepToRender,
+  // getNextStepFlowStepId,
+} from "../../../common/Helper";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
 
 export const AddLiquidity = () => {
   const history = useHistory();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const location: any = useLocation();
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
-  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
-  const { approveTransactionId } = useSelector((state: RootState) => state.approval);
-  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
+    (state: RootState) => state.crucible
+  );
+  // const { approveTransactionId } = useSelector(
+  //   (state: RootState) => state.approval
+  // );
+  const { tokenV2 } = useSelector(
+    (state: RootState) => state.walletAuthenticator
+  );
 
   const onStakeClick = () => {
-    // let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Stake"); 
+    // let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Stake");
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.stake;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
-  }
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history
+    );
+  };
 
   return (
     <FContainer className="f-mr-0" width={700}>
@@ -111,7 +135,7 @@ export const AddLiquidity = () => {
               className="w-100"
               disabled={!stepThreeCheck}
               onClick={() => onStakeClick()}
-            /> 
+            />
           </li>
         </ul>
       </FCard>

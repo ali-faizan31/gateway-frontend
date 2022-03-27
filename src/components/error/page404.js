@@ -1,5 +1,5 @@
 import React from "react";
-import { FContainer, FGrid, FGridItem, FItem } from "ferrum-design-system";
+import { FContainer, FItem } from "ferrum-design-system";
 import { Link } from "react-router-dom";
 import { PATH_DASHBOARD } from "../../routes/paths";
 

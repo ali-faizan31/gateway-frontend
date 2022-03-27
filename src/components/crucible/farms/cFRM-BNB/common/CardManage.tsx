@@ -10,12 +10,15 @@ import {
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
-import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
-import { useDispatch, useSelector } from "react-redux"; 
+// import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
+// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
-import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper";
+import {
+  getLatestStepToRender,
+  // getNextStepFlowStepId,
+} from "../../../common/Helper";
 import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
 
 import { ReactComponent as IconNetworkFrm } from "../../../../../assets/img/icon-network-frm.svg";
@@ -34,36 +37,60 @@ export const CrucibleManage = ({
   const history = useHistory();
   const location: any = useLocation();
   const dispatch = useDispatch();
-  const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
-  const { isConnected } = useSelector((state: RootState) => state.walletConnector);
-  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
-  const { currentStep, currentStepIndex, stepFlowStepHistory } = useSelector((state: RootState) => state.crucible);
+  const tokenPrices = useSelector(
+    (state: RootState) => state.crucible.tokenPrices
+  );
+  // const { isConnected } = useSelector(
+  //   (state: RootState) => state.walletConnector
+  // );
+  const { tokenV2 } = useSelector(
+    (state: RootState) => state.walletAuthenticator
+  );
+  const { currentStep, currentStepIndex, stepFlowStepHistory } = useSelector(
+    (state: RootState) => state.crucible
+  );
 
-  useEffect(() => { 
-    if (location.state === undefined){
-      history.push({pathname: PATH_DASHBOARD.crucible.index});
+  useEffect(() => {
+    if (location.state === undefined) {
+      history.push({ pathname: PATH_DASHBOARD.crucible.index });
     }
-  }, []) 
-  
-  const onMintcFRMClick = () => { 
-    console.log(location.state.stepFlowName, "Mint")
+    // eslint-disable-next-line
+  }, []);
+
+  const onMintcFRMClick = () => {
+    console.log(location.state.stepFlowName, "Mint");
     // let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Mint");
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.mint;
     location.state.id = nextStepInfo.id;
-    location.state.stepFlowName = nextStepInfo.name; 
-    console.log(nextStepInfo, location.state)
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
-    // history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint}); 
-  }
+    location.state.stepFlowName = nextStepInfo.name;
+    console.log(nextStepInfo, location.state);
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history
+    );
+    // history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint});
+  };
 
-  const onWrapClick = () => { 
+  const onWrapClick = () => {
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.unwrap;
-    console.log(nextStepInfo, location.state)
+    console.log(nextStepInfo, location.state);
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
-  }
- 
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history
+    );
+  };
 
   const [selectedToken, setSelectedToken] = useState<any>();
 

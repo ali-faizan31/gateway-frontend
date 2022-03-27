@@ -1,20 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useHistory } from "react-router-dom";
-import { FCard, FContainer, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system"; 
+import {
+  FCard,
+  FContainer,
+  FGrid,
+  FGridItem,
+  FItem,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-check-congrats.svg";
 import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
+// import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
 import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
+// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 
 export const Success = () => {
-  const history = useHistory()
+  const history = useHistory();
 
   const onAddLiquityClick = () => {
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRM.unstake.steps})
-  }
+    history.push({ pathname: PATH_DASHBOARD.crucible.cFRM.unstake.steps });
+  };
 
   return (
     <FContainer className="f-mr-0" width={800}>
@@ -29,34 +36,45 @@ export const Success = () => {
             Crucible Token Sustainable Liquidity Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-          Congrats! You have successfully unstaked your cFRM tokens. You can now use the tokens to generate even more rewards by adding liquidity for the cFRM - BNB pair and staking it. You can also generate rewards by trading the tokens or unwrap the tokens.               </FTypo>
+            Congrats! You have successfully unstaked your cFRM tokens. You can
+            now use the tokens to generate even more rewards by adding liquidity
+            for the cFRM - BNB pair and staking it. You can also generate
+            rewards by trading the tokens or unwrap the tokens.{" "}
+          </FTypo>
         </FItem>
-        <FTypo size={20} weight={500} className="f-mt-3 f-mb-3" align={"center"}>
+        <FTypo
+          size={20}
+          weight={500}
+          className="f-mt-3 f-mb-3"
+          align={"center"}
+        >
           Whats next?
         </FTypo>
         <FGrid>
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={" item-whats-next"}>
-              <div className="network-icon-wrapper text-center f-mb-1" onClick={()=>onAddLiquityClick()}>
+              <div
+                className="network-icon-wrapper text-center f-mb-1"
+                onClick={() => onAddLiquityClick()}
+              >
                 <span className="icon-wrap">
-                <IconNetworkcFRM/>
+                  <IconNetworkcFRM />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Add Liquidity &
-Compound Rewards
+                Add Liquidity & Compound Rewards
               </FTypo>
             </FItem>
           </FGridItem>
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={" item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
-                <span className="icon-wrap"> 
+                <span className="icon-wrap">
                   <IconNetworkLeaderboard />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Go to cFRM Leaderboard Competition
+                Go to cFRM Leaderboard Competition
               </FTypo>
             </FItem>
           </FGridItem>
@@ -64,7 +82,7 @@ Compound Rewards
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                   <IconNetworkcFRM/>
+                  <IconNetworkcFRM />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
@@ -76,7 +94,7 @@ Compound Rewards
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                   <IconNetworkcFRM/>
+                  <IconNetworkcFRM />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
@@ -92,4 +110,3 @@ Compound Rewards
     </FContainer>
   );
 };
- 

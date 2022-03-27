@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FButton, FCard, FGrid, FGridItem, FInputText, FItem, FTypo } from "ferrum-design-system";
+import {
+  FButton,
+  FCard,
+  FGrid,
+  FGridItem,
+  FInputText,
+  FItem,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
-import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
+// import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
+// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg";
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
 
 export const UnStake = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [approvedDone, setapprovedDone] = useState(false);
-  const [isApproving, setIsApproving] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false); 
+  // const [isApproving, setIsApproving] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-useEffect(() => {
-  console.log("approvedDone", approvedDone)
-}, [approvedDone])
-
+  useEffect(() => {
+    console.log("approvedDone", approvedDone);
+  }, [approvedDone]);
 
   const onUnStakeClick = () => {
     setIsProcessing(true);
-    setIsApproving(false);
+    // setIsApproving(false);
     setTransitionStatusDialog(true);
-  }
+  };
 
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
@@ -31,7 +38,7 @@ useEffect(() => {
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
-          Unstake cFRM
+            Unstake cFRM
           </FTypo>
         </FItem>
       </div>
@@ -69,20 +76,24 @@ useEffect(() => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-      You have 2.000 cFRM available to unstake.
+        You have 2.000 cFRM available to unstake.
       </FTypo>
-      
-      <div className="btn-wrap f-mt-2">
-        <FButton title={"Unstake Crucible"} className={"w-100"} onClick={() => onUnStakeClick()}></FButton>
-      </div> 
 
-      <DialogTransitionStatus 
-      transitionStatusDialog={transitionStatusDialog} 
-      setTransitionStatusDialog={setTransitionStatusDialog} 
-       isProcessing = {isProcessing}
-       setIsProcessing = {setIsProcessing}
-       setapprovedDone = {setapprovedDone}
-       />
+      <div className="btn-wrap f-mt-2">
+        <FButton
+          title={"Unstake Crucible"}
+          className={"w-100"}
+          onClick={() => onUnStakeClick()}
+        ></FButton>
+      </div>
+
+      <DialogTransitionStatus
+        transitionStatusDialog={transitionStatusDialog}
+        setTransitionStatusDialog={setTransitionStatusDialog}
+        isProcessing={isProcessing}
+        setIsProcessing={setIsProcessing}
+        setapprovedDone={setapprovedDone}
+      />
     </FCard>
   );
 };

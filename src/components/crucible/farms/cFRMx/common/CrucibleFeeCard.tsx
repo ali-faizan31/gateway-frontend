@@ -1,18 +1,25 @@
-import { FCard, FTypo, FGrid, FGridItem, FItem, FButton } from 'ferrum-design-system'
-import React, { useEffect } from 'react'
-import { useHistory } from 'react-router'
-import { PATH_DASHBOARD } from '../../../../../routes/paths';
+import {
+  FCard,
+  FTypo,
+  FGrid,
+  FGridItem,
+  FItem,
+  FButton,
+} from "ferrum-design-system";
+import React from "react";
+import { useHistory } from "react-router";
+import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 const CrucibleFeeCard = () => {
-  const history = useHistory(); 
-    
-    const onClaimRewardsClick = () => {
-      history.push({pathname: PATH_DASHBOARD.crucible.cFRMx.withdraw.withdraw})
-    }
+  const history = useHistory();
+
+  const onClaimRewardsClick = () => {
+    history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx.withdraw.withdraw });
+  };
 
   return (
     <>
-    <FCard className="card-crucible-token-info" width={"95%"}>
+      <FCard className="card-crucible-token-info" width={"95%"}>
         <FTypo size={24}>Crucible Token Info</FTypo>
         <FGrid className="btn-wrap">
           <FGridItem size={[4, 4, 4]}>
@@ -44,7 +51,13 @@ const CrucibleFeeCard = () => {
           <FGrid>
             <FGridItem size={[6, 6, 6]}>
               <FTypo className="f-pb--2">Your Crucible Deposits</FTypo>
-              <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
+              <FTypo
+                size={24}
+                weight={600}
+                align={"end"}
+                display="flex"
+                alignY={"end"}
+              >
                 13.929
                 <FTypo size={14} weight={300} className={"f-pl--7 f-pb--1"}>
                   cFRMx
@@ -53,8 +66,20 @@ const CrucibleFeeCard = () => {
             </FGridItem>
             <FGridItem size={[6, 6, 6]}>
               <FItem align="right">
-                <FTypo color="#DAB46E" size={50} weight={600} align={"end"} display="flex" alignY={"end"}>
-                  <FTypo size={16} weight={500} className={"f-pr--7 f-pb--3"} align="right">
+                <FTypo
+                  color="#DAB46E"
+                  size={50}
+                  weight={600}
+                  align={"end"}
+                  display="flex"
+                  alignY={"end"}
+                >
+                  <FTypo
+                    size={16}
+                    weight={500}
+                    className={"f-pr--7 f-pb--3"}
+                    align="right"
+                  >
                     APR
                   </FTypo>
                   192%
@@ -72,13 +97,16 @@ const CrucibleFeeCard = () => {
               </FTypo>
             </FGridItem>
             <FGridItem size={[4, 4, 6]} alignX="center" alignY={"end"}>
-              <FButton title={"Claim"} onClick={()=> onClaimRewardsClick()}></FButton>
+              <FButton
+                title={"Claim"}
+                onClick={() => onClaimRewardsClick()}
+              ></FButton>
             </FGridItem>
           </FGrid>
         </FCard>
       </FCard>
     </>
-  )
-}
+  );
+};
 
-export default CrucibleFeeCard
+export default CrucibleFeeCard;

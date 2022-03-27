@@ -1,32 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FButton, FCard, FGrid, FGridItem, FInputText, FItem, FTypo } from "ferrum-design-system";
+import {
+  FButton,
+  FCard,
+  FGrid,
+  FGridItem,
+  FInputText,
+  FItem,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
-import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
+// import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
+// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg";
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
 
 export const UnWrap = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [approvedDone, setapprovedDone] = useState(false);
-  const [isApproving, setIsApproving] = useState(false);
+  // const [isApproving, setIsApproving] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const onApproveClick = () => {
-    setTransitionStatusDialog(true);
-    setIsApproving(true);
-  }
+  // const onApproveClick = () => {
+  //   setTransitionStatusDialog(true);
+  //   setIsApproving(true);
+  // };
 
-useEffect(() => {
-  console.log("approvedDone", approvedDone)
-}, [approvedDone])
-
+  useEffect(() => {
+    console.log("approvedDone", approvedDone);
+  }, [approvedDone]);
 
   const onUnWrapClick = () => {
     setIsProcessing(true);
-    setIsApproving(false);
+    // setIsApproving(false);
     setTransitionStatusDialog(true);
-  }
+  };
 
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
@@ -36,7 +43,7 @@ useEffect(() => {
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
-          Unwrap Crucible Token
+            Unwrap Crucible Token
           </FTypo>
         </FItem>
       </div>
@@ -74,7 +81,7 @@ useEffect(() => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-      You have 100000.000 available in Base Token cFRMx.
+        You have 100000.000 available in Base Token cFRMx.
       </FTypo>
       <FTypo size={15} className={"f-mt-2 f-pl--5"}>
         Amount you will receive
@@ -89,19 +96,22 @@ useEffect(() => {
             FRMx
           </FTypo>
         }
-      /> 
+      />
       <div className="btn-wrap f-mt-2">
-        <FButton title={"Unwrap"} className={"w-100"} onClick={() => onUnWrapClick()}></FButton>
+        <FButton
+          title={"Unwrap"}
+          className={"w-100"}
+          onClick={() => onUnWrapClick()}
+        ></FButton>
       </div>
-       
 
-      <DialogTransitionStatus 
-      transitionStatusDialog={transitionStatusDialog} 
-      setTransitionStatusDialog={setTransitionStatusDialog} 
-       isProcessing = {isProcessing}
-       setIsProcessing = {setIsProcessing}
-       setapprovedDone = {setapprovedDone}
-       />
+      <DialogTransitionStatus
+        transitionStatusDialog={transitionStatusDialog}
+        setTransitionStatusDialog={setTransitionStatusDialog}
+        isProcessing={isProcessing}
+        setIsProcessing={setIsProcessing}
+        setapprovedDone={setapprovedDone}
+      />
     </FCard>
   );
 };

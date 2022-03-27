@@ -31,6 +31,7 @@ export default function MultiTokenLeaderboardIndex() {
         getLeaderboard();
       }
     }
+    // eslint-disable-next-line
   }, [id, token]);
 
   const getFrmTokenUSDCValue = ( chainId, fromToken, toToken, leaderboardData ) => {

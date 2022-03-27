@@ -6,7 +6,7 @@ import {
   FGrid,
   FGridItem,
   FItem,
-  FResponseBar,
+  // FResponseBar,
   FTypo,
 } from "ferrum-design-system";
 import { CrucibleManage } from "../common/CardManage";
@@ -15,7 +15,7 @@ import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { useWeb3React } from "@web3-react/core";
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
 import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
-import Web3 from "web3";
+// import Web3 from "web3";
 import { useHistory, useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { crucibleSlice } from "./../../../redux/CrucibleSlice";
@@ -29,37 +29,52 @@ import { getLatestStepToRender } from "../../../common/Helper";
 export const Manage = () => {
   const history = useHistory();
   const [dashboardAction, setDashboardAction] = useState(false);
-  const [unwrap, setUnwrap] = useState(false);
-  const [flowType, setFlowType] = useState("");
+  // const [unwrap, setUnwrap] = useState(false);
+  // const [flowType, setFlowType] = useState("");
   const location: any = useLocation();
-  const { active, activate, deactivate, library, account, chainId, error } =
-    useWeb3React();
+  const { active, library } = useWeb3React();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   //@ts-ignore
   const crucible = useSelector((state) => state.crucible.selectedCrucible);
   const {
-    isConnected,
-    isConnecting,
+    // isConnected,
+    // isConnecting,
     walletAddress,
-    walletBalance,
+    // walletBalance,
     networkClient,
   } = useSelector((state: RootState) => state.walletConnector);
   //@ts-ignore
-  const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
-  let userStake = (userCrucibleData.stakes||[]).find((e:any)=>e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd")
-  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
-  const { approveTransactionId } = useSelector((state: RootState) => state.approval);
-  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const userCrucibleData = useSelector(
+    (state: RootState) => state.crucible.userCrucibleDetails
+  );
+  let userStake = (userCrucibleData.stakes || []).find(
+    (e: any) => e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd"
+  );
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
+    (state: RootState) => state.crucible
+  );
+  // const { approveTransactionId } = useSelector((state: RootState) => state.approval);
+  const { tokenV2 } = useSelector(
+    (state: RootState) => state.walletAuthenticator
+  );
 
   const onUnStakeClick = () => {
     setIsLoading(true);
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.unstake;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history
+    );
     setIsLoading(false);
-  }
+  };
 
   const onStakeClick = async () => {
     // history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake});
@@ -67,58 +82,112 @@ export const Manage = () => {
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.stake;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history
+    );
     setIsLoading(false);
-  }
+  };
 
   const onClaimRewardsClick = () => {
     setIsLoading(true);
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.withdraw;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history
+    );
     setIsLoading(false);
-  }
+  };
 
-  const onAddLiquidityClick = () => { 
+  const onAddLiquidityClick = () => {
     setIsLoading(true);
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.generalAddLiquidity;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name; // getting no history againts this id
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history
+    );
     setIsLoading(false);
-  }
+  };
 
   const loadCrucibleUserInfo = createAsyncThunk(
     "crucible/loadUserInfo",
     async (payload: { crucibleCurrency: string }, ctx) => {
       const actions = crucibleSlice.actions;
-      const web3Helper =  new Web3Helper(networkClient as any)
-      const client = new CrucibleClient(web3Helper)
-      const userCrucibleDetails = await client.getUserCrucibleInfo(ctx.dispatch, payload.crucibleCurrency,walletAddress as string);
-      const stakingType = 'LP';
-      if(!!userCrucibleDetails){
-        if(stakingType === 'LP'){
-
+      const web3Helper = new Web3Helper(networkClient as any);
+      const client = new CrucibleClient(web3Helper);
+      const userCrucibleDetails = await client.getUserCrucibleInfo(
+        ctx.dispatch,
+        payload.crucibleCurrency,
+        walletAddress as string
+      );
+      const stakingType = "LP";
+      if (!!userCrucibleDetails) {
+        if (stakingType === "LP") {
         }
-        dispatch(actions.userCrucibleDetailsLoaded({data: userCrucibleDetails.data }))
+        dispatch(
+          actions.userCrucibleDetailsLoaded({ data: userCrucibleDetails.data })
+        );
       }
     }
   );
 
-
-  const loadLPStakingInfo = createAsyncThunk('crucible/loadUserInfo',
-  async (payload: { crucibleCurrency: string, userAddress:string,stakingAddress: string,network:string }, ctx) => {
-    const actions = crucibleSlice.actions;
-    const web3Helper =  new Web3Helper(networkClient as any)
-    const client = new CrucibleClient(web3Helper)
-    const userStakingDetails = await client.getLPStakingInfo(ctx.dispatch,location.state.LpCurrency,walletAddress as string,payload.stakingAddress,payload.network);
-    if(!!userStakingDetails){
-      dispatch(actions.userLpStakingDetailsLoaded({token: "cFRM_BNB_LP" ,data: {...userStakingDetails.data,stakingAddress:payload.stakingAddress,"LPaddress": location.state.LpCurrency} }))
+  const loadLPStakingInfo = createAsyncThunk(
+    "crucible/loadUserInfo",
+    async (
+      payload: {
+        crucibleCurrency: string;
+        userAddress: string;
+        stakingAddress: string;
+        network: string;
+      },
+      ctx
+    ) => {
+      const actions = crucibleSlice.actions;
+      const web3Helper = new Web3Helper(networkClient as any);
+      const client = new CrucibleClient(web3Helper);
+      const userStakingDetails = await client.getLPStakingInfo(
+        ctx.dispatch,
+        location.state.LpCurrency,
+        walletAddress as string,
+        payload.stakingAddress,
+        payload.network
+      );
+      if (!!userStakingDetails) {
+        dispatch(
+          actions.userLpStakingDetailsLoaded({
+            token: "cFRM_BNB_LP",
+            data: {
+              ...userStakingDetails.data,
+              stakingAddress: payload.stakingAddress,
+              LPaddress: location.state.LpCurrency,
+            },
+          })
+        );
+      }
     }
-});
+  );
 
-  const loadPricingInfo = createAsyncThunk('crucible/loadUserInfo',
+  const loadPricingInfo = createAsyncThunk(
+    "crucible/loadUserInfo",
     async (payload: { crucible: any }, ctx) => {
       const actions = crucibleSlice.actions;
       const web3Helper = new Web3Helper(networkClient as any);
@@ -168,6 +237,7 @@ export const Manage = () => {
     if (location.state.id === undefined) {
       history.push(PATH_DASHBOARD.crucible.index);
     }
+    // eslint-disable-next-line
   }, [location]);
 
   useEffect(() => {
@@ -175,6 +245,7 @@ export const Manage = () => {
       //@ts-ignore
       getCrucibleDetail();
     }
+    // eslint-disable-next-line
   }, [active, library, networkClient]);
 
   const getCrucibleDetail = async () => {
@@ -182,56 +253,107 @@ export const Manage = () => {
     const web3Helper = new Web3Helper(networkClient as any);
     const client = new CrucibleClient(web3Helper);
     const actions = crucibleSlice.actions;
-    dispatch(loadCrucibleUserInfo({crucibleCurrency:`${location.state.network.toUpperCase()}:${(location.state.contract || '').toLowerCase()}`}))
-    const crucibleData = await client.getCrucibleDetails(dispatch,location.state.network,location.state.contract,walletAddress as string)
-    const data =  await web3Helper.getTokenData(walletAddress as string,location.state.LpCurrency)
-    dispatch(actions.selectedCrucible({data: {...crucibleData.data,"LP_balance": data.balance,"LP_symbol": data.symbol} }))
+    dispatch(
+      loadCrucibleUserInfo({
+        crucibleCurrency: `${location.state.network.toUpperCase()}:${(
+          location.state.contract || ""
+        ).toLowerCase()}`,
+      })
+    );
+    const crucibleData = await client.getCrucibleDetails(
+      dispatch,
+      location.state.network,
+      location.state.contract,
+      walletAddress as string
+    );
+    const data = await web3Helper.getTokenData(
+      walletAddress as string,
+      location.state.LpCurrency
+    );
+    dispatch(
+      actions.selectedCrucible({
+        data: {
+          ...crucibleData.data,
+          LP_balance: data.balance,
+          LP_symbol: data.symbol,
+        },
+      })
+    );
 
-    if(crucibleData.data){
-      dispatch(loadLPStakingInfo({
-        "crucibleCurrency": `${(location.state.LpCurrency || '').toLowerCase()}`,
-        "userAddress": walletAddress as string,
-        "network": location.state.network,
-        "stakingAddress": location.state.LPstakingAddress
-      }))
-      dispatch(loadPricingInfo({crucible: crucibleData.data}))
-      setIsLoading(false)
+    if (crucibleData.data) {
+      dispatch(
+        loadLPStakingInfo({
+          crucibleCurrency: `${(
+            location.state.LpCurrency || ""
+          ).toLowerCase()}`,
+          userAddress: walletAddress as string,
+          network: location.state.network,
+          stakingAddress: location.state.LPstakingAddress,
+        })
+      );
+      dispatch(loadPricingInfo({ crucible: crucibleData.data }));
+      setIsLoading(false);
     }
   };
 
   return (
-    <FContainer className="f-mr-0 card-manage" width={900}> 
-      {
-        isLoading ?
-        <FCard  ><FItem align={"center"}><ClipLoader color="#cba461" loading={true} size={150} /></FItem></FCard>
-        :
-          <>
-            <CrucibleMyBalance />
-            {/* <FResponseBar variant="success" title={"Withdraw Transaction Successful. [ 0x06167934...5bvf645949c ]"} /> */}
-            <CrucibleManage dashboardAction={dashboardAction} setDashboardAction={setDashboardAction} setFlowType={setFlowType}/> 
-            <FContainer width={650}>
+    <FContainer className="f-mr-0 card-manage" width={900}>
+      {isLoading ? (
+        <FCard>
+          <FItem align={"center"}>
+            <ClipLoader color="#cba461" loading={true} size={150} />
+          </FItem>
+        </FCard>
+      ) : (
+        <>
+          <CrucibleMyBalance />
+          {/* <FResponseBar variant="success" title={"Withdraw Transaction Successful. [ 0x06167934...5bvf645949c ]"} /> */}
+          <CrucibleManage
+            dashboardAction={dashboardAction}
+            setDashboardAction={setDashboardAction}
+          />
+          <FContainer width={650}>
             <FCard className="card-crucible-token-info" width={"95%"}>
               <FTypo size={24}>Crucible Token Info</FTypo>
               <FGrid className="btn-wrap">
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
-                    <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate|| '0').times(100).toString()}%`}
+                    <FTypo
+                      color="#DAB46E"
+                      size={20}
+                      weight={700}
+                      className="f-pb--2"
+                    >
+                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0")
+                        .times(100)
+                        .toString()}%`}
                     </FTypo>
                     <FTypo size={20}>Transfer Fee</FTypo>
                   </FItem>
                 </FGridItem>
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
-                    <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate|| '0').times(100).toString()}%`}
+                    <FTypo
+                      color="#DAB46E"
+                      size={20}
+                      weight={700}
+                      className="f-pb--2"
+                    >
+                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0")
+                        .times(100)
+                        .toString()}%`}
                     </FTypo>
                     <FTypo size={20}>Unwrap Fee</FTypo>
                   </FItem>
                 </FGridItem>
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
-                    <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
+                    <FTypo
+                      color="#DAB46E"
+                      size={20}
+                      weight={700}
+                      className="f-pb--2"
+                    >
                       {crucible?.symbol}
                     </FTypo>
                     <FTypo size={20}>Crucible Token</FTypo>
@@ -331,7 +453,7 @@ export const Manage = () => {
             </FGrid>
           </FContainer>
         </>
-      }
+      )}
     </FContainer>
   );
 };

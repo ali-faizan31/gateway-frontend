@@ -1,33 +1,44 @@
-import React, { useEffect } from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import { FButton, FCard, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system";
+import React from "react";
+import { Link, useHistory } from "react-router-dom";
+import {
+  FButton,
+  FCard,
+  FGrid,
+  FGridItem,
+  FItem,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
 import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
-import { useSelector } from "react-redux"; 
-import { RootState } from "../../../../../redux/rootReducer";
+// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
+// import { useSelector } from "react-redux";
+// import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
-export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowType, unwrap, setUnwrap }: any) => {
+export const CrucibleManage = ({
+  dashboardAction,
+  setDashboardAction,
+  setFlowType,
+  unwrap,
+  setUnwrap,
+}: any) => {
   const history = useHistory();
-  const location: any = useLocation();
-  const { isConnected } = useSelector((state: RootState) => state.walletConnector);
+  // const location: any = useLocation();
+  // const { isConnected } = useSelector((state: RootState) => state.walletConnector);
 
-  // useEffect(() => { 
+  // useEffect(() => {
   //   if ( isConnected === false ){
   //     history.push('dashboard/crucible')
   //   }
   // }, [isConnected])
-  
-  
-  const onMintClick = () => { 
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRMx.mint.mint});
-  }
 
-  const onWrapClick = () => { 
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRMx.unwrap.unwrap});
-  }
+  const onMintClick = () => {
+    history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx.mint.mint });
+  };
 
+  const onWrapClick = () => {
+    history.push({ pathname: PATH_DASHBOARD.crucible.cFRMx.unwrap.unwrap });
+  };
 
   return (
     <FCard variant={"secondary"} className="card-manage-crucible card-shadow">
@@ -42,7 +53,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
         </FItem>
         <div className="network-icon-wrapper">
           <span className="icon-wrap">
-            <IconNetworkCFrm /> 
+            <IconNetworkCFrm />
           </span>
         </div>
       </div>
@@ -73,10 +84,21 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <FButton title={"Buy Token"} outlined className={"w-100"}></FButton>
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
-          <FButton title={"Mint cFRMx"} outlined className={"w-100"} onClick={() => onMintClick()}></FButton>
+          <FButton
+            title={"Mint cFRMx"}
+            outlined
+            className={"w-100"}
+            onClick={() => onMintClick()}
+          ></FButton>
         </FGridItem>
         <FGridItem size={[4, 4, 4]}>
-          <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"} onClick={() => onWrapClick()}></FButton>
+          <FButton
+            variant={"secondary"}
+            title={"Unwrap"}
+            outlined
+            className={"w-100"}
+            onClick={() => onWrapClick()}
+          ></FButton>
         </FGridItem>
       </FGrid>
     </FCard>

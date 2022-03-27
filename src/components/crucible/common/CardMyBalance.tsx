@@ -3,12 +3,12 @@ import { FCard, FItem, FList, FListItem, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconFerrum } from "../../../assets/img/icon-ferrum.svg";
 import { useSelector } from "react-redux";
 
-const DATA_MY_BAL = [
-  { network: "FRM", price: 0.072 },
-  { network: "FRM", price: 0.072 },
-  { network: "FRM", price: 0.072 },
-  { network: "FRM", price: 0.072 },
-];
+// const DATA_MY_BAL = [
+//   { network: "FRM", price: 0.072 },
+//   { network: "FRM", price: 0.072 },
+//   { network: "FRM", price: 0.072 },
+//   { network: "FRM", price: 0.072 },
+// ];
 
 export const CrucibleMyBalance = () => {
   //@ts-ignore

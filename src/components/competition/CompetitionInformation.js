@@ -34,10 +34,10 @@ const CompetitionInformation = () => {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isQueryChange, setIsQueryChange] = useState(false);
-  const [leaderboardData, setLeaderboardData] = useState({});
+  // const [leaderboardData, setLeaderboardData] = useState({});
   const [competitionData, setCompetitionData] = useState({});
-  const [startBlockList, setStartBlockList] = useState([]);
-  const [endBlockList, setEndBlockList] = useState([]);
+  // const [startBlockList, setStartBlockList] = useState([]);
+  // const [endBlockList, setEndBlockList] = useState([]);
   const [tokenHolderList, setTokenHolderList] = useState([]);
   const [filteredTokenHolderList, setFilteredTokenHolderList] = useState([]);
 
@@ -48,6 +48,7 @@ const CompetitionInformation = () => {
       return;
     }
     getCompetition();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -58,6 +59,7 @@ const CompetitionInformation = () => {
         setIsQueryChange(false);
       }
     }
+    // eslint-disable-next-line
   }, [query]);
 
   const getCompetition = () => {
@@ -65,9 +67,9 @@ const CompetitionInformation = () => {
       .then((res) => { 
         if (res?.data?.body?.competition) { 
           const { leaderboard } = res.data.body.competition; 
-          const competition = res.data.body.competition; 
+          // const competition = res.data.body.competition; 
           setCompetitionData(res.data.body.competition);
-          setLeaderboardData(leaderboard);
+          // setLeaderboardData(leaderboard);
           console.log(leaderboard, res.data.body.competition)
           let data = {
             // tokenContractAddress: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress,
@@ -99,7 +101,7 @@ const CompetitionInformation = () => {
         if (res?.data?.body?.competition) {
           const { leaderboard } = res.data.body;
           const { competition } = res.data.body;
-          setLeaderboardData(leaderboard);
+          // setLeaderboardData(leaderboard);
           setCompetitionData(competition);
           let data = {
             tokenContractAddress: leaderboard?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress,
@@ -131,7 +133,7 @@ const CompetitionInformation = () => {
       .then((res) => {
         if (res?.data?.data?.items  ) {
           const { items } = res.data.data;
-          setStartBlockList(items);
+          // setStartBlockList(items);
           getEndBlock(data, items);
         }
       })
@@ -150,7 +152,7 @@ const CompetitionInformation = () => {
       .then((res) => {
         if (res?.data?.data?.items  ) {
           const { items } = res.data.data;
-          setEndBlockList(items);
+          // setEndBlockList(items);
           mapCompetitionData(items, startBlock, data);
           setIsLoading(false);
         }

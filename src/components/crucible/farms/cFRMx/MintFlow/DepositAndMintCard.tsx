@@ -1,33 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FButton, FCard, FGrid, FGridItem, FInputText, FItem, FTypo } from "ferrum-design-system";
+import {
+  FButton,
+  FCard,
+  FGrid,
+  FGridItem,
+  FInputText,
+  FItem,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
-import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg"; 
+// import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
+// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bsc.svg";
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 export const CrucibleDeposit = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [approvedDone, setapprovedDone] = useState(false);
-  const [isApproving, setIsApproving] = useState(false);
+  // const [isApproving, setIsApproving] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const onApproveClick = () => {
     setTransitionStatusDialog(true);
-    setIsApproving(true);
-  }
+    // setIsApproving(true);
+  };
 
-useEffect(() => {
-  console.log("approvedDone", approvedDone)
-}, [approvedDone])
-
+  useEffect(() => {
+    console.log("approvedDone", approvedDone);
+  }, [approvedDone]);
 
   const onMintClick = () => {
     setIsProcessing(true);
-    setIsApproving(false);
+    // setIsApproving(false);
     setTransitionStatusDialog(true);
-  }
+  };
 
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
@@ -91,23 +98,31 @@ useEffect(() => {
           </FTypo>
         }
       />
-      {approvedDone ? 
-      <div className="btn-wrap f-mt-2">
-        <FButton title={"Mint Crucible"} className={"w-100"} onClick={() => onMintClick()}></FButton>
-      </div>
-       :   
-      <div className="btn-wrap f-mt-2">
-        <FButton title={"Approve"} className={"w-100"} onClick={() => onApproveClick()}></FButton>
-      </div>
-       } 
+      {approvedDone ? (
+        <div className="btn-wrap f-mt-2">
+          <FButton
+            title={"Mint Crucible"}
+            className={"w-100"}
+            onClick={() => onMintClick()}
+          ></FButton>
+        </div>
+      ) : (
+        <div className="btn-wrap f-mt-2">
+          <FButton
+            title={"Approve"}
+            className={"w-100"}
+            onClick={() => onApproveClick()}
+          ></FButton>
+        </div>
+      )}
 
-      <DialogTransitionStatus 
-      transitionStatusDialog={transitionStatusDialog} 
-      setTransitionStatusDialog={setTransitionStatusDialog} 
-       isProcessing = {isProcessing}
-       setIsProcessing = {setIsProcessing}
-       setapprovedDone = {setapprovedDone}
-       />
+      <DialogTransitionStatus
+        transitionStatusDialog={transitionStatusDialog}
+        setTransitionStatusDialog={setTransitionStatusDialog}
+        isProcessing={isProcessing}
+        setIsProcessing={setIsProcessing}
+        setapprovedDone={setapprovedDone}
+      />
     </FCard>
   );
 };

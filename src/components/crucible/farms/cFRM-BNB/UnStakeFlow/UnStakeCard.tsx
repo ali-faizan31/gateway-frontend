@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FButton,
@@ -10,66 +10,107 @@ import {
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
-import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
+// import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
+// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from "react-router"; 
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation } from "react-router";
 import { RootState } from "../../../../../redux/rootReducer";
-import { Web3Helper } from './../../../../../container-components/web3Client/web3Helper';
-import { CrucibleClient } from './../../../../../container-components/web3Client/crucibleClient';
-import {ApprovableButtonWrapper} from './../../../../../container-components/web3Client/approvalButtonWrapper';
-import {CRUCIBLE_CONTRACTS_V_0_1} from './../../../common/utils';
+import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
+import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
+import { ApprovableButtonWrapper } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
+import { CRUCIBLE_CONTRACTS_V_0_1 } from "./../../../common/utils";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
-import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper"; 
+import {
+  getLatestStepToRender,
+  // getNextStepFlowStepId
+} from "../../../common/Helper";
 
 export const UnStake = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location: any = useLocation();
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
-  const [approvedDone, setapprovedDone] = useState(false);
-  const [isApproving, setIsApproving] = useState(false);
+  // const [approvedDone, setapprovedDone] = useState(false);
+  // const [isApproving, setIsApproving] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   //@ts-ignore
   const crucible = useSelector((state) => state.crucible.selectedCrucible);
   const {
-    isConnected,
-    isConnecting,
+    // isConnected,
+    // isConnecting,
     walletAddress,
-    walletBalance,
+    // walletBalance,
     networkClient,
   } = useSelector((state: RootState) => state.walletConnector);
   const [isProcessed, setIsProcessed] = useState(false);
   const [amount, setAmount] = useState(0);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  // const [isSubmitted, setIsSubmitted] = useState(false);
   //@ts-ignore
-  const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
-  let userStake = (userCrucibleData.stakes||[]).find((e:any)=>e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd")
-  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
-  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
- 
- 
-  const getStepCompleted = async ( renderNeeded: any) => { 
+  const userCrucibleData = useSelector(
+    (state: RootState) => state.crucible.userCrucibleDetails
+  );
+  let userStake = (userCrucibleData.stakes || []).find(
+    (e: any) => e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd"
+  );
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
+    (state: RootState) => state.crucible
+  );
+  const { tokenV2 } = useSelector(
+    (state: RootState) => state.walletAuthenticator
+  );
+
+  const getStepCompleted = async (renderNeeded: any) => {
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
-      let updHistory = stepFlowStepHistory.map((obj, index) => index === currentStepIndex ? { ...obj, status: "completed" } : obj);
+      let updHistory = stepFlowStepHistory.map((obj, index) =>
+        index === currentStepIndex ? { ...obj, status: "completed" } : obj
+      );
       let data = { status: "completed" };
 
-      dispatch(CrucibleActions.updateCurrentStep({ currentStep: updatedCurrentStep, currentStepIndex: currentStepIndex }));
-      dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: updHistory }));
+      dispatch(
+        CrucibleActions.updateCurrentStep({
+          currentStep: updatedCurrentStep,
+          currentStepIndex: currentStepIndex,
+        })
+      );
+      dispatch(
+        CrucibleActions.updateStepFlowStepHistory({
+          stepFlowStepHistory: updHistory,
+        })
+      );
 
-    let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
-      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, renderNeeded);
+      // let updateResponse: any =
+      await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
+        currentStep._id,
+        data,
+        tokenV2
+      );
+      // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      getLatestStepToRender(
+        location.state,
+        tokenV2,
+        currentStep,
+        currentStepIndex,
+        stepFlowStepHistory,
+        dispatch,
+        history,
+        renderNeeded
+      );
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      let errorResponse =
+        e &&
+        e.response &&
+        e.response.data.status &&
+        e.response.data.status.message;
+      errorResponse
+        ? toast.error(`Error Occured: ${errorResponse}`)
+        : toast.error(`Error Occured: ${e}`);
     }
-  }
-  
+  };
+
   const onUnStakeClick = async (
     currency: string,
     stakingAddress: string,
@@ -95,7 +136,7 @@ export const UnStake = () => {
       if (response) {
         setIsProcessing(false);
         //setIsSubmitted(true)
-        setIsProcessed(true)
+        setIsProcessed(true);
         getStepCompleted(false);
       }
       //setIsApproving(false);
@@ -104,13 +145,21 @@ export const UnStake = () => {
   };
 
   const onContinueToNextStepClick = () => {
-    if ( currentStep.status === "pending"){ 
+    if (currentStep.status === "pending") {
       location.state.id = currentStep.stepFlow;
       let splitted = currentStep.stepFlowStep.name.split("-");
-      location.state.name = (splitted[0].trim() + " - " + splitted[1].trim()); 
-      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+      location.state.name = splitted[0].trim() + " - " + splitted[1].trim();
+      getLatestStepToRender(
+        location.state,
+        tokenV2,
+        currentStep,
+        currentStepIndex,
+        stepFlowStepHistory,
+        dispatch,
+        history
+      );
     }
-  } 
+  };
 
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
@@ -199,12 +248,12 @@ export const UnStake = () => {
         setTransitionStatusDialog={setTransitionStatusDialog}
         isProcessing={isProcessing}
         setIsProcessing={setIsProcessing}
-        setapprovedDone={setapprovedDone}
-        isSubmitted={isSubmitted}
+        setapprovedDone={false}
+        isSubmitted={false}
         isProcessed={isProcessed}
         crucible={crucible}
-        onContinueToNextStepClick ={()=>onContinueToNextStepClick()}
-       />
+        onContinueToNextStepClick={() => onContinueToNextStepClick()}
+      />
     </FCard>
   );
 };

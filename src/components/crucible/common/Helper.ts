@@ -88,7 +88,8 @@ export const renderComponent = (stepFlowStepName: any, state: any, history: any)
 
 export const getLatestStepToRender = async (state: any, token: any, currentStep: any, currentStepIndex: any, stepFlowStepsHistory: any, dispatch: any, history: any, renderNeeded: any = true) => {
   try {
-    let sequenceResponse = await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(state.id, token);
+    // let sequenceResponse = 
+    await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(state.id, token);
     // sequenceResponse = sequenceResponse.data && sequenceResponse.data.body && sequenceResponse.data.body.stepFlowStepsHistory;
     // let pendingStepInfo = getLatestStepWithPendingStatus(sequenceResponse);
     // dispatch(CrucibleActions.updateCurrentStep({ currentStep: pendingStepInfo?.pendingStep, currentStepIndex: pendingStepInfo?.index }));

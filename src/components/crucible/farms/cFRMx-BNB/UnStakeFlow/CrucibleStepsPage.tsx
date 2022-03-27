@@ -4,10 +4,10 @@ import {
   FButton,
   FCard,
   FContainer,
-  FGrid,
-  FGridItem,
+  // FGrid,
+  // FGridItem,
   FInputCheckbox,
-  FItem,
+  // FItem,
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";

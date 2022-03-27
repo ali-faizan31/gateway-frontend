@@ -1,21 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
-import { FCard, FContainer, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system"; 
+import {
+  FCard,
+  FContainer,
+  FGrid,
+  FGridItem,
+  FItem,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-check-congrats.svg";
 import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
 import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg"; 
+import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 export const Success = () => {
-  const history = useHistory()
+  const history = useHistory();
 
   const onAddLiquidityClick = () => {
-    history.push({pathname:PATH_DASHBOARD.crucible.cFRM.mint.steps});
-  }
+    history.push({ pathname: PATH_DASHBOARD.crucible.cFRM.mint.steps });
+  };
 
   return (
     <FContainer className="f-mr-0" width={800}>
@@ -30,24 +37,34 @@ export const Success = () => {
             Crucible Token Sustainable Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-          Congratulations! You have successfully minted your cFRM tokens. You can use cFRM to earn rewards, generate rewards, take advantage of arbitrage opportunities between cFRM, FRM many more tokens. Check out the benefits highlighted below and choose your path.
+            Congratulations! You have successfully minted your cFRM tokens. You
+            can use cFRM to earn rewards, generate rewards, take advantage of
+            arbitrage opportunities between cFRM, FRM many more tokens. Check
+            out the benefits highlighted below and choose your path.
           </FTypo>
         </FItem>
-        <FTypo size={20} weight={500} className="f-mt-3 f-mb-3" align={"center"}>
+        <FTypo
+          size={20}
+          weight={500}
+          className="f-mt-3 f-mb-3"
+          align={"center"}
+        >
           Whats next?
         </FTypo>
         <FGrid>
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={" item-whats-next"}>
-              <div className="network-icon-wrapper text-center f-mb-1" onClick={()=>onAddLiquidityClick()}>
+              <div
+                className="network-icon-wrapper text-center f-mb-1"
+                onClick={() => onAddLiquidityClick()}
+              >
                 <span className="icon-wrap">
-                  <IconNetworkcFRM /> 
+                  <IconNetworkcFRM />
                   <IconNetworkBsc />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Add Liquidity &
-Compound Rewards
+                Add Liquidity & Compound Rewards
               </FTypo>
             </FItem>
           </FGridItem>
@@ -55,7 +72,7 @@ Compound Rewards
             <FItem bgColor="#1C2229" className={" item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                <IconNetworkLeaderboard />
+                  <IconNetworkLeaderboard />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
@@ -67,11 +84,11 @@ Compound Rewards
             <FItem bgColor="#1C2229" className={"item-whats-next"}>
               <div className="network-icon-wrapper text-center f-mb-1">
                 <span className="icon-wrap">
-                <IconNetworkcFRMx />
+                  <IconNetworkcFRMx />
                 </span>
               </div>
               <FTypo size={20} weight={400} align={"center"}>
-              Stake & Earn Rewards
+                Stake & Earn Rewards
               </FTypo>
             </FItem>
           </FGridItem>
@@ -95,4 +112,3 @@ Compound Rewards
     </FContainer>
   );
 };
- 

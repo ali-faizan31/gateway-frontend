@@ -7,7 +7,7 @@ import {
   FButton,
   FContainer,
 } from "ferrum-design-system";
-import React, { useEffect } from "react";
+import React from "react";
 import { useHistory } from "react-router";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 

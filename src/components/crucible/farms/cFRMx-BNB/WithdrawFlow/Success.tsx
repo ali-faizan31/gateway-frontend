@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import {
   FCard,
   FContainer,
@@ -11,19 +11,19 @@ import {
 import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-check-congrats.svg";
 import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
-import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
-import { PATH_DASHBOARD } from "../../../../../routes/paths";
+// import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
+// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
+// import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 
 export const Success = () => {
-  const history = useHistory();
+  // const history = useHistory();
 
-  const onAddLiquityClick = () => {
-    history.push({
-      pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.withdraw.steps,
-    });
-  };
+  // const onAddLiquityClick = () => {
+  //   history.push({
+  //     pathname: PATH_DASHBOARD.crucible.cFRMx_BNB.withdraw.steps,
+  //   });
+  // };
 
   return (
     <FContainer className="f-mr-0">

@@ -1,23 +1,27 @@
 import React from "react";
-import { FCard, FGrid, FGridItem, FItem, FTypo } from "ferrum-design-system";
+import {
+  FCard,
+  //  FGrid,
+  //  FGridItem,
+  FItem,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconFerrum } from "../../../assets/img/icon-ferrum.svg";
 import { ReactComponent as IconArrowGreen } from "../../../assets/img/icon-price-arrow-indicator-green.svg";
-import { ReactComponent as IconArrowRed } from "../../../assets/img/icon-price-arrow-indicator-red.svg";
+// import { ReactComponent as IconArrowRed } from "../../../assets/img/icon-price-arrow-indicator-red.svg";
 import { useSelector } from "react-redux";
-
-
 
 export const CruciblePrice = () => {
   //@ts-ignore
-  const tokenPrices =  useSelector((state)=> state.crucible.tokenPrices)
-  console.log(tokenPrices,"tokenPricestokenPrices")
+  const tokenPrices = useSelector((state) => state.crucible.tokenPrices);
+  console.log(tokenPrices, "tokenPricestokenPrices");
 
   const DATA_PRICE = [
-    { network: "FRM", price_percentage: "4.8", price: tokenPrices['FRM']||0 },
-    { network: "FRM", price_percentage: "4.8", price: tokenPrices['FRM']||0 },
-    { network: "FRM", price_percentage: "4.8", price: tokenPrices['FRM']||0 },
-    { network: "FRM", price_percentage: "4.8", price: tokenPrices['FRM']||0 },
-  ]
+    { network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0 },
+    { network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0 },
+    { network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0 },
+    { network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0 },
+  ];
   return (
     <FCard>
       <FTypo className="card-title f-pl-1">Price</FTypo>
@@ -28,6 +32,7 @@ export const CruciblePrice = () => {
                 <FCard
                   variant={"secondary"}
                   className="card-price styled-card align-h"
+                  key={index}
                 >
                   <FItem display={"flex"} alignX="between" alignY={"center"}>
                     <FItem display={"flex"} alignY={"center"} className="w-100">
