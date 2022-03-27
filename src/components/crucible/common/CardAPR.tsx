@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import Datatable from "react-bs-datatable";
 import {
   FButton,
@@ -27,6 +27,8 @@ export const CardAPR = () => {
   // const { isConnected, isConnecting } = useSelector(
   //   (state: RootState) => state.walletConnector
   // );
+
+  const { farm } = useParams<{ farm?: string }>();
 
   const tableHeads: any[] = [
     {
@@ -192,7 +194,8 @@ export const CardAPR = () => {
     renderComponent(
       stepFlowStep.step.name,
       { id, stepFlowName, contract, network, LpCurrency, LPstakingAddress },
-      history
+      history,
+      farm
     );
     setIsLoading(false);
   };

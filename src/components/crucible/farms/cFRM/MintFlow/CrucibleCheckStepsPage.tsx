@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import {
   FButton,
   FCard,
@@ -12,18 +12,30 @@ import {
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { getActualRoute } from "../../../common/Helper";
 
 export const CrucibleStepsPage = () => {
   const history = useHistory();
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
+  const { farm } = useParams<{ farm?: string }>();
 
   const onStakeClick = () => {
-    history.push({ pathname: PATH_DASHBOARD.crucible.cFRM.stake.stake });
+    history.push({
+      pathname: getActualRoute(
+        farm,
+        PATH_DASHBOARD.crucible.crucibleActionRoutes.stake.stake
+      ),
+    });
   };
 
   const onWhatElseClick = () => {
-    history.push({ pathname: PATH_DASHBOARD.crucible.cFRM.mint.success });
+    history.push({
+      pathname: getActualRoute(
+        farm,
+        PATH_DASHBOARD.crucible.crucibleActionRoutes.mint.success
+      ),
+    });
   };
 
   const disableCheck = () => {

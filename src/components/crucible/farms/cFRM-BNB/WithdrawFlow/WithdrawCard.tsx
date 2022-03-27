@@ -25,10 +25,11 @@ import {
   getLatestStepToRender,
   // getNextStepFlowStepId,
 } from "../../../common/Helper";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 
 export const Withdraw = () => {
   const dispatch = useDispatch();
+  const { farm } = useParams<{ farm?: string }>();
   const history = useHistory();
   const location: any = useLocation();
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
@@ -96,7 +97,8 @@ export const Withdraw = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded
+        renderNeeded,
+        farm
       );
     } catch (e: any) {
       let errorResponse =
@@ -154,7 +156,9 @@ export const Withdraw = () => {
         currentStepIndex,
         stepFlowStepHistory,
         dispatch,
-        history
+        history,
+        false,
+        farm
       );
     }
   };

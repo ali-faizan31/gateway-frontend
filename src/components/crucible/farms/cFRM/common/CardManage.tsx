@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import {
   FButton,
   FCard,
@@ -14,6 +14,10 @@ import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/ico
 // import { useDispatch, useSelector } from "react-redux";
 // import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import {
+  getActualRoute,
+  getHumanReadableFarmName,
+} from "../../../common/Helper";
 // import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
 
 export const CrucibleManage = ({
@@ -24,6 +28,7 @@ export const CrucibleManage = ({
   setUnwrap,
 }: any) => {
   const history = useHistory();
+  const { farm } = useParams<{ farm?: string }>();
   // const dispatch = useDispatch()
   // const location: any = useLocation();
   // const { isConnected } = useSelector((state: RootState) => state.walletConnector);
@@ -37,7 +42,12 @@ export const CrucibleManage = ({
   // }, [isConnected])
 
   const onMintClick = () => {
-    history.push({ pathname: PATH_DASHBOARD.crucible.cFRM.mint.mint });
+    history.push({
+      pathname: getActualRoute(
+        farm,
+        PATH_DASHBOARD.crucible.crucibleActionRoutes.mint.mint
+      ),
+    });
   };
 
   const onUnWrapClick = () => {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import {
   FButton,
   FCard,
@@ -21,6 +21,7 @@ export const CrucibleStepsPage = () => {
   const location: any = useLocation();
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
+  const { farm } = useParams<{ farm?: string }>();
 
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
     (state: RootState) => state.crucible
@@ -40,7 +41,9 @@ export const CrucibleStepsPage = () => {
       currentStepIndex,
       stepFlowStepHistory,
       dispatch,
-      history
+      history,
+      false,
+      farm
     );
   };
 

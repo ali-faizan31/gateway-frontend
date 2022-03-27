@@ -125,105 +125,107 @@ function App() {
           {/* new routes ---------------------- */}
           {/* cfrm-bnb routes */}
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.manage}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.manage}
             component={cFRMBNBModule.cFRMBNBFarmingDashboardFlowManage}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.introduction}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.introduction}
             component={cFRMBNBModule.cFRMBNBFarmingDashboardFlowIntroduction}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.mint.steps}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.mint.steps}
             component={cFRMBNBModule.cFRMBNBFarmingMintFlowSteps}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.mint.mint}
             component={cFRMBNBModule.cFRMBNBFarmingMintFlowMint}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.stake.success}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.stake.success}
             component={cFRMBNBModule.cFRMBNBFarmingStakeFlowSucess}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.stake.stake}
             component={cFRMBNBModule.cFRMBNBFarmingStakeFlowStake}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.unstake.success}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.success}
             component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowSucess}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.unstake.unstake}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.unstake}
             component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowUnStake}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.unstake.steps}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.steps}
             component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowSteps}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.liquidity}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.liquidity}
             component={cFRMBNBModule.cFRMBNBFarmingLiquidityFlow}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.success}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.withdraw.success}
             component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowSucess}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.withdraw}
+            path={
+              PATH_DASHBOARD.crucible.crucibleActionRoutes.withdraw.withdraw
+            }
             component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowWithdraw}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.withdraw.steps}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.withdraw.steps}
             component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowSteps}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.unwrap}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unwrap.unwrap}
             component={cFRMBNBModule.cFRMBNBFarmingUnWrapFlowUnWrap}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.cFRM_BNB.unwrap.success}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unwrap.success}
             component={cFRMBNBModule.cFRMBNBFarmingUnWrapFlowSuccess}
             auth={isAuthenticated}
             layout={DashboardLayout}
@@ -231,7 +233,7 @@ function App() {
           />
           {/* cfrm-bnb routes end */}
           {/* cfrmx-bnb routes */}
-          <GuardedRoute
+          {/* <GuardedRoute
             path={PATH_DASHBOARD.crucible.cFRMx_BNB.introduction}
             component={cFRMxBNBModule.cFRMxBNBFarmingDashboardFlowIntroduction}
             auth={isAuthenticated}
@@ -335,10 +337,10 @@ function App() {
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
-          />
+          /> */}
           {/* cfrmx-bnb routes end */}
           {/* cfrm routes */}
-          <GuardedRoute
+          {/* <GuardedRoute
             path={PATH_DASHBOARD.crucible.cFRM.introduction}
             component={cFRMModule.cFRMFarmingDashboardFlowIntroduction}
             auth={isAuthenticated}
@@ -449,10 +451,10 @@ function App() {
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
-          />
+          /> */}
           {/* cfrm routes end */}
           {/* cfrmx routes */}
-          <GuardedRoute
+          {/* <GuardedRoute
             path={PATH_DASHBOARD.crucible.cFRMx.introduction}
             component={cFRMxModule.cFRMxFarmingDashboardFlowIntroduction}
             auth={isAuthenticated}
@@ -563,9 +565,9 @@ function App() {
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
-          />
+          /> */}
           {/* cfrmx routes end */}
-          <UnGuardedRoute
+          {/* <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.public}
             component={CruciblePublic}
             auth={isAuthenticated}
@@ -614,7 +616,7 @@ function App() {
             auth={isAuthenticated}
             layout={AuthLayout}
             headerTitle=""
-          />
+          /> */}
           {/* <UnGuardedRoute path='/auth/login' component={CommunityLogin} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/register' component={CommunityRegister} auth={isAuthenticated} layout={AuthLayout}/> */}
           <UnGuardedRoute

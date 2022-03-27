@@ -7,7 +7,7 @@ import {
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { RootState } from "../../../../../redux/rootReducer";
@@ -30,7 +30,7 @@ export const Introduction = () => {
   const history = useHistory();
   const location: any = useLocation();
   const dispatch = useDispatch();
-
+  const { farm } = useParams<{ farm?: string }>();
   const [neverShowAgain, setNeverShowAgain] = useState(false);
   // const [pendingStepInfo, setpendingStepInfo]  = useState<any>(undefined);
   const { meV2, tokenV2 } = useSelector(
@@ -79,7 +79,9 @@ export const Introduction = () => {
         currentStepIndex,
         stepFlowStepHistory,
         dispatch,
-        history
+        history,
+        false,
+        farm
       );
     }
     // eslint-disable-next-line
@@ -132,7 +134,9 @@ export const Introduction = () => {
           currentStepIndex,
           stepFlowStepHistory,
           dispatch,
-          history
+          history,
+          false,
+          farm
         );
     } catch (e: any) {
       let errorResponse =

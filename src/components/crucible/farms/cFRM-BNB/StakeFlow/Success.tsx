@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import {
   FCard,
   FContainer,
@@ -25,6 +25,7 @@ import { getLatestStepToRender } from "../../../common/Helper";
 export const Success = () => {
   const dispatch = useDispatch();
   const location: any = useLocation();
+  const { farm } = useParams<{ farm?: string }>();
   const history = useHistory();
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
     (state: RootState) => state.crucible
@@ -73,7 +74,8 @@ export const Success = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded
+        renderNeeded,
+        farm
       );
     } catch (e: any) {
       let errorResponse =

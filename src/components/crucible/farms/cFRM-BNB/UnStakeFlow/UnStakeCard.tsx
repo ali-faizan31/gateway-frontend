@@ -14,7 +14,7 @@ import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-
 // import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import { RootState } from "../../../../../redux/rootReducer";
 import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
@@ -30,6 +30,7 @@ import {
 
 export const UnStake = () => {
   const dispatch = useDispatch();
+  const { farm } = useParams<{ farm?: string }>();
   const history = useHistory();
   const location: any = useLocation();
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
@@ -97,7 +98,8 @@ export const UnStake = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded
+        renderNeeded,
+        farm
       );
     } catch (e: any) {
       let errorResponse =
@@ -156,7 +158,9 @@ export const UnStake = () => {
         currentStepIndex,
         stepFlowStepHistory,
         dispatch,
-        history
+        history,
+        false,
+        farm
       );
     }
   };

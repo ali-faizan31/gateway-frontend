@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import {
   FButton,
   FCard,
@@ -50,6 +50,8 @@ export const CrucibleManage = ({
     (state: RootState) => state.crucible
   );
 
+  const { farm } = useParams<{ farm?: string }>();
+
   useEffect(() => {
     if (location.state === undefined) {
       history.push({ pathname: PATH_DASHBOARD.crucible.index });
@@ -71,7 +73,9 @@ export const CrucibleManage = ({
       currentStepIndex,
       stepFlowStepHistory,
       dispatch,
-      history
+      history,
+      false,
+      farm
     );
     // history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint});
   };
@@ -88,7 +92,9 @@ export const CrucibleManage = ({
       currentStepIndex,
       stepFlowStepHistory,
       dispatch,
-      history
+      history,
+      false,
+      farm
     );
   };
 

@@ -8,14 +8,21 @@ import {
   FContainer,
 } from "ferrum-design-system";
 // import React, { useEffect } from 'react'
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { getActualRoute } from "../../../common/Helper";
 
 const CrucibleFeeCard = () => {
   const history = useHistory();
+  const { farm } = useParams<{ farm?: string }>();
 
   const onClaimRewardsClick = () => {
-    history.push({ pathname: PATH_DASHBOARD.crucible.cFRM.withdraw.withdraw });
+    history.push({
+      pathname: getActualRoute(
+        farm,
+        PATH_DASHBOARD.crucible.crucibleActionRoutes.withdraw.withdraw
+      ),
+    });
   };
 
   return (

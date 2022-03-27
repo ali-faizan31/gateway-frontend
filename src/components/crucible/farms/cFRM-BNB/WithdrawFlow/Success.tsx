@@ -21,11 +21,12 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { getLatestStepToRender } from "../../../common/Helper";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 // import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
 
 export const Success = () => {
   const dispatch = useDispatch();
+  const { farm } = useParams<{ farm?: string }>();
   const location: any = useLocation();
   const history = useHistory();
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
@@ -75,7 +76,8 @@ export const Success = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded
+        renderNeeded,
+        farm
       );
     } catch (e: any) {
       let errorResponse =

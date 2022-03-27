@@ -16,7 +16,7 @@ import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import { RootState } from "../../../../../redux/rootReducer";
 import { getLatestStepToRender } from "../../../common/Helper";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
@@ -24,6 +24,7 @@ import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 
 export const Success = () => {
   const dispatch = useDispatch();
+  const { farm } = useParams<{ farm?: string }>();
   const location: any = useLocation();
   const history = useHistory();
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
@@ -73,7 +74,8 @@ export const Success = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded
+        renderNeeded,
+        farm
       );
     } catch (e: any) {
       let errorResponse =

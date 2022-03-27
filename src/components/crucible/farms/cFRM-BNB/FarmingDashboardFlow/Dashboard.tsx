@@ -16,7 +16,7 @@ import { useWeb3React } from "@web3-react/core";
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
 import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
 // import Web3 from "web3";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { crucibleSlice } from "./../../../redux/CrucibleSlice";
 import { BigUtils } from "./../../../../../container-components/web3Client/types";
@@ -28,6 +28,7 @@ import { getLatestStepToRender } from "../../../common/Helper";
 
 export const Manage = () => {
   const history = useHistory();
+  const { farm } = useParams<{ farm?: string }>();
   const [dashboardAction, setDashboardAction] = useState(false);
   // const [unwrap, setUnwrap] = useState(false);
   // const [flowType, setFlowType] = useState("");
@@ -71,7 +72,9 @@ export const Manage = () => {
       currentStepIndex,
       stepFlowStepHistory,
       dispatch,
-      history
+      history,
+      false,
+      farm
     );
     setIsLoading(false);
   };
@@ -89,7 +92,9 @@ export const Manage = () => {
       currentStepIndex,
       stepFlowStepHistory,
       dispatch,
-      history
+      history,
+      false,
+      farm
     );
     setIsLoading(false);
   };
@@ -106,7 +111,9 @@ export const Manage = () => {
       currentStepIndex,
       stepFlowStepHistory,
       dispatch,
-      history
+      history,
+      false,
+      farm
     );
     setIsLoading(false);
   };
@@ -123,7 +130,9 @@ export const Manage = () => {
       currentStepIndex,
       stepFlowStepHistory,
       dispatch,
-      history
+      history,
+      false,
+      farm
     );
     setIsLoading(false);
   };

@@ -21,7 +21,7 @@ import {
   ApprovableButtonWrapper,
   approvalKey,
 } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 // import { useWeb3React } from "@web3-react/core";
 import {
   CFRM_BNB_STEP_FLOW_IDS,
@@ -41,7 +41,7 @@ import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/Connect
 
 export const CrucibleDeposit = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
-
+  const { farm } = useParams<{ farm?: string }>();
   const {
     isConnected,
     // isConnecting,
@@ -143,7 +143,8 @@ export const CrucibleDeposit = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded
+        renderNeeded,
+        farm
       );
     } catch (e: any) {
       let errorResponse =
@@ -201,7 +202,9 @@ export const CrucibleDeposit = () => {
       currentStepIndex,
       stepFlowStepHistory,
       dispatch,
-      history
+      history,
+      false,
+      farm
     );
   };
 

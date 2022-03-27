@@ -17,7 +17,7 @@ import {
   ApprovableButtonWrapper,
   approvalKey,
 } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import {
   // CFRM_BNB_STEP_FLOW_IDS,
   CRUCIBLE_CONTRACTS_V_0_1,
@@ -38,6 +38,7 @@ import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/Connect
 
 export const Stake = () => {
   const dispatch = useDispatch();
+  const { farm } = useParams<{ farm?: string }>();
   const location: any = useLocation();
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   // const [approvedDone, setapprovedDone] = useState(false);
@@ -143,7 +144,8 @@ export const Stake = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded
+        renderNeeded,
+        farm
       );
     } catch (e: any) {
       let errorResponse =
@@ -199,7 +201,9 @@ export const Stake = () => {
         currentStepIndex,
         stepFlowStepHistory,
         dispatch,
-        history
+        history,
+        false,
+        farm
       );
     }
   };

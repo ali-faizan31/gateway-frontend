@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import {
   FButton,
   FCard,
@@ -35,6 +35,8 @@ export const AddLiquidity = () => {
     (state: RootState) => state.walletAuthenticator
   );
 
+  const { farm } = useParams<{ farm?: string }>();
+
   const onStakeClick = () => {
     // let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Stake");
     let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.stake;
@@ -47,7 +49,9 @@ export const AddLiquidity = () => {
       currentStepIndex,
       stepFlowStepHistory,
       dispatch,
-      history
+      history,
+      false,
+      farm
     );
   };
 

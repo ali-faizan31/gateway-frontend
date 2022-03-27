@@ -16,7 +16,7 @@ import { DialogTransitionStatus } from "./DialogTransitionStatus";
 import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
 import { ApprovableButtonWrapper } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 // import { useWeb3React } from "@web3-react/core";
 import { CRUCIBLE_CONTRACTS_V_0_1 } from "./../../../common/utils";
 import { RootState } from "../../../../../redux/rootReducer";
@@ -33,6 +33,7 @@ import {
 export const UnWrap = () => {
   const location: any = useLocation();
   const history = useHistory();
+  const { farm } = useParams<{ farm?: string }>();
   const dispatch = useDispatch();
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   // const [approvedDone, setapprovedDone] = useState(false);
@@ -102,7 +103,8 @@ export const UnWrap = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded
+        renderNeeded,
+        farm
       );
     } catch (e: any) {
       let errorResponse =
@@ -163,7 +165,9 @@ export const UnWrap = () => {
         currentStepIndex,
         stepFlowStepHistory,
         dispatch,
-        history
+        history,
+        false,
+        farm
       );
     }
   };

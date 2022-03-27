@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import { ClipLoader } from "react-spinners";
 // import { RootState } from "../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../routes/paths";
@@ -13,11 +13,12 @@ import * as CrucibleActions from "../redux/CrucibleActions";
 // import { useWeb3React } from "@web3-react/core";
 // import { CrucibleClient } from "./../../../container-components/web3Client/crucibleClient";
 // import { Web3Helper } from "./../../../container-components/web3Client/web3Helper";
-
+import { getHumanReadableFarmName, getActualRoute } from "./Helper";
 export const Deployer = () => {
   const location: any = useLocation();
   const dispatch = useDispatch();
   const history = useHistory();
+  const { farm } = useParams<{ farm?: string }>();
   //   const [isLoading, setIsLoading] = useState(false);
   //   const { isConnected, isConnecting } = useSelector(
   //     (state: RootState) => state.walletConnector
@@ -49,7 +50,7 @@ export const Deployer = () => {
         })
       );
       let stepFlowStep = stepResponse.data.body.stepsFlowStep[0];
-      renderComponent(location.state.name, stepFlowStep.step.name);
+      renderComponent(location.state.name, stepFlowStep.step.name, farm);
     } else {
       history.push({ pathname: PATH_DASHBOARD.crucible.index });
     }
@@ -124,66 +125,26 @@ export const Deployer = () => {
   //     // }
   //   };
 
-  const renderComponent = (stepFlowName: any, stepName: any) => {
+  const renderComponent = (stepFlowName: any, stepName: any, farm: any) => {
     switch (stepFlowName) {
-      case "cFRM / BNB":
+      case `${getHumanReadableFarmName(farm)}`:
         switch (stepName) {
           case "Introduction":
             return history.push({
-              pathname: `/dashboard/crucible/cFRM-BNB/${location.state.contract}/introduction`,
+              pathname: `/dashboard/crucible/${farm}/${location.state.contract}/introduction`,
               state: location.state,
             });
           case "Crucible Farming Dashboard":
             return history.push({
-              pathname: PATH_DASHBOARD.crucible.cFRM_BNB.manage,
+              pathname: getActualRoute(
+                farm,
+                PATH_DASHBOARD.crucible.crucibleActionRoutes.manage
+              ),
               state: location.state,
             });
           default:
             return history.push(PATH_DASHBOARD.crucible.index);
         }
-      // break;
-      case "cFRMx / BNB":
-        switch (stepName) {
-          case "Introduction":
-            return history.push({
-              pathname: PATH_DASHBOARD.crucible.getStarted,
-              state: location.state,
-            });
-          case "Crucible Farming Dashboard":
-            return history.push({
-              pathname: PATH_DASHBOARD.crucible.manage,
-              state: location.state,
-            });
-        }
-        break;
-      case "cFRM":
-        switch (stepName) {
-          case "Introduction":
-            return history.push({
-              pathname: PATH_DASHBOARD.crucible.getStarted,
-              state: location.state,
-            });
-          case "Crucible Farming Dashboard":
-            return history.push({
-              pathname: PATH_DASHBOARD.crucible.manage,
-              state: location.state,
-            });
-        }
-        break;
-      case "cFRMx":
-        switch (stepName) {
-          case "Introduction":
-            return history.push({
-              pathname: PATH_DASHBOARD.crucible.getStarted,
-              state: location.state,
-            });
-          case "Crucible Farming Dashboard":
-            return history.push({
-              pathname: PATH_DASHBOARD.crucible.manage,
-              state: location.state,
-            });
-        }
-        break;
       default:
         return history.push(PATH_DASHBOARD.crucible.index);
     }
