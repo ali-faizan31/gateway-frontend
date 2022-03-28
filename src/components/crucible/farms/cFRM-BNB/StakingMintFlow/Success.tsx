@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useHistory, useLocation, useParams } from "react-router";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import {
   FCard,
   FContainer,
@@ -9,25 +8,25 @@ import {
   FItem,
   FTypo,
 } from "ferrum-design-system";
-import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-check-congrats.svg";
 import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
 // import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
 // import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
-// import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-check-congrats.svg";
+
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
-import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
-import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
-import {  STEP_FLOW_IDS } from "../../../common/utils";
+import toast from "react-hot-toast";
+import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
+import { STEP_FLOW_IDS } from "../../../common/utils";
 
 export const Success = () => {
   const dispatch = useDispatch();
-  const { farm } = useParams<{ farm?: string }>();
   const location: any = useLocation();
+  const { farm } = useParams<{ farm?: string }>();
   const history = useHistory();
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
     (state: RootState) => state.crucible
@@ -91,13 +90,9 @@ export const Success = () => {
     }
   };
 
-  const onRemoveLiquityClick = () => {
-    let nextStepInfo: any;
-    if (farm === "cFRM" || farm === "cFRMx"){
-      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unstakeAddLiquidity;
-    } else if (farm === "cFRMx-BNB" || farm === "cFRM-BNB"){
-      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unstakeRemoveLiquidity;
-    }
+  const onAddLiquidityClick = () => {
+    let nextStepInfo: any  = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].generalAddLiquidity;
+    
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(
@@ -111,7 +106,7 @@ export const Success = () => {
       true,
       farm
     );
-  };
+  }
 
   return (
     <FContainer className="f-mr-0">
@@ -125,13 +120,10 @@ export const Success = () => {
             Congratulations!
           </FTypo>
           <FTypo size={20} weight={500} className="f-mt-1">
-            Crucible Token Sustainable Liquidity Farming
+            Crucible Token Sustainable Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-            Congrats! You have successfully staked cFRM / BNB LP tokens. You
-            will now earn rewards for every cFRM transaction that generates a
-            fee. The reward distribution is proportional to your share of the
-            pool.
+            Congratulations! You have successfully minted your cFRM tokens. You can use cFRM to earn rewards, generate rewards, take advantage of arbitrage opportunities between cFRM, FRM many more tokens. Check out the benefits highlighted below and choose your path.
           </FTypo>
         </FItem>
         <FTypo
@@ -145,10 +137,7 @@ export const Success = () => {
         <FGrid>
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={"card-whats-next"}>
-              <div
-                className="card-whats-next-inner"
-                onClick={() => onRemoveLiquityClick()}
-              >
+              <div className="card-whats-next-inner" onClick={()=>onAddLiquidityClick()}>
                 <div className="card-whats-next-front">
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
@@ -157,13 +146,13 @@ export const Success = () => {
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    Remove Liquidity and Unwrap
+                    Add Liquidity &
+                    Compound Rewards
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">
                   <FTypo>
-                    Use cFRM and BNB to add Liquidity and compound rewards with
-                    Farming
+                    Use cFRM and BNB to add Liquidity and compound rewards with Farming
                   </FTypo>
                 </div>
               </div>

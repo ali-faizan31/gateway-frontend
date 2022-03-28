@@ -15,7 +15,7 @@ import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import { getActualRoute } from "../../../common/Helper";
 
-export const CrucibleStepsPage = () => {
+export const UnstakeAddLiquidity = () => {
   const { farm } = useParams<{ farm?: string }>();
   const history = useHistory();
   const [stepTwoCheck, setStepTwoCheck] = useState(false);

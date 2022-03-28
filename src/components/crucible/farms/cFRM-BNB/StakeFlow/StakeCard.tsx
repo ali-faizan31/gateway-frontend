@@ -27,7 +27,7 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
 import {
-  getLatestStepToRender,
+  getLatestStepToRender 
   // getNextStepFlowStepId
 } from "../../../common/Helper";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
@@ -62,6 +62,9 @@ export const Stake = () => {
   const userCrucibleData = useSelector(
     (state: RootState) => state.crucible.userCrucibleDetails
   );
+  // const LPStakingDetails = useSelector(
+  //   (state: RootState) => state.crucible.userLpStakingDetails
+  // );
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
     (state: RootState) => state.crucible
   );
@@ -189,6 +192,60 @@ export const Stake = () => {
     }
   };
 
+  // const onStakeClick = async () => {
+  //   if (networkClient) {
+  //     let currency: string = "";
+  //     let stakingAddress: string = "";
+  //     let amount: string = "";
+  //     let  network: string = "";
+  //     let  userAddress: string = "";
+  //     let response: any;
+
+  //     setTransitionStatusDialog(true);
+  //     setIsProcessing(true);
+  //     const web3Helper = new Web3Helper(networkClient as any);
+  //     const client = new CrucibleClient(web3Helper);
+
+  //   if (isLPFarm(farm)){
+  //     currency = crucible!.currency;
+  //     stakingAddress = (crucible?.staking || [])[0]?.address || ""
+  //     amount = amount.toString();
+  //     network =  crucible?.network
+  //     userAddress = walletAddress as string
+
+  //     response = await client.stakeLPToken(
+  //       dispatch,
+  //       currency,
+  //       userAddress,
+  //       stakingAddress,
+  //       network,
+  //       amount
+  //     );
+
+  //   } else if (isSingleTokenFarm(farm)){
+  //     currency = LPStakingDetails["cFRMx_BNB_LP"]?.stakeId;
+  //     stakingAddress = LPStakingDetails["cFRMx_BNB_LP"]?.stakingAddress || ""
+  //     amount = amount.toString();
+  //     network =  crucible?.network
+  //     userAddress = walletAddress as string
+
+  //     response = await client.StakeCrucible(
+  //       dispatch,
+  //       currency,
+  //       amount,
+  //       stakingAddress,
+  //       userAddress,
+  //       network
+  //     );
+  //   } 
+  //     if (response) {
+  //       setIsProcessing(false);
+  //       setIsProcessed(true);
+  //       getStepCompleted(false);
+  //     }
+  //   }
+  // };
+
   const onContinueToNextStepClick = () => {
     if (currentStep.status === "pending") {
       location.state.id = currentStep.stepFlow;
@@ -275,20 +332,20 @@ export const Stake = () => {
                 onClick={
                   ownProps.isApprovalMode
                     ? () => ownProps.onApproveClick()
-                    : () =>
-                        onStakeClick(
-                          crucible!.currency,
+                    : () => onStakeClick(
+                      crucible!.currency,
                           (crucible?.staking || [])[0]?.address || "",
                           amount.toString(),
                           true,
                           crucible?.network,
                           walletAddress as string
-                        )
+                    )
                 }
               ></FButton>
             </div>
           )}
           currency={crucible!.baseCurrency}
+          // currency={ isSingleTokenFarm(farm)? crucible!.baseCurrency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails["cFRMx_BNB_LP"]?.LPaddress}`}
           contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
           userAddress={walletAddress as string}
           amount={"0.0001"}

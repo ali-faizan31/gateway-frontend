@@ -102,6 +102,7 @@ export const Manage = () => {
         tokenV2
       );
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      runCompletionFlow(stepFlowStepHistory);
       getLatestStepToRender(
         location.state,
         tokenV2,
@@ -125,6 +126,18 @@ export const Manage = () => {
         : toast.error(`Error Occured: ${e}`);
     }
   };
+
+  const runCompletionFlow = async(stepFlowStepHistory: any) => {
+    for ( let i = 0; i < stepFlowStepHistory.length; i++ ){
+      if (stepFlowStepHistory[i].status === "started"){
+        await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
+          stepFlowStepHistory[i]._id,
+          {status: "completed" },
+          tokenV2
+        );
+      }
+    }
+  }
 
   const onUnStakeClick = () => {
     setIsLoading(true);
@@ -499,7 +512,7 @@ export const Manage = () => {
             </FCard>
           </FContainer>
           <FContainer width={850}>
-            <FGrid className="btn-wrap f-mt-2 f-mb-2">
+            <FGrid className="btn-wrap f-mt-2 f-mb-2 justify-content-center">
               <FGridItem size={[4, 4, 4]}>
                 <FButton
                   title={"Stake"}
@@ -516,7 +529,7 @@ export const Manage = () => {
                   onClick={() => onUnStakeClick()}
                 ></FButton>
               </FGridItem>
-              <FGridItem size={[4, 4, 4]}>
+              {(farm === "cFRM-BNB" || farm === "cFRMx-BNB") && <FGridItem size={[4, 4, 4]}>
                 <FButton
                   variant={"secondary"}
                   title={"Add Liquidity"}
@@ -524,7 +537,7 @@ export const Manage = () => {
                   className={"w-100"}
                   onClick={() => onAddLiquidityClick()}
                 ></FButton>
-              </FGridItem>
+              </FGridItem>}
             </FGrid>
           </FContainer>
         </>

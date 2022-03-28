@@ -24,7 +24,7 @@ export const Success = () => {
     history.push({
       pathname: getActualRoute(
         farm,
-        PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.steps
+        PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.removeLiquidity
       ),
     });
   };

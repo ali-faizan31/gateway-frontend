@@ -192,7 +192,12 @@ export const CrucibleDeposit = () => {
   };
 
   const onContinueToNextStepClick = () => {
-    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].generalAddLiquidity;
+    let nextStepInfo: any
+    if (farm === "cFRM-BNB" || farm === "cFRMx-BNB"){
+      nextStepInfo  = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].generalAddLiquidity;
+    } else if (farm === "cFRM" || farm === "cFRMx"){
+      nextStepInfo  = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].stakingMint;
+    }
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(

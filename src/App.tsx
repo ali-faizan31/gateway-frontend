@@ -153,6 +153,20 @@ function App() {
             headerTitle="Crucible"
           />
           <UnGuardedRoute
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.stakingMint.steps}
+            component={cFRMBNBModule.cFRMBNBFarmingStakingMintFlowIntroduction}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <UnGuardedRoute
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.stakingMint.success}
+            component={cFRMBNBModule.cFRMBNBFarmingStakingMintFlowSuccess}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.stake.success}
             component={cFRMBNBModule.cFRMBNBFarmingStakeFlowSucess}
             auth={isAuthenticated}
@@ -181,8 +195,15 @@ function App() {
             headerTitle="Crucible"
           />
           <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.steps}
-            component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowSteps}
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.addLiquidity}
+            component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowAddLiquidity}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Crucible"
+          />
+          <UnGuardedRoute
+            path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.removeLiquidity}
+            component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowRemoveLiquidity}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"

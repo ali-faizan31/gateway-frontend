@@ -103,6 +103,10 @@ export const PATH_DASHBOARD = {
         mint: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/:contract/mint/deposit"),
         success: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/:contract/stake/success"),
       },
+      stakingMint: {
+        steps: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/:contract/staking-mint/introduction"), 
+        success: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/:contract/staking-mint/success"),
+      },
       stake: {
         success: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/:contract/stake/success"),
         stake: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/:contract/stake/deposit"),
@@ -110,7 +114,8 @@ export const PATH_DASHBOARD = {
       unstake: {
         success: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unstake/success"),
         unstake: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unstake/deposit"),
-        steps: path( ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unstake/remove-liquidity" ),
+        addLiquidity: path( ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unstake/add-liquidity" ),
+        removeLiquidity: path( ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unstake/remove-liquidity" ),
       },
       withdraw: {
         success: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/withdraw/success"),
