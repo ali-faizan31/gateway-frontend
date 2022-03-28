@@ -23,13 +23,14 @@ import { BigUtils } from "./../../../../../container-components/web3Client/types
 import { RootState } from "../../../../../redux/rootReducer";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import ClipLoader from "react-spinners/ClipLoader";
-import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
+import { CFRM_BNB_STEP_FLOW_IDS, STEP_FLOW_IDS } from "../../../common/utils";
 import { getLatestStepToRender } from "../../../common/Helper";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 
 export const Manage = () => {
   const history = useHistory();
   const { farm } = useParams<{ farm?: string }>();
+  ("cFRM-BNB");
   const [dashboardAction, setDashboardAction] = useState(false);
   // const [unwrap, setUnwrap] = useState(false);
   // const [flowType, setFlowType] = useState("");
@@ -93,7 +94,7 @@ export const Manage = () => {
   const onStakeClick = async () => {
     // history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake});
     setIsLoading(true);
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.stake;
+    let nextStepInfo: any = STEP_FLOW_IDS[`${farm}`].stake;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(
