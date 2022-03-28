@@ -12,12 +12,12 @@ import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arro
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 // import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import {
-  getLatestStepToRender,
+  getLatestStepToRender, getObjectReadableFarmName,
   // getNextStepFlowStepId,
 } from "../../../common/Helper";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
-import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
+import {  STEP_FLOW_IDS } from "../../../common/utils";
 
 export const AddLiquidity = () => {
   const history = useHistory();
@@ -39,7 +39,7 @@ export const AddLiquidity = () => {
 
   const onStakeClick = () => {
     // let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Stake");
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.stake;
+    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].stake;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(
@@ -50,7 +50,7 @@ export const AddLiquidity = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      false,
+      true,
       farm
     );
   };
@@ -65,7 +65,7 @@ export const AddLiquidity = () => {
           className={"card-title w-100"}
           display="flex"
         >
-          Crucible Token Sustainable Liquidity Farming teste
+          Crucible Token Sustainable Liquidity Farming
         </FTypo>
         <ul>
           <li className="step step-success">

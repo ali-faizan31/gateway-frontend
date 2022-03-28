@@ -24,6 +24,6 @@ export const updateCurrentStep = (crucible: any) => (dispatch: any) => {
 };
 
 export const resetCrucible = () => (dispatch: any) => {
-  // console.log('rset -------------')
+  console.log('rset -------------')
   dispatch(actions.resetCrucible());
 };

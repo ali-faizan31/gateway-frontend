@@ -202,7 +202,7 @@ export const Stake = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        false,
+        true,
         farm
       );
     }

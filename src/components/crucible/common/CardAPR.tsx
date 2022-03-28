@@ -71,7 +71,9 @@ export const CardAPR = () => {
       yourRewards: "$.2",
       apr: "20%",
       id: "6238386bd292da2db05524f9",
-      contract: "0x5D8df66ea3e5c3C30A1dB4aFC6F17A917B201118",
+      contract: "0x5e767cadbd95e7b9f777ddd9e65eab1c29c487e6",
+      LpCurrency: "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224", 
+      LPstakingAddress: "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd",
       network: "BSC",
       internalName: "cFRM",
     },
@@ -194,9 +196,7 @@ export const CardAPR = () => {
         currentStep: stepFlowStep,
         currentStepIndex: 0,
       })
-    );
-    // let stepFlowName = stepFlowStep.name.split("-");
-    //  stepFlowName = (splitted[0].trim() + " - " + splitted[1].trim());
+    ); 
     renderComponent(
       stepFlowStep.step.name,
       { id, stepFlowName, contract, network, LpCurrency, LPstakingAddress },

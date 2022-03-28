@@ -72,6 +72,7 @@ export const Introduction = () => {
 
   useEffect(() => {
     if (isConnected && tokenV2 && stepFlowStepHistory.length) {
+      
       getLatestStepToRender(
         location.state,
         tokenV2,
@@ -96,17 +97,17 @@ export const Introduction = () => {
       let updateResponse: any = {};
 
       if (neverShowAgain === true) {
-        updatedCurrentStep = { ...currentStep, status: "completed" };
+        updatedCurrentStep = { ...currentStep, status: "skip" };
         updHistory = stepFlowStepHistory.map((obj, index) =>
-          index === currentStepIndex ? { ...obj, status: "completed" } : obj
+          index === currentStepIndex ? { ...obj, status: "skip" } : obj
         );
-        data = { status: "completed" };
+        data = { status: "skip" };
       } else {
-        updatedCurrentStep = { ...currentStep, status: "completed" };
+        updatedCurrentStep = { ...currentStep, status: "started" };
         updHistory = stepFlowStepHistory.map((obj, index) =>
-          index === currentStepIndex ? { ...obj, status: "completed" } : obj
+          index === currentStepIndex ? { ...obj, status: "started" } : obj
         );
-        data = { status: "completed" };
+        data = { status: "started" };
       }
 
       updateResponse =

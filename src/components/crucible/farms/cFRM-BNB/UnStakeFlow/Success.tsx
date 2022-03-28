@@ -19,10 +19,10 @@ import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
-import { getLatestStepToRender } from "../../../common/Helper";
+import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
-import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
+import {  STEP_FLOW_IDS } from "../../../common/utils";
 
 export const Success = () => {
   const dispatch = useDispatch();
@@ -92,7 +92,7 @@ export const Success = () => {
   };
 
   const onRemoveLiquityClick = () => {
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.unstakeRemoveLiquidity;
+    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unstakeRemoveLiquidity;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(
@@ -103,7 +103,7 @@ export const Success = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      false,
+      true,
       farm
     );
   };

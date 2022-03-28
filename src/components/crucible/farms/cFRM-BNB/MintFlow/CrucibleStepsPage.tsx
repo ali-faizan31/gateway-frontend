@@ -10,8 +10,8 @@ import {
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 // import { PATH_DASHBOARD } from "../../../../../routes/paths";
-import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
-import { getLatestStepToRender } from "../../../common/Helper";
+import { STEP_FLOW_IDS } from "../../../common/utils";
+import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 
@@ -31,7 +31,7 @@ export const CrucibleStepsPage = () => {
   );
 
   const onStakeClick = () => {
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.stake;
+    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].stake;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(
@@ -42,7 +42,7 @@ export const CrucibleStepsPage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      false,
+      true,
       farm
     );
   };

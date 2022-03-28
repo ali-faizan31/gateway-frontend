@@ -23,16 +23,16 @@ import {
 } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
 import { useHistory, useLocation, useParams } from "react-router";
 // import { useWeb3React } from "@web3-react/core";
-import {
-  CFRM_BNB_STEP_FLOW_IDS,
+import { 
   CRUCIBLE_CONTRACTS_V_0_1,
+  STEP_FLOW_IDS,
 } from "./../../../common/utils";
 import { RootState } from "../../../../../redux/rootReducer";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
 import {
-  getLatestStepToRender,
+  getLatestStepToRender, getObjectReadableFarmName,
   // getNextStepFlowStepId
 } from "../../../common/Helper";
 import { MetaMaskConnector } from "../../../../../container-components";
@@ -192,7 +192,7 @@ export const CrucibleDeposit = () => {
   };
 
   const onContinueToNextStepClick = () => {
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.generalAddLiquidity;
+    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].generalAddLiquidity;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(
@@ -203,7 +203,7 @@ export const CrucibleDeposit = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      false,
+      true,
       farm
     );
   };

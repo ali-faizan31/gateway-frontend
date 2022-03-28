@@ -159,7 +159,7 @@ export const UnStake = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        false,
+        true,
         farm
       );
     }

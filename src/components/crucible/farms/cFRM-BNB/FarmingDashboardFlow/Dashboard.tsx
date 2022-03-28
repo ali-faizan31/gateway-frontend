@@ -23,14 +23,16 @@ import { BigUtils } from "./../../../../../container-components/web3Client/types
 import { RootState } from "../../../../../redux/rootReducer";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import ClipLoader from "react-spinners/ClipLoader";
-import { CFRM_BNB_STEP_FLOW_IDS, STEP_FLOW_IDS } from "../../../common/utils";
-import { getLatestStepToRender } from "../../../common/Helper";
+import { STEP_FLOW_IDS } from "../../../common/utils";
+import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
+import * as CrucibleActions from "../../../redux/CrucibleActions";
+import toast from "react-hot-toast";
 
 export const Manage = () => {
   const history = useHistory();
   const { farm } = useParams<{ farm?: string }>();
-  ("cFRM-BNB");
+  // ("cFRM-BNB");
   const [dashboardAction, setDashboardAction] = useState(false);
   // const [unwrap, setUnwrap] = useState(false);
   // const [flowType, setFlowType] = useState("");
@@ -64,17 +66,69 @@ export const Manage = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
-        currentStep._id,
-        { status: "completed" },
-        tokenV2
-      );
+      // SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
+      //   currentStep._id,
+      //   { status: "completed" },
+      //   tokenV2
+      // );
+      getStepCompletedAndRunCompletionFlow(false);
     }
   }, [isLoading]);
 
+  const getStepCompletedAndRunCompletionFlow = async (renderNeeded: any) => {
+    try {
+      let updatedCurrentStep = { ...currentStep, status: "completed" };
+      let updHistory = stepFlowStepHistory.map((obj, index) =>
+        index === currentStepIndex ? { ...obj, status: "completed" } : obj
+      );
+      let data = { status: "completed" };
+
+      dispatch(
+        CrucibleActions.updateCurrentStep({
+          currentStep: updatedCurrentStep,
+          currentStepIndex: currentStepIndex,
+        })
+      );
+      dispatch(
+        CrucibleActions.updateStepFlowStepHistory({
+          stepFlowStepHistory: updHistory,
+        })
+      );
+
+      // let updateResponse: any =
+      await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
+        currentStep._id,
+        data,
+        tokenV2
+      );
+      // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      getLatestStepToRender(
+        location.state,
+        tokenV2,
+        currentStep,
+        currentStepIndex,
+        stepFlowStepHistory,
+        dispatch,
+        history,
+        renderNeeded,
+        farm,
+        true
+      );
+    } catch (e: any) {
+      let errorResponse =
+        e &&
+        e.response &&
+        e.response.data.status &&
+        e.response.data.status.message;
+      errorResponse
+        ? toast.error(`Error Occured: ${errorResponse}`)
+        : toast.error(`Error Occured: ${e}`);
+    }
+  };
+
   const onUnStakeClick = () => {
     setIsLoading(true);
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.unstake;
+    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unstake;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(
@@ -85,16 +139,15 @@ export const Manage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      false,
+      true,
       farm
     );
     setIsLoading(false);
   };
 
-  const onStakeClick = async () => {
-    // history.push({pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake});
+  const onStakeClick = async () => { 
     setIsLoading(true);
-    let nextStepInfo: any = STEP_FLOW_IDS[`${farm}`].stake;
+    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].stake;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(
@@ -105,7 +158,7 @@ export const Manage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      false,
+      true,
       farm
     );
     setIsLoading(false);
@@ -113,7 +166,7 @@ export const Manage = () => {
 
   const onClaimRewardsClick = () => {
     setIsLoading(true);
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.withdraw;
+    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].withdraw;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(
@@ -124,7 +177,7 @@ export const Manage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      false,
+      true,
       farm
     );
     setIsLoading(false);
@@ -132,7 +185,7 @@ export const Manage = () => {
 
   const onAddLiquidityClick = () => {
     setIsLoading(true);
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.generalAddLiquidity;
+    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].generalAddLiquidity;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name; // getting no history againts this id
     getLatestStepToRender(
@@ -143,7 +196,7 @@ export const Manage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      false,
+      true,
       farm
     );
     setIsLoading(false);

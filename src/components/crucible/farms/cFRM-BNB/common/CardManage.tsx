@@ -16,10 +16,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import {
+  getHumanReadableFarmName,
   getLatestStepToRender,
+  getObjectReadableFarmName,
   // getNextStepFlowStepId,
 } from "../../../common/Helper";
-import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
+import {  STEP_FLOW_IDS } from "../../../common/utils";
 
 import { ReactComponent as IconNetworkFrm } from "../../../../../assets/img/icon-network-frm.svg";
 import IconNetworkCFrmStr from "../../../../../assets/img/icon-network-cfrm.svg";
@@ -52,7 +54,7 @@ export const CrucibleManage = ({
 
   const { farm } = useParams<{ farm?: string }>();
 
-  useEffect(() => {
+  useEffect(() => { 
     if (location.state === undefined) {
       history.push({ pathname: PATH_DASHBOARD.crucible.index });
     }
@@ -60,9 +62,9 @@ export const CrucibleManage = ({
   }, []);
 
   const onMintcFRMClick = () => {
-    console.log(location.state.stepFlowName, "Mint");
-    // let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Mint");
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.mint;
+    console.log(location.state.stepFlowName, "Mint", farm, getObjectReadableFarmName(farm)); 
+    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].mint;
+    console.log('next step id:', nextStepInfo)
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     console.log(nextStepInfo, location.state);
@@ -74,14 +76,14 @@ export const CrucibleManage = ({
       stepFlowStepHistory,
       dispatch,
       history,
-      false,
+      true,
       farm
     );
     // history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint});
   };
 
   const onWrapClick = () => {
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.unwrap;
+    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unwrap;
     console.log(nextStepInfo, location.state);
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
@@ -93,7 +95,7 @@ export const CrucibleManage = ({
       stepFlowStepHistory,
       dispatch,
       history,
-      false,
+      true,
       farm
     );
   };
@@ -166,7 +168,7 @@ export const CrucibleManage = ({
             <IconGoBack />
           </Link>
           <FTypo size={24} weight={700}>
-            Crucible Farms Dashboard - cFRM / BNB
+            Crucible Farms Dashboard - {getHumanReadableFarmName(farm)}
           </FTypo>
         </FItem>
         <div className="network-icon-wrapper">
@@ -211,7 +213,7 @@ export const CrucibleManage = ({
 
         <FGridItem size={[4, 4, 4]}>
           <FButton
-            title={"Mint cFRMx"}
+            title={farm?.includes("cFRM-")? "Mint cFRM" : farm?.includes("cFRMx-") ? "Mint cFRMx" : "Mint"}
             className={"w-100 f-btn-gradiant"}
             onClick={() => onMintcFRMClick()}
           ></FButton>

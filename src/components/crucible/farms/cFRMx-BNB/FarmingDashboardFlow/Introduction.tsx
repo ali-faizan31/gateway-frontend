@@ -69,7 +69,7 @@ export const Introduction = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        false,
+        true,
         farm
       );
     }

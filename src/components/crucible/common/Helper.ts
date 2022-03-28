@@ -16,6 +16,19 @@ export const getHumanReadableFarmName = (farm: any) => {
   }
 };
 
+export const getObjectReadableFarmName = (farm: any) => {
+  switch (farm) {
+    case "cFRM-BNB":
+      return "cFRM_BNB";
+    case "cFRMx-BNB":
+      return "cFRMx_BNB";
+    case "cFRM":
+      return "cFRM";
+    case "cFRMx":
+      return "cFRMx";
+  }
+};
+
 export const getActualRoute = (farm: any, route: any) => {
   return route.replace(":farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)", farm);
 };
@@ -213,6 +226,23 @@ export const renderComponent = (
   }
 };
 
+const saveCurrentPreferncesInNewSequence = async (newSequence: any, oldHistory: any, token: any) => {
+  for ( let i = 0; i < oldHistory.length; i++ ){
+    if (oldHistory[i].status === "skip"){
+      for ( let j = 0; j < newSequence.length; j++ ){
+        if (newSequence[j].step._id === oldHistory[i].step._id){
+          console.log('save prefence step', newSequence[j], oldHistory[i])
+          await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
+            newSequence[j]._id,
+            { status: "skip" },
+            token
+          );
+        }
+      }
+    }
+  }
+}
+
 export const getLatestStepToRender = async (
   state: any,
   token: any,
@@ -222,15 +252,23 @@ export const getLatestStepToRender = async (
   dispatch: any,
   history: any,
   renderNeeded: any = true,
-  farm: any
+  farm: any,
+  saveCurrentPrefernces: any = false
 ) => {
-  try {
-    // let sequenceResponse =
-    // console.log("Creating sequence");
-    await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(
+  try { 
+     await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(
       state.id,
       token
     );
+    let latestResponse = await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
+      state.id,
+      token
+    );
+    latestResponse = latestResponse.data && latestResponse.data.body && latestResponse.data.body.stepFlowStepsHistory;
+    if ( saveCurrentPrefernces ){
+      console.log('save prefence flow')
+      saveCurrentPreferncesInNewSequence(latestResponse, stepFlowStepsHistory, token)
+    }
     // sequenceResponse = sequenceResponse.data && sequenceResponse.data.body && sequenceResponse.data.body.stepFlowStepsHistory;
     // let pendingStepInfo = getLatestStepWithPendingStatus(sequenceResponse);
     // dispatch(CrucibleActions.updateCurrentStep({ currentStep: pendingStepInfo?.pendingStep, currentStepIndex: pendingStepInfo?.index }));
@@ -248,7 +286,10 @@ export const getLatestStepToRender = async (
     let errorResponse = e && e.response && e.response.data.status;
     if (errorResponse?.code === 400) {
       try {
-        // console.log(state, currentStep, currentStepIndex, "line 51");
+        await SFSH_API.getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
+          state.id,
+          token
+        );
         let latestResponse =
           await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
             state.id,
@@ -361,8 +402,8 @@ export const getLatestStepWithPendingStatus = (stepResponse: any) => {
       current = stepResponse[i];
 
       if (
-        (previous.status !== "pending" && current.status === "pending") ||
-        current.status === "started"
+        (previous.status === "skip" || previous.status === "completed") && 
+        (current.status === "started" || current.status === "pending")
       ) {
         return { pendingStep: current, index: i };
       }
