@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 export const CrucibleMyBalance = () => {
   //@ts-ignore
   const tokenPrices = useSelector((state) => state.crucible.tokenPrices);
-  console.log(tokenPrices, "tokenPricestokenPrices");
+  // console.log(tokenPrices, "tokenPricestokenPrices");
 
   return (
     <FCard className="card-my-balance styled-card align-v">

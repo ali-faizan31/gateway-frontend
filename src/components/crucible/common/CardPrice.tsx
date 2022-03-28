@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 export const CruciblePrice = () => {
   //@ts-ignore
   const tokenPrices = useSelector((state) => state.crucible.tokenPrices);
-  console.log(tokenPrices, "tokenPricestokenPrices");
+  // console.log(tokenPrices, "tokenPricestokenPrices");
 
   const DATA_PRICE = [
     { network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0 },

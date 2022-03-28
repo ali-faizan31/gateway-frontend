@@ -179,7 +179,7 @@ export const CardAPR = () => {
     LPstakingAddress?: string,
     farm?: any
   ) => {
-    console.log("getStepToRender");
+    // console.log("getStepToRender");
     // history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: {id, name,contract,network}})
     setIsLoading(true);
     let stepResponse = await getStepFlowStepByStepFlowIdForPublic(id);

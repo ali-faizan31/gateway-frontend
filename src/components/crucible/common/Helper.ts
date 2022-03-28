@@ -226,7 +226,7 @@ export const getLatestStepToRender = async (
 ) => {
   try {
     // let sequenceResponse =
-    console.log("Creating sequence");
+    // console.log("Creating sequence");
     await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(
       state.id,
       token
@@ -238,6 +238,13 @@ export const getLatestStepToRender = async (
     // renderNeeded && renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
   } catch (e: any) {
     console.log("restart failed");
+    console.log("state : ", state);
+    console.log("token : ", token);
+    console.log("currentStep : ", currentStep);
+    console.log("currentStepIndex : ", currentStepIndex);
+    console.log("stepFlowStepsHistory : ", stepFlowStepsHistory);
+    console.log("renderNeeded : ", renderNeeded);
+    console.log("farm : ", farm);
     let errorResponse = e && e.response && e.response.data.status;
     if (errorResponse?.code === 400) {
       try {
@@ -252,6 +259,7 @@ export const getLatestStepToRender = async (
           latestResponse.data.body &&
           latestResponse.data.body.stepFlowStepsHistory;
         let pendingStepInfo = getLatestStepWithPendingStatus(latestResponse);
+
         console.log(pendingStepInfo, "pendingstep");
         if (currentStepIndex + 1 === stepFlowStepsHistory.length) {
           //last step, move onto next step flow
@@ -345,7 +353,7 @@ export const getLatestStepWithPendingStatus = (stepResponse: any) => {
     if (i === 0) {
       previous = stepResponse[i];
       current = stepResponse[i];
-      if (previous.status === "pending" || "started") {
+      if (previous.status === "pending" || previous.status === "started") {
         return { pendingStep: previous, index: i };
       }
     } else {
@@ -353,8 +361,8 @@ export const getLatestStepWithPendingStatus = (stepResponse: any) => {
       current = stepResponse[i];
 
       if (
-        previous.status !== "pending" &&
-        (current.status === "pending" || current.status === "started")
+        (previous.status !== "pending" && current.status === "pending") ||
+        current.status === "started"
       ) {
         return { pendingStep: current, index: i };
       }

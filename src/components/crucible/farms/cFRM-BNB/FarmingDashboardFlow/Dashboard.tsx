@@ -25,6 +25,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import ClipLoader from "react-spinners/ClipLoader";
 import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
 import { getLatestStepToRender } from "../../../common/Helper";
+import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 
 export const Manage = () => {
   const history = useHistory();
@@ -35,7 +36,7 @@ export const Manage = () => {
   const location: any = useLocation();
   const { active, library } = useWeb3React();
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   //@ts-ignore
   const crucible = useSelector((state) => state.crucible.selectedCrucible);
   const {
@@ -59,6 +60,16 @@ export const Manage = () => {
   const { tokenV2 } = useSelector(
     (state: RootState) => state.walletAuthenticator
   );
+
+  useEffect(() => {
+    if (!isLoading) {
+      SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
+        currentStep._id,
+        { status: "completed" },
+        tokenV2
+      );
+    }
+  }, [isLoading]);
 
   const onUnStakeClick = () => {
     setIsLoading(true);
@@ -324,7 +335,7 @@ export const Manage = () => {
           <FContainer width={650}>
             <FCard className="card-crucible-token-info">
               <FTypo size={24}>Crucible Token Info</FTypo>
-              <FGrid className="btn-wrap">
+              <FGrid className="info-bar">
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
                     <FTypo
@@ -371,7 +382,7 @@ export const Manage = () => {
               </FGrid>
               <FCard className={"styled-card align-v your-crucible"}>
                 <FGrid>
-                  <FGridItem size={[6, 6, 6]}>
+                  <FGridItem size={[6, 6, 6]} dir="column">
                     <FTypo className="f-pb--2">Your Crucible LP Deposits</FTypo>
                     <FTypo
                       size={24}
@@ -379,6 +390,7 @@ export const Manage = () => {
                       align={"end"}
                       display="flex"
                       alignY={"end"}
+                      color="#DAB46E"
                     >
                       {Number(userStake?.stakeOf || "0").toFixed(3)}
                       <FTypo

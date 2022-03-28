@@ -80,7 +80,7 @@ export const Introduction = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        false,
+        true,
         farm
       );
     }
@@ -102,11 +102,11 @@ export const Introduction = () => {
         );
         data = { status: "completed" };
       } else {
-        updatedCurrentStep = { ...currentStep, status: "started" };
+        updatedCurrentStep = { ...currentStep, status: "completed" };
         updHistory = stepFlowStepHistory.map((obj, index) =>
-          index === currentStepIndex ? { ...obj, status: "started" } : obj
+          index === currentStepIndex ? { ...obj, status: "completed" } : obj
         );
-        data = { status: "started" };
+        data = { status: "completed" };
       }
 
       updateResponse =
@@ -117,7 +117,7 @@ export const Introduction = () => {
         );
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       // console.log(updateResponse);
-      if (updateResponse?.status === "started") {
+      if (updateResponse) {
         dispatch(
           CrucibleActions.updateCurrentStep({
             currentStep: updatedCurrentStep,
