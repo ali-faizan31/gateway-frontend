@@ -113,6 +113,28 @@ export const Success = () => {
     );
   };
 
+  const onMintOrUnwrapClick = () => {
+    let nextStepInfo: any;
+    if (farm === "cFRM" || farm === "cFRMx"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].dashboard;
+    } else if (farm === "cFRMx-BNB" || farm === "cFRM-BNB"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].dashboard;
+    }
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      true,
+      farm
+    );
+  };
+
   return (
     <FContainer className="f-mr-0">
       <CrucibleMyBalance />
@@ -194,14 +216,14 @@ export const Success = () => {
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={"card-whats-next"}>
               <div className="card-whats-next-inner">
-                <div className="card-whats-next-front">
+                <div className="card-whats-next-front" onClick={()=>onMintOrUnwrapClick()}>
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
                       <IconNetworkcFRM />
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                  {farm?.includes("BNB") ? "Mint" : "Unwrap"} {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"}
+                  {farm?.includes("BNB") ? "Mint" : "Unwrap"} {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">

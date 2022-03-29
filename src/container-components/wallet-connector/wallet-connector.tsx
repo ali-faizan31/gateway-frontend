@@ -35,7 +35,7 @@ export const WalletConnector = ({
   } = useSelector((state: RootState) => state.walletAuthenticator);
 
   useEffect(() => {
-    console.log(isAuthenticationNeeded, "isAuthenticationNeeded");
+    // console.log(isAuthenticationNeeded, "isAuthenticationNeeded");
   }, [isAuthenticationNeeded]);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const WalletConnector = ({
       isConnected &&
       active
     ) {
-      console.log("Account Changed reconnect wallet");
+      // console.log("Account Changed reconnect wallet");
       activate(injected);
       setReconnect(true);
     }
@@ -57,7 +57,7 @@ export const WalletConnector = ({
     injected
       .isAuthorized()
       .then((isAuthorized) => {
-        console.log(isAuthorized, active, "isAuthorized");
+        // console.log(isAuthorized, active, "isAuthorized");
         if (isAuthorized && !active && !error && isConnected) {
           activate(injected);
         }
@@ -74,7 +74,7 @@ export const WalletConnector = ({
       isConnected &&
       active
     ) {
-      console.log("Chain Changed reconnect wallet");
+      // console.log("Chain Changed reconnect wallet");
       activate(injected);
       setReconnect(true);
     }
@@ -83,12 +83,12 @@ export const WalletConnector = ({
 
   useEffect(() => {
     if (active && !isConnected && library && !networkClient) {
-      console.log("web3 react connect set network client");
+      // console.log("web3 react connect set network client");
       dispatch(walletConnectorActions.connectWallet());
       setNetworkClient(library);
     }
     if (!active && isConnected && !library && !isConnecting) {
-      console.log("connected in currenct browser session reconnect wallet");
+      // console.log("connected in currenct browser session reconnect wallet");
       activate(injected);
       setReconnect(true);
     }
@@ -97,9 +97,9 @@ export const WalletConnector = ({
 
   useEffect(() => {
     if (reconnect && active) {
-      console.log(
-        "reconnect called and web3 is active again reset network client to set again"
-      );
+      // console.log(
+      //   "reconnect called and web3 is active again reset network client to set again"
+      // );
       dispatch(walletConnectorActions.reconnectWallet());
       setNetworkClient(undefined);
       setReconnect(false);
@@ -117,17 +117,17 @@ export const WalletConnector = ({
       chainId &&
       isConnecting
     ) {
-      console.log(
-        "network client is set, web3 react is also active test by fetching account balance"
-      );
+      // console.log(
+      //   "network client is set, web3 react is also active test by fetching account balance"
+      // );
       networkClient.eth
         .getBalance(account?.toString())
         .then((balance: String) => {
-          console.log(
-            "newtork ping completed successfully update redux with wallet and network client information",
-            balance,
-            account?.toString()
-          );
+          // console.log(
+          //   "newtork ping completed successfully update redux with wallet and network client information",
+          //   balance,
+          //   account?.toString()
+          // );
           dispatch(
             walletConnectorActions.walletConnected({
               chainId,
@@ -139,8 +139,8 @@ export const WalletConnector = ({
           );
         })
         .catch((err) => {
-          console.log("newtork ping failed reset wallet state");
-          console.log(err, " : error connecting wallet");
+          // console.log("newtork ping failed reset wallet state");
+          // console.log(err, " : error connecting wallet");
           toast.error(err || "Error connecting wallet");
           dispatch(walletConnectorActions.resetWalletConnector());
         });
@@ -157,12 +157,12 @@ export const WalletConnector = ({
   ]);
 
   const openWalletSelectorDialog = () => {
-    console.log("open wallet selector to connect");
+    // console.log("open wallet selector to connect");
     if (!isConnecting) {
       if (!isConnected) {
         setShowWalletDialog(true);
       } else {
-        console.log("wallet is already connect disconnect wallet");
+        // console.log("wallet is already connect disconnect wallet");
         dispatch(walletConnectorActions.resetWalletConnector());
         dispatch(
           walletAuthenticatorActions.resetWalletAuthentication({
@@ -178,31 +178,31 @@ export const WalletConnector = ({
         deactivate();
       }
     } else {
-      console.log("wallet is already in connect state");
+      // console.log("wallet is already in connect state");
     }
   };
 
-  // console.log(isConnecting, "isConnecting");
-  // console.log(isConnected, "isConnected");
-  // console.log(active, "active");
-  // console.log(library, "library");
-  // console.log(networkClient, "networkClient");
-  // console.log(walletAddress, "walletAddress");
-  // console.log(account, "account");
-  // console.log(walletAddress === account);
-  // console.log(chainId, "chainId");
-  // console.log(currentWalletNetwork, "currentWalletNetwork");
-  // console.log(currentWalletNetwork === chainId);
-  // console.log(error);
+  // // console.log(isConnecting, "isConnecting");
+  // // console.log(isConnected, "isConnected");
+  // // console.log(active, "active");
+  // // console.log(library, "library");
+  // // console.log(networkClient, "networkClient");
+  // // console.log(walletAddress, "walletAddress");
+  // // console.log(account, "account");
+  // // console.log(walletAddress === account);
+  // // console.log(chainId, "chainId");
+  // // console.log(currentWalletNetwork, "currentWalletNetwork");
+  // // console.log(currentWalletNetwork === chainId);
+  // // console.log(error);
 
   const connectMetaMask = () => {
     if (isConnected) {
-      console.log("wallet is already connect disconnect wallet");
+      // console.log("wallet is already connect disconnect wallet");
       dispatch(walletConnectorActions.resetWalletConnector());
       setNetworkClient(undefined);
       deactivate();
     } else {
-      console.log("intialize web3 wallet connect for meta mask");
+      // console.log("intialize web3 wallet connect for meta mask");
       activate(injected);
       setShowWalletDialog(false);
       setNetworkClient(undefined);
@@ -212,7 +212,7 @@ export const WalletConnector = ({
   useEffect(() => {
     if (error) {
       dispatch(walletConnectorActions.resetWalletConnector());
-      console.log(error);
+      // console.log(error);
       toast.error(error?.message || "Error connecting wallet");
     }
     // eslint-disable-next-line

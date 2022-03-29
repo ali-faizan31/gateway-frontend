@@ -138,13 +138,13 @@ function App() {
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          {/* <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.mint.steps}
             component={cFRMBNBModule.cFRMBNBFarmingMintFlowSteps}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
-          />
+          /> */}
           <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.mint.mint}
             component={cFRMBNBModule.cFRMBNBFarmingMintFlowMint}

@@ -43,8 +43,7 @@ export const isSingleTokenFarm = (farm: any) => {
   return false;
 }
 
-export const getActualRoute = (farm: any, route: any) => {
-  console.log(route.replace(":farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)", farm), 'replaced actual route')
+export const getActualRoute = (farm: any, route: any) => { 
   return route.replace(":farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)", farm);
 };
 
@@ -459,18 +458,17 @@ export const getLatestStepWithPendingStatus = (currentStepIndex:any, stepRespons
       //   return { pendingStep: previous, index: i };
       // }
       if (previous.status === "pending") {
-        console.log('returning previous')
+        console.log('returning pending:', previous)
         return { pendingStep: previous, index: i };
       }
     } else {
       previous = stepResponse[i - 1];
-      current = stepResponse[i];
-      console.log(previous, current)
+      current = stepResponse[i]; 
       if (
         (previous.status === "skip" || previous.status === "started" || previous.status === "completed") && 
         ( current.status === "pending")
       ) {
-        console.log('returning previous')
+        console.log('returning pending:', current)
         return { pendingStep: current, index: i };
       }
     }

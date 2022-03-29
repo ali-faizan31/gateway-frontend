@@ -31,7 +31,12 @@ export const CrucibleStepsPage = () => {
   );
 
   const onStakeClick = () => {
-    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].stake;
+    let nextStepInfo: any;
+    if (farm?.includes("cFRMx")){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].stake;
+    } else if (farm === "cFRM" || farm === "cFRM-BNB"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].stake;
+    }
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(
@@ -126,7 +131,7 @@ export const CrucibleStepsPage = () => {
           </li>
           <li className="step-last">
             <FButton
-              title="Stake cFRM LP"
+              title={`Stake ${farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP`}
               postfix={<IconArrow />}
               className="w-100"
               disabled={!stepThreeCheck}

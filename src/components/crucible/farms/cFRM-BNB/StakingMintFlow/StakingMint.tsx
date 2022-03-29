@@ -162,7 +162,7 @@ export const StakingMintSteps = () => {
                     </li>
                     <li className="step-last">
                         <FItem>
-                            <FButton title={`Stake ${farm?.includes("cFRMx")? "cFRMx": "cFRM"}`} postfix={<IconArrow />} className="w-100" disabled={disableCheck()} onClick={() => onStakeClick()} />
+                            <FButton title={`Stake ${farm?.includes("cFRMx")? "cFRMx": "cFRM"}`} postfix={<IconArrow />} className="w-100" disabled={disableCheck()} style={{marginRight:"3px"}} onClick={() => onStakeClick()} />
                         </FItem>
                         <FItem>
                             <FButton title="What Else Can I Do?" postfix={<IconArrow />} className="w-100" disabled={disableCheck()} onClick={() => onWhatElseClick()} />

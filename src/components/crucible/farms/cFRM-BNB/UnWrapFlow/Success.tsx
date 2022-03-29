@@ -16,9 +16,10 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router";
 import { RootState } from "../../../../../redux/rootReducer";
-import { getLatestStepToRender } from "../../../common/Helper";
+import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
+import { STEP_FLOW_IDS } from "../../../common/utils";
 
 export const Success = () => {
   const dispatch = useDispatch();
@@ -87,6 +88,67 @@ export const Success = () => {
     }
   };
 
+  const onMintAndStakeClick = () => {
+    let nextStepInfo: any;
+    let newFarm: any;
+    if (farm?.includes("cFRMx")){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].dashboard;
+      newFarm = "cFRM-BNB"
+    } else if (farm?.includes("cFRM")){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].dashboard;
+      newFarm = "cFRMx-BNB"
+    }
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      true,
+      newFarm
+    );
+  }
+
+  const onMintClick = () => {
+    let nextStepInfo: any;
+    let newFarm: any;
+    if (farm?.includes("BNB")){
+      if (farm?.includes("cFRMx")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].dashboard
+        newFarm = "cFRM-BNB" 
+      } else {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].dashboard
+        newFarm = "cFRMx-BNB"  
+      }
+    } else {
+      if (farm===("cFRMx")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].dashboard
+        newFarm = "cFRM" 
+      } else if (farm===("cFRM")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].dashboard
+        newFarm = "cFRMx"  
+      }
+    }
+    
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      true,
+      newFarm
+    );
+  }
+
   return (
     <FContainer className="f-mr-0" width={800}>
       <CrucibleMyBalance />
@@ -119,7 +181,7 @@ export const Success = () => {
         <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={"card-whats-next"}>
               <div className="card-whats-next-inner">
-                <div className="card-whats-next-front">
+                <div className="card-whats-next-front" onClick={()=>onMintAndStakeClick()}>
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
                     {farm?.includes("cFRMx") ? <IconNetworkcFRM /> :<IconNetworkcFRMx />  }
@@ -162,7 +224,7 @@ export const Success = () => {
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={"card-whats-next"}>
               <div className="card-whats-next-inner">
-                <div className="card-whats-next-front">
+                <div className="card-whats-next-front" onClick={()=>onMintClick()}>
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
                       <IconNetworkcFRM />

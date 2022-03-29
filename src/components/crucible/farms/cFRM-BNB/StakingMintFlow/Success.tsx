@@ -92,7 +92,12 @@ export const Success = () => {
 
   const onAddLiquidityClick = () => {
     let nextStepInfo: any  = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].generalAddLiquidity;
-    
+    // let nextStepInfo: any;
+    // if (farm?.includes("cFRMx")){
+    //   nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].stake;
+    // } else if (farm === "cFRM" || farm === "cFRM-BNB"){
+    //   nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].stake;
+    // }
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(

@@ -54,23 +54,7 @@ export const WalletAuthencationOnSignIn = ({
   // >(undefined);
   // const [connectedAndVerifiedWallet, setConnectedAndVerifiedWallet] =
   //   useState("");
-
-  useEffect(() => {
-    console.log(
-      "isConnect",
-      isConnecting,
-      currentWalletNetwork,
-      walletAddress,
-      networkClient,
-      isAuthenticationNeeded
-    );
-  }, [
-    isConnecting,
-    currentWalletNetwork,
-    walletAddress,
-    networkClient,
-    isAuthenticationNeeded,
-  ]);
+ 
 
   useEffect(() => {
     if (isConnected && !applicationUserToken && isConnecting === false) {
@@ -87,18 +71,11 @@ export const WalletAuthencationOnSignIn = ({
         tokenV2 &&
         meV2.addresses[0].network.ferrumNetworkIdentifier.toString() !==
           currentWalletNetwork.toString()
-      ) {
-        console.log(
-          tokenV2,
-          meV2,
-          meV2.addresses[0].network.ferrumNetworkIdentifier,
-          currentWalletNetwork
-        );
+      ) { 
         dispatch(walletAuthenticatorActions.saveSignature({ signature: "" }));
         dispatch(walletAuthenticatorActions.saveNonce({ nonce: "" }));
         checkAllowedIdentifier(currentWalletNetwork, applicationUserToken);
-      } else if (tokenV2 === "") {
-        console.log(tokenV2);
+      } else if (tokenV2 === "") { 
         dispatch(walletAuthenticatorActions.saveSignature({ signature: "" }));
         dispatch(walletAuthenticatorActions.saveNonce({ nonce: "" }));
         checkAllowedIdentifier(currentWalletNetwork, applicationUserToken);
@@ -116,8 +93,7 @@ export const WalletAuthencationOnSignIn = ({
   }, [isAllowedonGateway]);
 
   useEffect(() => {
-    if (isConnected && isAllowedonGateway === true) {
-      console.log(currentWalletNetwork);
+    if (isConnected && isAllowedonGateway === true) { 
       getNonce(currentWalletNetwork, walletAddress, applicationUserToken);
     }
     // eslint-disable-next-line
@@ -131,8 +107,7 @@ export const WalletAuthencationOnSignIn = ({
       signature &&
       isForSigninFlow
     ) {
-      // signin
-      console.log("signin");
+      // signin 
       verifySignatureToSignin(
         currentWalletNetwork.toString(),
         walletAddress,
@@ -151,8 +126,7 @@ export const WalletAuthencationOnSignIn = ({
 
   useEffect(() => {
     if (tokenV2 && signature && getSignatureFromMetamask) {
-      // profile
-      console.log("profile");
+      // profile 
       verifySignatureToUpdateProfileForCommunityMember(signature, tokenV2);
     }
     // eslint-disable-next-line

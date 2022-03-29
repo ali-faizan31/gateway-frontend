@@ -38,8 +38,13 @@ export const AddLiquidity = () => {
   const { farm } = useParams<{ farm?: string }>();
 
   const onStakeClick = () => {
-    // let nextStepInfo: any = getNextStepFlowStepId(location.state.stepFlowName, "Stake");
-    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].stake;
+    let nextStepInfo: any;
+    if (farm?.includes("cFRMx")){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].stake;
+    } else if (farm === "cFRM" || farm === "cFRM-BNB"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].stake;
+    }
+    // let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].stake;
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(
@@ -51,7 +56,7 @@ export const AddLiquidity = () => {
       dispatch,
       history,
       true,
-      farm
+      farm?.includes("cFRMx")? "cFRMx-BNB": "cFRM-BNB"
     );
   };
 
@@ -74,7 +79,7 @@ export const AddLiquidity = () => {
                 Step 1
               </FTypo>
               <FTypo size={18}>
-                Congratulations! You have successfully minted your {farm?.includes("cFRMX")? "cFRMx": "cFRM"} tokens!
+                Congratulations! You have successfully minted your {farm?.includes("cFRMx")? "cFRMx": "cFRM"} tokens!
                 Please proceed to step 2.
               </FTypo>
             </span>

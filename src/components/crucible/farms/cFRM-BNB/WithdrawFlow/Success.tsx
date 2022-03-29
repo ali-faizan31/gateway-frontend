@@ -18,10 +18,11 @@ import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
-import { getLatestStepToRender } from "../../../common/Helper";
+import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import { useHistory, useLocation, useParams } from "react-router";
+import { STEP_FLOW_IDS } from "../../../common/utils";
 // import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
 
 export const Success = () => {
@@ -91,20 +92,77 @@ export const Success = () => {
     }
   };
 
-  // const onAddLiquityClick = () => {
-  //   let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.withdrawAddLiquidity;
-  //   location.state.id = nextStepInfo.id;
-  //   location.state.stepFlowName = nextStepInfo.name;
-  //   getLatestStepToRender(
-  //     location.state,
-  //     tokenV2,
-  //     currentStep,
-  //     currentStepIndex,
-  //     stepFlowStepHistory,
-  //     dispatch,
-  //     history
-  //   );
-  // };
+  const onMintClick = () => {
+    let nextStepInfo: any;
+    let newFarm: any;
+    if (farm?.includes("BNB")){
+      if (farm?.includes("cFRMx")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].mint
+        newFarm = "cFRM-BNB" 
+      } else {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].mint
+        newFarm = "cFRMx-BNB"  
+      }
+    } else {
+      if (farm===("cFRMx")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].mint
+        newFarm = "cFRM" 
+      } else if (farm===("cFRM")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].mint
+        newFarm = "cFRMx"  
+      }
+    }
+    
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      true,
+      newFarm
+    );
+  }
+
+  const onAddLiquidityClick = () => {
+    let nextStepInfo: any;
+    let newFarm: any;
+    if (farm?.includes("BNB")){
+      if (farm?.includes("cFRMx")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].withdrawAddLiquidity
+        newFarm = "cFRMx-BNB" 
+      } else {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].withdrawAddLiquidity
+        newFarm = "cFRM-BNB"  
+      }
+    } else {
+      if (farm===("cFRMx")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].withdrawAddLiquidity
+        newFarm = "cFRMx" 
+      } else if (farm===("cFRM")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].withdrawAddLiquidity
+        newFarm = "cFRM"  
+      }
+    }
+    
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      true,
+      newFarm
+    );
+  };
 
   return (
     <FContainer className="f-mr-0">
@@ -136,7 +194,7 @@ export const Success = () => {
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={"card-whats-next"}>
               <div className="card-whats-next-inner">
-                <div className="card-whats-next-front">
+                <div className="card-whats-next-front" onClick={()=>onAddLiquidityClick()}>
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
                       <IconNetworkcFRM />
@@ -149,7 +207,7 @@ export const Success = () => {
                 </div>
                 <div className="card-whats-next-back">
                   <FTypo>
-                    Use cFRM and BNB to add Liquidity and compound rewards with
+                    Use {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB to add Liquidity and compound rewards with
                     Farming
                   </FTypo>
                 </div>
@@ -181,15 +239,15 @@ export const Success = () => {
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={"card-whats-next"}>
               <div className="card-whats-next-inner">
-                <div className="card-whats-next-front">
+                <div className="card-whats-next-front" onClick={()=>onMintClick()}>
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
-                    {farm?.includes("cFRMx") ?  <IconNetworkcFRMx /> : <IconNetworkcFRM />} 
+                    {farm?.includes("cFRMx") ?  <IconNetworkcFRM /> : <IconNetworkcFRMx />} 
                      
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    Mint {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} 
+                    Mint {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} 
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">
