@@ -217,7 +217,7 @@ export const CrucibleDeposit = () => {
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title f-mb-2">
         <FItem display={"flex"} alignY="center">
-          <Link to="/dashboard/crucible/cFRM-BNB/manage" className="btn-back">
+          <Link to={`/dashboard/crucible/${farm}/manage`} className="btn-back">
             <IconGoBack />
           </Link>
           <FTypo size={24} weight={700}>

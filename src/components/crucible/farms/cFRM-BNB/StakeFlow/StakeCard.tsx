@@ -20,14 +20,14 @@ import {
 import { useHistory, useLocation, useParams } from "react-router";
 import {
   // CFRM_BNB_STEP_FLOW_IDS,
-  CRUCIBLE_CONTRACTS_V_0_1,
+  CRUCIBLE_CONTRACTS_V_0_1, getBaseTokenName, getCrucibleTokenName,
 } from "./../../../common/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
 import {
-  getLatestStepToRender 
+  getLatestStepToRender, getObjectReadableFarmName, isLPFarm, isSingleTokenFarm 
   // getNextStepFlowStepId
 } from "../../../common/Helper";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
@@ -62,17 +62,19 @@ export const Stake = () => {
   const userCrucibleData = useSelector(
     (state: RootState) => state.crucible.userCrucibleDetails
   );
-  // const LPStakingDetails = useSelector(
-  //   (state: RootState) => state.crucible.userLpStakingDetails
-  // );
+  const LPStakingDetails = useSelector(
+    (state: RootState) => state.crucible.userLpStakingDetails
+  );
+  const tokenPrices = useSelector(
+    (state: RootState) => state.crucible.tokenPrices
+  );
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
     (state: RootState) => state.crucible
   );
   const { meV2, tokenV2 } = useSelector(
     (state: RootState) => state.walletAuthenticator
   );
-  const {
-    //  approveTransactionId,
+  const { 
     approvals,
   } = useSelector((state: RootState) => state.approval);
 
@@ -162,74 +164,21 @@ export const Stake = () => {
     }
   };
 
-  const onStakeClick = async (
-    currency: string,
-    stakingAddress: string,
-    amount: string,
-    isPublic: boolean,
-    network: string,
-    userAddress: string
-  ) => {
-    if (networkClient) {
-      setTransitionStatusDialog(true);
-      setIsProcessing(true);
-      const web3Helper = new Web3Helper(networkClient as any);
-      const client = new CrucibleClient(web3Helper);
-
-      const response = await client.StakeCrucible(
-        dispatch,
-        currency,
-        amount,
-        stakingAddress,
-        userAddress,
-        network
-      );
-      if (response) {
-        setIsProcessing(false);
-        setIsProcessed(true);
-        getStepCompleted(false);
-      }
-    }
-  };
-
-  // const onStakeClick = async () => {
+  // const onStakeClick = async (
+  //   currency: string,
+  //   stakingAddress: string,
+  //   amount: string,
+  //   isPublic: boolean,
+  //   network: string,
+  //   userAddress: string
+  // ) => {
   //   if (networkClient) {
-  //     let currency: string = "";
-  //     let stakingAddress: string = "";
-  //     let amount: string = "";
-  //     let  network: string = "";
-  //     let  userAddress: string = "";
-  //     let response: any;
-
   //     setTransitionStatusDialog(true);
   //     setIsProcessing(true);
   //     const web3Helper = new Web3Helper(networkClient as any);
   //     const client = new CrucibleClient(web3Helper);
 
-  //   if (isLPFarm(farm)){
-  //     currency = crucible!.currency;
-  //     stakingAddress = (crucible?.staking || [])[0]?.address || ""
-  //     amount = amount.toString();
-  //     network =  crucible?.network
-  //     userAddress = walletAddress as string
-
-  //     response = await client.stakeLPToken(
-  //       dispatch,
-  //       currency,
-  //       userAddress,
-  //       stakingAddress,
-  //       network,
-  //       amount
-  //     );
-
-  //   } else if (isSingleTokenFarm(farm)){
-  //     currency = LPStakingDetails["cFRMx_BNB_LP"]?.stakeId;
-  //     stakingAddress = LPStakingDetails["cFRMx_BNB_LP"]?.stakingAddress || ""
-  //     amount = amount.toString();
-  //     network =  crucible?.network
-  //     userAddress = walletAddress as string
-
-  //     response = await client.StakeCrucible(
+  //     const response = await client.StakeCrucible(
   //       dispatch,
   //       currency,
   //       amount,
@@ -237,7 +186,6 @@ export const Stake = () => {
   //       userAddress,
   //       network
   //     );
-  //   } 
   //     if (response) {
   //       setIsProcessing(false);
   //       setIsProcessed(true);
@@ -245,6 +193,60 @@ export const Stake = () => {
   //     }
   //   }
   // };
+
+  const onStakeClick = async () => {
+    if (networkClient) {
+      let currency: string = "";
+      let stakingAddress: string = "";
+      let amount: string = "";
+      let  network: string = "";
+      let  userAddress: string = "";
+      let response: any;
+
+      setTransitionStatusDialog(true);
+      setIsProcessing(true);
+      const web3Helper = new Web3Helper(networkClient as any);
+      const client = new CrucibleClient(web3Helper);
+
+    if (isLPFarm(farm)){
+      currency = LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.stakeId;
+      stakingAddress = LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.stakingAddress || ""
+      amount = amount.toString();
+      network =  crucible?.network
+      userAddress = walletAddress as string
+
+      response = await client.stakeLPToken(
+        dispatch,
+        currency,
+        userAddress,
+        stakingAddress,
+        network,
+        amount
+      );
+
+    } else if (isSingleTokenFarm(farm)){
+      currency = crucible!.currency;
+      stakingAddress = (crucible?.staking || [])[0]?.address || ""
+      amount = amount.toString();
+      network =  crucible?.network
+      userAddress = walletAddress as string
+
+      response = await client.StakeCrucible(
+        dispatch,
+        currency,
+        amount,
+        stakingAddress,
+        userAddress,
+        network
+      );
+    } 
+      if (response) {
+        setIsProcessing(false);
+        setIsProcessed(true);
+        getStepCompleted(false);
+      }
+    }
+  };
 
   const onContinueToNextStepClick = () => {
     if (currentStep.status === "pending") {
@@ -265,15 +267,31 @@ export const Stake = () => {
     }
   };
 
+  const getAmount = () => {
+    if (farm?.includes("BNB")){
+      return crucible?.LP_balance || 0;
+    } else {
+      return Number(userCrucibleData?.balance || "0")
+    }
+  }
+
+  const getAmountSymbol = () => {
+    if (farm?.includes("BNB")){
+      return crucible?.symbol;
+    } else {
+      return (userCrucibleData?.symbol)
+    }
+  }
+
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title">
         <FItem display={"flex"} alignY="center">
-          <Link to="/dashboard/crucible/cFRM-BNB/manage" className="btn-back">
+          <Link to={`/dashboard/crucible/${farm}/manage`} className="btn-back">
             <IconGoBack />
           </Link>
           <FTypo size={30} weight={600}>
-            Stake cFRM / BNB LP Token
+            Stake {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} {farm?.includes("BNB") ? "/ BNB LP" : ""} Token
           </FTypo>
         </FItem>
       </div>
@@ -281,20 +299,20 @@ export const Stake = () => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              FRM Price (USD)
+            {getBaseTokenName(farm)} Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
-              $0.072
+            ${tokenPrices[farm!]}
             </FTypo>
           </FItem>
         </FGridItem>
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              cFRM Price (USD)
+            {getCrucibleTokenName(farm)} Price (USD)
             </FTypo>
             <FTypo size={36} weight={500}>
-              $0.072
+            ${tokenPrices[getCrucibleTokenName(farm)!]}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -310,7 +328,7 @@ export const Stake = () => {
           <FTypo color="#DAB46E" className={"f-pr-1"}>
             <span
               onClick={() =>
-                setAmount(Number(userCrucibleData?.balance || "0"))
+                setAmount(getAmount())
               }
             >
               Max
@@ -319,8 +337,8 @@ export const Stake = () => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-        You have {userCrucibleData?.balance || "0"} available in Token{" "}
-        {userCrucibleData?.symbol} to Stake.
+        You have {getAmount()} available in Token 
+        {getAmountSymbol()} to Stake.
       </FTypo>
       {meV2._id && isConnected ? (
         <ApprovableButtonWrapper
@@ -332,20 +350,15 @@ export const Stake = () => {
                 onClick={
                   ownProps.isApprovalMode
                     ? () => ownProps.onApproveClick()
-                    : () => onStakeClick(
-                      crucible!.currency,
-                          (crucible?.staking || [])[0]?.address || "",
-                          amount.toString(),
-                          true,
-                          crucible?.network,
-                          walletAddress as string
-                    )
+                    : () => onStakeClick()
+                      // crucible+ddress as string
+                    
                 }
               ></FButton>
             </div>
           )}
-          currency={crucible!.baseCurrency}
-          // currency={ isSingleTokenFarm(farm)? crucible!.baseCurrency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails["cFRMx_BNB_LP"]?.LPaddress}`}
+          // currency={crucible!.baseCurrency}
+          currency={ isSingleTokenFarm(farm)? crucible!.baseCurrency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.LPaddress}`}
           contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
           userAddress={walletAddress as string}
           amount={"0.0001"}

@@ -17,12 +17,12 @@ import { Web3Helper } from "./../../../../../container-components/web3Client/web
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 import { ApprovableButtonWrapper } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
-import { CRUCIBLE_CONTRACTS_V_0_1 } from "./../../../common/utils";
+import { CRUCIBLE_CONTRACTS_V_0_1, getBaseTokenName, getCrucibleTokenName } from "./../../../common/utils";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
 import {
-  getLatestStepToRender,
+  getLatestStepToRender, getObjectReadableFarmName, isLPFarm, isSingleTokenFarm,
   // getNextStepFlowStepId,
 } from "../../../common/Helper";
 import { useHistory, useLocation, useParams } from "react-router";
@@ -54,6 +54,12 @@ export const Withdraw = () => {
   );
   let userStake = (userCrucibleData.stakes || []).find(
     (e: any) => e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd"
+  );
+  const tokenPrices = useSelector(
+    (state: RootState) => state.crucible.tokenPrices
+  ); 
+  const LPStakingDetails = useSelector(
+    (state: RootState) => state.crucible.userLpStakingDetails
   );
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
     (state: RootState) => state.crucible
@@ -112,38 +118,38 @@ export const Withdraw = () => {
     }
   };
 
-  const onWithdrawClick = async (
-    currency: string,
-    stakingAddress: string,
-    amount: string,
-    isPublic: boolean,
-    network: string,
-    userAddress: string
-  ) => {
-    if (networkClient) {
-      setTransitionStatusDialog(true);
-      setIsProcessing(true);
-      const web3Helper = new Web3Helper(networkClient as any);
-      const client = new CrucibleClient(web3Helper);
+  // const onWithdrawClick = async (
+  //   currency: string,
+  //   stakingAddress: string,
+  //   amount: string,
+  //   isPublic: boolean,
+  //   network: string,
+  //   userAddress: string
+  // ) => {
+  //   if (networkClient) {
+  //     setTransitionStatusDialog(true);
+  //     setIsProcessing(true);
+  //     const web3Helper = new Web3Helper(networkClient as any);
+  //     const client = new CrucibleClient(web3Helper);
 
-      const response = await client.withdrawRewards(
-        dispatch,
-        network,
-        amount,
-        currency,
-        stakingAddress,
-        userAddress
-      );
-      if (response) {
-        setIsProcessing(false);
-        //setIsSubmitted(true)
-        setIsProcessed(true);
-        getStepCompleted(false);
-      }
-      //setIsApproving(false);
-      //setTransitionStatusDialog(true);
-    }
-  };
+  //     const response = await client.withdrawRewards(
+  //       dispatch,
+  //       network,
+  //       amount,
+  //       currency,
+  //       stakingAddress,
+  //       userAddress
+  //     );
+  //     if (response) {
+  //       setIsProcessing(false);
+  //       //setIsSubmitted(true)
+  //       setIsProcessed(true);
+  //       getStepCompleted(false);
+  //     }
+  //     //setIsApproving(false);
+  //     //setTransitionStatusDialog(true);
+  //   }
+  // };
   const onContinueToNextStepClick = () => {
     if (currentStep.status === "pending") {
       location.state.id = currentStep.stepFlow;
@@ -163,11 +169,80 @@ export const Withdraw = () => {
     }
   };
 
+  const getRewardAmount = () => {
+    if (farm?.includes("BNB")){
+      return LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.rewards[0]?.rewardAmount || "0";
+    } else {
+      return userStake?.rewardOf || 0
+    }
+  }
+
+  const getRewardSymbol = () => {
+    if (farm?.includes("BNB")){
+      return LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.rewards[0]?.rewardAmount || "0"; //get from ibrahim
+    } else {
+      return crucible.symbol
+    }
+  }
+
+  const onWithdrawClick = async () => {
+    if (networkClient) {
+      let currency: string = "";
+      let stakingAddress: string = "";
+      let amount: string = "";
+      let  network: string = "";
+      let  userAddress: string = "";
+      let response: any;
+
+      setTransitionStatusDialog(true);
+      setIsProcessing(true);
+      const web3Helper = new Web3Helper(networkClient as any);
+      const client = new CrucibleClient(web3Helper);
+
+    if (isLPFarm(farm)){
+      currency = LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.stakeId;
+      stakingAddress = LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.stakingAddress || ""
+      amount = "0";
+      network =  crucible?.network
+      userAddress = walletAddress as string
+
+      response = await client.withdrawRewardsLPToken(
+        dispatch,
+        currency,
+        userAddress,
+        stakingAddress,
+        network
+      );
+
+    } else if (isSingleTokenFarm(farm)){
+      currency = crucible!.currency;
+      stakingAddress = (crucible?.staking || [])[0]?.address || ""
+      amount = userStake?.rewardOf;
+      network =  crucible?.network
+      userAddress = walletAddress as string
+
+      response = await client.withdrawRewards(
+        dispatch,
+        network,
+        amount,
+        currency,
+        stakingAddress,
+        userAddress
+      );
+    } 
+      if (response) {
+        setIsProcessing(false);
+        setIsProcessed(true);
+        getStepCompleted(false);
+      }
+    }
+  };
+
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title f-mb-2">
         <FItem display={"flex"} alignY="center">
-          <Link to="/dashboard/crucible/cFRM-BNB/manage" className="btn-back">
+          <Link to={`/dashboard/crucible/${farm}/manage`} className="btn-back">
             <IconGoBack />
           </Link>
           <FTypo size={24} weight={700}>
@@ -179,20 +254,20 @@ export const Withdraw = () => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={20} className="f-mb-1">
-              FRM Price (USD)
+            {getBaseTokenName(farm)} Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              $0.072
+            ${tokenPrices[farm!]}
             </FTypo>
           </FItem>
         </FGridItem>
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={24} className="f-mb-1">
-              cFRMx Price (USD)
+            {getCrucibleTokenName(farm)} Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              $0.072
+            ${tokenPrices[getCrucibleTokenName(farm)!]}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -210,7 +285,8 @@ export const Withdraw = () => {
               className="primary-color"
               align={"center"}
             >
-              {userStake?.rewardOf || 0} {crucible.symbol}
+              {getRewardAmount()} {getRewardSymbol()}
+              {/* {userStake?.rewardOf || 0} {crucible.symbol} */}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -226,18 +302,19 @@ export const Withdraw = () => {
                 ownProps.isApprovalMode
                   ? () => ownProps.onApproveClick()
                   : () =>
-                      onWithdrawClick(
-                        crucible!.currency,
-                        (crucible?.staking || [])[0]?.address || "",
-                        userStake?.rewardOf || 0,
-                        true,
-                        crucible?.network,
-                        walletAddress as string
-                      )
+                      onWithdrawClick()
+                        // crucible!.currency,
+                        // (crucible?.staking || [])[0]?.address || "",
+                        // userStake?.rewardOf || 0,
+                        // true,
+                        // crucible?.network,
+                        // walletAddress as string
+                      
               }
             ></FButton>
           )}
-          currency={crucible!.currency}
+          // currency={crucible!.currency}
+          currency={isSingleTokenFarm(farm)? crucible!.currency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.LPaddress}`}
           contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
           userAddress={walletAddress as string}
           amount={"0.0001"}

@@ -185,7 +185,7 @@ export const CrucibleManage = ({
               {getBaseTokenName(farm)} Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              ${tokenPrices["FRM"]}
+              ${tokenPrices[farm!]}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -195,7 +195,7 @@ export const CrucibleManage = ({
               {getCrucibleTokenName(farm)} Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              ${tokenPrices["cFRM"]}
+              ${tokenPrices[getCrucibleTokenName(farm)!]}
             </FTypo>
           </FItem>
         </FGridItem>

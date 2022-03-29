@@ -59,7 +59,7 @@ export const ApplicationWrapper = ({ children }: any) => {
   }, [isConnected, walletWrapperInitialized]);
 
   const signIntoServer = async () => { 
-    const user = await getUserProfile(); 
+     await getUserProfile(); 
     // dispatch(applicationWrapperActions.getUserProfile(user));
   };
 

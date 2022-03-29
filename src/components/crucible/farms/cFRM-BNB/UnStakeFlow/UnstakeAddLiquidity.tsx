@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import {
   FButton,
   FCard,
@@ -11,15 +11,50 @@ import {
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
-import { PATH_DASHBOARD } from "../../../../../routes/paths";
-import { CrucibleMyBalance } from "../../../common/CardMyBalance";
-import { getActualRoute } from "../../../common/Helper";
+import { CrucibleMyBalance } from "../../../common/CardMyBalance"; 
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../../redux/rootReducer";
+import { getObjectReadableFarmName, getLatestStepToRender } from "../../../common/Helper";
+import { STEP_FLOW_IDS } from "../../../common/utils";
 
 export const UnstakeAddLiquidity = () => {
+  const dispatch = useDispatch();
   const { farm } = useParams<{ farm?: string }>();
+  const location: any = useLocation();
   const history = useHistory();
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
+    (state: RootState) => state.crucible
+  );
+  const { tokenV2 } = useSelector(
+    (state: RootState) => state.walletAuthenticator
+  );
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
+
+  const onStakeClick = () => {
+    let nextStepInfo: any;
+    let newFarm: any;
+    if (farm==="cFRMx"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].stake;
+      newFarm = "cFRMx-BNB"
+    } else if (farm==="cFRM"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].stake;
+      newFarm = "cFRM-BNB"
+    }
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      true,
+      newFarm
+    );
+  }
 
   return (
     <FContainer className="f-mr-0" width={700}>
@@ -103,14 +138,7 @@ export const UnstakeAddLiquidity = () => {
               postfix={<IconArrow />}
               className="w-100"
               disabled={!stepThreeCheck}
-              onClick={() =>
-                history.push({
-                  pathname: getActualRoute(
-                    farm,
-                    PATH_DASHBOARD.crucible.crucibleActionRoutes.stake.stake
-                  ),
-                })
-              }
+              onClick={() =>onStakeClick()}
             />
           </li>
         </ul>

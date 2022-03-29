@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import {
   FButton,
   FCard,
@@ -11,23 +11,75 @@ import {
   // FItem,
   FTypo,
 } from "ferrum-design-system";
-import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
-import { PATH_DASHBOARD } from "../../../../../routes/paths";
-import { CrucibleMyBalance } from "../../../common/CardMyBalance";
-import { getActualRoute } from "../../../common/Helper";
+import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg"; 
+import { CrucibleMyBalance } from "../../../common/CardMyBalance"; 
+import { STEP_FLOW_IDS } from "../../../common/utils";
+import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../../redux/rootReducer";
 
 export const UnstakeRemoveLiquidity = () => {
-  const { farm } = useParams<{ farm?: string }>();
+  const { farm } = useParams<{ farm?: string }>(); 
+  const dispatch = useDispatch();
+  const location: any = useLocation();
   const history = useHistory();
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
+    (state: RootState) => state.crucible
+  );
+  const { tokenV2 } = useSelector(
+    (state: RootState) => state.walletAuthenticator
+  );
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
 
   const onStakeClick =() => {
-
+    let nextStepInfo: any;
+    let newFarm: any;
+    if (farm==="cFRM-BNB"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].stake;
+      newFarm = "cFRM"
+    } else if (farm==="cFRMx-BNB"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].stake;
+      newFarm = "cFRMx"
+    }
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      true,
+      newFarm
+    );
   }
 
   const onUnwrapClick = () => {
-    
+    let nextStepInfo: any;
+    let newFarm: any;
+    if (farm==="cFRMx-BNB"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].unwrap;
+      newFarm = "cFRMx-BNB"
+    } else if (farm==="cFRM-BNB"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].unwrap;
+      newFarm = "cFRM-BNB"
+    }
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      true,
+      newFarm
+    );
   }
 
   return (
@@ -40,7 +92,7 @@ export const UnstakeRemoveLiquidity = () => {
           className={"card-title w-100"}
           display="flex"
         >
-          Crucible Token Sustainable Liquidity Farming teste
+          Crucible Token Sustainable Liquidity Farming
         </FTypo>
         <ul>
           <li className="step step-success">
