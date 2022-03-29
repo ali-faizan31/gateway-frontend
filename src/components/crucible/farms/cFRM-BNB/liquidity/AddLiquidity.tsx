@@ -138,7 +138,7 @@ export const AddLiquidity = () => {
           </li>
           <li className="step-last">
             <FButton
-              title="Stake cFRM LP"
+              title={`Stake ${farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP`}
               postfix={<IconArrow />}
               className="w-100"
               disabled={!stepThreeCheck}

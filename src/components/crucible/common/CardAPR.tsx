@@ -56,11 +56,11 @@ export const CardAPR = () => {
       yourDeposit: "$13",
       yourRewards: "$.1",
       apr: "10%",
-      id: "6238314dd292da2db05524dd",
-      contract: "0x5e767cadbd95e7b9f777ddd9e65eab1c29c487e6",
       network: "BSC",
-      LpCurrency: "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224",
-      LPstakingAddress: "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd",
+      id: "6238314dd292da2db05524dd",
+      contract: "0x5e767cadbd95e7b9f777ddd9e65eab1c29c487e6", // crucible contract address
+      LpCurrency: "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224",  // ape-lp token for crucible and bnb pair
+      LPstakingAddress: "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd", // lp farm where lp currency will be staked
       internalName: "cFRM-BNB",
     },
     {

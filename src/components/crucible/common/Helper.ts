@@ -339,16 +339,16 @@ export const getLatestStepToRender = async (
     let errorResponse = e && e.response && e.response.data.status;
     if (errorResponse?.code === 400) {
       try {
-        let latestResponse =
+        // let latestResponse =
         await SFSH_API.getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
           state.id,
           token
         );
-        // let latestResponse =
-        //   await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
-        //     state.id,
-        //     token
-        //   );
+        let latestResponse =
+          await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
+            state.id,
+            token
+          );
         latestResponse =
           latestResponse.data &&
           latestResponse.data.body &&
