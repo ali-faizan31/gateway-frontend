@@ -21,7 +21,7 @@ import {
   getObjectReadableFarmName,
   // getNextStepFlowStepId,
 } from "../../../common/Helper";
-import {  STEP_FLOW_IDS } from "../../../common/utils";
+import {  getBaseTokenName, getCrucibleTokenName, STEP_FLOW_IDS } from "../../../common/utils";
 
 import { ReactComponent as IconNetworkFrm } from "../../../../../assets/img/icon-network-frm.svg";
 import IconNetworkCFrmStr from "../../../../../assets/img/icon-network-cfrm.svg";
@@ -182,7 +182,7 @@ export const CrucibleManage = ({
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={20} className="f-mb-1">
-              FRMx Price (USD)
+              {getBaseTokenName(farm)} Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
               ${tokenPrices["FRM"]}
@@ -192,7 +192,7 @@ export const CrucibleManage = ({
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={20} className="f-mb-1">
-              FRMx Price (USD)
+              {getCrucibleTokenName(farm)} Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
               ${tokenPrices["cFRM"]}

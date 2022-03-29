@@ -10,7 +10,7 @@ import {
 } from "ferrum-design-system";
 import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-check-congrats.svg";
 import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
-// import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg"; 
+import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg"; 
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -99,12 +99,12 @@ export const Success = () => {
             Congratulations!
           </FTypo>
           <FTypo size={20} weight={500} className="f-mt-1">
-            Crucible Token Sustainable Liquidity Farming
+            Crucible Token Sustainable {farm?.includes("BNB") ? "Liquidity" : ""} Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-            Congrats! You have successfully unwraped your cFRM tokens. You can
-            now use the unwraped FRM tokens to Mint and Stake cFRM, buy cFRM, or
-            simply HODL.{" "}
+            Congrats! You have successfully unwraped your  {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens. You can
+            now use the unwraped {farm?.includes("cFRMx") ? "FRMx" : "FRM"} tokens to Mint and Stake {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}, buy  {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}, or
+            simply hold.
           </FTypo>
         </FItem>
         <FTypo
@@ -122,17 +122,16 @@ export const Success = () => {
                 <div className="card-whats-next-front">
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
-                      <IconNetworkcFRM /> 
+                    {farm?.includes("cFRMx") ? <IconNetworkcFRM /> :<IconNetworkcFRMx />  }
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    cFRMx / BNB Mint and Stake
+                  {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} / BNB Mint and Stake
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">
                   <FTypo>
-                    Use cFRM and BNB to add Liquidity and compound rewards with
-                    Farming
+                  Now you can proceed to Mint and Stake {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} LP tokens
                   </FTypo>
                 </div>
               </div>
@@ -170,12 +169,12 @@ export const Success = () => {
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    Mint cFRM
+                    Mint {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"}
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">
                   <FTypo>
-                    You can always mint more cFRM to increase your pool share.
+                    You can always mint more {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} to increase your pool share.
                   </FTypo>
                 </div>
               </div>
@@ -191,12 +190,12 @@ export const Success = () => {
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    Trade cFRM
+                    Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">
                   <FTypo>
-                    You can always mint more cFRM to increase your pool share.
+                    You can always mint more {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} to increase your pool share.
                   </FTypo>
                 </div>
               </div>

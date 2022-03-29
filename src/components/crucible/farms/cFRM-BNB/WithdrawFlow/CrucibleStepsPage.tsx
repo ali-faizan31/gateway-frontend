@@ -29,7 +29,7 @@ export const CrucibleStepsPage = () => {
           className={"card-title w-100"}
           display="flex"
         >
-          Crucible Token Sustainable Liquidity Farming teste
+          Crucible Token Sustainable {farm?.includes("BNB") ? "Liquidity" : ""} Farming
         </FTypo>
         <ul>
           <li className="step step-success">
@@ -49,13 +49,13 @@ export const CrucibleStepsPage = () => {
                 Step 2
               </FTypo>
               <FTypo size={18}>
-                In order to deposit LP tokens into the cFRM LP Farm (cFRM/BNB
+                In order to deposit LP tokens into the {farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP Farm (cFRM/BNB
                 pair), you will first need to add liquidity.
                 <strong>Click ‘Add Liquidity’ to get started.</strong>
                 <br></br>
                 <br></br>
                 After you add liquidity, you will need to return to this screen
-                and stake the cFRM LP tokens.
+                and stake the {farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP tokens.
               </FTypo>
               <br></br>
               <FInputCheckbox

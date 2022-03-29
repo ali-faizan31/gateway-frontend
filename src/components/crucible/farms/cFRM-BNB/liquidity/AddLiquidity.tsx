@@ -74,7 +74,7 @@ export const AddLiquidity = () => {
                 Step 1
               </FTypo>
               <FTypo size={18}>
-                Congratulations! You have successfully minted your cFRM tokens!
+                Congratulations! You have successfully minted your {farm?.includes("cFRMX")? "cFRMx": "cFRM"} tokens!
                 Please proceed to step 2.
               </FTypo>
             </span>
@@ -85,13 +85,13 @@ export const AddLiquidity = () => {
                 Step 2
               </FTypo>
               <FTypo size={18}>
-                In order to deposit LP tokens into the cFRM LP Farm (cFRM/BNB
+                In order to deposit LP tokens into the {farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP Farm ({farm?.includes("cFRMX")? "cFRMx": "cFRM"}/BNB
                 pair), you will first need to add liquidity.
                 <strong>Click ‘Add Liquidity’ to get started.</strong>
                 <br></br>
                 <br></br>
                 After you add liquidity, you will need to return to this screen
-                and stake the cFRM LP tokens.
+                and stake the {farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP tokens.
               </FTypo>
               <br></br>
               <FInputCheckbox
@@ -117,7 +117,7 @@ export const AddLiquidity = () => {
               </FTypo>
               <FTypo size={18}>
                 Congratulations! You have successfully added liquidity. You are
-                now able to stake your APE-LP cFRM-BNB tokens to start earning
+                now able to stake your {farm?.includes("BNB")? "APE-LPs": ""} {farm?.includes("cFRMx")? "cFRMx": "cFRM"}{farm?.includes("BNB")? "-BNB": " LP"} tokens to start earning
                 rewards!
               </FTypo>
               <br></br>
@@ -126,8 +126,7 @@ export const AddLiquidity = () => {
                 name="step3Check"
                 className="f-mb-1 f-mt-1"
                 label={
-                  "I have added liquidity of APE-LP cFRM-BNB pair and have the LP tokens. I’m ready to stake my APE-LP cFRM-BNB tokens now."
-                }
+                  `I have added liquidity of ${farm?.includes("BNB")? "APE-LP": ""} ${farm?.includes("cFRMx")? "cFRMx": "cFRM"}${farm?.includes("BNB")? "-BNB": "/BNB"} pair and have the LP tokens. I’m ready to stake my ${farm?.includes("BNB")? "APE-LP": ""} ${farm?.includes("cFRMx")? "cFRMx": "cFRM"}${farm?.includes("BNB")? "-BNB": "/BNB"} tokens now.`                }
               />
               {/* <FButton title="Add Liquidity" postfix={<IconArrow />} className="w-100" disabled={!stepThreeCheck} /> */}
             </span>

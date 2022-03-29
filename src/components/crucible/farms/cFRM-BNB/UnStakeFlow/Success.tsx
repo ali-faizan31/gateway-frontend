@@ -12,8 +12,8 @@ import {
 import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-check-congrats.svg";
 import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
-// import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
-// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
+import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
+import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 // import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import toast from "react-hot-toast";
@@ -91,7 +91,7 @@ export const Success = () => {
     }
   };
 
-  const onRemoveLiquityClick = () => {
+  const onLiquityClick = () => {
     let nextStepInfo: any;
     if (farm === "cFRM" || farm === "cFRMx"){
       nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unstakeAddLiquidity;
@@ -125,10 +125,10 @@ export const Success = () => {
             Congratulations!
           </FTypo>
           <FTypo size={20} weight={500} className="f-mt-1">
-            Crucible Token Sustainable Liquidity Farming
+            Crucible Token Sustainable {farm?.includes("BNB") ? "Liquidity" : ""} Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-            Congrats! You have successfully staked cFRM / BNB LP tokens. You
+            Congrats! You have successfully staked {farm?.includes("BNB")? "APE-LP": ""} {farm?.includes("cFRMx")? "cFRMx": "cFRM"} {farm?.includes("BNB")? "-BNB": ""} tokens. You
             will now earn rewards for every cFRM transaction that generates a
             fee. The reward distribution is proportional to your share of the
             pool.
@@ -147,17 +147,17 @@ export const Success = () => {
             <FItem bgColor="#1C2229" className={"card-whats-next"}>
               <div
                 className="card-whats-next-inner"
-                onClick={() => onRemoveLiquityClick()}
+                onClick={() => onLiquityClick()}
               >
                 <div className="card-whats-next-front">
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
                       <IconNetworkcFRM />
-                      <IconNetworkcFRMx />
+                      {farm?.includes("BNB")? "" :<IconNetworkBsc />}
                     </span>
                   </div>
-                  <FTypo size={20} weight={400} align={"center"}>
-                    Remove Liquidity and Unwrap
+                  <FTypo size={20} weight={400} align={"center"}> 
+                    {farm?.includes("BNB")? "Remove Liquidity and Unwrap": "Add Liquidity & Compound Rewards"}
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">
@@ -175,8 +175,7 @@ export const Success = () => {
                 <div className="card-whats-next-front">
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
-                      <IconNetworkcFRM />
-                      <IconNetworkcFRMx />
+                      <IconNetworkLeaderboard/> 
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
@@ -202,12 +201,13 @@ export const Success = () => {
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    Mint cFRM
+                  {farm?.includes("BNB") ? "Mint" : "Unwrap"} {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"}
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">
                   <FTypo>
-                    You can always mint more cFRM to increase your pool share.
+                  {farm?.includes("BNB") ? "You can always mint more cFRM to increase your pool share." :
+                    "You can unwrap or trade cFRM back to the base FRM token."}
                   </FTypo>
                 </div>
               </div>
@@ -219,18 +219,13 @@ export const Success = () => {
                 <div className="card-whats-next-front">
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
-                      <IconNetworkcFRM />
+                    {farm?.includes("cFRMx") ? <IconNetworkcFRMx /> : <IconNetworkcFRM />}
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    Trade cFRM
+                    Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                   </FTypo>
-                </div>
-                <div className="card-whats-next-back">
-                  <FTypo>
-                    You can always mint more cFRM to increase your pool share.
-                  </FTypo>
-                </div>
+                </div> 
               </div>
             </FItem>
           </FGridItem>

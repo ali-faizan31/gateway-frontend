@@ -450,7 +450,7 @@ export const Manage = () => {
               <FCard className={"styled-card align-v your-crucible"}>
                 <FGrid>
                   <FGridItem size={[6, 6, 6]} dir="column">
-                    <FTypo className="f-pb--2">Your Crucible LP Deposits</FTypo>
+                    <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB")? "LP": ""} Deposits</FTypo>
                     <FTypo
                       size={24}
                       weight={600}
@@ -465,7 +465,7 @@ export const Manage = () => {
                         weight={300}
                         className={"f-pl--7 f-pb--1"}
                       >
-                        APE-LP cFRM-BNB
+                        {farm?.includes("BNB")? `APE-LP ${farm}`: farm}
                       </FTypo>
                     </FTypo>
                   </FGridItem>

@@ -26,44 +26,7 @@ export const CRUCIBLE_CONTRACTS_V_0_1: any = {
   },
 };
 
-export const CFRM_BNB_STEP_FLOW_IDS: any = {
-  dashboard: {
-    id: "6238314dd292da2db05524dd",
-    name: "cFRM / BNB Crucible Farm - Farming Dashboard Flow",
-  },
-  mint: {
-    id: "6239951af0f70e3848644311",
-    name: "cFRM / BNB Crucible Farm - Mint Flow",
-  },
-  generalAddLiquidity: {
-    id: "623b7111f0f70e38486448fd",
-    name: "cFRM / BNB Crucible Farm - Add Liquidity - General Flow",
-  },
-  stake: {
-    id: "6239953cf0f70e3848644314",
-    name: "cFRM / BNB Crucible Farm - Stake Flow",
-  },
-  unstake: {
-    id: "62399544f0f70e3848644317",
-    name: "cFRM / BNB Crucible Farm - Unstake Flow",
-  },
-  unstakeRemoveLiquidity: {
-    id: "623b71ccf0f70e3848644900",
-    name: "cFRM / BNB Crucible Farm - Remove Liquidity - Unstake Flow",
-  },
-  withdraw: {
-    id: "6239954ef0f70e384864431a",
-    name: "cFRM / BNB Crucible Farm - Withdraw Flow",
-  },
-  withdrawAddLiquidity: {
-    id: "623b720ff0f70e3848644903",
-    name: "cFRM / BNB Crucible Farm - Add Liquidity - Withdraw Flow",
-  },
-  unwrap: {
-    id: "62399559f0f70e384864431d",
-    name: "cFRM / BNB Crucible Farm - Unwrap Flow",
-  },
-};
+ 
 
 export const STEP_FLOW_IDS: any = {
   cFRM_BNB: {
@@ -227,3 +190,20 @@ export const STEP_FLOW_IDS: any = {
     },
   },
 };
+
+export const getBaseTokenName = (farm: any) => {
+  if (farm === "cFRM" || farm === "cFRM-BNB"){
+    return "FRM";
+  } else if (farm === "cFRMx" || farm === "cFRMx-BNB"){
+    return "FRMx";
+  }
+}
+
+export const getCrucibleTokenName = (farm: any) => {
+  if (farm === "cFRM" || farm === "cFRM-BNB"){
+    return "cFRM";
+  } else if (farm === "cFRMx" || farm === "cFRMx-BNB"){
+    return "cFRMx";
+  }
+}
+

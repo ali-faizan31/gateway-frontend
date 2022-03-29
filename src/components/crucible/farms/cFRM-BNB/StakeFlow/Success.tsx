@@ -10,7 +10,7 @@ import {
 } from "ferrum-design-system";
 import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
-// import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
+import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
 // import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-check-congrats.svg";
 
@@ -89,6 +89,26 @@ export const Success = () => {
     }
   };
 
+  const getFistCardData = (direction: any) => {
+    if (direction === "front") {
+      if (farm?.includes("cFRMx")) {
+        return "cFRM / BNB Mint & Stake"
+      } else {
+        return "cFRMx / BNB Mint & Stake"
+      }
+    } else if (direction === "back") {
+      if (farm?.includes("cFRMx")) {
+        return "Now you can proceed to Mint and Stake cFRM LP tokens"
+      } else {
+        return "Now you can proceed to Mint and Stake cFRMx LP tokens"
+      }
+    }
+  }
+
+  const getFirstCardClickFunction = () => {
+
+  }
+
   return (
     <FContainer className="f-mr-0">
       <CrucibleMyBalance />
@@ -101,12 +121,12 @@ export const Success = () => {
             Congratulations!
           </FTypo>
           <FTypo size={20} weight={500} className="f-mt-1">
-            Crucible Token Sustainable Liquidity Farming
+            Crucible Token Sustainable {farm?.includes("BNB") ? "Liquidity" : ""} Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-            Congrats! You have successfully staked cFRM / BNB LP tokens. You
+            Congrats! You have successfully staked your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} {farm?.includes("BNB") ? "/ BNB LP" : ""} tokens. You
             will now earn rewards for every cFRM transaction that generates a
-            fee. The reward distribution is proportional to your share of the
+            fee. {farm?.includes("BNB") ? "" : "To amplify your rewards by ~4x, consider Adding Liquidity for cFRM / BNB and staking the LP tokens."} The reward distribution is proportional to your share of the
             pool.
           </FTypo>
         </FItem>
@@ -122,7 +142,7 @@ export const Success = () => {
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={"card-whats-next"}>
               <div className="card-whats-next-inner">
-                <div className="card-whats-next-front">
+                <div className="card-whats-next-front" onClick={()=>getFirstCardClickFunction()}>
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
                       <IconNetworkcFRM />
@@ -130,13 +150,12 @@ export const Success = () => {
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    cFRMx / BNB Mint and Stake
+                    {farm?.includes("BNB") ? getFistCardData("front") : "Add Liquidity & Compound Rewards"}
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">
                   <FTypo>
-                    Use cFRM and BNB to add Liquidity and compound rewards with
-                    Farming
+                    {farm?.includes("BNB") ? getFistCardData("back") : "Use cFRM and BNB to add Liquidity and compound rewards with Farming"}
                   </FTypo>
                 </div>
               </div>
@@ -148,8 +167,7 @@ export const Success = () => {
                 <div className="card-whats-next-front">
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
-                      <IconNetworkcFRM />
-                      <IconNetworkcFRMx />
+                     <IconNetworkLeaderboard/>
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
@@ -175,12 +193,12 @@ export const Success = () => {
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    Mint cFRM
+                    Mint {farm?.includes("BNB") ? "" : "and Stake"}  {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"}
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">
                   <FTypo>
-                    You can always mint more cFRM to increase your pool share.
+                    You can always mint more  {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} to increase your pool share.
                   </FTypo>
                 </div>
               </div>
@@ -196,14 +214,14 @@ export const Success = () => {
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    Trade cFRM
+                    Trade  {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                   </FTypo>
                 </div>
-                <div className="card-whats-next-back">
+                {/* <div className="card-whats-next-back">
                   <FTypo>
                     You can always mint more cFRM to increase your pool share.
                   </FTypo>
-                </div>
+                </div> */}
               </div>
             </FItem>
           </FGridItem>
