@@ -4,6 +4,7 @@ import {
   FCard,
   FContainer,
   FInputCheckbox,
+  FItem,
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
@@ -25,12 +26,13 @@ import { useWeb3React } from "@web3-react/core";
 // import {Web3Helper} from './../../../../../container-components/web3Client/web3Helper';
 import toast, { Toaster } from "react-hot-toast";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
+import { ClipLoader } from "react-spinners";
 
 export const Introduction = () => {
   const history = useHistory();
   const location: any = useLocation();
   const dispatch = useDispatch();
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { farm } = useParams<{ farm?: string }>();
   const [neverShowAgain, setNeverShowAgain] = useState(false);
   // const [pendingStepInfo, setpendingStepInfo]  = useState<any>(undefined);
@@ -70,10 +72,11 @@ export const Introduction = () => {
     }
     // eslint-disable-next-line
   }, [active, library, networkClient]);
+ 
+  
 
   useEffect(() => {
-    if (isConnected && tokenV2 && stepFlowStepHistory.length) {
-      
+    if (isConnected && tokenV2 && stepFlowStepHistory.length) { 
       getLatestStepToRender(
         location.state,
         tokenV2,
@@ -85,12 +88,12 @@ export const Introduction = () => {
         true,
         farm
       );
-      setIsLoaded(true)
     }
     // eslint-disable-next-line
-  }, [tokenV2, stepFlowStepHistory]);
+  }, [tokenV2]);
 
-  const onGetStartedClick = async () => { 
+  const onGetStartedClick = async () => {
+    // setIsLoading(true); 
     try {
       let updatedCurrentStep: any = {};
       let updHistory: any = [];
@@ -118,20 +121,32 @@ export const Introduction = () => {
           tokenV2
         );
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      getLatestStepToRender(
+        location.state,
+        tokenV2,
+        currentStep,
+        currentStepIndex,
+        stepFlowStepHistory,
+        dispatch,
+        history,
+        true,
+        farm, 
+      );
+      // setIsLoading(false);
       // console.log(updateResponse);
-      if (updateResponse) {
-        dispatch(
-          CrucibleActions.updateCurrentStep({
-            currentStep: updatedCurrentStep,
-            currentStepIndex: currentStepIndex,
-          })
-        );
-        dispatch(
-          CrucibleActions.updateStepFlowStepHistory({
-            stepFlowStepHistory: updHistory,
-          })
-        );
-      }
+      // if (updateResponse) {
+      //   dispatch(
+      //     CrucibleActions.updateCurrentStep({
+      //       currentStep: updatedCurrentStep,
+      //       currentStepIndex: currentStepIndex,
+      //     })
+      //   );
+      //   dispatch(
+      //     CrucibleActions.updateStepFlowStepHistory({
+      //       stepFlowStepHistory: updHistory,
+      //     })
+      //   );
+      // }
       // getLatestStepToRender(
       //   location.state,
       //   tokenV2,
@@ -163,6 +178,14 @@ export const Introduction = () => {
     <>
       <Toaster />
       <FContainer width={950} className="f-mr-0 f-mb-2">
+      {isLoading ? (
+        <FCard>
+          <FItem align={"center"}>
+            <ClipLoader color="#cba461" loading={true} size={150} />
+          </FItem>
+        </FCard>) :
+        (
+          <>
         <FCard variant={"secondary"} className="card-get-started">
           <FTypo className="card-title" size={25} weight={700} color="#DAB46E">
             Welcome To The Crucible by Ferrum Network
@@ -199,7 +222,7 @@ export const Introduction = () => {
             <FButton
               title={"Get Started"}
               postfix={<IconArrow />}
-              disabled={isLoaded === false}
+              // disabled={isLoading}
               className="w-100 f-mt-2"
               onClick={() => onGetStartedClick()}
             />
@@ -218,6 +241,8 @@ export const Introduction = () => {
           className="f-mb-1 f-mt-1"
           label={"Don’t show the intro guide again."}
         />
+        </>
+        )}
       </FContainer>
     </>
   );

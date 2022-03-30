@@ -307,15 +307,15 @@ export const getLatestStepToRender = async (
   saveCurrentPrefernces: any = false
 ) => {
   try { 
-    // let latestResponse =  
+    let latestResponse =  
     await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(
       state.id,
       token
     );
-    let latestResponse = await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
-      state.id,
-      token
-    );
+    // let latestResponse = await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
+    //   state.id,
+    //   token
+    // );
     latestResponse = latestResponse.data && latestResponse.data.body && latestResponse.data.body.stepFlowStepsHistory;
     if ( saveCurrentPrefernces ){
       console.log('save prefence flow')
@@ -387,6 +387,11 @@ export const getLatestStepToRender = async (
             CrucibleActions.updateCurrentStep({
               currentStep: pendingStepInfo?.pendingStep,
               currentStepIndex: pendingStepInfo?.index,
+            })
+          );
+          dispatch(
+            CrucibleActions.updateStepFlowStepHistory({
+              stepFlowStepHistory: latestResponse,
             })
           );
         } 
