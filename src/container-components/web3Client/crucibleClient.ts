@@ -1,5 +1,5 @@
 import { AnyAction, Dispatch } from '@reduxjs/toolkit';
-import Web3 from "web3";
+// import Web3 from "web3";
 import {Web3Helper} from "./web3Helper";
 import {crucibleApi} from '../../_apis/CrucibleApi';
 
@@ -263,7 +263,7 @@ export class CrucibleClient {
                 return web3Helper        
             }
 			return 
-			return 
+			// return 
 		} catch (e) {
             console.log(e)
             // UI handle Errors
@@ -414,7 +414,7 @@ export class CrucibleClient {
             })
 
             if(request.data.data){
-                const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])            
+                // const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])            
             }
            
 			return

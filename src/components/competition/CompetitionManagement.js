@@ -1,17 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { sentenceCase, paramCase } from "change-case";
+import { sentenceCase,
+  //  paramCase 
+  } from "change-case";
 import toast, { Toaster } from "react-hot-toast";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import ClipLoader from "react-spinners/ClipLoader";
-import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FDialog, FItem, FInputRadio } from "ferrum-design-system";
+import {
+  FTable,
+  FContainer,
+  FButton,
+  FGrid,
+  FInputText,
+  FGridItem,
+  FDialog,
+  FItem,
+  FInputRadio,
+} from "ferrum-design-system";
 import { RiFileCopy2Fill, RiMailOpenLine, RiEdit2Fill } from "react-icons/ri";
 import Datatable from "react-bs-datatable";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
-import { PATH_ADMIN, PATH_DASHBOARD } from "../../routes/paths";
-import { getAllCompetitions, updateCompetitionStatusById } from "../../_apis/CompetitionCrud";
+import { 
+  // PATH_ADMIN,
+   PATH_DASHBOARD } from "../../routes/paths";
+import {
+  getAllCompetitions,
+  updateCompetitionStatusById,
+} from "../../_apis/CompetitionCrud";
 import { TOKEN_TAG } from "../../utils/const.utils";
 
 const CompetitionManagement = () => {
@@ -19,8 +36,8 @@ const CompetitionManagement = () => {
   const limit = 10;
   let token = localStorage.getItem(TOKEN_TAG);
   const [query, setQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [offset, setOffset] = useState(0);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [offset, setOffset] = useState(0);
   const [competitionList, setCompetitionList] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
   const [statusValue, setStatusValue] = useState("");
@@ -28,6 +45,7 @@ const CompetitionManagement = () => {
 
   useEffect(() => {
     getCompetitionListing();
+    // eslint-disable-next-line
   }, [query]);
 
   const statusFormatter = (params) => {
@@ -38,7 +56,11 @@ const CompetitionManagement = () => {
         <div data-label="Status" className="justify-content-space-between">
           <FButton title={sentenceCase(status)}></FButton>
           {/* <p className='custom-icon'><RiEdit2Fill /></p> */}
-          <FButton prefix={<RiEdit2Fill />} className="f-ml-1" onClick={() => onEditStatusClick(params)}></FButton>
+          <FButton
+            prefix={<RiEdit2Fill />}
+            className="f-ml-1"
+            onClick={() => onEditStatusClick(params)}
+          ></FButton>
         </div>
       </>
     );
@@ -56,8 +78,11 @@ const CompetitionManagement = () => {
         <FButton
           type="button"
           title={" Details"}
-          disabled={params.status === "pending" || params.status === "cancelled"}
-          onClick={() => onDetailClick(params)}></FButton>
+          disabled={
+            params.status === "pending" || params.status === "cancelled"
+          }
+          onClick={() => onDetailClick(params)}
+        ></FButton>
       </div>
     </>
   );
@@ -103,15 +128,28 @@ const CompetitionManagement = () => {
     <>
       <div data-label="Public URL">
         <FItem display={"flex"}>
-          <FButton prefix={<RiFileCopy2Fill />} className="f-mr-1" onClick={() => copyPublicUrl(params)}></FButton>
-          <FButton prefix={<RiMailOpenLine />} label="Open" className={"f-mt--2"} onClick={() => openPublicUrl(params)}></FButton>
+          <FButton
+            prefix={<RiFileCopy2Fill />}
+            className="f-mr-1"
+            onClick={() => copyPublicUrl(params)}
+          ></FButton>
+          <FButton
+            prefix={<RiMailOpenLine />}
+            label="Open"
+            className={"f-mt--2"}
+            onClick={() => openPublicUrl(params)}
+          ></FButton>
         </FItem>
       </div>
     </>
   );
 
   const columns = [
-    { prop: "name", title: "Name", cell: (params) => <div data-label="Name">{params.name}</div> },
+    {
+      prop: "name",
+      title: "Name",
+      cell: (params) => <div data-label="Name">{params.name}</div>,
+    },
     { prop: "startDate", title: "Start Date", cell: startDateFormatter },
     { prop: "endDate", title: "End Date", cell: endDateFormatter },
     { prop: "status", title: "Status", cell: statusFormatter },
@@ -120,7 +158,7 @@ const CompetitionManagement = () => {
   ];
 
   const getCompetitionListing = () => {
-    getAllCompetitions(offset, limit, token)
+    getAllCompetitions(0, limit, token)
       .then((res) => {
         if (query === "") {
           if (res?.data?.body?.competitions?.length) {
@@ -130,7 +168,9 @@ const CompetitionManagement = () => {
         } else if (query) {
           if (res?.data?.body?.competitions?.length) {
             const { competitions } = res.data.body;
-            const tempData = competitions.map((x) => x.name.toLowerCase().includes(query.toLowerCase()) && x);
+            const tempData = competitions.map(
+              (x) => x.name.toLowerCase().includes(query.toLowerCase()) && x
+            );
             setCompetitionList(tempData.filter((x) => x && x));
           }
         }
@@ -163,10 +203,10 @@ const CompetitionManagement = () => {
   const {
     reset,
     register,
-    control,
+    // control,
     handleSubmit,
     formState: { errors, isSubmitting },
-    watch,
+    // watch,
   } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(statusSchema),
@@ -207,7 +247,13 @@ const CompetitionManagement = () => {
             <FGridItem size={[6, 12, 12]} alignX="start" alignY={"end"}>
               <h1>Competition Management</h1>
             </FGridItem>
-            <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[6, 12, 12]} display={"flex"}>
+            <FGridItem
+              alignX={"end"}
+              alignY={"end"}
+              dir={"row"}
+              size={[6, 12, 12]}
+              display={"flex"}
+            >
               <FInputText
                 id="outlined-basic"
                 label="Search"
@@ -218,15 +264,31 @@ const CompetitionManagement = () => {
                 onChange={(e) => setQuery(e.target.value)}
                 style={{ width: "100%" }}
               />
-              <FButton type="button" className="f-ml-1" onClick={openCreateCompetition} title="Create Competition"></FButton>
+              <FButton
+                type="button"
+                className="f-ml-1"
+                onClick={openCreateCompetition}
+                title="Create Competition"
+              ></FButton>
             </FGridItem>
           </FGrid>
           <FTable>
-            <Datatable tableBody={competitionList} tableHeaders={columns} rowsPerPage={10} tableClass="striped hover responsive" />
+            <Datatable
+              tableBody={competitionList}
+              tableHeaders={columns}
+              rowsPerPage={10}
+              tableClass="striped hover responsive"
+            />
           </FTable>
         </FContainer>
 
-        <FDialog show={showDialog} size={"medium"} onHide={onCancel} title={"Update Competition Status"} className="connect-wallet-dialog ">
+        <FDialog
+          show={showDialog}
+          size={"medium"}
+          onHide={onCancel}
+          title={"Update Competition Status"}
+          className="connect-wallet-dialog "
+        >
           <FItem className={"f-mt-2"}>Select Status of Competition</FItem>
           <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
             <FInputRadio
@@ -285,8 +347,16 @@ const CompetitionManagement = () => {
                   type="submit"
                   title={"Update Status"}
                   onClick={onSubmit}
-                  postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
-                <FButton type="button" className={"f-ml-1"} title={"Cancel"} onClick={onCancel}></FButton>
+                  postfix={
+                    isSubmitting && <ClipLoader color="#fff" size={20} />
+                  }
+                ></FButton>
+                <FButton
+                  type="button"
+                  className={"f-ml-1"}
+                  title={"Cancel"}
+                  onClick={onCancel}
+                ></FButton>
               </FGridItem>
             </FGrid>
           </form>

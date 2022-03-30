@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import {
   FCard,
@@ -11,8 +11,8 @@ import {
 import { ReactComponent as IconCongrats } from "../../../../../assets/img/icon-check-congrats.svg";
 import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
-import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
+// import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
+// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 
 export const Success = () => {

@@ -54,11 +54,11 @@ export class Web3Helper {
     );
     let symbol = await tokenContract.methods.symbol().call();
     let decimals = (await tokenContract.methods.decimals().call()) as any;
-    let name = await tokenContract.methods.name().call();
+    // let name = await tokenContract.methods.name().call();
     let balance = await tokenContract.methods.balanceOf(walletAddress).call();
     const decimalFactor = 10 ** Number(decimals);
     balance = new Big(balance).div(decimalFactor).toFixed();
     return {symbol,decimals,balance}
-    console.log("symbolsymbolsymbol",symbol,balance)
+    // console.log("symbolsymbolsymbol",symbol,balance)
   }
 }

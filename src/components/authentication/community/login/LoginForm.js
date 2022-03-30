@@ -22,9 +22,13 @@ import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils";
 const LoginForm = () => {
   const history = useHistory();
   const [viewPassword, setViewPassword] = useState(false);
+  // eslint-disable-next-line
   const [connected, setConnected] = useState(false);
+  // eslint-disable-next-line
   const [address, setAddress] = useState("");
+  // eslint-disable-next-line
   const [network, setNetwork] = useState("ETHEREUM");
+  // eslint-disable-next-line
   const [web3, setWeb3] = useState(null);
   const [applicationUserToken, setApplicationUserToken] = useState("");
 

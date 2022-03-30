@@ -4,38 +4,43 @@ import {
   FButton,
   FCard,
   FContainer,
+  // FGrid,
+  // FGridItem,
   FInputCheckbox,
+  FItem,
+  // FItem,
   FTypo,
 } from "ferrum-design-system";
-import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
-import { CrucibleMyBalance } from "../../../common/CardMyBalance";
-// import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg"; 
+import { CrucibleMyBalance } from "../../../common/CardMyBalance"; 
 import { STEP_FLOW_IDS } from "../../../common/utils";
 import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 
-export const CrucibleStepsPage = () => {
-  const history = useHistory();
+export const UnstakeRemoveLiquidity = () => {
+  const { farm } = useParams<{ farm?: string }>(); 
   const dispatch = useDispatch();
   const location: any = useLocation();
-  const [stepTwoCheck, setStepTwoCheck] = useState(false);
-  const [stepThreeCheck, setStepThreeCheck] = useState(false);
-  const { farm } = useParams<{ farm?: string }>();
-
+  const history = useHistory();
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
     (state: RootState) => state.crucible
   );
   const { tokenV2 } = useSelector(
     (state: RootState) => state.walletAuthenticator
   );
+  const [stepTwoCheck, setStepTwoCheck] = useState(false);
+  const [stepThreeCheck, setStepThreeCheck] = useState(false);
 
-  const onStakeClick = () => {
+  const onStakeClick =() => {
     let nextStepInfo: any;
-    if (farm?.includes("cFRMx")){
-      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].stake;
-    } else if (farm === "cFRM" || farm === "cFRM-BNB"){
-      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].stake;
+    let newFarm: any;
+    if (farm==="cFRM-BNB"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].stake;
+      newFarm = "cFRM"
+    } else if (farm==="cFRMx-BNB"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].stake;
+      newFarm = "cFRMx"
     }
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
@@ -48,12 +53,36 @@ export const CrucibleStepsPage = () => {
       dispatch,
       history,
       true,
-      farm
+      newFarm
     );
-  };
+  }
+
+  const onUnwrapClick = () => {
+    let nextStepInfo: any;
+    let newFarm: any;
+    if (farm==="cFRMx-BNB"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].unwrap;
+      newFarm = "cFRMx-BNB"
+    } else if (farm==="cFRM-BNB"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].unwrap;
+      newFarm = "cFRM-BNB"
+    }
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      true,
+      newFarm
+    );
+  }
 
   return (
-    // file not used
     <FContainer className="f-mr-0" width={700}>
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-crucible-steps">
@@ -63,7 +92,7 @@ export const CrucibleStepsPage = () => {
           className={"card-title w-100"}
           display="flex"
         >
-          Crucible Token Sustainable Liquidity Farming teste
+          Crucible Token Sustainable Liquidity Farming
         </FTypo>
         <ul>
           <li className="step step-success">
@@ -72,7 +101,7 @@ export const CrucibleStepsPage = () => {
                 Step 1
               </FTypo>
               <FTypo size={18}>
-                Congratulations! You have successfully minted your {farm?.includes("cFRMX")? "cFRMx": "cFRM"} tokens!
+                Congratulations! You have successfully unstaked your APE-LP {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} -BNB tokens!
                 Please proceed to step 2.
               </FTypo>
             </span>
@@ -83,13 +112,11 @@ export const CrucibleStepsPage = () => {
                 Step 2
               </FTypo>
               <FTypo size={18}>
-                In order to deposit LP tokens into the {farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP Farm ({farm?.includes("cFRMx")? "cFRMx": "cFRM"}/BNB
-                pair), you will first need to add liquidity.
-                <strong>Click ‘Add Liquidity’ to get started.</strong>
+                In order to unwrap your LP tokens into the {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB, you will first need to remove liquidity.
+                <strong>Click ‘Remove Liquidity’ to get started.</strong>
                 <br></br>
                 <br></br>
-                After you add liquidity, you will need to return to this screen
-                and stake the {farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP tokens.
+                After you remove liquidity, you will need to return to this screen to either unwrap {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}, Stake {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}, or simply hold.
               </FTypo>
               <br></br>
               <FInputCheckbox
@@ -97,11 +124,11 @@ export const CrucibleStepsPage = () => {
                 name="step2Check"
                 className="f-mb-1 f-mt-1"
                 label={
-                  "I understand that in order to earn rewards I need to return to this page after adding liquidity and complete Step 3."
+                  `I understand that in order to unwrap or stake ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} I need to return to this page after removing liquidity and complete Step 3.`
                 }
               />
               <FButton
-                title="Add Liquidity"
+                title="Remove Liquidity"
                 postfix={<IconArrow />}
                 className="w-100"
                 disabled={!stepTwoCheck}
@@ -114,9 +141,7 @@ export const CrucibleStepsPage = () => {
                 Step 3
               </FTypo>
               <FTypo size={18}>
-                Congratulations! You have successfully added liquidity. You are
-                now able to stake your {farm?.includes("BNB")? "APE-LP": ""} {farm?.includes("cFRMx")? "cFRMx": "cFRM"}{farm?.includes("BNB")? "-BNB": " LP"} tokens to start earning
-                rewards!
+                Congratulations! You have successfully removed liquidity. You are now able to unwrap or stake your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens.
               </FTypo>
               <br></br>
               <FInputCheckbox
@@ -124,20 +149,18 @@ export const CrucibleStepsPage = () => {
                 name="step3Check"
                 className="f-mb-1 f-mt-1"
                 label={
-                  `I have added liquidity of ${farm?.includes("BNB")? "APE-LP": ""} ${farm?.includes("cFRMx")? "cFRMx": "cFRM"}${farm?.includes("BNB")? "-BNB": "/BNB"} pair and have the LP tokens. I’m ready to stake my ${farm?.includes("BNB")? "APE-LP": ""} ${farm?.includes("cFRMx")? "cFRMx": "cFRM"}${farm?.includes("BNB")? "-BNB": "/BNB"} tokens now.`
-                }
+                  `I have removed liquidity of APE LP ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} - BNB pair and have the ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens. I’m ready to unwrap or stake my ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens.`}
               />
               {/* <FButton title="Add Liquidity" postfix={<IconArrow />} className="w-100" disabled={!stepThreeCheck} /> */}
             </span>
           </li>
           <li className="step-last">
-            <FButton
-              title={`Stake ${farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP`}
-              postfix={<IconArrow />}
-              className="w-100"
-              disabled={!stepThreeCheck}
-              onClick={() => onStakeClick()}
-            />
+            <FItem>
+              <FButton title={`Stake`} className="w-100" disabled={!stepThreeCheck} onClick={() => onStakeClick()} />
+            </FItem>
+            <FItem>
+              <FButton title="Unwrap" className="w-100" disabled={!stepThreeCheck} onClick={() => onUnwrapClick()} />
+            </FItem> 
           </li>
         </ul>
       </FCard>

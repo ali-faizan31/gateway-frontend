@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseUrl, apiKey } from "../utils/const.utils";
+import { baseUrl } from "../utils/const.utils";
 
 export function getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId( id, token ) {
     return axios.get(`${baseUrl}/api/v1/community-member/stepsFlowStepsHistory/stepFlow/latest/${id}?isPagination=false`, {

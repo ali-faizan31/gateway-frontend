@@ -28,7 +28,7 @@ export const isCurrencyValid = (cur: string): boolean => {
     if (!token.startsWith('0x')) {
         return false;
     }
-    if (token.length != 42) {
+    if (token.length !== 42) {
         return false;
     }
     if (!network) {
@@ -70,7 +70,7 @@ export const linkForTransaction = (network: string, tid: string) => {
 		default:
 			return ''
 	}
-	return '';
+	// return '';
 }
 
 export const addToken = async (tokenChainData:any) => {
