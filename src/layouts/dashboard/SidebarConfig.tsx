@@ -116,6 +116,17 @@ export const sidebarConfig = [
     ],
   },
   {
+    title: "Competition",
+    path: PATH_DASHBOARD.general.competition,
+    icon: ICONS.competition,
+    children: [
+      {
+        title: "A2 Competition",
+        path: PATH_DASHBOARD.general.specificCompetition,
+      }
+    ],
+  },
+  {
     title: "Leaderboard",
     path: PATH_DASHBOARD.general.leaderboard,
     icon: ICONS.leaderboard,

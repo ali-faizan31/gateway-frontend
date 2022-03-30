@@ -69,6 +69,7 @@ export const PATH_DASHBOARD = {
     detailLeaderBoardById: path(ROOTS_DASHBOARD, "/leaderboard:id"),
     competition: path(ROOTS_DASHBOARD, "/competition"),
     createCompetition: path(ROOTS_DASHBOARD, "/competition/create"),
+    specificCompetition: path(ROOTS_DASHBOARD, "/competition/6229cf127b13cb22f75ae6eb"),
     competitionManagement: path(ROOTS_DASHBOARD, "/competition/management"),
     detailCompetitionById: path(ROOTS_DASHBOARD, "/competition:id"),
     multiLeaderBoardByProvidedId: path(
