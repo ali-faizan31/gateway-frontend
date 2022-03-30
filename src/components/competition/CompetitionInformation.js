@@ -21,7 +21,6 @@ import {
 import { TOKEN_TAG } from '../../utils/const.utils';
 
 const CompetitionInformation = () => {
-
     const {id} = useParams();
     const exportRef = useRef();
     let token = localStorage.getItem(TOKEN_TAG);
@@ -33,7 +32,10 @@ const CompetitionInformation = () => {
     const [leaderboardData, setLeaderboardData] = useState({});
     const [competitionData, setCompetitionData] = useState({});
     const [competitionParticipants, setCompetitionParticipants] = useState([]);
-    const [competitionParticipantsFiltered, setCompetitionParticipantsFiltered] = useState([]);
+    const [
+        competitionParticipantsFiltered,
+        setCompetitionParticipantsFiltered
+    ] = useState([]);
     const [showWallets, setShowWallets] = useState(false);
 
     useEffect(() => {
@@ -50,7 +52,11 @@ const CompetitionInformation = () => {
     useEffect(() => {
         if (isQueryChange) {
             if (competitionParticipants.length) {
-                const tempData = competitionParticipants.filter((x) => x.tokenHolderAddress.toLowerCase().includes(query.toLowerCase()));
+                const tempData = competitionParticipants.filter((x) =>
+                    x.tokenHolderAddress
+                        .toLowerCase()
+                        .includes(query.toLowerCase())
+                );
                 setCompetitionParticipantsFiltered(tempData);
                 setIsQueryChange(false);
             }
@@ -58,17 +64,50 @@ const CompetitionInformation = () => {
     }, [query]);
 
     const getCompetitionParticipants = () => {
-        const leaderboardDexUrl = leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.networkDex?.dex?.url;
-        const tokenContractAddress = leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress;
+        const leaderboardDexUrl =
+            leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]
+                ?.currencyAddressesByNetwork?.networkDex?.dex?.url;
+        const tokenContractAddress =
+            leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]
+                ?.currencyAddressesByNetwork?.tokenContractAddress;
         getCompetitionsParticipantsRanks(id, false, 0, 10)
             .then((res) => {
                 if (res?.data?.body?.participants) {
-                    const formattedRes = res?.data?.body?.participants?.map(p => ({
-                        ...p,
-                        ...(p?.tokenHolderQuantity && {tokenHolderQuantity: TruncateWithoutRounding(eitherConverter(p?.tokenHolderQuantity, 'wei').ether, 2)?.toLocaleString('en-US')}),
-                        levelUpUrl: `${leaderboardDexUrl}swap?inputCurrency=BNB&outputCurrency=${tokenContractAddress}&exactField=output&exactAmount=${TruncateWithoutRounding(p?.levelUpAmount, 2)?.toLocaleString('en-US')}`,
-                        ...(p?.levelUpAmount && {formattedLevelUpAmount: TruncateWithoutRounding(p?.levelUpAmount, 2)})
-                    }));
+                    const formattedRes = res?.data?.body?.participants?.map((p) => {
+                        let color = '';
+                        if (p?.tokenHolderQuantity === '') {
+                            color = 'yellow';
+                        }
+                        if (Number(p?.humanReadableGrowth) >= 0 && p?.tokenHolderQuantity !== '') {
+                            color = 'green';
+                        } else if (Number(p?.humanReadableGrowth) < 0 && p?.tokenHolderQuantity !== '') {
+                            color = 'red';
+                        }
+                        return (
+                            {
+                                ...p,
+                                humanReadableGrowth: {
+                                    data: p?.humanReadableGrowth,
+                                    color
+                                },
+                                tokenHolderQuantity: p?.tokenHolderQuantity ? TruncateWithoutRounding(
+                                    eitherConverter(
+                                        p?.tokenHolderQuantity,
+                                        'wei'
+                                    ).ether,
+                                    2
+                                )?.toLocaleString('en-US') : 0,
+                                levelUpUrl: `${leaderboardDexUrl}swap?inputCurrency=BNB&outputCurrency=${tokenContractAddress}&exactField=output&exactAmount=${TruncateWithoutRounding(
+                                    p?.levelUpAmount,
+                                    2
+                                )}`,
+                                formattedLevelUpAmount: p?.levelUpAmount ? TruncateWithoutRounding(
+                                    p?.levelUpAmount,
+                                    2
+                                ) : 0
+                            }
+                        );
+                    });
                     setCompetitionParticipants(formattedRes);
                     setCompetitionParticipantsFiltered(formattedRes);
                 } else {
@@ -106,50 +145,78 @@ const CompetitionInformation = () => {
     };
 
     const TruncateWithoutRounding = (value, decimals) => {
-        const parts = value.toString().split('.');
+        if (value) {
+            const parts = value.toString().split('.');
 
-        if (parts.length === 2) {
-            return Number([parts[0], parts[1].slice(0, decimals)].join('.'));
+            if (parts.length === 2) {
+                return Number([parts[0], parts[1].slice(0, decimals)].join('.'));
+            }
+            return Number(parts[0]);
+        } else {
+            return '';
         }
-        return Number(parts[0]);
     };
 
     const levelUpFormatter = (params) => (
         <div data-label="Get Token">
-            <a href={params.levelUpUrl} target="_blank" rel="noreferrer"
-               className="f-btn f-btn-primary text-decoration-none">
+            <a
+                href={params.levelUpUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="f-btn f-btn-primary text-decoration-none"
+            >
                 LEVEL UP
-            </a></div>
+            </a>
+        </div>
     );
 
     const columns = [
-        {prop: 'rank', title: 'Rank', cell: (params) => <div data-label="Rank">{params?.rank}</div>},
+        {
+            prop: 'rank',
+            title: 'Rank',
+            cell: (params) => <div data-label="Rank">{params?.rank}</div>
+        },
         {
             prop: 'tokenHolderAddress',
             title: 'Wallet Address',
-            cell: (params) => <div data-label="Wallet Address">
-                {
-                    showWallets ? params?.tokenHolderAddress : `${params?.tokenHolderAddress?.substr(0, 6)}...${params?.tokenHolderAddress?.substr(
-                        params?.tokenHolderAddress?.length - 4
-                    )}`
-                }
-            </div>
+            cell: (params) => (
+                <div data-label="Wallet Address">
+                    {showWallets
+                        ? params?.tokenHolderAddress
+                        : `${params?.tokenHolderAddress?.substr(
+                            0,
+                            6
+                        )}...${params?.tokenHolderAddress?.substr(
+                            params?.tokenHolderAddress?.length - 4
+                        )}`}
+                </div>
+            )
         },
         {
             prop: 'tokenHolderQuantity',
             title: 'Balance',
-            cell: (params) => <div data-label="Balance">{params?.tokenHolderQuantity}</div>
+            cell: (params) => (
+                <div data-label="Balance">{params?.tokenHolderQuantity}</div>
+            )
         },
         {
             prop: 'humanReadableGrowth',
             title: 'Growth / Reduction',
-            cell: (params) => <div data-label="Growth / Reduction">{params?.humanReadableGrowth}</div>
+            cell: (params) => (
+                <div data-label="Growth / Reduction"
+                     style={{color: params?.humanReadableGrowth?.color}}>
+                    {params?.humanReadableGrowth?.data ? TruncateWithoutRounding(params?.humanReadableGrowth?.data, 2).toLocaleString('en-US') : 0}
+                </div>
+            )
         },
         {
             prop: 'levelUpAmount',
             title: 'Level Up Amount',
-            cell: (params) => <div
-                data-label="Level Up Amount">{TruncateWithoutRounding(params?.levelUpAmount, 2)} FRM</div>
+            cell: (params) => (
+                <div data-label="Level Up Amount">
+                    {params?.levelUpAmount ? TruncateWithoutRounding(params?.levelUpAmount, 2).toLocaleString('en-US') : 0} FRM
+                </div>
+            )
         },
         {
             prop: 'levelUpUrl',
@@ -197,24 +264,42 @@ const CompetitionInformation = () => {
             <CSVLink
                 data={competitionParticipants}
                 headers={csvHeaders}
-                filename={`${competitionData?.name}-${moment(new Date()).format('DD-MMM-YYYY')}.csv`}
+                filename={`${competitionData?.name}-${moment(new Date()).format(
+                    'DD-MMM-YYYY'
+                )}.csv`}
                 ref={exportRef}
                 style={{display: 'none'}}
             />
             <FContainer type="fluid">
                 <FContainer>
                     <FGrid className={'f-mt-1 f-mb-1'}>
-                        <FGridItem size={[6, 6, 6]} alignX="start" alignY={'end'}>
+                        <FGridItem
+                            size={[6, 6, 6]}
+                            alignX="start"
+                            alignY={'end'}
+                        >
                             <h1>{competitionData?.name || 'Competition'}</h1>
                         </FGridItem>
                         <FGridItem size={[2, 2, 2]} alignX="start" alignY="end">
-                            {
-                                competitionParticipants?.length ?
-                                    <FButton type="button" className="btn-create f-ml-1" onClick={showAllWallets}
-                                             title={`${showWallets ? 'Hide' : 'Show'} Wallets`}/> : ''
-                            }
+                            {competitionParticipants?.length ? (
+                                <FButton
+                                    type="button"
+                                    className="btn-create f-ml-1"
+                                    onClick={showAllWallets}
+                                    title={`${
+                                        showWallets ? 'Hide' : 'Show'
+                                    } Wallets`}
+                                />
+                            ) : (
+                                ''
+                            )}
                         </FGridItem>
-                        <FGridItem alignX={'end'} alignY={'end'} dir={'row'} size={[4, 4, 4]}>
+                        <FGridItem
+                            alignX={'end'}
+                            alignY={'end'}
+                            dir={'row'}
+                            size={[4, 4, 4]}
+                        >
                             <FInputText
                                 label="Search Wallet"
                                 placeholder="0x000...0000"
@@ -225,8 +310,13 @@ const CompetitionInformation = () => {
                             />
 
                             {!isPublicUser && (
-                                <FButton type="button" className="btn-create f-ml-1" disabled={!isLoading}
-                                         onClick={onExportClick} title={' Export to CSV'}/>
+                                <FButton
+                                    type="button"
+                                    className="btn-create f-ml-1"
+                                    disabled={!isLoading}
+                                    onClick={onExportClick}
+                                    title={' Export to CSV'}
+                                />
                             )}
                         </FGridItem>
                     </FGrid>
@@ -237,7 +327,10 @@ const CompetitionInformation = () => {
                                 tableBody={competitionParticipantsFiltered}
                                 rowsPerPage={10}
                                 tableClass="striped hover responsive"
-                                initialSort={{prop: 'rank', isAscending: true}}
+                                initialSort={{
+                                    prop: 'rank',
+                                    isAscending: true
+                                }}
                             />
                         </FTable>
                     ) : isLoading ? (
