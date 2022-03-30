@@ -1,15 +1,30 @@
-import React, { useMemo } from "react";
+import React from "react";
 import IconMetaMask from "../../assets/img/icon-metamask.svg";
-import IconCoinbase from "../../assets/img/icon-coinbase.png";
-import IconWalletConnect from "../../assets/img/icon-wallet-connect.svg";
+// import IconCoinbase from "../../assets/img/icon-coinbase.png";
+// import IconWalletConnect from "../../assets/img/icon-wallet-connect.svg";
 // import { useApplicationUIContext } from "../../ApplicationUiContext";
 import { FDialog, FList, FListItem } from "ferrum-design-system";
 import "./ConnectWalletDialog-styles.scss";
 
-export const ConnectWalletDialog = ({ show, onHide, metaMaskClickEvent }: any) => {
+export const ConnectWalletDialog = ({
+  show,
+  onHide,
+  metaMaskClickEvent,
+}: any) => {
   return (
-    <FDialog show={show} onHide={onHide} size="small" title="Connect Wallet" className="connect-wallet-dialog  f-mb-2">
-      <FList display="block" type="number" className={"f-mt-2"} variant="connect-wallet">
+    <FDialog
+      show={show}
+      onHide={onHide}
+      size="small"
+      title="Connect Wallet"
+      className="connect-wallet-dialog  f-mb-2"
+    >
+      <FList
+        display="block"
+        type="number"
+        className={"f-mt-2"}
+        variant="connect-wallet"
+      >
         <FListItem display="flex" onClick={metaMaskClickEvent}>
           <strong>MetaMask</strong>
           <span className="icon-wrap">

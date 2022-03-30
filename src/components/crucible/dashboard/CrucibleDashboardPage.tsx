@@ -1,28 +1,30 @@
 import {
-  FCard,
+  // FCard,
   FContainer,
-  FGrid,
-  FGridItem,
-  FItem,
+  // FGrid,
+  // FGridItem,
+  // FItem,
   FTypo,
 } from "ferrum-design-system";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../redux/rootReducer";
+import { useDispatch } from "react-redux";
+// import { RootState } from "../../../redux/rootReducer";
 import { CardAPR } from "../common/CardAPR";
 import { CrucibleMyBalance } from "../common/CardMyBalance";
-import { CruciblePrice } from "../common/CardPrice"; 
-import { useHistory, useLocation } from "react-router"; 
-import * as CrucibleActions from '../redux/CrucibleActions'
+import { CruciblePrice } from "../common/CardPrice";
+// import { useHistory, useLocation } from "react-router";
+import * as CrucibleActions from "../redux/CrucibleActions";
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
-  const { isConnected } = useSelector((state: RootState) => state.walletConnector);
-  
+  // const { isConnected } = useSelector(
+  //   (state: RootState) => state.walletConnector
+  // );
+
   useEffect(() => {
-    dispatch(CrucibleActions.resetCrucible())        
-  }, [])
-  
+    dispatch(CrucibleActions.resetCrucible());
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <FContainer className="f-ml-0 crucible-dashboard">

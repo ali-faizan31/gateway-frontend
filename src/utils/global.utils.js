@@ -4,23 +4,23 @@ export const arraySortByKeyDescending = (array, key) =>
   array.slice().sort((a, b) => b[key] - a[key]);
 
 export const mergeTwoArrays = (dataset1, dataset2) => {
-  const arr1 = [
-    { address: "12", balance: "frm same" },
-    { address: "25", balance: "frm same" },
-    { address: "14", balance: "frm" },
-  ];
-  const arr2 = [
-    { address: "23", balance: "frmx" },
-    { address: "12", balance: "frmx same" },
-    { address: "25", balance: "frmx same" },
-    { address: "26", balance: "frmx" },
-  ];
+  // const arr1 = [
+  //   { address: "12", balance: "frm same" },
+  //   { address: "25", balance: "frm same" },
+  //   { address: "14", balance: "frm" },
+  // ];
+  // const arr2 = [
+  //   { address: "23", balance: "frmx" },
+  //   { address: "12", balance: "frmx same" },
+  //   { address: "25", balance: "frmx same" },
+  //   { address: "26", balance: "frmx" },
+  // ];
   const map1 = new Map();
   const map2 = new Map();
-  dataset1.map((d1, i) => {
+  dataset1.forEach((d1, i) => {
     map1.set(d1.address, i);
   });
-  dataset2.map((d2, i) => {
+  dataset2.forEach((d2, i) => {
     map2.set(d2.address, i);
   });
   for (const d2 of dataset2) {

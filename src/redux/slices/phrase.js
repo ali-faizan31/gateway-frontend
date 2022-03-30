@@ -24,8 +24,8 @@ const slice = createSlice({
     translationsRecived(state, action) {
       state.isLoading = false;
       state.translations = action.payload;
-      if(state.activeTranslation.langageCode == undefined){
-        let index = action.payload.findIndex(item => item.langageCode == "en");      
+      if(state.activeTranslation.langageCode === undefined){
+        let index = action.payload.findIndex(item => item.langageCode === "en");      
         state.activeTranslation = index ? action.payload[index] : action.payload[0]
       }
     },
@@ -47,7 +47,7 @@ export const getPhraseDataDispatch = () => (dispatch) => {
       langages.forEach((langage) => {
         let values = [];
         res.data.forEach((row) => {
-          if (row.locale.code == langage) {
+          if (row.locale.code === langage) {
             values[`${row.key.name}`] = row.content;
           }
         });
@@ -67,14 +67,14 @@ export const getPhraseDataDispatch = () => (dispatch) => {
 };
 
 export const setActiveTranslation = (translations, language, activeLanguage) => (dispatch) => { 
-  let index = translations.findIndex(item => item.langageCode == language);
+  let index = translations.findIndex(item => item.langageCode === language);
   if ( index > -1){
-    if(activeLanguage != language ) { 
+    if(activeLanguage !== language ) { 
       dispatch(slice.actions.activateTranslation(translations[index]));       
     }
   } else {
-    if(activeLanguage == undefined){
-      let index = translations.findIndex(item => item.langageCode == "en");      
+    if(activeLanguage === undefined){
+      let index = translations.findIndex(item => item.langageCode === "en");      
       const activeTranslation = index ? translations[index] : translations[0]
       dispatch(slice.actions.activateTranslation(activeTranslation));     
     }

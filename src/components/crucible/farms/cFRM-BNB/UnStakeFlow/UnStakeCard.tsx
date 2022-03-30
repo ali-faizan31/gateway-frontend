@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FButton,
@@ -10,81 +10,175 @@ import {
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
-import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
-import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
+// import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
+// import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from "react-router"; 
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation, useParams } from "react-router";
 import { RootState } from "../../../../../redux/rootReducer";
-import { Web3Helper } from './../../../../../container-components/web3Client/web3Helper';
-import { CrucibleClient } from './../../../../../container-components/web3Client/crucibleClient';
-import {ApprovableButtonWrapper} from './../../../../../container-components/web3Client/approvalButtonWrapper';
-import {CRUCIBLE_CONTRACTS_V_0_1} from './../../../common/utils';
+import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
+import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
+import { ApprovableButtonWrapper } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
+import { CRUCIBLE_CONTRACTS_V_0_1, getBaseTokenName, getCrucibleTokenName } from "./../../../common/utils";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
-import { getLatestStepToRender, getNextStepFlowStepId } from "../../../common/Helper"; 
+import {
+  getLatestStepToRender, isLPFarm, isSingleTokenFarm,
+  // getNextStepFlowStepId
+} from "../../../common/Helper";
 
 export const UnStake = () => {
   const dispatch = useDispatch();
+  const { farm } = useParams<{ farm?: string }>();
   const history = useHistory();
   const location: any = useLocation();
-  const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
-  const [approvedDone, setapprovedDone] = useState(false);
-  const [isApproving, setIsApproving] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  //@ts-ignore
-  const crucible = useSelector((state) => state.crucible.selectedCrucible);
-  const {
-    isConnected,
-    isConnecting,
-    walletAddress,
-    walletBalance,
-    networkClient,
-  } = useSelector((state: RootState) => state.walletConnector);
+  const [transitionStatusDialog, setTransitionStatusDialog] = useState(false); 
+  const [isProcessing, setIsProcessing] = useState(false); 
+  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible); 
+  const LPStakingDetails = useSelector(                                       
+    (state: RootState) => state.crucible.userLpStakingDetails                 
+  );
+  const tokenPrices = useSelector(
+    (state: RootState) => state.crucible.tokenPrices
+  );
+  const { walletAddress, networkClient, } = useSelector((state: RootState) => state.walletConnector);
   const [isProcessed, setIsProcessed] = useState(false);
-  const [amount, setAmount] = useState(0);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  //@ts-ignore
-  const userCrucibleData =  useSelector((state)=> state.crucible.userCrucibleDetails)
-  let userStake = (userCrucibleData.stakes||[]).find((e:any)=>e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd")
-  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
-  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
- 
- 
-  const getStepCompleted = async ( renderNeeded: any) => { 
+  const [amount, setAmount] = useState(); 
+  const userCrucibleData = useSelector(
+    (state: RootState) => state.crucible.userCrucibleDetails
+  );
+  let userStake = (userCrucibleData.stakes || []).find(
+    (e: any) => e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd"
+  );
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
+    (state: RootState) => state.crucible
+  );
+  const { tokenV2 } = useSelector(
+    (state: RootState) => state.walletAuthenticator
+  );
+
+  const getStepCompleted = async (renderNeeded: any) => {
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
-      let updHistory = stepFlowStepHistory.map((obj, index) => index === currentStepIndex ? { ...obj, status: "completed" } : obj);
+      let updHistory = stepFlowStepHistory.map((obj, index) =>
+        index === currentStepIndex ? { ...obj, status: "completed" } : obj
+      );
       let data = { status: "completed" };
 
-      dispatch(CrucibleActions.updateCurrentStep({ currentStep: updatedCurrentStep, currentStepIndex: currentStepIndex }));
-      dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: updHistory }));
+      dispatch(
+        CrucibleActions.updateCurrentStep({
+          currentStep: updatedCurrentStep,
+          currentStepIndex: currentStepIndex,
+        })
+      );
+      dispatch(
+        CrucibleActions.updateStepFlowStepHistory({
+          stepFlowStepHistory: updHistory,
+        })
+      );
 
-    let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
-      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, renderNeeded);
+      // let updateResponse: any =
+      await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
+        currentStep._id,
+        data,
+        tokenV2
+      );
+      // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      getLatestStepToRender(
+        location.state,
+        tokenV2,
+        currentStep,
+        currentStepIndex,
+        stepFlowStepHistory,
+        dispatch,
+        history,
+        renderNeeded,
+        farm
+      );
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      let errorResponse =
+        e &&
+        e.response &&
+        e.response.data.status &&
+        e.response.data.status.message;
+      errorResponse
+        ? toast.error(`Error Occured: ${errorResponse}`)
+        : toast.error(`Error Occured: ${e}`);
     }
-  }
-  
-  const onUnStakeClick = async (
-    currency: string,
-    stakingAddress: string,
-    amount: string,
-    isPublic: boolean,
-    network: string,
-    userAddress: string
-  ) => {
+  };
+
+  // const onUnStakeClick = async (
+  //   currency: string,
+  //   stakingAddress: string,
+  //   amount: string,
+  //   isPublic: boolean,
+  //   network: string,
+  //   userAddress: string
+  // ) => {
+  //   if (networkClient) {
+  //     setTransitionStatusDialog(true);
+  //     setIsProcessing(true);
+  //     const web3Helper = new Web3Helper(networkClient as any);
+  //     const client = new CrucibleClient(web3Helper);
+
+      // const response = await client.UnStakeCrucible(
+  //       dispatch,
+  //       currency,
+  //       amount,
+  //       stakingAddress,
+  //       userAddress,
+  //       network
+  //     );
+  //     if (response) {
+  //       setIsProcessing(false);
+  //       //setIsSubmitted(true)
+  //       setIsProcessed(true);
+  //       getStepCompleted(false);
+  //     }
+  //     //setIsApproving(false);
+  //     //setTransitionStatusDialog(true);
+  //   }
+  // };
+
+  const onUnStakeClick = async () => {
     if (networkClient) {
+      let currency: string = "";
+      let stakingAddress: string = "";
+      let amount: string = "";
+      let  network: string = "";
+      let  userAddress: string = "";
+      let response: any;
+
       setTransitionStatusDialog(true);
       setIsProcessing(true);
       const web3Helper = new Web3Helper(networkClient as any);
       const client = new CrucibleClient(web3Helper);
 
-      const response = await client.UnStakeCrucible(
+    if (isLPFarm(farm)){
+      currency = LPStakingDetails[farm!]?.stakeId;
+      stakingAddress = LPStakingDetails[farm!]?.stakingAddress || ""
+      amount = amount.toString();
+      network =  crucible?.network
+      userAddress = walletAddress as string
+
+      response = await client.unstakeLPToken(
+        dispatch,
+        currency,
+        userAddress,
+        amount,
+        stakingAddress,
+        network,
+      );
+
+    } else if (isSingleTokenFarm(farm)){
+      currency = crucible!.currency;
+      stakingAddress = (crucible?.staking || [])[0]?.address || ""
+      amount = amount.toString();
+      network =  crucible?.network
+      userAddress = walletAddress as string
+
+      response = await client.UnStakeCrucible(
         dispatch,
         currency,
         amount,
@@ -92,35 +186,59 @@ export const UnStake = () => {
         userAddress,
         network
       );
+    } 
       if (response) {
         setIsProcessing(false);
-        //setIsSubmitted(true)
-        setIsProcessed(true)
+        setIsProcessed(true);
         getStepCompleted(false);
       }
-      //setIsApproving(false);
-      //setTransitionStatusDialog(true);
     }
   };
 
   const onContinueToNextStepClick = () => {
-    if ( currentStep.status === "pending"){ 
+    if (currentStep.status === "pending") {
       location.state.id = currentStep.stepFlow;
       let splitted = currentStep.stepFlowStep.name.split("-");
-      location.state.name = (splitted[0].trim() + " - " + splitted[1].trim()); 
-      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+      location.state.name = splitted[0].trim() + " - " + splitted[1].trim();
+      getLatestStepToRender(
+        location.state,
+        tokenV2,
+        currentStep,
+        currentStepIndex,
+        stepFlowStepHistory,
+        dispatch,
+        history,
+        true,
+        farm
+      );
     }
-  } 
+  };
+
+  const getAmountSymbol = () => {
+    if (farm?.includes("BNB")){
+      return crucible?.LP_symbol;
+    } else {
+      return (crucible?.symbol)
+    }
+  }
+
+  const getAmount = () => {
+    if (farm?.includes("BNB")){
+      return (LPStakingDetails[farm!]?.stake) || 0;
+    } else {
+      return Number((userStake?.stakeOf) || "0")
+    }
+  }
 
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title">
         <FItem display={"flex"} alignY="center">
-          <Link to="/dashboard/crucible/cFRM-BNB/manage" className="btn-back">
+          <Link to={`/dashboard/crucible/${farm}/manage`} className="btn-back">
             <IconGoBack />
           </Link>
           <FTypo size={24} weight={700}>
-            Unstake cFRM / BNB LP Token
+            Unstake {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} {farm?.includes("BNB") ? "/ BNB LP" : ""} Token
           </FTypo>
         </FItem>
       </div>
@@ -128,20 +246,20 @@ export const UnStake = () => {
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={20} className="f-mb-1">
-              FRM Price (USD)
+            {getBaseTokenName(farm)} Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              $0.072
+            ${tokenPrices[farm!]}
             </FTypo>
           </FItem>
         </FGridItem>
         <FGridItem size={[6, 6, 6]}>
           <FItem bgColor="#1C2229" className={"f-p-2"}>
             <FTypo size={20} className="f-mb-1">
-              cFRMx Price (USD)
+            {getCrucibleTokenName(farm)} Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              $0.072
+            ${tokenPrices[getCrucibleTokenName(farm)!]}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -155,15 +273,14 @@ export const UnStake = () => {
         placeholder="Amount to unstake"
         postfix={
           <FTypo color="#DAB46E" className={"f-pr-1"}>
-            <span onClick={() => setAmount(Number(userStake?.stakeOf || "0"))}>
+            <span onClick={() => setAmount(getAmount())}>
               Max
             </span>
           </FTypo>
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-        You have {Number(userStake?.stakeOf || "0").toFixed(3)} cFRM / BNB LP
-        available to unstake.
+        You have {getAmount()} {getAmountSymbol()} available to unstake.
       </FTypo>
 
       <div className="btn-wrap f-mt-2">
@@ -172,22 +289,23 @@ export const UnStake = () => {
             <FButton
               title={"Unstake Crucible"}
               className={"w-100"}
+              disabled={Number(getAmount()) === 0}
               onClick={
                 ownProps.isApprovalMode
                   ? () => ownProps.onApproveClick()
                   : () =>
-                      onUnStakeClick(
-                        crucible!.currency,
-                        (crucible?.staking || [])[0]?.address || "",
-                        amount.toString(),
-                        true,
-                        crucible?.network,
-                        walletAddress as string
-                      )
+                      onUnStakeClick()
+                        // crucible!.currency,
+                        // (crucible?.staking || [])[0]?.address || "",
+                        // amount.toString(),
+                        // true,
+                        // crucible?.network,
+                        // walletAddress as string
+                      
               }
             ></FButton>
           )}
-          currency={crucible!.currency}
+          currency={isSingleTokenFarm(farm)? crucible!.baseCurrency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
           contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
           userAddress={walletAddress as string}
           amount={"0.0001"}
@@ -199,12 +317,12 @@ export const UnStake = () => {
         setTransitionStatusDialog={setTransitionStatusDialog}
         isProcessing={isProcessing}
         setIsProcessing={setIsProcessing}
-        setapprovedDone={setapprovedDone}
-        isSubmitted={isSubmitted}
+        setapprovedDone={false}
+        isSubmitted={false}
         isProcessed={isProcessed}
         crucible={crucible}
-        onContinueToNextStepClick ={()=>onContinueToNextStepClick()}
-       />
+        onContinueToNextStepClick={() => onContinueToNextStepClick()}
+      />
     </FCard>
   );
 };
