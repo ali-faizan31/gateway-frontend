@@ -261,7 +261,7 @@ export const Manage = () => {
       if (!!userStakingDetails) {
         dispatch(
           actions.userLpStakingDetailsLoaded({
-            token: "cFRM_BNB_LP",
+            token: `${farm}`,
             data: {
               ...userStakingDetails.data,
               stakingAddress: payload.stakingAddress,
@@ -281,19 +281,27 @@ export const Manage = () => {
       const client = new CrucibleClient(web3Helper);
       const tokens = [
         {
-          token: "FRMX",
-          currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
-        },
-        {
           token: "FRM",
           currency: "BSC:0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc",
         },
         {
-          token: "cFRM-BNB-LP",
+          token: "FRMx",
+          currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
+        },
+        {
+          token: "cFRM-BNB",
           currency: "BSC:0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc",
         },
         {
+          token: "cFRMx-BNB",
+          currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
+        },
+        {
           token: "cFRM",
+          currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
+        },
+        {
+          token: "cFRMx",
           currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
         },
       ];
@@ -321,7 +329,7 @@ export const Manage = () => {
   );
 
   useEffect(() => {
-    if (location.state.id === undefined) {
+    if (location.state === undefined) {
       history.push(PATH_DASHBOARD.crucible.index);
     }
     // eslint-disable-next-line
@@ -362,8 +370,8 @@ export const Manage = () => {
         data: {
           ...crucibleData.data,
           LP_balance: data.balance,
-          LP_symbol: data.symbol,
-        },
+          LP_symbol: data.symbol,       
+        },  
       })
     );
 

@@ -24,7 +24,7 @@ import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
 import {
-  getLatestStepToRender, getObjectReadableFarmName, isLPFarm, isSingleTokenFarm,
+  getLatestStepToRender, isLPFarm, isSingleTokenFarm,
   // getNextStepFlowStepId
 } from "../../../common/Helper";
 
@@ -33,29 +33,18 @@ export const UnStake = () => {
   const { farm } = useParams<{ farm?: string }>();
   const history = useHistory();
   const location: any = useLocation();
-  const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
-  // const [approvedDone, setapprovedDone] = useState(false);
-  // const [isApproving, setIsApproving] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  //@ts-ignore
-  const crucible = useSelector((state) => state.crucible.selectedCrucible);
-  const LPStakingDetails = useSelector(
-    (state: RootState) => state.crucible.userLpStakingDetails
+  const [transitionStatusDialog, setTransitionStatusDialog] = useState(false); 
+  const [isProcessing, setIsProcessing] = useState(false); 
+  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible); 
+  const LPStakingDetails = useSelector(                                       
+    (state: RootState) => state.crucible.userLpStakingDetails                 
   );
   const tokenPrices = useSelector(
     (state: RootState) => state.crucible.tokenPrices
   );
-  const {
-    // isConnected,
-    // isConnecting,
-    walletAddress,
-    // walletBalance,
-    networkClient,
-  } = useSelector((state: RootState) => state.walletConnector);
+  const { walletAddress, networkClient, } = useSelector((state: RootState) => state.walletConnector);
   const [isProcessed, setIsProcessed] = useState(false);
-  const [amount, setAmount] = useState(0);
-  // const [isSubmitted, setIsSubmitted] = useState(false);
-  //@ts-ignore
+  const [amount, setAmount] = useState(); 
   const userCrucibleData = useSelector(
     (state: RootState) => state.crucible.userCrucibleDetails
   );
@@ -167,8 +156,8 @@ export const UnStake = () => {
       const client = new CrucibleClient(web3Helper);
 
     if (isLPFarm(farm)){
-      currency = LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.stakeId;
-      stakingAddress = LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.stakingAddress || ""
+      currency = LPStakingDetails[farm!]?.stakeId;
+      stakingAddress = LPStakingDetails[farm!]?.stakingAddress || ""
       amount = amount.toString();
       network =  crucible?.network
       userAddress = walletAddress as string
@@ -227,17 +216,17 @@ export const UnStake = () => {
 
   const getAmountSymbol = () => {
     if (farm?.includes("BNB")){
-      return crucible?.symbol;
+      return crucible?.LP_symbol;
     } else {
-      return (userCrucibleData?.symbol)
+      return (crucible?.symbol)
     }
   }
 
   const getAmount = () => {
     if (farm?.includes("BNB")){
-      return LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.stake || 0;
+      return (LPStakingDetails[farm!]?.stake) || 0;
     } else {
-      return Number(userStake?.stakeOf || "0")
+      return Number((userStake?.stakeOf) || "0")
     }
   }
 
@@ -291,8 +280,7 @@ export const UnStake = () => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-        You have {getAmount().toFixed(3)} {getAmountSymbol()}
-        available to unstake.
+        You have {getAmount()} {getAmountSymbol()} available to unstake.
       </FTypo>
 
       <div className="btn-wrap f-mt-2">
@@ -301,6 +289,7 @@ export const UnStake = () => {
             <FButton
               title={"Unstake Crucible"}
               className={"w-100"}
+              disabled={Number(getAmount()) === 0}
               onClick={
                 ownProps.isApprovalMode
                   ? () => ownProps.onApproveClick()
@@ -316,7 +305,7 @@ export const UnStake = () => {
               }
             ></FButton>
           )}
-          currency={isSingleTokenFarm(farm)? crucible!.baseCurrency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.LPaddress}`}
+          currency={isSingleTokenFarm(farm)? crucible!.baseCurrency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
           contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
           userAddress={walletAddress as string}
           amount={"0.0001"}

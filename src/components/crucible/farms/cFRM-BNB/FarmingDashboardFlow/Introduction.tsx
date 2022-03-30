@@ -30,6 +30,7 @@ export const Introduction = () => {
   const history = useHistory();
   const location: any = useLocation();
   const dispatch = useDispatch();
+  const [isLoaded, setIsLoaded] = useState(false);
   const { farm } = useParams<{ farm?: string }>();
   const [neverShowAgain, setNeverShowAgain] = useState(false);
   // const [pendingStepInfo, setpendingStepInfo]  = useState<any>(undefined);
@@ -84,12 +85,12 @@ export const Introduction = () => {
         true,
         farm
       );
+      setIsLoaded(true)
     }
     // eslint-disable-next-line
   }, [tokenV2, stepFlowStepHistory]);
 
-  const onGetStartedClick = async () => {
-    console.log("I am at onGetStartedClick");
+  const onGetStartedClick = async () => { 
     try {
       let updatedCurrentStep: any = {};
       let updHistory: any = [];
@@ -198,6 +199,7 @@ export const Introduction = () => {
             <FButton
               title={"Get Started"}
               postfix={<IconArrow />}
+              disabled={isLoaded === false}
               className="w-100 f-mt-2"
               onClick={() => onGetStartedClick()}
             />

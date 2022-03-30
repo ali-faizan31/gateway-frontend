@@ -22,7 +22,7 @@ import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
 import {
-  getLatestStepToRender, getObjectReadableFarmName, isLPFarm, isSingleTokenFarm,
+  getLatestStepToRender, isLPFarm, isSingleTokenFarm,
   // getNextStepFlowStepId,
 } from "../../../common/Helper";
 import { useHistory, useLocation, useParams } from "react-router";
@@ -32,23 +32,11 @@ export const Withdraw = () => {
   const { farm } = useParams<{ farm?: string }>();
   const history = useHistory();
   const location: any = useLocation();
-  const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
-  // const [approvedDone, setapprovedDone] = useState(false);
-  // const [isApproving, setIsApproving] = useState(false);
+  const [transitionStatusDialog, setTransitionStatusDialog] = useState(false); 
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isProcessed, setIsProcessed] = useState(false);
-  // const [isSubmitted, setIsSubmitted] = useState(false);
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
-  //@ts-ignore
-  const crucible = useSelector((state) => state.crucible.selectedCrucible);
-  const {
-    // isConnected,
-    // isConnecting,
-    walletAddress,
-    // walletBalance,
-    networkClient,
-  } = useSelector((state: RootState) => state.walletConnector);
-  //@ts-ignore
+  const [isProcessed, setIsProcessed] = useState(false); 
+  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
+  const { walletAddress, networkClient, } = useSelector((state: RootState) => state.walletConnector); 
   const userCrucibleData = useSelector(
     (state: RootState) => state.crucible.userCrucibleDetails
   );
@@ -171,7 +159,7 @@ export const Withdraw = () => {
 
   const getRewardAmount = () => {
     if (farm?.includes("BNB")){
-      return LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.rewards[0]?.rewardAmount || "0";
+      return LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || "0";
     } else {
       return userStake?.rewardOf || 0
     }
@@ -179,7 +167,7 @@ export const Withdraw = () => {
 
   const getRewardSymbol = () => {
     if (farm?.includes("BNB")){
-      return LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.rewards[0]?.rewardAmount || "0"; //get from ibrahim
+      return crucible.LP_symbol; //get from ibrahim
     } else {
       return crucible.symbol
     }
@@ -200,8 +188,8 @@ export const Withdraw = () => {
       const client = new CrucibleClient(web3Helper);
 
     if (isLPFarm(farm)){
-      currency = LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.stakeId;
-      stakingAddress = LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.stakingAddress || ""
+      currency = LPStakingDetails[farm!]?.stakeId;
+      stakingAddress = LPStakingDetails[farm!]?.stakingAddress || ""
       amount = "0";
       network =  crucible?.network
       userAddress = walletAddress as string
@@ -298,6 +286,7 @@ export const Withdraw = () => {
             <FButton
               title={"Withdraw Rewards"}
               className={"w-100"}
+              disabled={Number(getRewardAmount()) === 0}
               onClick={
                 ownProps.isApprovalMode
                   ? () => ownProps.onApproveClick()
@@ -314,7 +303,7 @@ export const Withdraw = () => {
             ></FButton>
           )}
           // currency={crucible!.currency}
-          currency={isSingleTokenFarm(farm)? crucible!.currency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.LPaddress}`}
+          currency={isSingleTokenFarm(farm)? crucible!.currency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
           contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
           userAddress={walletAddress as string}
           amount={"0.0001"}

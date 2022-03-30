@@ -27,7 +27,7 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
 import {
-  getLatestStepToRender, getObjectReadableFarmName, isLPFarm, isSingleTokenFarm 
+  getLatestStepToRender, isLPFarm, isSingleTokenFarm 
   // getNextStepFlowStepId
 } from "../../../common/Helper";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
@@ -79,20 +79,8 @@ export const Stake = () => {
   } = useSelector((state: RootState) => state.approval);
 
   useEffect(() => {
-    console.log(
-      "appr val",
-      approvals,
-      walletAddress,
-      CRUCIBLE_CONTRACTS_V_0_1["BSC"].router,
-      crucible?.baseCurrency,
-      approvals[
-        approvalKey(
-          walletAddress as string,
-          CRUCIBLE_CONTRACTS_V_0_1["BSC"].router,
-          crucible?.baseCurrency
-        )
-      ]
-    );
+    console.log( "appr val", approvals, walletAddress, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible?.baseCurrency, 
+    approvals[ approvalKey( walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible?.baseCurrency ) ] );
     if (
       Number(
         approvals[
@@ -209,8 +197,8 @@ export const Stake = () => {
       const client = new CrucibleClient(web3Helper);
 
     if (isLPFarm(farm)){
-      currency = LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.stakeId;
-      stakingAddress = LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.stakingAddress || ""
+      currency = LPStakingDetails[farm!]?.stakeId;
+      stakingAddress = LPStakingDetails[farm!]?.stakingAddress || ""
       amount = amount.toString();
       network =  crucible?.network
       userAddress = walletAddress as string
@@ -277,11 +265,13 @@ export const Stake = () => {
 
   const getAmountSymbol = () => {
     if (farm?.includes("BNB")){
-      return crucible?.symbol;
+      return crucible?.LP_symbol;
     } else {
-      return (userCrucibleData?.symbol)
+      return (crucible?.symbol)
     }
   }
+
+  console.log(getAmount(), typeof(getAmount()), 'amount')
 
   return (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
@@ -337,8 +327,7 @@ export const Stake = () => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-        You have {getAmount()} available in Token 
-        {getAmountSymbol()} to Stake.
+        You have {getAmount()} available in Token {getAmountSymbol()} to Stake.
       </FTypo>
       {meV2._id && isConnected ? (
         <ApprovableButtonWrapper
@@ -347,6 +336,7 @@ export const Stake = () => {
               <FButton
                 title={ownProps.isApprovalMode ? "Approve" : "Stake Crucible"}
                 className={"w-100"}
+                disabled={Number(getAmount()) === 0}
                 onClick={
                   ownProps.isApprovalMode
                     ? () => ownProps.onApproveClick()
@@ -358,7 +348,7 @@ export const Stake = () => {
             </div>
           )}
           // currency={crucible!.baseCurrency}
-          currency={ isSingleTokenFarm(farm)? crucible!.baseCurrency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails[`${getObjectReadableFarmName(farm)!}_LP`]?.LPaddress}`}
+          currency={ isSingleTokenFarm(farm)? crucible!.baseCurrency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
           contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
           userAddress={walletAddress as string}
           amount={"0.0001"}

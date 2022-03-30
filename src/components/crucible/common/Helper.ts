@@ -282,8 +282,7 @@ const saveCurrentPreferncesInNewSequence = async (newSequence: any, oldHistory: 
   for ( let i = 0; i < oldHistory.length; i++ ){
     if (oldHistory[i].status === "skip"){
       for ( let j = 0; j < newSequence.length; j++ ){
-        if (newSequence[j].step._id === oldHistory[i].step._id){
-          console.log('save prefence step', newSequence[j], oldHistory[i])
+        if (newSequence[j].step._id === oldHistory[i].step._id){ 
           await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
             newSequence[j]._id,
             { status: "skip" },
@@ -339,16 +338,16 @@ export const getLatestStepToRender = async (
     let errorResponse = e && e.response && e.response.data.status;
     if (errorResponse?.code === 400) {
       try {
-        // let latestResponse =
+        let latestResponse =
         await SFSH_API.getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
           state.id,
           token
         );
-        let latestResponse =
-          await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
-            state.id,
-            token
-          );
+        // let latestResponse =
+        //   await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
+        //     state.id,
+        //     token
+        //   );
         latestResponse =
           latestResponse.data &&
           latestResponse.data.body &&

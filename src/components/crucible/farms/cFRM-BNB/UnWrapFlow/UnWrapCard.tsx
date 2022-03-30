@@ -255,6 +255,7 @@ export const UnWrap = () => {
               <FButton
                 title={"Unwrap"}
                 className={"w-100"}
+                disabled = {Number(userCrucibleData?.balance)===0}
                 onClick={
                   ownProps.isApprovalMode
                     ? () => ownProps.onApproveClick()

@@ -297,6 +297,7 @@ export const CrucibleDeposit = () => {
                 <FButton
                   title={ownProps.isApprovalMode ? "Approve" : "Mint"}
                   className={"w-100"}
+                  disabled={Number(userCrucibleData?.baseBalance || "0") === 0}
                   onClick={
                     ownProps.isApprovalMode
                       ? () => ownProps.onApproveClick()
