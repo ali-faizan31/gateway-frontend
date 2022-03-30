@@ -32,7 +32,6 @@ const CompetitionInformation = () => {
     const [isQueryChange, setIsQueryChange] = useState(false);
     const [leaderboardData, setLeaderboardData] = useState({});
     const [competitionData, setCompetitionData] = useState({});
-    const [filteredTokenHolderList, setFilteredTokenHolderList] = useState([]);
     const [competitionParticipants, setCompetitionParticipants] = useState([]);
     const [competitionParticipantsFiltered, setCompetitionParticipantsFiltered] = useState([]);
     const [showWallets, setShowWallets] = useState(false);
@@ -66,7 +65,9 @@ const CompetitionInformation = () => {
                 if (res?.data?.body?.participants) {
                     const formattedRes = res?.data?.body?.participants?.map(p => ({
                         ...p,
-                        levelUpUrl: `${leaderboardDexUrl}swap?inputCurrency=BNB&outputCurrency=${tokenContractAddress}&exactField=output&exactAmount=${TruncateWithoutRounding(p?.levelUpAmount, 2).toLocaleString('en-US')}`
+                        ...(p?.tokenHolderQuantity && {tokenHolderQuantity: TruncateWithoutRounding(eitherConverter(p?.tokenHolderQuantity, 'wei').ether, 2)?.toLocaleString('en-US')}),
+                        levelUpUrl: `${leaderboardDexUrl}swap?inputCurrency=BNB&outputCurrency=${tokenContractAddress}&exactField=output&exactAmount=${TruncateWithoutRounding(p?.levelUpAmount, 2)?.toLocaleString('en-US')}`,
+                        ...(p?.levelUpAmount && {formattedLevelUpAmount: TruncateWithoutRounding(p?.levelUpAmount, 2)})
                     }));
                     setCompetitionParticipants(formattedRes);
                     setCompetitionParticipantsFiltered(formattedRes);
@@ -122,7 +123,7 @@ const CompetitionInformation = () => {
     );
 
     const columns = [
-        {prop: 'rank', title: 'Rank', cell: (params) => <div data-label="Rank">{params.rank}</div>},
+        {prop: 'rank', title: 'Rank', cell: (params) => <div data-label="Rank">{params?.rank}</div>},
         {
             prop: 'tokenHolderAddress',
             title: 'Wallet Address',
@@ -137,19 +138,18 @@ const CompetitionInformation = () => {
         {
             prop: 'tokenHolderQuantity',
             title: 'Balance',
-            cell: (params) => <div
-                data-label="Balance">{params.tokenHolderQuantity && TruncateWithoutRounding(eitherConverter(params.tokenHolderQuantity, 'wei').ether, 2).toLocaleString('en-US')}</div>
+            cell: (params) => <div data-label="Balance">{params?.tokenHolderQuantity}</div>
         },
         {
             prop: 'humanReadableGrowth',
             title: 'Growth / Reduction',
-            cell: (params) => <div data-label="Growth / Reduction">{params.humanReadableGrowth}</div>
+            cell: (params) => <div data-label="Growth / Reduction">{params?.humanReadableGrowth}</div>
         },
         {
             prop: 'levelUpAmount',
             title: 'Level Up Amount',
             cell: (params) => <div
-                data-label="Level Up Amount">{TruncateWithoutRounding(params.levelUpAmount, 2)} FRM</div>
+                data-label="Level Up Amount">{TruncateWithoutRounding(params?.levelUpAmount, 2)} FRM</div>
         },
         {
             prop: 'levelUpUrl',
@@ -170,12 +170,10 @@ const CompetitionInformation = () => {
 
     const csvHeaders = [
         {label: 'Rank', key: 'rank'},
-        {label: 'Wallet Address', key: 'address'},
-        {label: 'Balance', key: 'formattedBalance'},
-        {label: 'Growth / Reduction', key: 'formattedGrowthRate'},
-        {label: 'Status', key: 'status'},
-        {label: 'Level Up Amount', key: 'formattedLevelUpAmount'},
-        {label: 'Get Token', key: 'levelUpUrl'}
+        {label: 'Wallet Address', key: 'tokenHolderAddress'},
+        {label: 'Balance', key: 'tokenHolderQuantity'},
+        {label: 'Growth / Reduction', key: 'humanReadableGrowth'},
+        {label: 'Level Up Amount', key: 'formattedLevelUpAmount'}
     ];
 
     const onQueryChange = (e) => {
@@ -197,7 +195,7 @@ const CompetitionInformation = () => {
         <>
             <Toaster/>
             <CSVLink
-                data={filteredTokenHolderList}
+                data={competitionParticipants}
                 headers={csvHeaders}
                 filename={`${competitionData?.name}-${moment(new Date()).format('DD-MMM-YYYY')}.csv`}
                 ref={exportRef}
@@ -227,7 +225,7 @@ const CompetitionInformation = () => {
                             />
 
                             {!isPublicUser && (
-                                <FButton type="button" className="btn-create f-ml-1" disabled={isLoading}
+                                <FButton type="button" className="btn-create f-ml-1" disabled={!isLoading}
                                          onClick={onExportClick} title={' Export to CSV'}/>
                             )}
                         </FGridItem>
