@@ -239,7 +239,7 @@ const CompetitionInformation = () => {
         {label: 'Rank', key: 'rank'},
         {label: 'Wallet Address', key: 'tokenHolderAddress'},
         {label: 'Balance', key: 'tokenHolderQuantity'},
-        {label: 'Growth / Reduction', key: 'humanReadableGrowth'},
+        {label: 'Growth / Reduction', key: 'humanReadableGrowth.data'},
         {label: 'Level Up Amount', key: 'formattedLevelUpAmount'}
     ];
 
