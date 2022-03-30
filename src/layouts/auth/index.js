@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import {
-  FLayout,
-  FMain,
+  // FLayout,
+  // FMain,
   FGrid,
   FGridItem,
   FItem,
-  FContainer,
+  // FContainer,
 } from "ferrum-design-system";
 
 function useWindowSize() {
@@ -22,7 +22,7 @@ function useWindowSize() {
 }
 
 const AuthLayout = ({ children }) => {
-  const [width, height] = useWindowSize();
+  const [width] = useWindowSize();
   const [showPicture, setShowPicture] = useState(true); 
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const AuthLayout = ({ children }) => {
         <FGridItem
           size={[4, 12, 12]}
           dir={"column"}
-          display={!showPicture && "none"}
+          // display={!showPicture && "none"}
           alignX={"center"}
           alignY={"center"}
           display={"block"}

@@ -3,7 +3,7 @@ import {
   FButton,
   FCard,
   FContainer,
-  FInputCheckbox,
+  // FInputCheckbox,
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../assets/img/icon-arrow-square.svg";
@@ -12,22 +12,20 @@ import { useSelector } from "react-redux";
 import { MetaMaskConnector } from "../../../container-components";
 import { RootState } from "../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../routes/paths";
-import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog"; 
+import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId } from "../../../_apis/StepFlowStepHistory";
 import { CrucibleMyBalance } from "../common/CardMyBalance";
- 
+
 const Introduction = () => {
   const history = useHistory();
   const location: any = useLocation();
 
   const [neverShowAgain, setNeverShowAgain] = useState(false);
-  const [stepFlowResponse, setStepFlowResponse] = useState<any>(undefined);
+  // const [stepFlowResponse, setStepFlowResponse] = useState<any>(undefined);
   const { meV2, tokenV2 } = useSelector(
     (state: RootState) => state.walletAuthenticator
   );
-  const { stepFlowStepHistory, currentStep } = useSelector(
-    (state: RootState) => state.crucible
-  );
+  const { currentStep } = useSelector((state: RootState) => state.crucible);
   const { isConnected } = useSelector(
     (state: RootState) => state.walletConnector
   );
@@ -37,6 +35,7 @@ const Introduction = () => {
     if (location.state === undefined) {
       history.push(PATH_DASHBOARD.crucible.index);
     }
+    // eslint-disable-next-line
   }, [location]);
 
   useEffect(() => {
@@ -47,6 +46,7 @@ const Introduction = () => {
         state: location.state,
       });
     }
+    // eslint-disable-next-line
   }, [isConnected, meV2]);
 
   //   useEffect(() => {
@@ -58,11 +58,20 @@ const Introduction = () => {
   //     }
   //   }, [tokenV2, location, stepFlowStepHistory])
 
+  useEffect(() => {
+    setNeverShowAgain(false);
+  }, []);
+
   const onGetStartedClick = async () => {
-    console.log(neverShowAgain)
-    if ( neverShowAgain === true ){
-      let data = { status: "completed" }
-      let updateResponse: any = await updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+    console.log(neverShowAgain);
+    if (neverShowAgain === true) {
+      let data = { status: "completed" };
+      let updateResponse: any =
+        await updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
+          currentStep._id,
+          data,
+          tokenV2
+        );
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       console.log(updateResponse, "------------------");
       history.push({
@@ -77,9 +86,9 @@ const Introduction = () => {
     }
   };
 
-  const onNeverShowClick = (value: any) => {
-    setNeverShowAgain(value);
-  };
+  // const onNeverShowClick = (value: any) => {
+  //   setNeverShowAgain(value);
+  // };
 
   return (
     <FContainer className="f-mb-2 f-mr-0">

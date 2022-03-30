@@ -1,12 +1,13 @@
 import React from "react";
 import {
   PATH_PUBLIC_USER,
-  PATH_ADMIN,
+  // PATH_ADMIN,
   PATH_DASHBOARD,
 } from "../../routes/paths";
 
 const getSideMenuIcon = (name: any) => (
   <img
+    alt="side menu item"
     src={`/ferrum/${name}`}
     height="22px"
     width="22px"
@@ -17,6 +18,7 @@ const getSideMenuIcon = (name: any) => (
 
 export const getCurrencyIcon = (src: any) => (
   <img
+    alt="side menu item"
     src={`${src}`}
     height="22px"
     width="22px"
