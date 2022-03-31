@@ -72,8 +72,9 @@ export class Web3Helper {
       "1000000000000000000",
       [currency,"0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c","0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"]
     ).call()
-
-    if(response.length){
+    console.log(response, currency, 'pricing response')
+    if(response.length > 0){
+      console.log(response, 'pricing response')
       return await this.amountToHuman(response[2],18)
     }
     return 0

@@ -18,9 +18,9 @@ export const CruciblePrice = () => {
 
   const DATA_PRICE = [
     { network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0 },
-    { network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0 },
-    { network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0 },
-    { network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0 },
+    { network: "cFRM", price_percentage: "4.8", price: tokenPrices["cFRM"] || 0 },
+    { network: "FRMx", price_percentage: "4.8", price: tokenPrices["FRMx"] || 0 },
+    { network: "cFRMx", price_percentage: "4.8", price: tokenPrices["cFRMx"] || 0 },
   ];
   return (
     <FCard>
@@ -42,7 +42,8 @@ export const CruciblePrice = () => {
                       <FTypo>{item.network}</FTypo>
                     </FItem>
                     <FTypo color="#28B885" size={14} align={"right"}>
-                      <IconArrowGreen width={15} /> {item.price_percentage}%
+                      <IconArrowGreen width={15} /> 
+                      {/* {item.price_percentage}% */}
                     </FTypo>
                   </FItem>
                   <FTypo

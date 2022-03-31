@@ -15,7 +15,6 @@ export interface IApprovableButtonWrapperViewProps {
   error?: string;
   onApproveClick: () => void;
 }
-
 export interface IApprovableButtonWrapperOwnProps {
   currency: string;
   contractAddress: string;
@@ -23,11 +22,9 @@ export interface IApprovableButtonWrapperOwnProps {
   amount: string;
   View: (props: IApprovableButtonWrapperViewProps) => any;
 }
-
 function mapStateToProps(state: any): ApprovalState {
   return state.approval;
 }
-
 export function approvalKey(
   userAddress: string,
   contractAddress: string,
@@ -35,7 +32,6 @@ export function approvalKey(
 ) {
   return `${userAddress}|${contractAddress}|${currency}`;
 }
-
 export const doGetApproval = createAsyncThunk(
   "approveButton/doGetApproval",
   async (
@@ -55,7 +51,6 @@ export const doGetApproval = createAsyncThunk(
       contractAddress,
       currency
     );
-
     if (!!allocation && allocation.data) {
       ctx.dispatch(
         approvableButtonSlice.actions.allocationUpdated({
@@ -70,12 +65,11 @@ export const doGetApproval = createAsyncThunk(
     // const allocation = await api.getContractAllocation(userAddress, contractAddress, currency);
     // console.log('doGetApproval', payload, {allocation});
     // if (!!allocation) {
-    // 	ctx.dispatch(approvableButtonSlice.actions.allocationUpdated({
-    // 		contractAddress, userAddress, currency, allocation: allocation.allocation }))
+    //  ctx.dispatch(approvableButtonSlice.actions.allocationUpdated({
+    //    contractAddress, userAddress, currency, allocation: allocation.allocation }))
     // }
   }
 );
-
 export const doApprove = createAsyncThunk(
   "approveButton/doApprove",
   async (
@@ -106,7 +100,6 @@ export const doApprove = createAsyncThunk(
     }
   }
 );
-
 //Action.approvableButtonSlice/approveTransactionReceived
 export const approvableButtonSlice = createSlice({
   name: "approvableButton",
@@ -156,7 +149,6 @@ export const approvableButtonSlice = createSlice({
     });
   },
 });
-
 async function updateEvent(
   dispatch: Dispatch<AnyAction>,
   e: ChainEventBase,
@@ -189,7 +181,6 @@ async function updateEvent(
     return { ...e, status: "failed" };
   }
 }
-
 export function ApprovableButtonWrapper(
   ownProps: IApprovableButtonWrapperOwnProps
 ) {
@@ -204,14 +195,12 @@ export function ApprovableButtonWrapper(
     undefined
   );
   const { library } = useWeb3React();
-
   useEffect(() => {
     if (userAddress && contractAddress && currency) {
       dispatch(
         doGetApproval({ userAddress, contractAddress, currency, networkClient })
       );
     }
-
     if (library && !networkClient) {
       console.log("web3 react connect set network client");
       setNetworkClient(library);

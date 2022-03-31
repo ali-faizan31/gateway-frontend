@@ -10,8 +10,8 @@ export const CRUCIBLE_CONTRACTS_V_0_1: any = {
     staking: "",
   },
   BSC: {
-    factory: "0x60267694219dc99aa00e866508b9aebbcf6649dd",
-    router: "0x54c4c29e8f46b100ef10af9331dabff33dfb1d62",
+    factory: "0x948b3c3d27bc472c46addf617439248e9269e1e1",
+    router: "0x3b83a1a700af32d17ce138d2527b2b48adba9b73",
     staking: "",
   },
   ETHEREUM: {

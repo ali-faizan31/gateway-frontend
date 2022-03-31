@@ -6,9 +6,7 @@ import {
   Dispatch,
 } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-
 const FETCH_TIMEOUT: number = 1000 * 25;
-
 export interface ChainEventBase {
   id: string;
   userAddress: string;
@@ -23,9 +21,7 @@ export interface ChainEventBase {
   reason?: string;
   retry: number;
 }
-
 export type ChainEventStatus = "" | "pending" | "failed" | "completed";
-
 export interface ChainEventItemProps {
   network: string;
   id: string;
@@ -39,7 +35,6 @@ export interface ChainEventItemProps {
     dispatch: Dispatch<AnyAction>
   ) => Promise<ChainEventBase>;
 }
-
 export const chainEventsSlice = createSlice({
   name: "ChainEvents",
   initialState: {} as { [k: string]: ChainEventBase },
@@ -62,13 +57,11 @@ export const chainEventsSlice = createSlice({
     },
   },
 });
-
 const refreshPendingThunk = createAsyncThunk(
   "data/refreshPending",
   async (payload: {}, thunk) => {
     const state = thunk.getState() as any;
     // Only applies to the fully signed in and initialized state...
-
     const we = state.watchEvents;
     const items = Object.values(we);
     console.log("WATCHING ", { we });
@@ -92,9 +85,7 @@ const refreshPendingThunk = createAsyncThunk(
     });
   }
 );
-
 const init: any = {};
-
 function kickOff(dispatch: any) {
   if (!!init.init) {
     return;
@@ -107,7 +98,6 @@ function kickOff(dispatch: any) {
     }, FETCH_TIMEOUT);
   }
 }
-
 /**
  * This component will manage a watchable event. Wrap watchable events in this component.
  * It will call the bakend periodically to update the event status.
