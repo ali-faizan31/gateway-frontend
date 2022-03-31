@@ -27,6 +27,7 @@ import {
 } from "../../../common/Helper";
 import { useHistory, useLocation, useParams } from "react-router";
 import { ClipLoader } from "react-spinners";
+import eitherConverter from "ether-converter";
 
 export const Withdraw = () => {
   const dispatch = useDispatch();
@@ -164,7 +165,8 @@ export const Withdraw = () => {
 
   const getRewardAmount = () => {
     if (farm?.includes("BNB")){
-      return LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || "0";
+      return Number(eitherConverter(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || "0", 'wei').ether)
+      // return LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || "0";
     } else {
       return userStake?.rewardOf || 0
     }

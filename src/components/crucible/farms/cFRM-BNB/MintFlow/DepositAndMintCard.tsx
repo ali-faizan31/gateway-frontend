@@ -252,7 +252,7 @@ export const CrucibleDeposit = () => {
             <FGridItem size={[6, 6, 6]}>
               <FItem bgColor="#1C2229" className={"f-p-2"}>
                 <FTypo size={20} className="f-mb-1">
-                  cFRM Price (USD)
+                {crucible?.symbol} (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
                   ${tokenPrices["cFRM"] || "0"}
@@ -296,7 +296,7 @@ export const CrucibleDeposit = () => {
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
                 <span onClick={() => setMintAmount(userCrucibleData?.baseBalance)}>
-                  cFRM
+                {crucible?.symbol}
                 </span>
               </FTypo>
             }

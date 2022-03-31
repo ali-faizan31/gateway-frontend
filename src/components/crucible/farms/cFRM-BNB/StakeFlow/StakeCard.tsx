@@ -36,6 +36,7 @@ import toast from "react-hot-toast";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { ClipLoader } from "react-spinners";
+import { getTokenInformation } from "../../../../../utils/global.utils";
 
 export const Stake = () => {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ export const Stake = () => {
   const [amount, setAmount] = useState(0);
   const history = useHistory();
   const [isProcessed, setIsProcessed] = useState(false);
-  // const [isSubmitted, setIsSubmitted] = useState(false);
+  const [tokenInfo, setTokenInfo] = useState<any>({});
 
   //@ts-ignore
   const crucible = useSelector((state) => state.crucible.selectedCrucible);
@@ -209,8 +210,6 @@ export const Stake = () => {
       network =  crucible?.network
       userAddress = walletAddress as string
 
-      
-
       response = await client.stakeLPToken(
         dispatch,
         currency,
@@ -264,7 +263,14 @@ export const Stake = () => {
     }
   };
 
-  const getAmount = () => {
+  
+  useEffect(() => {
+    if (crucible.contractAddress){
+     getTokenInformation(networkClient, walletAddress, crucible.contractAddress, setTokenInfo, tokenInfo)
+    }
+   }, [crucible])
+
+  const getAmount = () => { 
     if (farm?.includes("BNB")){
       return crucible?.LP_balance || 0;
     } else {
@@ -280,7 +286,7 @@ export const Stake = () => {
     }
   }
 
-  console.log(getAmount(), typeof(getAmount()), 'amount')
+  console.log(crucible, 'amount')
 
   return (
     <>
@@ -344,7 +350,7 @@ export const Stake = () => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-        You have {getAmount()} available in Token {getAmountSymbol()} to Stake.
+        You have {tokenInfo.balance} available in Token {getAmountSymbol()} to Stake.
       </FTypo>
       {meV2._id && isConnected ? (
         <ApprovableButtonWrapper
