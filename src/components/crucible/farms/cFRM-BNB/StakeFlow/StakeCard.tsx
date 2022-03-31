@@ -79,9 +79,12 @@ export const Stake = () => {
     approvals,
   } = useSelector((state: RootState) => state.approval);
 
+  
+  console.log('stake payload' , LPStakingDetails)
+
   useEffect(() => {
     console.log( "appr val", approvals, walletAddress, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible?.baseCurrency, 
-    approvals[ approvalKey( walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible?.baseCurrency ) ] );
+    approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible?.baseCurrency) ] );
     if (
       Number(
         approvals[
@@ -185,7 +188,7 @@ export const Stake = () => {
   //   }
   // };
 
-  const onStakeClick = async () => {
+  const onStakeClick = async (amountToStake:number) => {
     if (networkClient) {
       let currency: string = "";
       let stakingAddress: string = "";
@@ -202,9 +205,11 @@ export const Stake = () => {
     if (isLPFarm(farm)){
       currency = LPStakingDetails[farm!]?.stakeId;
       stakingAddress = LPStakingDetails[farm!]?.stakingAddress || ""
-      amount = amount.toString();
+      amount = amountToStake.toString();
       network =  crucible?.network
       userAddress = walletAddress as string
+
+      
 
       response = await client.stakeLPToken(
         dispatch,
@@ -218,7 +223,7 @@ export const Stake = () => {
     } else if (isSingleTokenFarm(farm)){
       currency = crucible!.currency;
       stakingAddress = (crucible?.staking || [])[0]?.address || ""
-      amount = amount.toString();
+      amount = amountToStake.toString();
       network =  crucible?.network
       userAddress = walletAddress as string
 
@@ -348,11 +353,11 @@ export const Stake = () => {
               <FButton
                 title={ownProps.isApprovalMode ? "Approve" : "Stake Crucible"}
                 className={"w-100"}
-                disabled={Number(getAmount()) === 0}
+                // disabled={Number(getAmount()) === 0}
                 onClick={
                   ownProps.isApprovalMode
                     ? () => ownProps.onApproveClick()
-                    : () => onStakeClick()
+                    : () => onStakeClick(amount)
                       // crucible+ddress as string
                     
                 }

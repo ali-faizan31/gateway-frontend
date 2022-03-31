@@ -50,7 +50,7 @@ const Dashboard = () => {
   return (
     <>
       <FContainer type="fluid">
-        <FButton
+        {/* <FButton
           type="button"
           className="btn-create f-ml-1"
           onClick={() =>
@@ -64,7 +64,7 @@ const Dashboard = () => {
             )
           }
           title={"Mint"}
-        ></FButton>
+        ></FButton> */}
         <h1>Dashboards</h1>
       </FContainer>
     </>

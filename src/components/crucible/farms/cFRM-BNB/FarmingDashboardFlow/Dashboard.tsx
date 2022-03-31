@@ -224,6 +224,7 @@ export const Manage = () => {
       const actions = crucibleSlice.actions;
       const web3Helper = new Web3Helper(networkClient as any);
       const client = new CrucibleClient(web3Helper);
+      const res = await web3Helper.getTokenPriceFromRouter()
       const userCrucibleDetails = await client.getUserCrucibleInfo(
         ctx.dispatch,
         payload.crucibleCurrency,
@@ -254,6 +255,7 @@ export const Manage = () => {
       const actions = crucibleSlice.actions;
       const web3Helper = new Web3Helper(networkClient as any);
       const client = new CrucibleClient(web3Helper);
+      console.log('first', location.state)
       const userStakingDetails = await client.getLPStakingInfo(
         ctx.dispatch,
         location.state.LpCurrency,
@@ -268,7 +270,7 @@ export const Manage = () => {
             data: {
               ...userStakingDetails.data,
               stakingAddress: payload.stakingAddress,
-              LPaddress: location.state.LpCurrency,
+              LPaddress: location.state.LpCurrency, 
             },
           })
         );

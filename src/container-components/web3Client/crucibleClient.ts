@@ -183,6 +183,7 @@ export class CrucibleClient {
 				params: [],
 			} );
 			if (!!userCrucibleInfo) {
+                console.log(userCrucibleInfo, "user crucible info")
                 return userCrucibleInfo;
 			}
 			return 

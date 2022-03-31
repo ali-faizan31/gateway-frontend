@@ -193,6 +193,9 @@ export const CardAPR = () => {
     };
   });
 
+
+
+  
   const getStepToRender = async (
     id: any,
     stepFlowName: any,
