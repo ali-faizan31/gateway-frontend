@@ -17,11 +17,13 @@ import { STEP_FLOW_IDS } from "../../../common/utils";
 import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
+import { ClipLoader } from "react-spinners";
 
 export const UnstakeRemoveLiquidity = () => {
   const { farm } = useParams<{ farm?: string }>(); 
   const dispatch = useDispatch();
   const location: any = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
     (state: RootState) => state.crucible
@@ -33,6 +35,7 @@ export const UnstakeRemoveLiquidity = () => {
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
 
   const onStakeClick =() => {
+    setIsLoading(true)
     let nextStepInfo: any;
     let newFarm: any;
     if (farm==="cFRM-BNB"){
@@ -52,8 +55,8 @@ export const UnstakeRemoveLiquidity = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      newFarm
+      newFarm,
+      setIsLoading
     );
   }
 
@@ -77,12 +80,20 @@ export const UnstakeRemoveLiquidity = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      newFarm
+      newFarm,
+      setIsLoading
     );
   }
 
   return (
+    <>
+    {isLoading ? (
+       <FCard>
+       <FItem align={"center"}>
+         <ClipLoader color="#cba461" loading={true} size={150} />
+       </FItem>
+     </FCard>
+    ) : (
     <FContainer className="f-mr-0" width={700}>
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-crucible-steps">
@@ -165,5 +176,8 @@ export const UnstakeRemoveLiquidity = () => {
         </ul>
       </FCard>
     </FContainer>
+    )
+    }
+    </>
   );
 };

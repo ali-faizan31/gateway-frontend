@@ -37,10 +37,12 @@ import {
 } from "../../../common/Helper";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
+import { ClipLoader } from "react-spinners";
 // import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 export const CrucibleDeposit = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { farm } = useParams<{ farm?: string }>();
   const {
     isConnected,
@@ -109,6 +111,7 @@ export const CrucibleDeposit = () => {
   const [isProcessed, setIsProcessed] = useState(false);
 
   const getStepCompleted = async (renderNeeded: any) => {
+    setIsLoading(true)
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) =>
@@ -143,8 +146,9 @@ export const CrucibleDeposit = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded,
-        farm
+        farm,
+        setIsLoading,
+        renderNeeded, 
       );
     } catch (e: any) {
       let errorResponse =
@@ -192,7 +196,8 @@ export const CrucibleDeposit = () => {
   };
 
   const onContinueToNextStepClick = () => {
-    let nextStepInfo: any
+    let nextStepInfo: any;
+    setIsLoading(true)
     if (farm === "cFRM-BNB" || farm === "cFRMx-BNB"){
       nextStepInfo  = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].generalAddLiquidity;
     } else if (farm === "cFRM" || farm === "cFRMx"){
@@ -208,12 +213,20 @@ export const CrucibleDeposit = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm
+      farm,
+      setIsLoading
     );
   };
 
   return (
+    <>
+    {isLoading ? (
+       <FCard>
+       <FItem align={"center"}>
+         <ClipLoader color="#cba461" loading={true} size={150} />
+       </FItem>
+     </FCard>
+    ) : (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title f-mb-2">
         <FItem display={"flex"} alignY="center">
@@ -341,5 +354,7 @@ export const CrucibleDeposit = () => {
         onContinueToNextStepClick={() => onContinueToNextStepClick()}
       />
     </FCard>
+    )}
+    </>
   );
 };

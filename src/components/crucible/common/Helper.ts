@@ -302,25 +302,27 @@ export const getLatestStepToRender = async (
   stepFlowStepsHistory: any,
   dispatch: any,
   history: any,
-  renderNeeded: any = true,
   farm: any,
+  setIsLoading: any,
+  renderNeeded: any = true,
   saveCurrentPrefernces: any = false
 ) => {
   try { 
-    let latestResponse =  
+    // let latestResponse =  
     await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(
       state.id,
       token
     );
-    // let latestResponse = await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
-    //   state.id,
-    //   token
-    // );
+    let latestResponse = await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
+      state.id,
+      token
+    );
     latestResponse = latestResponse.data && latestResponse.data.body && latestResponse.data.body.stepFlowStepsHistory;
     if ( saveCurrentPrefernces ){
       console.log('save prefence flow')
       saveCurrentPreferncesInNewSequence(latestResponse, stepFlowStepsHistory, token)
     }
+    setIsLoading(false);
     // sequenceResponse = sequenceResponse.data && sequenceResponse.data.body && sequenceResponse.data.body.stepFlowStepsHistory;
     // let pendingStepInfo = getLatestStepWithPendingStatus(sequenceResponse);
     // dispatch(CrucibleActions.updateCurrentStep({ currentStep: pendingStepInfo?.pendingStep, currentStepIndex: pendingStepInfo?.index }));
@@ -356,7 +358,7 @@ export const getLatestStepToRender = async (
         let pendingStepInfo = getLatestStepWithPendingStatus(currentStepIndex, latestResponse);
 
         console.log(pendingStepInfo, "pendingstep");
-        if (currentStepIndex + 1 === stepFlowStepsHistory.length) {
+        if ( currentStepIndex && currentStepIndex + 1 === stepFlowStepsHistory.length) {
           //last step, move onto next step flow
           console.log("last step condition");
           dispatch(
@@ -370,12 +372,13 @@ export const getLatestStepToRender = async (
               stepFlowStepHistory: latestResponse,
             })
           );
+          setIsLoading(false);
           renderNeeded &&
             renderComponent(
               pendingStepInfo?.pendingStep.step.name,
               state,
               history,
-              farm
+              farm,
             );
         } 
         else if (
@@ -408,6 +411,7 @@ export const getLatestStepToRender = async (
               currentStepIndex: pendingStepInfo?.index,
             })
           );
+          setIsLoading(false);
           renderNeeded &&
             renderComponent(
               pendingStepInfo?.pendingStep.step.name,

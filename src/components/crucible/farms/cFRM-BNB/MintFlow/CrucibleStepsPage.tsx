@@ -19,6 +19,7 @@ export const CrucibleStepsPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const location: any = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
   const { farm } = useParams<{ farm?: string }>();
@@ -31,6 +32,7 @@ export const CrucibleStepsPage = () => {
   );
 
   const onStakeClick = () => {
+    setIsLoading(true);
     let nextStepInfo: any;
     if (farm?.includes("cFRMx")){
       nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].stake;
@@ -47,8 +49,8 @@ export const CrucibleStepsPage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm
+      farm,
+      setIsLoading
     );
   };
 

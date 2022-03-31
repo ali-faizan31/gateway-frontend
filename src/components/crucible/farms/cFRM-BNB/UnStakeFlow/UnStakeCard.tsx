@@ -27,12 +27,14 @@ import {
   getLatestStepToRender, isLPFarm, isSingleTokenFarm,
   // getNextStepFlowStepId
 } from "../../../common/Helper";
+import { ClipLoader } from "react-spinners";
 
 export const UnStake = () => {
   const dispatch = useDispatch();
   const { farm } = useParams<{ farm?: string }>();
   const history = useHistory();
   const location: any = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false); 
   const [isProcessing, setIsProcessing] = useState(false); 
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible); 
@@ -59,6 +61,7 @@ export const UnStake = () => {
   );
 
   const getStepCompleted = async (renderNeeded: any) => {
+    setIsLoading(true)
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) =>
@@ -93,8 +96,9 @@ export const UnStake = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded,
-        farm
+        farm,
+        setIsLoading,
+        renderNeeded, 
       );
     } catch (e: any) {
       let errorResponse =
@@ -196,6 +200,7 @@ export const UnStake = () => {
   };
 
   const onContinueToNextStepClick = () => {
+    setIsLoading(true)
     if (currentStep.status === "pending") {
       location.state.id = currentStep.stepFlow;
       let splitted = currentStep.stepFlowStep.name.split("-");
@@ -208,8 +213,8 @@ export const UnStake = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        true,
-        farm
+        farm,
+        setIsLoading
       );
     }
   };
@@ -231,6 +236,14 @@ export const UnStake = () => {
   }
 
   return (
+    <>
+    {isLoading ? (
+       <FCard>
+       <FItem align={"center"}>
+         <ClipLoader color="#cba461" loading={true} size={150} />
+       </FItem>
+     </FCard>
+    ) : (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title">
         <FItem display={"flex"} alignY="center">
@@ -324,5 +337,7 @@ export const UnStake = () => {
         onContinueToNextStepClick={() => onContinueToNextStepClick()}
       />
     </FCard>
+    )}
+    </>
   );
 };

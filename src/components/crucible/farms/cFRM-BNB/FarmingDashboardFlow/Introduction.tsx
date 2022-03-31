@@ -51,20 +51,12 @@ export const Introduction = () => {
   );
   const { active, library } = useWeb3React();
 
-  useEffect(() => {
-    console.log(location.state);
+  useEffect(() => { 
     if (location.state === undefined) {
       history.push(PATH_DASHBOARD.crucible.index);
     }
     // eslint-disable-next-line
-  }, [location]);
-
-  useEffect(() => {
-    if (location.state.id === undefined) {
-      history.push(PATH_DASHBOARD.crucible.index);
-    }
-    // eslint-disable-next-line
-  }, [location]);
+  }, [location]); 
 
   useEffect(() => {
     if (library && !networkClient) {
@@ -72,28 +64,9 @@ export const Introduction = () => {
     }
     // eslint-disable-next-line
   }, [active, library, networkClient]);
- 
-  
-
-  useEffect(() => {
-    if (isConnected && tokenV2 && stepFlowStepHistory.length) { 
-      getLatestStepToRender(
-        location.state,
-        tokenV2,
-        currentStep,
-        currentStepIndex,
-        stepFlowStepHistory,
-        dispatch,
-        history,
-        true,
-        farm
-      );
-    }
-    // eslint-disable-next-line
-  }, [tokenV2]);
 
   const onGetStartedClick = async () => {
-    // setIsLoading(true); 
+    setIsLoading(true); 
     try {
       let updatedCurrentStep: any = {};
       let updHistory: any = [];
@@ -129,35 +102,9 @@ export const Introduction = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        true,
-        farm, 
-      );
-      // setIsLoading(false);
-      // console.log(updateResponse);
-      // if (updateResponse) {
-      //   dispatch(
-      //     CrucibleActions.updateCurrentStep({
-      //       currentStep: updatedCurrentStep,
-      //       currentStepIndex: currentStepIndex,
-      //     })
-      //   );
-      //   dispatch(
-      //     CrucibleActions.updateStepFlowStepHistory({
-      //       stepFlowStepHistory: updHistory,
-      //     })
-      //   );
-      // }
-      // getLatestStepToRender(
-      //   location.state,
-      //   tokenV2,
-      //   currentStep,
-      //   currentStepIndex,
-      //   stepFlowStepHistory,
-      //   dispatch,
-      //   history,
-      //   false,
-      //   farm
-      // );
+        farm,
+        setIsLoading
+      ); 
     } catch (e: any) {
       let errorResponse =
         e &&
