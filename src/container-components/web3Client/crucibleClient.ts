@@ -1,5 +1,5 @@
 import { AnyAction, Dispatch } from '@reduxjs/toolkit';
-import Web3 from "web3";
+// import Web3 from "web3";
 import {Web3Helper} from "./web3Helper";
 import {crucibleApi} from '../../_apis/CrucibleApi';
 
@@ -160,6 +160,155 @@ export class CrucibleClient {
 	
 	}
 
+    async getLPStakingInfo(
+        dispatch: Dispatch<AnyAction>,
+        crucibleAddress: string,
+        userAddress:string,
+        stakingAddress: string,
+        network:string
+    ) {
+		try {
+            
+            const Api = new crucibleApi()
+            await Api.signInToServer(userAddress)
+			const userCrucibleInfo = await Api.crucibleApi({
+				command: 'userStakeInfo',
+				data: {
+                    crucible:crucibleAddress,
+                    "stakeType": "openEnded",
+                    "stakeId": crucibleAddress,
+                    "network": network ,
+                    "stakingAddress": stakingAddress,
+                    userAddress},
+				params: [],
+			} );
+			if (!!userCrucibleInfo) {
+                return userCrucibleInfo;
+			}
+			return 
+		} catch (e) {
+            console.log(e)
+            // UI handle Errors
+		}finally{
+            // Handle Modal Close
+		}
+	
+	}
+
+    async  stakeLPToken(
+        dispatch: Dispatch<AnyAction>,
+        LpAddress: string,
+        userAddress:string,
+        stakingAddress: string,
+        network:string,
+        amount:string
+    ) {
+		try {
+            
+            const Api = new crucibleApi()
+            await Api.signInToServer(userAddress)
+			const request = await Api.crucibleApi({
+				command: 'stakeGetTransaction',
+				data: {
+                    currency : `${network}:${LpAddress}`,
+                    "stakeType": "openEnded",
+                    "stakeId": LpAddress,
+                    "network": network ,
+                    amount,
+                    "stakingAddress": stakingAddress,
+                    userAddress},
+				params: [],
+			} );
+            if(request.data.data){
+                const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])    
+                return web3Helper        
+            }
+
+			return 
+		} catch (e) {
+            console.log(e)
+            // UI handle Errors
+		}finally{
+            // Handle Modal Close
+		}
+	
+	}
+
+    async  unstakeLPToken(
+        dispatch: Dispatch<AnyAction>,
+        LpAddress: string,
+        userAddress:string,
+        amount:string,
+        stakingAddress: string,
+        network:string
+    ) {
+		try {
+            
+            const Api = new crucibleApi()
+            await Api.signInToServer(userAddress)
+			const request = await Api.crucibleApi({
+				command: 'withdrawStakeGetTransaction',
+				data: {
+                    currency : `${network}:${LpAddress}`,
+                    "stakeType": "openEnded",
+                    "stakeId": LpAddress,
+                    "network": network ,
+                    amount,
+                    "stakingAddress": stakingAddress,
+                    userAddress},
+				params: [],
+			} );
+			if(request.data.data){
+                const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])    
+                return web3Helper        
+            }
+			return 
+			// return 
+		} catch (e) {
+            console.log(e)
+            // UI handle Errors
+		}finally{
+            // Handle Modal Close
+		}
+	
+	}
+
+    async  withdrawRewardsLPToken(
+        dispatch: Dispatch<AnyAction>,
+        LpAddress: string,
+        userAddress:string,
+        stakingAddress: string,
+        network:string
+    ) {
+		try {
+            
+            const Api = new crucibleApi()
+            await Api.signInToServer(userAddress)
+			const request = await Api.crucibleApi({
+				command: 'takeRewardsGetTransaction',
+				data: {
+                    "stakeType": "openEnded",
+                    "stakeId": LpAddress,
+                    "network": network ,
+                    "stakingAddress": stakingAddress,
+                    userAddress},
+				params: [],
+			} );
+
+            if(request.data.data){
+                const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])    
+                return web3Helper        
+            }
+			return 
+		} catch (e) {
+            console.log(e)
+            // UI handle Errors
+		}finally{
+            // Handle Modal Close
+		}
+	
+	}
+
     async getPairPrice(dispatch:Dispatch,crucible:string,base:string,userAddress: string){
 		try {
             const Api = new crucibleApi()
@@ -265,7 +414,7 @@ export class CrucibleClient {
             })
 
             if(request.data.data){
-                const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])            
+                // const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])            
             }
            
 			return

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { format, parseISO } from "date-fns";
+// import { format, parseISO } from "date-fns";
 import { useForm } from "react-hook-form";
 import {
   FInputText,
@@ -14,28 +14,31 @@ import {
   FInputCheckbox,
 } from "ferrum-design-system";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
-import * as validations from "../../utils/validations";
-import { PATH_ADMIN, PATH_DASHBOARD } from "../../routes/paths";
-import { DatePicker } from "antd";
-import moment from "moment";
+// import * as validations from "../../utils/validations";
+import { 
+  // PATH_ADMIN,
+   PATH_DASHBOARD } from "../../routes/paths";
+// import { DatePicker } from "antd";
+// import moment from "moment";
 import { getAllLeaderboards } from "../../_apis/LeaderboardCrud";
 import { addCompetition } from "../../_apis/CompetitionCrud";
-import { getAllCompetitionsDispatch } from "../../redux/slices/competition";
+// import { getAllCompetitionsDispatch } from "../../redux/slices/competition";
 // import "./Competition.scss";
 import { chainIdList } from "../leaderboard/LeaderboardHelper";
 import { TOKEN_TAG } from "../../utils/const.utils";
 
 export default function NewCompetition() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const history = useHistory();
   let token = localStorage.getItem(TOKEN_TAG);
   const [leaderboardList, setLeaderboardList] = useState([]);
 
   useEffect(() => {
     getLeaderboardListing();
+    // eslint-disable-next-line
   }, []);
 
   const newCompetitionSchema = Yup.object().shape({
@@ -58,12 +61,12 @@ export default function NewCompetition() {
   };
 
   const {
-    reset,
+    // reset,
     register,
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-    watch,
+    // watch,
   } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(newCompetitionSchema),

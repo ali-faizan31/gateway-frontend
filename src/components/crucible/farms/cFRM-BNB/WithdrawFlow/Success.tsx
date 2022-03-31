@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   FCard,
@@ -13,52 +13,156 @@ import { ReactComponent as IconNetworkcFRM } from "../../../../../assets/img/ico
 import { ReactComponent as IconNetworkcFRMx } from "../../../../../assets/img/icon-network-cfrmx.svg";
 import { ReactComponent as IconNetworkLeaderboard } from "../../../../../assets/img/icon-network-leaderboard.svg";
 import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
-import { PATH_DASHBOARD } from "../../../../../routes/paths";
+// import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
-import { getLatestStepToRender } from "../../../common/Helper"; import * as CrucibleActions from "../../../redux/CrucibleActions";
+import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
+import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
-import { useHistory, useLocation } from "react-router"
-import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
+import { useHistory, useLocation, useParams } from "react-router";
+import { STEP_FLOW_IDS } from "../../../common/utils";
+// import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
 
 export const Success = () => {
-  const dispatch = useDispatch()
-  const location: any = useLocation(); 
+  const dispatch = useDispatch();
+  const { farm } = useParams<{ farm?: string }>();
+  const location: any = useLocation();
   const history = useHistory();
-  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
-  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
+    (state: RootState) => state.crucible
+  );
+  const { tokenV2 } = useSelector(
+    (state: RootState) => state.walletAuthenticator
+  );
 
   useEffect(() => {
     getStepCompleted(false);
-  }, [])
+    //eslint-disable-next-line
+  }, []);
 
-  const getStepCompleted = async (renderNeeded: any) => { 
+  const getStepCompleted = async (renderNeeded: any) => {
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
-      let updHistory = stepFlowStepHistory.map((obj, index) => index === currentStepIndex ? { ...obj, status: "completed" } : obj);
+      let updHistory = stepFlowStepHistory.map((obj, index) =>
+        index === currentStepIndex ? { ...obj, status: "completed" } : obj
+      );
       let data = { status: "completed" };
 
-      dispatch(CrucibleActions.updateCurrentStep({ currentStep: updatedCurrentStep, currentStepIndex: currentStepIndex }));
-      dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: updHistory }));
+      dispatch(
+        CrucibleActions.updateCurrentStep({
+          currentStep: updatedCurrentStep,
+          currentStepIndex: currentStepIndex,
+        })
+      );
+      dispatch(
+        CrucibleActions.updateStepFlowStepHistory({
+          stepFlowStepHistory: updHistory,
+        })
+      );
 
-    let updateResponse: any = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
-      updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, renderNeeded);
+      // let updateResponse: any =
+      await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
+        currentStep._id,
+        data,
+        tokenV2
+      );
+      // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
+      getLatestStepToRender(
+        location.state,
+        tokenV2,
+        currentStep,
+        currentStepIndex,
+        stepFlowStepHistory,
+        dispatch,
+        history,
+        renderNeeded,
+        farm
+      );
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      let errorResponse =
+        e &&
+        e.response &&
+        e.response.data.status &&
+        e.response.data.status.message;
+      errorResponse
+        ? toast.error(`Error Occured: ${errorResponse}`)
+        : toast.error(`Error Occured: ${e}`);
     }
-  }
+  };
 
-
-  const onAddLiquityClick = () => { 
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.withdrawAddLiquidity;
+  const onMintClick = () => {
+    let nextStepInfo: any;
+    let newFarm: any;
+    if (farm?.includes("BNB")){
+      if (farm?.includes("cFRMx")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].mint
+        newFarm = "cFRM-BNB" 
+      } else {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].mint
+        newFarm = "cFRMx-BNB"  
+      }
+    } else {
+      if (farm===("cFRMx")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].mint
+        newFarm = "cFRM" 
+      } else if (farm===("cFRM")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].mint
+        newFarm = "cFRMx"  
+      }
+    }
+    
     location.state.id = nextStepInfo.id;
-    location.state.stepFlowName = nextStepInfo.name; 
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      true,
+      newFarm
+    );
   }
+
+  const onAddLiquidityClick = () => {
+    let nextStepInfo: any;
+    let newFarm: any;
+    if (farm?.includes("BNB")){
+      if (farm?.includes("cFRMx")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].withdrawAddLiquidity
+        newFarm = "cFRMx-BNB" 
+      } else {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].withdrawAddLiquidity
+        newFarm = "cFRM-BNB"  
+      }
+    } else {
+      if (farm===("cFRMx")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].withdrawAddLiquidity
+        newFarm = "cFRMx" 
+      } else if (farm===("cFRM")) {
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].withdrawAddLiquidity
+        newFarm = "cFRM"  
+      }
+    }
+    
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      true,
+      newFarm
+    );
+  };
 
   return (
     <FContainer className="f-mr-0">
@@ -72,13 +176,10 @@ export const Success = () => {
             Congratulations!
           </FTypo>
           <FTypo size={20} weight={500} className="f-mt-1">
-            Crucible Token Sustainable Liquidity Farming
+            Crucible Token Sustainable {farm?.includes("BNB") ? "Liquidity" : ""} Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-            Congrats! You have successfully staked cFRM / BNB LP tokens. You
-            will now earn rewards for every cFRM transaction that generates a
-            fee. The reward distribution is proportional to your share of the
-            pool.
+          Congrats! You have successfully withdrawn your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} reward tokens. You can now use the tokens to generate even more rewards by compounding or trading them.
           </FTypo>
         </FItem>
         <FTypo
@@ -93,20 +194,20 @@ export const Success = () => {
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={"card-whats-next"}>
               <div className="card-whats-next-inner">
-                <div className="card-whats-next-front">
+                <div className="card-whats-next-front" onClick={()=>onAddLiquidityClick()}>
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
                       <IconNetworkcFRM />
-                      <IconNetworkcFRMx />
+                      <IconNetworkBsc />
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    cFRMx / BNB Mint and Stake
+                  Add Liquidity & Compound Rewards
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">
                   <FTypo>
-                    Use cFRM and BNB to add Liquidity and compound rewards with
+                    Use {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB to add Liquidity and compound rewards with
                     Farming
                   </FTypo>
                 </div>
@@ -119,8 +220,7 @@ export const Success = () => {
                 <div className="card-whats-next-front">
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
-                      <IconNetworkcFRM />
-                      <IconNetworkcFRMx />
+                      <IconNetworkLeaderboard /> 
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
@@ -139,14 +239,15 @@ export const Success = () => {
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={"card-whats-next"}>
               <div className="card-whats-next-inner">
-                <div className="card-whats-next-front">
+                <div className="card-whats-next-front" onClick={()=>onMintClick()}>
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
-                      <IconNetworkcFRM />
+                    {farm?.includes("cFRMx") ?  <IconNetworkcFRM /> : <IconNetworkcFRMx />} 
+                     
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    Mint cFRM
+                    Mint {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} 
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">
@@ -163,18 +264,13 @@ export const Success = () => {
                 <div className="card-whats-next-front">
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
-                      <IconNetworkcFRM />
+                    {farm?.includes("cFRMx") ?  <IconNetworkcFRMx /> : <IconNetworkcFRM />} 
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    Trade cFRM
+                    Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                   </FTypo>
-                </div>
-                <div className="card-whats-next-back">
-                  <FTypo>
-                    You can always mint more cFRM to increase your pool share.
-                  </FTypo>
-                </div>
+                </div> 
               </div>
             </FItem>
           </FGridItem>

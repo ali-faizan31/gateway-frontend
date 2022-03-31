@@ -1,4 +1,7 @@
 import Web3 from "web3";
+import FerrumJson from "../../utils/FerrumToken.json";
+import { Big } from "big.js";
+import { AbiItem } from "web3-utils";
 
 export class Web3Helper {
   web3Client: Web3;
@@ -42,5 +45,20 @@ export class Web3Helper {
     }
     console.log(txIds, "txIdstxIds");
     return txIds.join(",") + "|" + JSON.stringify(payload || "");
+  }
+
+  async getTokenData (walletAddress:string,tokenAddr:string) {
+    const tokenContract = new this.web3Client.eth.Contract(
+      FerrumJson.abi as AbiItem[],
+      tokenAddr
+    );
+    let symbol = await tokenContract.methods.symbol().call();
+    let decimals = (await tokenContract.methods.decimals().call()) as any;
+    // let name = await tokenContract.methods.name().call();
+    let balance = await tokenContract.methods.balanceOf(walletAddress).call();
+    const decimalFactor = 10 ** Number(decimals);
+    balance = new Big(balance).div(decimalFactor).toFixed();
+    return {symbol,decimals,balance}
+    // console.log("symbolsymbolsymbol",symbol,balance)
   }
 }

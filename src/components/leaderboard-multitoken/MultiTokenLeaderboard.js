@@ -55,7 +55,6 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
     }
   }, [query]);
 
-
   const getTokensHolderList = async (leaderboard) => {
     try{
       let res = await getTokenHolderlistByCABNId(leaderboard?.frmCabn?.id);

@@ -3,17 +3,17 @@ import { FCard, FItem, FList, FListItem, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconFerrum } from "../../../assets/img/icon-ferrum.svg";
 import { useSelector } from "react-redux";
 
-const DATA_MY_BAL = [
-  { network: "FRM", price: 0.072 },
-  { network: "FRM", price: 0.072 },
-  { network: "FRM", price: 0.072 },
-  { network: "FRM", price: 0.072 },
-];
+// const DATA_MY_BAL = [
+//   { network: "FRM", price: 0.072 },
+//   { network: "FRM", price: 0.072 },
+//   { network: "FRM", price: 0.072 },
+//   { network: "FRM", price: 0.072 },
+// ];
 
 export const CrucibleMyBalance = () => {
   //@ts-ignore
   const tokenPrices = useSelector((state) => state.crucible.tokenPrices);
-  console.log(tokenPrices, "tokenPricestokenPrices");
+  // console.log(tokenPrices, "tokenPricestokenPrices");
 
   return (
     <FCard className="card-my-balance styled-card align-v">

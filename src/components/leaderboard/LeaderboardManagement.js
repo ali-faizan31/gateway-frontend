@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 // material
-import { sentenceCase, paramCase } from "change-case";
-import { PATH_ADMIN, PATH_DASHBOARD } from "../../routes/paths";
+import { sentenceCase } from "change-case";
+import {  PATH_DASHBOARD } from "../../routes/paths";
 import toast, { Toaster } from "react-hot-toast";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import ClipLoader from "react-spinners/ClipLoader";
-import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FDialog, FItem, FInputRadio, FTruncateText, FTypo } from "ferrum-design-system";
+import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FDialog, FItem, FInputRadio, FTypo } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
 import { RiFileCopy2Fill, RiMailOpenLine, RiEdit2Fill } from "react-icons/ri";
 import { getAllLeaderboards, updateLeaderboardStatusById } from "../../_apis/LeaderboardCrud";
@@ -20,8 +20,8 @@ const LeaderboardManagement = () => {
   const history = useHistory();
   let token = localStorage.getItem(TOKEN_TAG);
   const [query, setQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [offset, setOffset] = useState(0);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [offset, setOffset] = useState(0);
   const [leaderboardList, setLeaderboardList] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
   const [statusValue, setStatusValue] = useState("");
@@ -31,10 +31,11 @@ const LeaderboardManagement = () => {
     if (query || token) {
       getLeaderboardListing();
     }
+    // eslint-disable-next-line
   }, [query, token]);
 
   const getLeaderboardListing = () => {
-    getAllLeaderboards(offset, limit, token)
+    getAllLeaderboards(0, limit, token)
       .then((res) => {
         if (query === "") {
           if (res?.data?.body?.leaderboards?.length) {
@@ -111,10 +112,10 @@ const LeaderboardManagement = () => {
   const {
     reset,
     register,
-    control,
+    // control,
     handleSubmit,
     formState: { errors, isSubmitting },
-    watch,
+    // watch,
   } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(statusSchema),

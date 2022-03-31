@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ME_TAG } from "../../../../utils/const.utils";
+// import { ME_TAG } from "../../../../utils/const.utils";
 import { WALLET_AUTHENTICATION_STATE, defaultWalletAuthenticationState } from "../WalletAuthenticationInterfaces";
 
 const initialWalletAUthenticationState: WALLET_AUTHENTICATION_STATE = {

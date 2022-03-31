@@ -2,11 +2,11 @@ import React from "react";
 import RegisterForm from "./RegisterForm";
 import {
   FContainer,
-  FCard,
-  FLayout,
-  FMain,
-  FGrid,
-  FGridItem,
+  // FCard,
+  // FLayout,
+  // FMain,
+  // FGrid,
+  // FGridItem,
   FItem,
 } from "ferrum-design-system";
 

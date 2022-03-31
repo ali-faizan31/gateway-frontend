@@ -1,32 +1,59 @@
 import React, { useState } from "react";
-import { useHistory, useLocation } from "react-router";
-import { FButton, FCard, FContainer, FInputCheckbox, FItem, FTypo } from "ferrum-design-system"; 
+import { useHistory, useLocation, useParams } from "react-router";
+import {
+  FButton,
+  FCard,
+  FContainer,
+  FInputCheckbox,
+  FTypo,
+} from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
-import { PATH_DASHBOARD } from "../../../../../routes/paths";
-import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
-import { getLatestStepToRender } from "../../../common/Helper"; 
+// import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { STEP_FLOW_IDS } from "../../../common/utils";
+import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 
 export const CrucibleStepsPage = () => {
   const history = useHistory();
-  const dispatch = useDispatch()
-  const location: any = useLocation(); 
+  const dispatch = useDispatch();
+  const location: any = useLocation();
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
+  const { farm } = useParams<{ farm?: string }>();
 
-  const { stepFlowStepHistory, currentStep, currentStepIndex, } = useSelector((state: RootState) => state.crucible);
-  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
+    (state: RootState) => state.crucible
+  );
+  const { tokenV2 } = useSelector(
+    (state: RootState) => state.walletAuthenticator
+  );
 
   const onStakeClick = () => {
-    let nextStepInfo: any = CFRM_BNB_STEP_FLOW_IDS.stake;
+    let nextStepInfo: any;
+    if (farm?.includes("cFRMx")){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].stake;
+    } else if (farm === "cFRM" || farm === "cFRM-BNB"){
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].stake;
+    }
     location.state.id = nextStepInfo.id;
-    location.state.stepFlowName = nextStepInfo.name; 
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history);
-  }
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      true,
+      farm
+    );
+  };
 
   return (
+    // file not used
     <FContainer className="f-mr-0" width={700}>
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-crucible-steps">
@@ -45,7 +72,7 @@ export const CrucibleStepsPage = () => {
                 Step 1
               </FTypo>
               <FTypo size={18}>
-                Congratulations! You have successfully minted your cFRM tokens!
+                Congratulations! You have successfully minted your {farm?.includes("cFRMX")? "cFRMx": "cFRM"} tokens!
                 Please proceed to step 2.
               </FTypo>
             </span>
@@ -56,13 +83,13 @@ export const CrucibleStepsPage = () => {
                 Step 2
               </FTypo>
               <FTypo size={18}>
-                In order to deposit LP tokens into the cFRM LP Farm (cFRM/BNB
+                In order to deposit LP tokens into the {farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP Farm ({farm?.includes("cFRMx")? "cFRMx": "cFRM"}/BNB
                 pair), you will first need to add liquidity.
                 <strong>Click ‘Add Liquidity’ to get started.</strong>
                 <br></br>
                 <br></br>
                 After you add liquidity, you will need to return to this screen
-                and stake the cFRM LP tokens.
+                and stake the {farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP tokens.
               </FTypo>
               <br></br>
               <FInputCheckbox
@@ -88,7 +115,7 @@ export const CrucibleStepsPage = () => {
               </FTypo>
               <FTypo size={18}>
                 Congratulations! You have successfully added liquidity. You are
-                now able to stake your APE-LP cFRM-BNB tokens to start earning
+                now able to stake your {farm?.includes("BNB")? "APE-LP": ""} {farm?.includes("cFRMx")? "cFRMx": "cFRM"}{farm?.includes("BNB")? "-BNB": " LP"} tokens to start earning
                 rewards!
               </FTypo>
               <br></br>
@@ -97,7 +124,7 @@ export const CrucibleStepsPage = () => {
                 name="step3Check"
                 className="f-mb-1 f-mt-1"
                 label={
-                  "I have added liquidity of APE-LP cFRM-BNB pair and have the LP tokens. I’m ready to stake my APE-LP cFRM-BNB tokens now."
+                  `I have added liquidity of ${farm?.includes("BNB")? "APE-LP": ""} ${farm?.includes("cFRMx")? "cFRMx": "cFRM"}${farm?.includes("BNB")? "-BNB": "/BNB"} pair and have the LP tokens. I’m ready to stake my ${farm?.includes("BNB")? "APE-LP": ""} ${farm?.includes("cFRMx")? "cFRMx": "cFRM"}${farm?.includes("BNB")? "-BNB": "/BNB"} tokens now.`
                 }
               />
               {/* <FButton title="Add Liquidity" postfix={<IconArrow />} className="w-100" disabled={!stepThreeCheck} /> */}
@@ -105,7 +132,7 @@ export const CrucibleStepsPage = () => {
           </li>
           <li className="step-last">
             <FButton
-              title="Stake cFRM LP"
+              title={`Stake ${farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP`}
               postfix={<IconArrow />}
               className="w-100"
               disabled={!stepThreeCheck}

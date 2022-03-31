@@ -1,19 +1,21 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import {
   FButton,
   FCard,
   FContainer,
   FInputCheckbox,
-  FItem,
+  // FItem,
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
+import { getActualRoute } from "../../../common/Helper";
 
 export const CrucibleStepsPage = () => {
   const history = useHistory();
+  const { farm } = useParams<{ farm?: string }>();
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
 
@@ -27,7 +29,7 @@ export const CrucibleStepsPage = () => {
           className={"card-title w-100"}
           display="flex"
         >
-          Crucible Token Sustainable Liquidity Farming teste
+          Crucible Token Sustainable {farm?.includes("BNB") ? "Liquidity" : ""} Farming
         </FTypo>
         <ul>
           <li className="step step-success">
@@ -47,13 +49,13 @@ export const CrucibleStepsPage = () => {
                 Step 2
               </FTypo>
               <FTypo size={18}>
-                In order to deposit LP tokens into the cFRM LP Farm (cFRM/BNB
+                In order to deposit LP tokens into the {farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP Farm (cFRM/BNB
                 pair), you will first need to add liquidity.
                 <strong>Click ‘Add Liquidity’ to get started.</strong>
                 <br></br>
                 <br></br>
                 After you add liquidity, you will need to return to this screen
-                and stake the cFRM LP tokens.
+                and stake the {farm?.includes("cFRMx")? "cFRMx": "cFRM"} LP tokens.
               </FTypo>
               <br></br>
               <FInputCheckbox
@@ -102,7 +104,10 @@ export const CrucibleStepsPage = () => {
               disabled={!stepThreeCheck}
               onClick={() =>
                 history.push({
-                  pathname: PATH_DASHBOARD.crucible.cFRM_BNB.stake.stake,
+                  pathname: getActualRoute(
+                    farm,
+                    PATH_DASHBOARD.crucible.crucibleActionRoutes.stake.stake
+                  ),
                 })
               }
             />

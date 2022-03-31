@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { useDispatch } from "react-redux";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { verify } from 'jsonwebtoken';
@@ -9,8 +9,8 @@ import { connectWeb3, disconnectWeb3 } from "../../../utils/connect-wallet/conne
 import { checkUniqueWalletAddressAndAuthenticated,
    saveAddressAndGenerateNonce, getIp, verifySignatureAndUpdateNonce, 
    isFerrumNetworkIdentifierAllowedonGateway } from "../../../_apis/WalletAuthencation";
-import { FDialog, FItem, FList, FListItem, FContainer, FButton, FGridItem } from "ferrum-design-system";
-import { chainData } from "../../../utils/constants";
+import { FDialog, FItem, FList, FContainer, FButton, FGridItem } from "ferrum-design-system";
+// import { chainData } from "../../../utils/constants";
 import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog }  from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { useSelector } from 'react-redux'; 
@@ -40,11 +40,13 @@ export function Web3AuthWrapper(props) {
   const [network, setNetwork] = useState("ETHEREUM");
   const [web3, setWeb3] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [walletInformation, setWalletInformation] = useState({});
+  // const [walletInformation, setWalletInformation] = useState({});
   const [allowedNetworksData, setAllowedNetworksData] = useState([]);
   const [networkModal, setNetworkModal] = useState(false);
   const history = useHistory();
-  const { isConnected, currentWalletNetwork, walletAddress, walletBalance, currentWallet } = useSelector((state) => state.walletConnector);
+  const { isConnected
+    // , currentWalletNetwork, walletAddress, walletBalance, currentWallet 
+  } = useSelector((state) => state.walletConnector);
  
   const validateUserAddr = async () => {
     setLoading(true);  
@@ -150,7 +152,7 @@ export function Web3AuthWrapper(props) {
           }
         }
       } else {
-        throw "Address not unique"
+        throw new Error("Address not unique")
       } 
     } catch (e) {
       toast.error(`Error occured ${e}`); 
@@ -189,7 +191,7 @@ export function Web3AuthWrapper(props) {
     } else {
       let walletInformation = await connectWeb3(setAddress, setConnected, setWeb3, setNetwork, toast); 
       setConnected(false); 
-      walletInformation && setWalletInformation(walletInformation);
+      // walletInformation && setWalletInformation(walletInformation);
       walletInformation &&  checkAllowedIdentifier(walletInformation);
     }
   } 
