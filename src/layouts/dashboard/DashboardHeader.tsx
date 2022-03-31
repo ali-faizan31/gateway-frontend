@@ -10,13 +10,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
 // import { logout } from "../../_apis/OnboardingCrud";
 import toast from "react-hot-toast";
-import { localStorageHelper } from "../../utils/global.utils";
+import { localStorageHelper, TruncateWithoutRounding } from "../../utils/global.utils";
 import {
   COMMUNITY_ROLE_TAG,
   ME_TAG,
   TOKEN_TAG,
   ORG_ROLE_TAG,
   tokenFRMBSCMainnet,
+  tokenFRMxBSCMainnet
 } from "../../utils/const.utils";
 import {
   getFormattedBalance,
@@ -25,33 +26,41 @@ import {
 import FerrumJson from "../../utils/FerrumToken.json";
 import { AbiItem } from "web3-utils";
 import { Big } from "big.js";
-// import * as CrucibleActions from '../../components/crucible/redux/CrucibleActions'
+import { getNetworkInformationForPublicUser } from '../../_apis/NetworkCrud';
+import { getCABNInformationForPublicUser } from "../../_apis/CABNCrud";
 
 const DashboardHeader = ({ title }: any) => {
   // const { pathname } = useLocation();
   // const dispatch = useDispatch();
   const history = useHistory();
   // const isPublic = pathname.includes("pub");
+  const [networkResponse, setNetworkResponse] = useState<any>({});
   const {
     isConnected,
     isConnecting,
     walletAddress,
     walletBalance,
     networkClient,
+    currentWalletNetwork
   } = useSelector((state: RootState) => state.walletConnector);
   const { meV2 } = useSelector((state: RootState) => state.walletAuthenticator);
-  const [tokenInfo, setTokenInfo] = useState({
-    symbol: "",
-    name: "",
-    decimals: "",
-    balance: "",
-  });
+  const [FRMTokenInfo, setFRMTokenInfo] = useState<any>({});
 
-  //   useEffect(() => {
-  //     if ( isConnected === false && tokenV2 ){
-  //         dispatch(CrucibleActions.resetCrucible());
-  //     }
-  // }, [isConnected])
+  const [FRMxTokenInfo, setFRMxTokenInfo] = useState<any>({});
+
+  useEffect(() => {
+    if (currentWalletNetwork) {
+      getCurrentNetworkInformation(currentWalletNetwork);
+    }
+  }, [currentWalletNetwork])
+
+  const getCurrentNetworkInformation = async (currentWalletNetwork: any) => {
+    let networkResponse = await getNetworkInformationForPublicUser(currentWalletNetwork);
+    networkResponse = networkResponse.data && networkResponse.data.body && networkResponse.data.body.network;
+    if (networkResponse) {
+      setNetworkResponse(networkResponse);
+    }
+  }
 
   useEffect(() => {
     if (meV2 && meV2.role === COMMUNITY_ROLE_TAG) {
@@ -61,22 +70,6 @@ const DashboardHeader = ({ title }: any) => {
     }
     // eslint-disable-next-line
   }, [isConnected, isConnecting]);
-
-  // const showLogoutButton = () => {
-  //   if (isPublic) {
-  //     return false;
-  //   }
-  //   return true;
-  // };
-
-  // const handleCommunityMemberLogout = async (values: any) => {
-  //   try {
-  //     const res = await logout(values, localStorageHelper.getToken())
-  //     return res?.data?.body;
-  //   } catch (e: any) {
-  //     toast.error(`Error Occured: ${e?.response?.data?.status?.message}`)
-  //   }
-  // }
 
   const handleLogout = async () => {
     // let data = {};
@@ -88,15 +81,26 @@ const DashboardHeader = ({ title }: any) => {
       }
       localStorageHelper.removeItem(ME_TAG);
       localStorageHelper.removeItem(TOKEN_TAG);
-    } catch (e) {}
+    } catch (e) { }
   };
 
   useEffect(() => {
-    getTokenInformation();
+    getTokenInformation(tokenFRMBSCMainnet, setFRMTokenInfo, FRMTokenInfo);
+    getTokenInformation(tokenFRMxBSCMainnet, setFRMxTokenInfo, FRMxTokenInfo);
+    getCABNInformation(tokenFRMBSCMainnet, setFRMTokenInfo, FRMTokenInfo);
+    getCABNInformation(tokenFRMxBSCMainnet, setFRMxTokenInfo, FRMxTokenInfo);
     // eslint-disable-next-line
   }, [networkClient]);
 
-  const getTokenInformation = async () => {
+  const getCABNInformation = async (tokenContractAddress: any, setInfo: any, info: any) => {
+    let cabnResponse: any = await getCABNInformationForPublicUser(tokenContractAddress);
+    cabnResponse = cabnResponse.data && cabnResponse.data.body && cabnResponse.data.body.currencyAddressesByNetworks[0]; 
+    if (cabnResponse){
+    setInfo({ ...info, symbol: cabnResponse.currency.symbol, logo: cabnResponse.currency.logo })
+    }
+  }
+
+  const getTokenInformation = async (tokenContractAddress: any, setInfo: any, info: any) => {
     let symbol,
       decimals,
       name,
@@ -105,7 +109,7 @@ const DashboardHeader = ({ title }: any) => {
       if (networkClient) {
         const tokenContract = new networkClient.eth.Contract(
           FerrumJson.abi as AbiItem[],
-          tokenFRMBSCMainnet
+          tokenContractAddress
         );
         symbol = await tokenContract.methods.symbol().call();
         decimals = (await tokenContract.methods.decimals().call()) as any;
@@ -114,8 +118,9 @@ const DashboardHeader = ({ title }: any) => {
         const decimalFactor = 10 ** Number(decimals);
         balance = new Big(balance).div(decimalFactor).toFixed();
       }
-      setTokenInfo({
-        symbol,
+      setInfo({
+        ...info,
+        tokenSymbol: symbol,
         balance: balance ? balance : "0",
         name,
         decimals,
@@ -124,7 +129,7 @@ const DashboardHeader = ({ title }: any) => {
       toast.error(`Error occured: ${e}`);
     }
   };
-
+  
   return (
     <>
       <FHeader showLogo={false} titleText={title}>
@@ -153,14 +158,22 @@ const DashboardHeader = ({ title }: any) => {
                         variant={"primary"}
                         className={"d-flex custom-padding-10 overflow-visible"}
                       >
-                        {tokenInfo && tokenInfo.balance}
+                        <img src={FRMTokenInfo?.logo} height="22px" width="22px" style={{ marginRight: "3px" }}  />
+                        {FRMTokenInfo && TruncateWithoutRounding(FRMTokenInfo.balance, 3)}
                         <p className="primary-color f-pl--4">
-                          {" " + tokenInfo.symbol}
+                          {" "} {FRMTokenInfo.symbol ? FRMTokenInfo.symbol : FRMTokenInfo.tokenSymbol}
                         </p>
                       </FCard>
-                      {/* <FCard className={"no-left-margin custom-padding-10 d-flex custom-border-radius-4"} variant={"primary"}>
-                        {getFormattedBalance(walletBalance)} Matic
-                      </FCard> */}
+                      <FCard
+                        variant={"primary"}
+                        className={"d-flex custom-padding-10 overflow-visible"}
+                      >
+                        {FRMxTokenInfo.logo && <img src={FRMxTokenInfo.logo} height="22px" width="22px" style={{ marginRight: "3px" }}  />}
+                        {FRMxTokenInfo && TruncateWithoutRounding(FRMxTokenInfo.balance, 3)}
+                        <p className="primary-color f-pl--4"> 
+                          {" "}  {FRMxTokenInfo.symbol ? FRMxTokenInfo.symbol : FRMxTokenInfo.tokenSymbol}
+                        </p>
+                      </FCard>
                     </FItem>
                   </FCard>
                   <FCard
@@ -169,12 +182,12 @@ const DashboardHeader = ({ title }: any) => {
                       "no-left-margin custom-padding-10 custom-border-radius-4 custom-min-width-270"
                     }
                   >
-                    <FItem display={"flex"}>
-                      <img src="/ferrum/wallet-address.svg" alt="Icon" />
+                    <FItem display={"flex"} className="justify-content-center">
                       <FCard
                         variant={"secondary"}
                         className={"d-flex custom-padding-10 overflow-visible"}
                       >
+                        <img src={networkResponse && networkResponse?.networkCurrencyAddressByNetwork?.currency?.logo} height="22px" width="22px" style={{ marginRight: "3px" }}  />
                         {getFormattedWalletAddress(walletAddress)}
                       </FCard>
                       <FCard
@@ -183,7 +196,7 @@ const DashboardHeader = ({ title }: any) => {
                         }
                         variant={"primary"}
                       >
-                        {new Big(getFormattedBalance(walletBalance)).toFixed(4)}
+                        {TruncateWithoutRounding(getFormattedBalance(walletBalance), 3)} {networkResponse && networkResponse?.networkCurrencySymbol}
                       </FCard>
                     </FItem>
                   </FCard>
