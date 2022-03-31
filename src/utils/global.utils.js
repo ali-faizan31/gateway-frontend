@@ -80,6 +80,17 @@ export const getFormattedBalance = (balance) =>
 export const getFormattedWalletAddress = (address) =>
   `${address.substr(0, 6)}...${address.substr(address.length - 4)}`;
 
+export const TruncateWithoutRounding = (value, decimals) => {
+  if (value) {
+    const parts = value.toString().split(".");
+
+    if (parts.length === 2) {
+      return Number([parts[0], parts[1].slice(0, decimals)].join("."));
+    }
+    return Number(parts[0]);
+  }
+};
+
 export const getLatestStepWithPendingStatus = (stepResponse) => {
   let previous = {};
   let current = {};
