@@ -280,8 +280,8 @@ export const CrucibleDeposit = () => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-        You have {Number(userCrucibleData?.baseBalance || "0").toFixed(3)}{" "}
-        available in Token Base {userCrucibleData?.baseSymbol}.
+        You have {Number(userCrucibleData?.baseBalance || "0").toFixed(3)}{" "} 
+        available in the Base Token {userCrucibleData?.baseSymbol}.
       </FTypo>
       <FTypo size={15} className={"f-mt-2 f-pl--5"}>
         Amount you will receive

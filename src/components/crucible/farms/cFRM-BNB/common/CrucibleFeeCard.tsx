@@ -8,15 +8,25 @@ import {
   FContainer,
 } from "ferrum-design-system";
 import React, { useEffect } from "react";
-import { useHistory, useParams } from "react-router";
+import { useSelector } from "react-redux";
+import { useHistory, useLocation, useParams } from "react-router";
+import { BigUtils } from "../../../../../container-components/web3Client/types";
+import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { getActualRoute } from "../../../common/Helper";
 
 const CrucibleFeeCard = () => {
   const history = useHistory();
-
+  const location: any = useLocation();
   const { farm } = useParams<{ farm?: string }>();
+  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
 
+  const userCrucibleData = useSelector(
+    (state: RootState) => state.crucible.userCrucibleDetails
+  );
+  let userStake = (userCrucibleData.stakes || []).find(
+    (e: any) => e.address.toLowerCase() === location.state.LPstakingAddress
+  );
   useEffect(() => {
     console.log("test");
   }, []);
@@ -44,7 +54,9 @@ const CrucibleFeeCard = () => {
                   weight={700}
                   className="f-pb--2"
                 >
-                  2%
+                  {`${BigUtils.safeParse(crucible?.feeOnTransferRate || "0")
+                        .times(100)
+                        .toString()}%`}
                 </FTypo>
                 <FTypo size={20}>Transfer Fee</FTypo>
               </FItem>
@@ -57,7 +69,9 @@ const CrucibleFeeCard = () => {
                   weight={700}
                   className="f-pb--2"
                 >
-                  4%
+                  {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0")
+                        .times(100)
+                        .toString()}%`}
                 </FTypo>
                 <FTypo size={20}>Unwrap Fee</FTypo>
               </FItem>
@@ -70,7 +84,7 @@ const CrucibleFeeCard = () => {
                   weight={700}
                   className="f-pb--2"
                 >
-                  cFRM
+                   {crucible?.symbol}
                 </FTypo>
                 <FTypo size={20}>Crucible Token</FTypo>
               </FItem>
@@ -79,7 +93,7 @@ const CrucibleFeeCard = () => {
           <FCard className={"styled-card align-v your-crucible"}>
             <FGrid>
               <FGridItem size={[6, 6, 6]} dir="column">
-                <FTypo className="f-pb--2">Your Crucible LP Deposits</FTypo>
+                <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB")? "LP": ""} Farm Stake</FTypo>
                 <FTypo
                   size={24}
                   weight={600}
@@ -87,9 +101,9 @@ const CrucibleFeeCard = () => {
                   display="flex"
                   alignY={"end"}
                 >
-                  13.929
+                   {Number(userStake?.stakeOf || "0").toFixed(3)}
                   <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
-                    APE-LP cFRM-BNB
+                  {farm?.includes("BNB")? `APE-LP ${crucible?.symbol}-BNB`: crucible?.symbol}
                   </FTypo>
                 </FTypo>
               </FGridItem>
@@ -122,7 +136,7 @@ const CrucibleFeeCard = () => {
               <FGridItem size={[6]} dir="column">
                 <FTypo className="f-pb--2">Your unclaimed Rewards</FTypo>
                 <FTypo color="#DAB46E" size={22} weight={700}>
-                  7.292 cFRMx
+                {Number(userStake?.rewardOf || "0").toFixed(3)} {crucible?.symbol}
                 </FTypo>
               </FGridItem>
               <FGridItem size={[6]} alignY="center" alignX={"end"}>
