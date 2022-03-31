@@ -6539,10 +6539,10 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "2.1.1"
 
-ferrum-design-system@1.0.62:
-  version "1.0.62"
-  resolved "https://registry.yarnpkg.com/ferrum-design-system/-/ferrum-design-system-1.0.62.tgz#a536f0b9cf479b6565afa2ffbf5ca3332064b706"
-  integrity sha512-kEIaappanCAPfEEf1g36PIrZWPSgtU/qHxQAAh6p7lIWABHtd2nytNkZg7JxtiP6S55iqPMkS0JAqzc17wfQIA==
+ferrum-design-system@1.0.65:
+  version "1.0.65"
+  resolved "https://registry.yarnpkg.com/ferrum-design-system/-/ferrum-design-system-1.0.65.tgz#cc45ca2b8ac0f63cace7599db1ee6df35233ced5"
+  integrity sha512-5jkGgZDcJKeJB6NR8iX/46pm5vE7ydfcFmwhwASfxcC/6tlYRa50fFuSNKQYPhOMHZUjZksCg05kLS9Tk/ntBg==
   dependencies:
     "@babel/cli" "^7.16.0"
     "@babel/core" "^7.16.0"
