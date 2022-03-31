@@ -26,10 +26,12 @@ import {
   // getNextStepFlowStepId,
 } from "../../../common/Helper";
 import { useHistory, useLocation, useParams } from "react-router";
+import { ClipLoader } from "react-spinners";
 
 export const Withdraw = () => {
   const dispatch = useDispatch();
   const { farm } = useParams<{ farm?: string }>();
+  const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   const location: any = useLocation();
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false); 
@@ -57,6 +59,7 @@ export const Withdraw = () => {
   );
 
   const getStepCompleted = async (renderNeeded: any) => {
+    setIsLoading(true)
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) =>
@@ -91,8 +94,9 @@ export const Withdraw = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded,
-        farm
+        farm,
+        setIsLoading,
+        renderNeeded, 
       );
     } catch (e: any) {
       let errorResponse =
@@ -139,6 +143,7 @@ export const Withdraw = () => {
   //   }
   // };
   const onContinueToNextStepClick = () => {
+    setIsLoading(true)
     if (currentStep.status === "pending") {
       location.state.id = currentStep.stepFlow;
       let splitted = currentStep.stepFlowStep.name.split("-");
@@ -151,8 +156,8 @@ export const Withdraw = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        true,
-        farm
+        farm,
+        setIsLoading
       );
     }
   };
@@ -227,6 +232,14 @@ export const Withdraw = () => {
   };
 
   return (
+    <>
+    {isLoading ? (
+       <FCard>
+       <FItem align={"center"}>
+         <ClipLoader color="#cba461" loading={true} size={150} />
+       </FItem>
+     </FCard>
+    ) : (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title f-mb-2">
         <FItem display={"flex"} alignY="center">
@@ -322,5 +335,7 @@ export const Withdraw = () => {
         onContinueToNextStepClick={() => onContinueToNextStepClick()}
       />
     </FCard>
+    )}
+    </>
   );
 };

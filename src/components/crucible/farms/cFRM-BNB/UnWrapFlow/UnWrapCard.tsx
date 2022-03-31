@@ -29,10 +29,12 @@ import {
   getLatestStepToRender,
   //  getNextStepFlowStepId
 } from "../../../common/Helper";
+import { ClipLoader } from "react-spinners";
 
 export const UnWrap = () => {
   const location: any = useLocation();
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
   const { farm } = useParams<{ farm?: string }>();
   const dispatch = useDispatch();
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
@@ -69,6 +71,7 @@ export const UnWrap = () => {
   // };
 
   const getStepCompleted = async (renderNeeded: any) => {
+    setIsLoading(true)
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) =>
@@ -103,8 +106,9 @@ export const UnWrap = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded,
-        farm
+        farm,
+        setIsLoading,
+        renderNeeded, 
       );
     } catch (e: any) {
       let errorResponse =
@@ -153,6 +157,7 @@ export const UnWrap = () => {
   };
 
   const onContinueToNextStepClick = () => {
+    setIsLoading(true)
     if (currentStep.status === "pending") {
       location.state.id = currentStep.stepFlow;
       let splitted = currentStep.stepFlowStep.name.split("-");
@@ -166,13 +171,21 @@ export const UnWrap = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        true,
-        farm
+        farm,
+        setIsLoading
       );
     }
   };
 
   return (
+    <>
+    {isLoading ? (
+       <FCard>
+       <FItem align={"center"}>
+         <ClipLoader color="#cba461" loading={true} size={150} />
+       </FItem>
+     </FCard>
+    ) : (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title">
         <FItem display={"flex"} alignY="center">
@@ -291,5 +304,7 @@ export const UnWrap = () => {
         onContinueToNextStepClick={() => onContinueToNextStepClick()}
       />
     </FCard>
+    )}
+    </>
   );
 };

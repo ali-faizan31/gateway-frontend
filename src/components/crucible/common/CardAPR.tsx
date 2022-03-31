@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import Datatable from "react-bs-datatable";
 import {
@@ -8,25 +8,44 @@ import {
   FItem,
   FTable,
   FTypo,
+  FDialog
 } from "ferrum-design-system";
 import { ReactComponent as IconNetworkcFRM } from "../../../assets/img/icon-network-cfrm.svg";
 import { ReactComponent as IconNetworkBsc } from "../../../assets/img/icon-network-bnb.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import { RootState } from "../../../redux/rootReducer";
 // import { PATH_DASHBOARD } from "../../../routes/paths";
-import { getStepFlowStepByStepFlowIdForPublic } from "../../../_apis/StepFlowStepCrud";
+import * as SFSH_API from "../../../_apis/StepFlowStepHistory";
 import * as CrucibleActions from "../redux/CrucibleActions";
-import { renderComponent } from "./Helper";
+import { getLatestStepToRender, renderComponent } from "./Helper";
 import { ClipLoader } from "react-spinners";
+import { RootState } from "../../../redux/rootReducer";
+import { MetaMaskConnector } from "../../../container-components";
+import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 
 export const CardAPR = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [showConnectDialog, setShowConnectDialog] = useState(false);
+  const { tokenV2 } = useSelector(
+    (state: RootState) => state.walletAuthenticator
+  );
+  const { currentStep, currentStepIndex, stepFlowStepHistory } = useSelector(
+    (state: RootState) => state.crucible
+  );
+
   // const [isSet, setIsSet] = useState(false);
-  // const { isConnected, isConnecting } = useSelector(
-  //   (state: RootState) => state.walletConnector
-  // );
+  const { isConnected } = useSelector(
+    (state: RootState) => state.walletConnector
+  );
+
+  useEffect(() => {
+    if (tokenV2){
+      setShowConnectDialog(false);
+    }
+  }, [tokenV2])
+  
 
   const tableHeads: any[] = [
     {
@@ -72,7 +91,7 @@ export const CardAPR = () => {
       apr: "20%",
       id: "6238386bd292da2db05524f9",
       contract: "0x5e767cadbd95e7b9f777ddd9e65eab1c29c487e6",
-      LpCurrency: "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224", 
+      LpCurrency: "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224",
       LPstakingAddress: "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd",
       network: "BSC",
       internalName: "cFRM",
@@ -87,7 +106,7 @@ export const CardAPR = () => {
       network: "BSC",
       id: "62383841d292da2db05524f3",
       contract: "0x5e767cadbd95e7b9f777ddd9e65eab1c29c487e6",
-      LpCurrency: "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224", 
+      LpCurrency: "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224",
       LPstakingAddress: "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd",
       internalName: "cFRMx-BNB",
     },
@@ -100,7 +119,7 @@ export const CardAPR = () => {
       apr: "40%",
       id: "62383865d292da2db05524f6",
       contract: "0x5e767cadbd95e7b9f777ddd9e65eab1c29c487e6",
-      LpCurrency: "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224", 
+      LpCurrency: "0xe8606F8F4e8D2D1fBbB0086775Fb0b3456423224",
       LPstakingAddress: "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd",
       network: "BSC",
       internalName: "cFRMx",
@@ -183,35 +202,33 @@ export const CardAPR = () => {
     LPstakingAddress?: string,
     farm?: any
   ) => {
-    // console.log("getStepToRender");
-    // history.push({pathname: PATH_DASHBOARD.crucible.deployer, state: {id, name,contract,network}})
-    setIsLoading(true);
-    let stepResponse = await getStepFlowStepByStepFlowIdForPublic(id);
-    dispatch(
-      CrucibleActions.updateStepFlowStepHistory({
-        stepFlowStepHistory: stepResponse.data.body.stepsFlowStep,
-      })
-    );
-    let stepFlowStep = stepResponse.data.body.stepsFlowStep[0];
-    dispatch(
-      CrucibleActions.updateCurrentStep({
-        currentStep: stepFlowStep,
-        currentStepIndex: 0,
-      })
-    ); 
-    renderComponent(
-      stepFlowStep.step.name,
-      { id, stepFlowName, contract, network, LpCurrency, LPstakingAddress },
-      history,
-      farm
-    );
-    setIsLoading(false);
+    if (isConnected && tokenV2) {
+      setIsLoading(true);
+      console.log('on manage click', currentStep, currentStepIndex, stepFlowStepHistory,)
+      getLatestStepToRender(
+        { id, stepFlowName, contract, network, LpCurrency, LPstakingAddress },
+        tokenV2,
+        currentStep,
+        currentStepIndex,
+        stepFlowStepHistory,
+        dispatch,
+        history,
+        farm,
+        setIsLoading
+      );
+    } else {
+      setShowConnectDialog(true);
+    }
   };
 
   return (
     <>
       {isLoading ? (
-        <ClipLoader color="#cba461" loading={true} size={150} />
+        <FCard>
+          <FItem align={"center"}>
+            <ClipLoader color="#cba461" loading={true} size={150} />
+          </FItem>
+        </FCard>
       ) : (
         <FCard className="card-apr f-mt-2">
           <FItem
@@ -235,6 +252,21 @@ export const CardAPR = () => {
           </FTable>
         </FCard>
       )}
+
+      <FDialog
+        show={showConnectDialog}
+        size={"medium"}
+        onHide={() => setShowConnectDialog(false)}
+        title={"Connect to Metamask"}
+        className="connect-wallet-dialog "
+      >
+        <MetaMaskConnector.WalletConnector
+          WalletConnectView={FButton}
+          WalletConnectModal={ConnectWalletDialog}
+          isAuthenticationNeeded={true}
+          WalletConnectViewProps={{ className: "w-100" }}
+        />
+      </FDialog>
     </>
   );
 };

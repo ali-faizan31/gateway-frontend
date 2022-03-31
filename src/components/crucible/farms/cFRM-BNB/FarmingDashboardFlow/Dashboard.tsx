@@ -65,17 +65,19 @@ export const Manage = () => {
   );
 
   useEffect(() => {
-    if (!isLoading) {
+    // if (!isLoading) {
       // SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
       //   currentStep._id,
       //   { status: "completed" },
       //   tokenV2
       // );
       getStepCompletedAndRunCompletionFlow(false);
-    }
-  }, [isLoading]);
+    // }
+  }, []);
 
   const getStepCompletedAndRunCompletionFlow = async (renderNeeded: any) => {
+    console.log('here')
+    setIsLoading(true)
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) =>
@@ -111,8 +113,9 @@ export const Manage = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded,
         farm,
+        setIsLoading,
+        true,
         true
       );
     } catch (e: any) {
@@ -152,8 +155,8 @@ export const Manage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm
+      farm,
+      setIsLoading
     );
     setIsLoading(false);
   };
@@ -171,8 +174,8 @@ export const Manage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm
+      farm,
+      setIsLoading
     );
     setIsLoading(false);
   };
@@ -190,8 +193,8 @@ export const Manage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm
+      farm,
+      setIsLoading
     );
     setIsLoading(false);
   };
@@ -209,8 +212,8 @@ export const Manage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm
+      farm,
+      setIsLoading
     );
     setIsLoading(false);
   };

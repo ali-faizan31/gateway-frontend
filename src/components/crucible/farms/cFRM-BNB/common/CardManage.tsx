@@ -28,6 +28,7 @@ import IconNetworkCFrmStr from "../../../../../assets/img/icon-network-cfrm.svg"
 import IconNetworkFrmx from "../../../../../assets/img/icon-network-frmx.svg";
 import IconNetworkCFrmx from "../../../../../assets/img/icon-network-cfrmx.svg";
 import { ReactComponent as IconNetworkBnb } from "../../../../../assets/img/icon-network-bnb.svg";
+import { ClipLoader } from "react-spinners";
 
 export const CrucibleManage = ({
   dashboardAction,
@@ -39,6 +40,7 @@ export const CrucibleManage = ({
   const history = useHistory();
   const location: any = useLocation();
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const tokenPrices = useSelector(
     (state: RootState) => state.crucible.tokenPrices
   );
@@ -62,7 +64,7 @@ export const CrucibleManage = ({
   }, []);
 
   const onMintcFRMClick = () => {
-    console.log(location.state.stepFlowName, "Mint", farm, getObjectReadableFarmName(farm)); 
+    setIsLoading(true)
     let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].mint;
     console.log('next step id:', nextStepInfo)
     location.state.id = nextStepInfo.id;
@@ -76,13 +78,14 @@ export const CrucibleManage = ({
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm
+      farm,
+      setIsLoading
     );
     // history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint});
   };
 
   const onWrapClick = () => {
+    setIsLoading(true)
     let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unwrap;
     console.log(nextStepInfo, location.state);
     location.state.id = nextStepInfo.id;
@@ -95,8 +98,8 @@ export const CrucibleManage = ({
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm
+      farm,
+      setIsLoading
     );
   };
 
@@ -161,6 +164,14 @@ export const CrucibleManage = ({
   ];
 
   return (
+    <>
+    {isLoading ? (
+       <FCard>
+       <FItem align={"center"}>
+         <ClipLoader color="#cba461" loading={true} size={150} />
+       </FItem>
+     </FCard>
+    ) : (
     <FCard variant={"secondary"} className="card-manage-crucible card-shadow">
       <div className="card-title f-mb-2">
         <FItem display={"flex"} alignY="center">
@@ -185,7 +196,7 @@ export const CrucibleManage = ({
               {getBaseTokenName(farm)} Price (USD)
             </FTypo>
             <FTypo size={30} weight={500}>
-              ${tokenPrices[farm!] || 0}
+              ${tokenPrices[getBaseTokenName(farm)!] || 0}
             </FTypo>
           </FItem>
         </FGridItem>
@@ -229,5 +240,7 @@ export const CrucibleManage = ({
         </FGridItem>
       </FGrid>
     </FCard>
+    )}
+    </>
   );
 };

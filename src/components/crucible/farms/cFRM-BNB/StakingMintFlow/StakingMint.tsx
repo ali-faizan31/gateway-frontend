@@ -10,11 +10,13 @@ import * as CrucibleActions from "../../../redux/CrucibleActions";
 import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import toast from "react-hot-toast";
 import { STEP_FLOW_IDS } from "../../../common/utils";
+import { ClipLoader } from "react-spinners";
 
 export const StakingMintSteps = () => {
     const dispatch = useDispatch();
     const location: any = useLocation();
     const history = useHistory();
+    const [isLoading, setIsLoading] = useState(false);
     const [stepTwoCheck, setStepTwoCheck] = useState(false);
     const [stepThreeCheck, setStepThreeCheck] = useState(false);
     const { farm } = useParams<{ farm?: string }>();
@@ -26,6 +28,7 @@ export const StakingMintSteps = () => {
     );
 
     const onStakeClick = async () => {
+        setIsLoading(true)
         for (let i = 0; i < stepFlowStepHistory.length; i++) {
             await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
                 stepFlowStepHistory[i]._id,
@@ -56,13 +59,14 @@ export const StakingMintSteps = () => {
             stepFlowStepHistory,
             dispatch,
             history,
-            true,
-            farm
+            farm,
+            setIsLoading
         );
 
     }
 
     const onWhatElseClick = async () => {
+        setIsLoading(true)
         try {
             let updatedCurrentStep: any = {};
             let updHistory: any = [];
@@ -105,8 +109,8 @@ export const StakingMintSteps = () => {
                 stepFlowStepHistory,
                 dispatch,
                 history,
-                true,
-                farm
+                farm,
+                setIsLoading
             );
         } catch (e: any) {
             let errorResponse =
@@ -125,6 +129,14 @@ export const StakingMintSteps = () => {
     }
 
     return (
+        <>
+        {isLoading ? (
+           <FCard>
+           <FItem align={"center"}>
+             <ClipLoader color="#cba461" loading={true} size={150} />
+           </FItem>
+         </FCard>
+        ) : (
         <FContainer className="f-mr-0" width={900}>
             <CrucibleMyBalance />
             <FCard variant={"secondary"} className="card-crucible-steps">
@@ -171,5 +183,7 @@ export const StakingMintSteps = () => {
                 </ul>
             </FCard>
         </FContainer>
+        )}
+        </>
     );
 };

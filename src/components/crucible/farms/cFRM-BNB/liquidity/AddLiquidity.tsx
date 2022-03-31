@@ -5,6 +5,7 @@ import {
   FCard,
   FContainer,
   FInputCheckbox,
+  FItem,
   // FItem,
   FTypo,
 } from "ferrum-design-system";
@@ -18,11 +19,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 import {  STEP_FLOW_IDS } from "../../../common/utils";
+import { ClipLoader } from "react-spinners";
 
 export const AddLiquidity = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const location: any = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
@@ -38,6 +41,7 @@ export const AddLiquidity = () => {
   const { farm } = useParams<{ farm?: string }>();
 
   const onStakeClick = () => {
+    setIsLoading(true);
     let nextStepInfo: any;
     if (farm?.includes("cFRMx")){
       nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].stake;
@@ -55,12 +59,20 @@ export const AddLiquidity = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm?.includes("cFRMx")? "cFRMx-BNB": "cFRM-BNB"
+      farm?.includes("cFRMx")? "cFRMx-BNB": "cFRM-BNB",
+      setIsLoading
     );
   };
 
   return (
+    <>
+    {isLoading ? (
+       <FCard>
+       <FItem align={"center"}>
+         <ClipLoader color="#cba461" loading={true} size={150} />
+       </FItem>
+     </FCard>
+    ) : (
     <FContainer className="f-mr-0" width={700}>
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-crucible-steps">
@@ -148,5 +160,7 @@ export const AddLiquidity = () => {
         </ul>
       </FCard>
     </FContainer>
+    )}
+    </>
   );
 };
