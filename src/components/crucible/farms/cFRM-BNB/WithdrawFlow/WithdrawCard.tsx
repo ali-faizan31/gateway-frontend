@@ -27,7 +27,7 @@ import {
 } from "../../../common/Helper";
 import { useHistory, useLocation, useParams } from "react-router";
 import { ClipLoader } from "react-spinners";
-import eitherConverter from "ether-converter";
+// import eitherConverter from "ether-converter";
 
 export const Withdraw = () => {
   const dispatch = useDispatch();
@@ -165,16 +165,19 @@ export const Withdraw = () => {
 
   const getRewardAmount = () => {
     if (farm?.includes("BNB")){
-      return Number(eitherConverter(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || "0", 'wei').ether)
+      return networkClient?.utils.fromWei(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0, 'ether')
       // return LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || "0";
     } else {
-      return userStake?.rewardOf || 0
+      networkClient?.utils.fromWei(userStake?.rewardOf || 0, 'ether') 
+      // return userStake?.rewardOf || 0
     }
   }
 
+  console.log(networkClient?.utils.fromWei(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount, 'ether'))
+
   const getRewardSymbol = () => {
     if (farm?.includes("BNB")){
-      return crucible.LP_symbol; //get from ibrahim
+      return crucible.LP_symbol; 
     } else {
       return crucible.symbol
     }
