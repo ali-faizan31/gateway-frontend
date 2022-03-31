@@ -285,43 +285,45 @@ export const Manage = () => {
       const tokens = [
         {
           token: "FRM",
-          currency: "BSC:0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc",
+          currency: "0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc",
         },
         {
           token: "FRMx",
-          currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
+          currency: "0x8523518001ad5d24b2A04e8729743C0643A316c0",
         },
         {
           token: "cFRM-BNB",
-          currency: "BSC:0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc",
+          currency: "0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc",
         },
         {
           token: "cFRMx-BNB",
-          currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
+          currency: "0x8523518001ad5d24b2A04e8729743C0643A316c0",
         },
         {
           token: "cFRM",
-          currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
+          currency: "0x8523518001ad5d24b2A04e8729743C0643A316c0",
         },
         {
           token: "cFRMx",
-          currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
+          currency: "0x8523518001ad5d24b2A04e8729743C0643A316c0",
         },
       ];
 
       for (let item of tokens) {
-        const priceDetails = (await client.getPairPrice(
-          ctx.dispatch,
-          item.currency,
-          item.currency,
-          walletAddress as string
-        )) as any;
+        const priceDetails = await web3Helper.getTokenPriceFromRouter(item.currency)
+        console.log(priceDetails);
+        // (await client.getPairPrice(
+        //   ctx.dispatch,
+        //   item.currency,
+        //   item.currency,
+        //   walletAddress as string
+        // )) as any;
         if (!!priceDetails) {
           dispatch(
             actions.priceDataLoaded({
               data: {
                 token: item.token,
-                price: Number(priceDetails.basePrice.usdtPrice).toFixed(3),
+                price: Number(priceDetails).toFixed(3),
               },
             })
           );

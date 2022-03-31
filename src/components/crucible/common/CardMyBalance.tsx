@@ -137,7 +137,7 @@ export const CrucibleMyBalance = () => {
             display="flex"
             alignY={"end"}
           >
-            {TruncateWithoutRounding(CBTTokenInfo.balance, 3) || 0}
+            {TruncateWithoutRounding(APELPCFRMxTokenInfo.balance, 3) || 0}
             <FTypo
               size={14}
               weight={600}
