@@ -7,6 +7,7 @@ import {
   // FGrid,
   // FGridItem,
   FInputCheckbox,
+  FItem,
   // FItem,
   FTypo,
 } from "ferrum-design-system";
@@ -16,10 +17,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 import { getObjectReadableFarmName, getLatestStepToRender } from "../../../common/Helper";
 import { STEP_FLOW_IDS } from "../../../common/utils";
+import { ClipLoader } from "react-spinners";
 
 export const UnstakeAddLiquidity = () => {
   const dispatch = useDispatch();
   const { farm } = useParams<{ farm?: string }>();
+  const [isLoading, setIsLoading] = useState(false);
   const location: any = useLocation();
   const history = useHistory();
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
@@ -32,6 +35,7 @@ export const UnstakeAddLiquidity = () => {
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
 
   const onStakeClick = () => {
+    setIsLoading(true)
     let nextStepInfo: any;
     let newFarm: any;
     if (farm==="cFRMx"){
@@ -51,12 +55,20 @@ export const UnstakeAddLiquidity = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      newFarm
-    );
+      newFarm,
+      setIsLoading  
+        );
   }
 
   return (
+    <>
+    {isLoading ? (
+       <FCard>
+       <FItem align={"center"}>
+         <ClipLoader color="#cba461" loading={true} size={150} />
+       </FItem>
+     </FCard>
+    ) : (
     <FContainer className="f-mr-0" width={700}>
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-crucible-steps">
@@ -144,5 +156,7 @@ export const UnstakeAddLiquidity = () => {
         </ul>
       </FCard>
     </FContainer>
+    )}
+    </>
   );
 };

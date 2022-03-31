@@ -1,5 +1,6 @@
 import Web3 from "web3";
 import FerrumJson from "../../utils/FerrumToken.json";
+import ApeRouterJson from '../../utils/ApeRouterAbi.json'
 import { Big } from "big.js";
 import { AbiItem } from "web3-utils";
 
@@ -61,4 +62,28 @@ export class Web3Helper {
     return {symbol,decimals,balance}
     // console.log("symbolsymbolsymbol",symbol,balance)
   }
+
+  async getTokenPriceFromRouter (currency = "0x1A59BF30D6dC8e8363c90A14C142dCb85825C5a7") {
+    const ApeContract = new this.web3Client.eth.Contract(ApeRouterJson.abi as AbiItem[],
+      "0xcF0feBd3f17CEf5b47b0cD257aCf6025c5BFf3b7"
+    );
+
+    const response = await ApeContract.methods.getAmountsOut(
+      "1000000000000000000",
+      [currency,"0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c","0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"]
+    ).call()
+
+    if(response.length){
+      return await this.amountToHuman(response[2],18)
+    }
+    return 0
+  }
+
+  async amountToHuman (amount: string,decimal:number) {
+    const decimalFactor = 10 ** decimal;
+    return new Big(amount).div(decimalFactor).toFixed();
+  }
 }
+
+
+

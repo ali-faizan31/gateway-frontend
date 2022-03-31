@@ -65,17 +65,19 @@ export const Manage = () => {
   );
 
   useEffect(() => {
-    if (!isLoading) {
+    // if (!isLoading) {
       // SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
       //   currentStep._id,
       //   { status: "completed" },
       //   tokenV2
       // );
       getStepCompletedAndRunCompletionFlow(false);
-    }
-  }, [isLoading]);
+    // }
+  }, []);
 
   const getStepCompletedAndRunCompletionFlow = async (renderNeeded: any) => {
+    console.log('here')
+    setIsLoading(true)
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) =>
@@ -111,8 +113,9 @@ export const Manage = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        renderNeeded,
         farm,
+        setIsLoading,
+        true,
         true
       );
     } catch (e: any) {
@@ -152,8 +155,8 @@ export const Manage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm
+      farm,
+      setIsLoading
     );
     setIsLoading(false);
   };
@@ -171,8 +174,8 @@ export const Manage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm
+      farm,
+      setIsLoading
     );
     setIsLoading(false);
   };
@@ -190,8 +193,8 @@ export const Manage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm
+      farm,
+      setIsLoading
     );
     setIsLoading(false);
   };
@@ -209,8 +212,8 @@ export const Manage = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      farm
+      farm,
+      setIsLoading
     );
     setIsLoading(false);
   };
@@ -282,43 +285,45 @@ export const Manage = () => {
       const tokens = [
         {
           token: "FRM",
-          currency: "BSC:0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc",
+          currency: "0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc",
         },
         {
           token: "FRMx",
-          currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
+          currency: "0x8523518001ad5d24b2A04e8729743C0643A316c0",
         },
         {
           token: "cFRM-BNB",
-          currency: "BSC:0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc",
+          currency: "0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc",
         },
         {
           token: "cFRMx-BNB",
-          currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
+          currency: "0x8523518001ad5d24b2A04e8729743C0643A316c0",
         },
         {
           token: "cFRM",
-          currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
+          currency: "0x8523518001ad5d24b2A04e8729743C0643A316c0",
         },
         {
           token: "cFRMx",
-          currency: "BSC:0x8523518001ad5d24b2A04e8729743C0643A316c0",
+          currency: "0x8523518001ad5d24b2A04e8729743C0643A316c0",
         },
       ];
 
       for (let item of tokens) {
-        const priceDetails = (await client.getPairPrice(
-          ctx.dispatch,
-          item.currency,
-          item.currency,
-          walletAddress as string
-        )) as any;
+        const priceDetails = await web3Helper.getTokenPriceFromRouter(item.currency)
+        console.log(priceDetails);
+        // (await client.getPairPrice(
+        //   ctx.dispatch,
+        //   item.currency,
+        //   item.currency,
+        //   walletAddress as string
+        // )) as any;
         if (!!priceDetails) {
           dispatch(
             actions.priceDataLoaded({
               data: {
                 token: item.token,
-                price: Number(priceDetails.basePrice.usdtPrice).toFixed(3),
+                price: Number(priceDetails).toFixed(3),
               },
             })
           );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import {
   FCard,
@@ -22,10 +22,12 @@ import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
 import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import { STEP_FLOW_IDS } from "../../../common/utils";
+import { ClipLoader } from "react-spinners";
 
 export const Success = () => {
   const dispatch = useDispatch();
   const location: any = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
   const { farm } = useParams<{ farm?: string }>();
   const history = useHistory();
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
@@ -41,6 +43,7 @@ export const Success = () => {
   }, []);
 
   const getStepCompleted = async (renderNeeded: any) => {
+    setIsLoading(true)
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) =>
@@ -73,10 +76,11 @@ export const Success = () => {
         currentStep,
         currentStepIndex,
         stepFlowStepHistory,
-        dispatch,
+        dispatch, 
         history,
-        renderNeeded,
-        farm
+        farm,
+        setIsLoading,
+        renderNeeded, 
       );
     } catch (e: any) {
       let errorResponse =
@@ -107,6 +111,7 @@ export const Success = () => {
   }
 
   const getFirstCardClickFunction = () => {
+    setIsLoading(true)
     let nextStepInfo: any;
     let newFarm: any;
     if (farm?.includes("BNB")){
@@ -137,13 +142,14 @@ export const Success = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      newFarm
+      newFarm,
+      setIsLoading 
     );
 
   }
 
   const onMintClick = () => {
+    setIsLoading(true)
     let nextStepInfo: any;
     let newFarm: any;
     if (farm?.includes("BNB")){
@@ -174,12 +180,20 @@ export const Success = () => {
       stepFlowStepHistory,
       dispatch,
       history,
-      true,
-      newFarm
+      newFarm,
+      setIsLoading
     );
   }
 
   return (
+    <>
+    {isLoading ? (
+       <FCard>
+       <FItem align={"center"}>
+         <ClipLoader color="#cba461" loading={true} size={150} />
+       </FItem>
+     </FCard>
+    ) : (
     <FContainer className="f-mr-0">
       <CrucibleMyBalance />
       <FCard variant={"secondary"} className="card-congrats">
@@ -301,5 +315,7 @@ export const Success = () => {
         </FGrid>
       </FCard>
     </FContainer>
+    )}
+    </>
   );
 };

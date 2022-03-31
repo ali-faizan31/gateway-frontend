@@ -13,6 +13,7 @@ import competitionReducer from './slices/competition';
 import leaderboardReducer from './slices/leaderboard';
 import phraseReducer from './slices/phrase';
 import { approvableButtonSlice } from "../container-components/web3Client/approvalButtonWrapper";
+import { chainEventsSlice } from "../container-components/web3Client/chainEventItem"; 
 
 const walletConnectorPersistConfig = {
   key: "walletConnector",
@@ -56,6 +57,7 @@ const rootReducer = combineReducers({
      walletConnectorSlice.reducer
   ),
   approval: approvableButtonSlice.reducer,
+  watchEvents: chainEventsSlice.reducer,
   crucible: persistReducer(cruciblePersistConfig, crucibleSlice.reducer),
   competition: competitionReducer,
   leaderboard: leaderboardReducer,

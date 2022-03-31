@@ -13,7 +13,7 @@ import { MetaMaskConnector } from "../../../container-components";
 import { RootState } from "../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../routes/paths";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
-import { getLatestStepWithPendingStatus } from "../../../utils/global.utils";
+// import { getLatestStepWithPendingStatus } from "../../../utils/global.utils";
 import { updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId } from "../../../_apis/StepFlowStepHistory";
 
 export const CrucibleGetStarted = () => {
@@ -39,17 +39,17 @@ export const CrucibleGetStarted = () => {
     }
   }, [location]);
 
-  useEffect(() => {
-    if (stepFlowStepHistory?.length) {
-      const step: any = getLatestStepWithPendingStatus(stepFlowStepHistory); // undefined check implement to reatrt sequence
-      if (tokenV2 && location.state.id && step?.step?.name !== "Introduction") {
-        history.push({
-          pathname: PATH_DASHBOARD.crucible.deployer,
-          state: location.state,
-        });
-      }
-    }
-  }, [tokenV2, location, stepFlowStepHistory]);
+  // useEffect(() => {
+  //   if (stepFlowStepHistory?.length) {
+  //     const step: any = getLatestStepWithPendingStatus(stepFlowStepHistory); // undefined check implement to reatrt sequence
+  //     if (tokenV2 && location.state.id && step?.step?.name !== "Introduction") {
+  //       history.push({
+  //         pathname: PATH_DASHBOARD.crucible.deployer,
+  //         state: location.state,
+  //       });
+  //     }
+  //   }
+  // }, [tokenV2, location, stepFlowStepHistory]);
 
   const onGetStartedClick = async () => {
     console.log(neverShowAgain);

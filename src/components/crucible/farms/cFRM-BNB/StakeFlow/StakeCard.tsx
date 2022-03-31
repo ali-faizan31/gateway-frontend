@@ -35,6 +35,7 @@ import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
+import { ClipLoader } from "react-spinners";
 
 export const Stake = () => {
   const dispatch = useDispatch();
@@ -42,7 +43,7 @@ export const Stake = () => {
   const location: any = useLocation();
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   // const [approvedDone, setapprovedDone] = useState(false);
-  // const [isApproving, setIsApproving] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [amount, setAmount] = useState(0);
   const history = useHistory();
@@ -103,6 +104,7 @@ export const Stake = () => {
   }, [approvals]);
 
   const getStepCompleted = async (renderNeeded: any) => {
+    setIsLoading(true)
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) =>
@@ -135,10 +137,11 @@ export const Stake = () => {
         currentStep,
         currentStepIndex,
         stepFlowStepHistory,
-        dispatch,
+        dispatch, 
         history,
-        renderNeeded,
-        farm
+        farm,
+        setIsLoading,
+        renderNeeded, 
       );
     } catch (e: any) {
       let errorResponse =
@@ -237,6 +240,7 @@ export const Stake = () => {
   };
 
   const onContinueToNextStepClick = () => {
+    setIsLoading(true)
     if (currentStep.status === "pending") {
       location.state.id = currentStep.stepFlow;
       let splitted = currentStep.stepFlowStep.name.split("-");
@@ -249,8 +253,8 @@ export const Stake = () => {
         stepFlowStepHistory,
         dispatch,
         history,
-        true,
-        farm
+        farm,
+        setIsLoading
       );
     }
   };
@@ -274,6 +278,14 @@ export const Stake = () => {
   console.log(getAmount(), typeof(getAmount()), 'amount')
 
   return (
+    <>
+    {isLoading ? (
+       <FCard>
+       <FItem align={"center"}>
+         <ClipLoader color="#cba461" loading={true} size={150} />
+       </FItem>
+     </FCard>
+    ) : (
     <FCard variant={"secondary"} className="card-deposit  card-shadow">
       <div className="card-title">
         <FItem display={"flex"} alignY="center">
@@ -374,5 +386,7 @@ export const Stake = () => {
         onContinueToNextStepClick={() => onContinueToNextStepClick()}
       />
     </FCard>
+    )}
+    </>
   );
 };
