@@ -26,7 +26,7 @@ import {  getBaseTokenName, getCrucibleTokenName, STEP_FLOW_IDS } from "../../..
 import { ReactComponent as IconNetworkFrm } from "../../../../../assets/img/icon-network-frm.svg";
 import IconNetworkCFrmStr from "../../../../../assets/img/icon-network-cfrm.svg";
 import IconNetworkFrmx from "../../../../../assets/img/icon-network-frmx.svg";
-import IconNetworkCFrmx from "../../../../../assets/img/icon-network-cfrmx.svg";
+import IconNetworkCFrmxStr from "../../../../../assets/img/icon-network-cfrmx.svg";
 import { ReactComponent as IconNetworkBnb } from "../../../../../assets/img/icon-network-bnb.svg";
 import { ClipLoader } from "react-spinners";
 
@@ -144,7 +144,7 @@ export const CrucibleManage = ({
       label: (
         <FItem display={"flex"} alignY="center">
           <span className="icon-wrap">
-            <img src={IconNetworkCFrmx} alt="network-cfrmx" />
+            <img src={IconNetworkCFrmxStr} alt="network-cfrmx" />
           </span>{" "}
           <span>cFRMx</span>
         </FItem>
@@ -184,8 +184,8 @@ export const CrucibleManage = ({
         </FItem>
         <div className="network-icon-wrapper">
           <span className="icon-wrap">
-            <img src={IconNetworkCFrmStr} alt="network-cfrm" />
-            <IconNetworkBnb />
+            <img src={farm?.includes("cFRMx") ? IconNetworkCFrmxStr : IconNetworkCFrmStr} alt="network-cfrm" />
+            {farm?.includes("BNB") && <IconNetworkBnb />}
           </span>
         </div>
       </div>
