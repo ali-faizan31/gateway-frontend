@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FHeader, FButton, FItem, FCard } from "ferrum-design-system";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { FaUserCircle } from "react-icons/fa";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory, Link, useLocation } from "react-router-dom";
 import { PATH_AUTH, PATH_DASHBOARD } from "../../routes/paths";
 import { MetaMaskConnector } from "../../container-components";
 import { ConnectWalletDialog } from "../../utils/connect-wallet/ConnectWalletDialog";
@@ -30,10 +30,10 @@ import { getNetworkInformationForPublicUser } from '../../_apis/NetworkCrud';
 import { getCABNInformationForPublicUser } from "../../_apis/CABNCrud";
 
 const DashboardHeader = ({ title }: any) => {
-  // const { pathname } = useLocation();
+  const { pathname } = useLocation();
   // const dispatch = useDispatch();
   const history = useHistory();
-  // const isPublic = pathname.includes("pub");
+  const isPublic = pathname.includes("pub");
   const [networkResponse, setNetworkResponse] = useState<any>({});
   const {
     isConnected,
@@ -133,14 +133,14 @@ const DashboardHeader = ({ title }: any) => {
   return (
     <>
       <FHeader showLogo={false} titleText={title}>
-        {localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG && (
+        {(localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG && !isPublic) && (
           <FItem align="right" display={"flex"}>
             <FButton
               title="Logout"
               postfix={<RiLogoutCircleRLine />}
               onClick={handleLogout}
             ></FButton>
-          </FItem>
+        </FItem>
         )}
         {localStorageHelper.load(ME_TAG)?.role !== ORG_ROLE_TAG && (
           <FItem align="right" display={"flex"} className="no-left-margin">

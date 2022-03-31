@@ -54,7 +54,7 @@ export const Manage = () => {
     (state: RootState) => state.crucible.userCrucibleDetails
   );
   let userStake = (userCrucibleData.stakes || []).find(
-    (e: any) => e.address === "0xAb0433AA0b5e05f1FF0FD293CFf8bEe15882cCAd"
+    (e: any) => e.address.toLowerCase() === location.state.LPstakingAddress
   );
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
     (state: RootState) => state.crucible
@@ -285,11 +285,11 @@ export const Manage = () => {
       const tokens = [
         {
           token: "FRM",
-          currency: "0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc",
+          currency: "0xa719b8ab7ea7af0ddb4358719a34631bb79d15dc", // done
         },
         {
           token: "FRMx",
-          currency: "0x8523518001ad5d24b2A04e8729743C0643A316c0",
+          currency: "0x8523518001ad5d24b2a04e8729743c0643a316c0", // done
         },
         {
           token: "cFRM-BNB",
@@ -301,11 +301,11 @@ export const Manage = () => {
         },
         {
           token: "cFRM",
-          currency: "0x8523518001ad5d24b2A04e8729743C0643A316c0",
+          currency: "0x1a59bf30d6dc8e8363c90a14c142dcb85825c5a7", // done  // change before prod
         },
         {
           token: "cFRMx",
-          currency: "0x8523518001ad5d24b2A04e8729743C0643A316c0",
+          currency: "0x176e6504bfa5edf24d3a2665cc766f16959c2633",
         },
       ];
 
@@ -424,7 +424,7 @@ export const Manage = () => {
                       weight={700}
                       className="f-pb--2"
                     >
-                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0")
+                      {`${BigUtils.safeParse(crucible?.feeOnTransferRate || "0")
                         .times(100)
                         .toString()}%`}
                     </FTypo>
@@ -463,7 +463,7 @@ export const Manage = () => {
               <FCard className={"styled-card align-v your-crucible"}>
                 <FGrid>
                   <FGridItem size={[6, 6, 6]} dir="column">
-                    <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB")? "LP": ""} Deposits</FTypo>
+                    <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB")? "LP": ""} Farm Stake </FTypo>
                     <FTypo
                       size={24}
                       weight={600}
@@ -478,7 +478,7 @@ export const Manage = () => {
                         weight={300}
                         className={"f-pl--7 f-pb--1"}
                       >
-                        {farm?.includes("BNB")? `APE-LP ${farm}`: farm}
+                        {farm?.includes("BNB")? `APE-LP ${crucible?.symbol}-BNB`: crucible?.symbol}
                       </FTypo>
                     </FTypo>
                   </FGridItem>
@@ -511,7 +511,7 @@ export const Manage = () => {
                   <FGridItem size={[6]} dir="column">
                     <FTypo className="f-pb--2">Your unclaimed Rewards</FTypo>
                     <FTypo color="#DAB46E" size={22} weight={500}>
-                      {Number(userStake?.rewardOf || "0").toFixed(3)} cFRM
+                      {Number(userStake?.rewardOf || "0").toFixed(3)} {crucible?.symbol}
                     </FTypo>
                   </FGridItem>
                   <FGridItem size={[6]} alignY="center" alignX={"end"}>

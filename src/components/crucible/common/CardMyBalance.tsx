@@ -23,6 +23,24 @@ export const CrucibleMyBalance = () => {
 
 
   useEffect(() => {
+    console.log('CBTTokenInfo', CBTTokenInfo)
+  }, [CBTTokenInfo])
+
+  useEffect(() => {
+    console.log('CBTxTokenInfo', CBTxTokenInfo)
+  }, [CBTxTokenInfo])
+
+  useEffect(() => {
+    console.log('APELPCFRMTokenInfo', APELPCFRMTokenInfo)
+  }, [APELPCFRMTokenInfo])
+
+  useEffect(() => {
+    console.log('APELPCFRMxTokenInfo', APELPCFRMxTokenInfo)
+  }, [APELPCFRMxTokenInfo])
+
+
+
+  useEffect(() => {
     getTokenInformation(networkClient, walletAddress, CBTTokenContractAddress, setCBTTokenInfo, CBTTokenInfo);
     getTokenInformation(networkClient, walletAddress, CBTxTokenContractAddress, setCBTxTokenInfo, CBTxTokenInfo);
     getTokenInformation(networkClient, walletAddress, APELPCFRMBNBTokenContractAddress, setAPELPCFRMTokenInfo, APELPCFRMTokenInfo);
