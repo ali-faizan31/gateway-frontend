@@ -13,7 +13,8 @@ import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arro
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 // import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import {
-  getLatestStepToRender, getObjectReadableFarmName,
+  getLatestStepToRender,
+  getObjectReadableFarmName,
   // getNextStepFlowStepId,
 } from "../../../common/Helper";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,35 +31,29 @@ export const AddLiquidity = () => {
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
   const [networkResponse, setNetworkResponse] = useState<any>({});
-  const [addLiquidityUrl, setAddLiquidityUrl] = useState('');
-  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
-    (state: RootState) => state.crucible
-  );
-  const { tokenV2 } = useSelector(
-    (state: RootState) => state.walletAuthenticator
-  );
+  const [addLiquidityUrl, setAddLiquidityUrl] = useState("");
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
+  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
   const { currentWalletNetwork } = useSelector((state: RootState) => state.walletConnector);
   const { farm } = useParams<{ farm?: string }>();
-
 
   useEffect(() => {
     if (currentWalletNetwork) {
       getNetworkInfo();
     }
-  }, [currentWalletNetwork])
-
+  }, [currentWalletNetwork]);
 
   const getNetworkInfo = async () => {
     let networkResponse: any = await getNetworkInformationForPublicUser(currentWalletNetwork);
     networkResponse = networkResponse.data && networkResponse.data.body && networkResponse.data.body.network;
     if (networkResponse) {
-      setNetworkResponse(networkResponse)
-      let dexUrl = networkResponse.networkCurrencyAddressByNetwork.networkDex.dex.url
+      setNetworkResponse(networkResponse);
+      let dexUrl = networkResponse.networkCurrencyAddressByNetwork.networkDex.dex.url;
       let addLiquidityUrl = `${dexUrl}add/${crucible.contractAddress}/ETH`;
       setAddLiquidityUrl(addLiquidityUrl);
     }
-  }
+  };
 
   const onStakeClick = () => {
     setIsLoading(true);
@@ -93,15 +88,10 @@ export const AddLiquidity = () => {
           </FItem>
         </FCard>
       ) : (
-        <FContainer className="f-mr-0" width={700}>
+        <FContainer width={700}>
           <CrucibleMyBalance />
           <FCard variant={"secondary"} className="card-crucible-steps">
-            <FTypo
-              size={25}
-              weight={700}
-              className={"card-title w-100"}
-              display="flex"
-            >
+            <FTypo size={25} weight={700} className={"card-title w-100"} display="flex">
               Crucible Token Sustainable Liquidity Farming
             </FTypo>
             <ul>
@@ -111,8 +101,7 @@ export const AddLiquidity = () => {
                     Step 1
                   </FTypo>
                   <FTypo size={18}>
-                    Congratulations! You have successfully minted your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens!
-                    Please proceed to step 2.
+                    Congratulations! You have successfully minted your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens! Please proceed to step 2.
                   </FTypo>
                 </span>
               </li>
@@ -122,22 +111,20 @@ export const AddLiquidity = () => {
                     Step 2
                   </FTypo>
                   <FTypo size={18}>
-                    In order to deposit LP tokens into the {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} LP Farm ({farm?.includes("cFRMX") ? "cFRMx" : "cFRM"}/BNB
-                    pair), you will first need to add liquidity.
+                    In order to deposit LP tokens into the {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} LP Farm (
+                    {farm?.includes("cFRMX") ? "cFRMx" : "cFRM"}/BNB pair), you will first need to add liquidity.
                     <strong>Click ‘Add Liquidity’ to get started.</strong>
                     <br></br>
                     <br></br>
-                    After you add liquidity, you will need to return to this screen
-                    and stake the {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} LP tokens.
+                    After you add liquidity, you will need to return to this screen and stake the {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} LP
+                    tokens.
                   </FTypo>
                   <br></br>
                   <FInputCheckbox
                     onClick={() => setStepTwoCheck(!stepTwoCheck)}
                     name="step2Check"
                     className="f-mb-1 f-mt-1"
-                    label={
-                      "I understand that in order to earn rewards I need to return to this page after adding liquidity and complete Step 3."
-                    }
+                    label={"I understand that in order to earn rewards I need to return to this page after adding liquidity and complete Step 3."}
                   />
                   <FButton
                     title="Add Liquidity"
@@ -154,17 +141,20 @@ export const AddLiquidity = () => {
                     Step 3
                   </FTypo>
                   <FTypo size={18}>
-                    Congratulations! You have successfully added liquidity. You are
-                    now able to stake your {farm?.includes("BNB") ? "APE-LPs" : ""} {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}{farm?.includes("BNB") ? "-BNB" : " LP"} tokens to start earning
-                    rewards!
+                    Congratulations! You have successfully added liquidity. You are now able to stake your {farm?.includes("BNB") ? "APE-LPs" : ""}{" "}
+                    {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
+                    {farm?.includes("BNB") ? "-BNB" : " LP"} tokens to start earning rewards!
                   </FTypo>
                   <br></br>
                   <FInputCheckbox
                     onClick={() => setStepThreeCheck(!stepThreeCheck)}
                     name="step3Check"
                     className="f-mb-1 f-mt-1"
-                    label={
-                      `I have added liquidity of ${farm?.includes("BNB") ? "APE-LP" : ""} ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}${farm?.includes("BNB") ? "-BNB" : "/BNB"} pair and have the LP tokens. I’m ready to stake my ${farm?.includes("BNB") ? "APE-LP" : ""} ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}${farm?.includes("BNB") ? "-BNB" : "/BNB"} tokens now.`}
+                    label={`I have added liquidity of ${farm?.includes("BNB") ? "APE-LP" : ""} ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}${
+                      farm?.includes("BNB") ? "-BNB" : "/BNB"
+                    } pair and have the LP tokens. I’m ready to stake my ${farm?.includes("BNB") ? "APE-LP" : ""} ${
+                      farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
+                    }${farm?.includes("BNB") ? "-BNB" : "/BNB"} tokens now.`}
                   />
                   {/* <FButton title="Add Liquidity" postfix={<IconArrow />} className="w-100" disabled={!stepThreeCheck} /> */}
                 </span>

@@ -11,22 +11,12 @@ import { RootState } from "../../redux/rootReducer";
 // import { logout } from "../../_apis/OnboardingCrud";
 import toast from "react-hot-toast";
 import { localStorageHelper, TruncateWithoutRounding } from "../../utils/global.utils";
-import {
-  COMMUNITY_ROLE_TAG,
-  ME_TAG,
-  TOKEN_TAG,
-  ORG_ROLE_TAG,
-  tokenFRMBSCMainnet,
-  tokenFRMxBSCMainnet
-} from "../../utils/const.utils";
-import {
-  getFormattedBalance,
-  getFormattedWalletAddress,
-} from "../../utils/global.utils";
+import { COMMUNITY_ROLE_TAG, ME_TAG, TOKEN_TAG, ORG_ROLE_TAG, tokenFRMBSCMainnet, tokenFRMxBSCMainnet } from "../../utils/const.utils";
+import { getFormattedBalance, getFormattedWalletAddress } from "../../utils/global.utils";
 import FerrumJson from "../../utils/FerrumToken.json";
 import { AbiItem } from "web3-utils";
 import { Big } from "big.js";
-import { getNetworkInformationForPublicUser } from '../../_apis/NetworkCrud';
+import { getNetworkInformationForPublicUser } from "../../_apis/NetworkCrud";
 import { getCABNInformationForPublicUser } from "../../_apis/CABNCrud";
 
 const DashboardHeader = ({ title }: any) => {
@@ -35,16 +25,11 @@ const DashboardHeader = ({ title }: any) => {
   const history = useHistory();
   const isPublic = pathname.includes("pub");
   const [networkResponse, setNetworkResponse] = useState<any>({});
-  const {
-    isConnected,
-    isConnecting,
-    walletAddress,
-    walletBalance,
-    networkClient,
-    currentWalletNetwork
-  } = useSelector((state: RootState) => state.walletConnector);
+  const { isConnected, isConnecting, walletAddress, walletBalance, networkClient, currentWalletNetwork } = useSelector(
+    (state: RootState) => state.walletConnector
+  );
   const { meV2 } = useSelector((state: RootState) => state.walletAuthenticator);
-  
+
   const [FRMTokenInfo, setFRMTokenInfo] = useState<any>({});
 
   const [FRMxTokenInfo, setFRMxTokenInfo] = useState<any>({});
@@ -53,8 +38,7 @@ const DashboardHeader = ({ title }: any) => {
     if (currentWalletNetwork) {
       getCurrentNetworkInformation(currentWalletNetwork);
     }
-  }, [currentWalletNetwork])
-  
+  }, [currentWalletNetwork]);
 
   const getCurrentNetworkInformation = async (currentWalletNetwork: any) => {
     let networkResponse = await getNetworkInformationForPublicUser(currentWalletNetwork);
@@ -62,7 +46,7 @@ const DashboardHeader = ({ title }: any) => {
     if (networkResponse) {
       setNetworkResponse(networkResponse);
     }
-  }
+  };
 
   useEffect(() => {
     if (meV2 && meV2.role === COMMUNITY_ROLE_TAG) {
@@ -83,7 +67,7 @@ const DashboardHeader = ({ title }: any) => {
       }
       localStorageHelper.removeItem(ME_TAG);
       localStorageHelper.removeItem(TOKEN_TAG);
-    } catch (e) { }
+    } catch (e) {}
   };
 
   useEffect(() => {
@@ -96,11 +80,11 @@ const DashboardHeader = ({ title }: any) => {
 
   const getCABNInformation = async (tokenContractAddress: any, setInfo: any, info: any) => {
     let cabnResponse: any = await getCABNInformationForPublicUser(tokenContractAddress);
-    cabnResponse = cabnResponse.data && cabnResponse.data.body && cabnResponse.data.body.currencyAddressesByNetworks[0]; 
-    if (cabnResponse){
-    setInfo({ ...info, symbol: cabnResponse.currency.symbol, logo: cabnResponse.currency.logo })
+    cabnResponse = cabnResponse.data && cabnResponse.data.body && cabnResponse.data.body.currencyAddressesByNetworks[0];
+    if (cabnResponse) {
+      setInfo({ ...info, symbol: cabnResponse.currency.symbol, logo: cabnResponse.currency.logo });
     }
-  }
+  };
 
   const getTokenInformation = async (tokenContractAddress: any, setInfo: any, info: any) => {
     let symbol,
@@ -109,10 +93,7 @@ const DashboardHeader = ({ title }: any) => {
       balance = null;
     try {
       if (networkClient) {
-        const tokenContract = new networkClient.eth.Contract(
-          FerrumJson.abi as AbiItem[],
-          tokenContractAddress
-        );
+        const tokenContract = new networkClient.eth.Contract(FerrumJson.abi as AbiItem[], tokenContractAddress);
         symbol = await tokenContract.methods.symbol().call();
         decimals = (await tokenContract.methods.decimals().call()) as any;
         name = await tokenContract.methods.name().call();
@@ -131,73 +112,46 @@ const DashboardHeader = ({ title }: any) => {
       toast.error(`Error occured: ${e}`);
     }
   };
-  
+
   return (
     <>
       <FHeader showLogo={false} titleText={title}>
-        {(localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG && !isPublic) && (
+        {localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG && !isPublic && (
           <FItem align="right" display={"flex"}>
-            <FButton
-              title="Logout"
-              postfix={<RiLogoutCircleRLine />}
-              onClick={handleLogout}
-            ></FButton>
-        </FItem>
+            <FButton title="Logout" postfix={<RiLogoutCircleRLine />} onClick={handleLogout}></FButton>
+          </FItem>
         )}
         {localStorageHelper.load(ME_TAG)?.role !== ORG_ROLE_TAG && (
           <FItem align="right" display={"flex"} className="no-left-margin">
             <>
               {walletAddress && (
                 <>
-                  <FCard
-                    variant={"primary"}
-                    className={
-                      "no-left-margin custom-padding-10 custom-border-radius-4 custom-min-width-270"
-                    }
-                  >
-                    <FItem display={"flex"}>
-                      <FCard
-                        variant={"primary"}
-                        className={"d-flex custom-padding-10 overflow-visible"}
-                      >
-                        <img src={FRMTokenInfo?.logo} height="22px" width="22px" style={{ marginRight: "3px" }}  />
+                  <FCard variant={"primary"} className={"no-left-margin custom-padding-0 custom-border-radius-4 custom-min-width-270"}>
+                    <FItem display={"flex"} alignY="center">
+                      <FCard variant={"primary"} className={"d-flex custom-padding-10 overflow-visible"}>
+                        <img src={FRMTokenInfo?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} />
                         {FRMTokenInfo && TruncateWithoutRounding(FRMTokenInfo.balance, 3)}
-                        <p className="primary-color f-pl--4">
-                          {" "} {FRMTokenInfo.symbol ? FRMTokenInfo.symbol : FRMTokenInfo.tokenSymbol}
-                        </p>
+                        <p className="primary-color f-pl--4"> {FRMTokenInfo.symbol ? FRMTokenInfo.symbol : FRMTokenInfo.tokenSymbol}</p>
                       </FCard>
-                      <FCard
-                        variant={"primary"}
-                        className={"d-flex custom-padding-10 overflow-visible"}
-                      >
-                        {FRMxTokenInfo.logo && <img src={FRMxTokenInfo.logo} height="22px" width="22px" style={{ marginRight: "3px" }}  />}
+                      <FCard variant={"primary"} className={"d-flex custom-padding-10 overflow-visible"}>
+                        {FRMxTokenInfo.logo && <img src={FRMxTokenInfo.logo} height="22px" width="22px" style={{ marginRight: "3px" }} />}
                         {FRMxTokenInfo && TruncateWithoutRounding(FRMxTokenInfo.balance, 3)}
-                        <p className="primary-color f-pl--4"> 
-                          {" "}  {FRMxTokenInfo.symbol ? FRMxTokenInfo.symbol : FRMxTokenInfo.tokenSymbol}
-                        </p>
+                        <p className="primary-color f-pl--4"> {FRMxTokenInfo.symbol ? FRMxTokenInfo.symbol : FRMxTokenInfo.tokenSymbol}</p>
                       </FCard>
                     </FItem>
                   </FCard>
-                  <FCard
-                    variant={"secondary"}
-                    className={
-                      "no-left-margin custom-padding-10 custom-border-radius-4 custom-min-width-270"
-                    }
-                  >
-                    <FItem display={"flex"} className="justify-content-center">
-                      <FCard
-                        variant={"secondary"}
-                        className={"d-flex custom-padding-10 overflow-visible"}
-                      >
-                        <img src={networkResponse && networkResponse?.networkCurrencyAddressByNetwork?.currency?.logo} height="22px" width="22px" style={{ marginRight: "3px" }}  />
+                  <FCard variant={"secondary"} className={"no-left-margin custom-padding-1 custom-border-radius-4 custom-min-width-270"}>
+                    <FItem display={"flex"} alignY="center">
+                      <FCard variant={"secondary"} className={"d-flex custom-padding-10 overflow-visible"}>
+                        <img
+                          src={networkResponse && networkResponse?.networkCurrencyAddressByNetwork?.currency?.logo}
+                          height="22px"
+                          width="22px"
+                          style={{ marginRight: "3px" }}
+                        />
                         {getFormattedWalletAddress(walletAddress)}
                       </FCard>
-                      <FCard
-                        className={
-                          "no-left-margin custom-padding-10 d-flex custom-border-radius-4"
-                        }
-                        variant={"primary"}
-                      >
+                      <FCard className={"no-left-margin custom-padding-10 d-flex custom-border-radius-4"} variant={"primary"}>
                         {TruncateWithoutRounding(getFormattedBalance(walletBalance), 3)} {networkResponse && networkResponse?.networkCurrencySymbol}
                       </FCard>
                     </FItem>
@@ -209,9 +163,7 @@ const DashboardHeader = ({ title }: any) => {
                 WalletConnectModal={ConnectWalletDialog}
                 isAuthenticationNeeded={true}
                 WalletConnectViewProps={{
-                  className: isConnected
-                    ? "no-left-margin connect-button-left-borders"
-                    : "no-left-margin",
+                  className: isConnected ? "no-left-margin connect-button-left-borders" : "no-left-margin",
                 }}
               />
               <Link
@@ -224,8 +176,7 @@ const DashboardHeader = ({ title }: any) => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                }}
-              >
+                }}>
                 <FaUserCircle color="#cba461" size={"40px"} />
               </Link>
             </>

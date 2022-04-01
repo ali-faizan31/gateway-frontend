@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  FButton,
-  FCard,
-  FContainer,
-  FInputCheckbox,
-  FTypo,
-} from "ferrum-design-system";
+import { FButton, FCard, FContainer, FInputCheckbox, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconArrow } from "../../assets/img/icon-arrow-square.svg";
 import { useHistory, useLocation } from "react-router";
 import { useSelector } from "react-redux";
@@ -22,15 +16,9 @@ export const CrucibleGetStarted = () => {
 
   const [neverShowAgain, setNeverShowAgain] = useState(false);
   const [stepFlowResponse, setStepFlowResponse] = useState<any>(undefined);
-  const { meV2, tokenV2 } = useSelector(
-    (state: RootState) => state.walletAuthenticator
-  );
-  const { stepFlowStepHistory, currentStep } = useSelector(
-    (state: RootState) => state.crucible
-  );
-  const { isConnected } = useSelector(
-    (state: RootState) => state.walletConnector
-  );
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { stepFlowStepHistory, currentStep } = useSelector((state: RootState) => state.crucible);
+  const { isConnected } = useSelector((state: RootState) => state.walletConnector);
 
   useEffect(() => {
     console.log(location.state);
@@ -55,12 +43,7 @@ export const CrucibleGetStarted = () => {
     console.log(neverShowAgain);
     if (neverShowAgain === true) {
       let data = { status: "completed" };
-      let updateResponse: any =
-        await updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
-          currentStep._id,
-          data,
-          tokenV2
-        );
+      let updateResponse: any = await updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       console.log(updateResponse, "------------------");
       history.push({
@@ -80,14 +63,13 @@ export const CrucibleGetStarted = () => {
   };
 
   return (
-    <FContainer width={950} className="f-mr-0 f-mb-2">
+    <FContainer width={800} className="f-mb-2">
       <FCard variant={"secondary"} className="card-get-started">
         <FTypo className="card-title" size={22} color="#DAB46E">
           Welcome To The Crucible by Ferrum Network
         </FTypo>
         <FTypo>
-          Watch the explainer video below for a step-by-step tutorial on how to
-          mint, add liquidity, farm, trade, and earn rewards through the
+          Watch the explainer video below for a step-by-step tutorial on how to mint, add liquidity, farm, trade, and earn rewards through the
           Crucible!
         </FTypo>
         <div className="video-wrapper f-mt-1 f-mb-1">
@@ -98,8 +80,7 @@ export const CrucibleGetStarted = () => {
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             frameBorder="0"
-            allowFullScreen
-          ></iframe>
+            allowFullScreen></iframe>
         </div>
         <FTypo size={22} weight={500} className="f-mb-1">
           Crucible Benefits
@@ -114,12 +95,7 @@ export const CrucibleGetStarted = () => {
           <li>Mint, Add Liquidity, Farm, Trade, and Earn Rewards</li>
         </ul>
         {meV2._id ? (
-          <FButton
-            title={"Get Started"}
-            postfix={<IconArrow />}
-            className="w-100 f-mt-2"
-            onClick={() => onGetStartedClick()}
-          />
+          <FButton title={"Get Started"} postfix={<IconArrow />} className="w-100 f-mt-2" onClick={() => onGetStartedClick()} />
         ) : (
           <MetaMaskConnector.WalletConnector
             WalletConnectView={FButton}

@@ -1,22 +1,23 @@
-@media screen and (max-width: 991px) {
-  .f-main .f-container {
-    &.fluid {
-      padding: 2rem 1rem;
+@media screen and (max-width: 1200px) {
+  .f-layout {
+    &.layout-crucible {
+      .f-main {
+        .f-container {
+          &.fluid {
+            padding-right: 1.5rem;
+          }
+        }
+      }
     }
-  }
-  .f-layout header .f-header-title {
-    position: absolute;
-    left: 120px;
-    top: 2rem;
   }
   .card-my-balance {
     position: relative;
-    top: 3rem;
+    top: -2rem;
     left: 0;
     max-width: 90%;
     padding: 1rem 3rem 0 2rem;
-    border-radius: 0 0 10px 10px;
-
+    border-radius: 0 0 10px 10px !important;
+    // margin-bottom: 1rem;
     ul {
       display: flex;
       overflow-y: auto;
@@ -29,6 +30,27 @@
         margin-bottom: 0;
         padding-bottom: 0;
       }
+    }
+  }
+  .card-get-started {
+    margin-right: 0;
+  }
+}
+@media screen and (max-width: 991px) {
+  .f-main .f-container {
+    &.fluid {
+      padding: 2rem 1rem;
+    }
+  }
+  .f-layout header .f-header-title {
+    position: absolute;
+    left: 120px;
+    top: 2rem;
+  }
+  .mobile-aside-toggler {
+    right: 20rem !important;
+    &.open {
+      right: 1rem !important;
     }
   }
 }
