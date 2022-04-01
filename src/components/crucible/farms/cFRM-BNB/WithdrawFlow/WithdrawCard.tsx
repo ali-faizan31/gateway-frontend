@@ -165,10 +165,13 @@ export const Withdraw = () => {
 
   const getRewardAmount = () => {
     if (farm?.includes("BNB")){
-      return networkClient?.utils.fromWei(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0, 'ether')
+      console.log(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount)
+      return LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0
+      // return networkClient?.utils.fromWei(String(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0), 'ether')
       // return LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || "0";
     } else {
-      networkClient?.utils.fromWei(userStake?.rewardOf || 0, 'ether') 
+      return userStake?.rewardOf || 0
+      // networkClient?.utils.fromWei(String(userStake?.rewardOf || 0), 'ether') 
       // return userStake?.rewardOf || 0
     }
   }

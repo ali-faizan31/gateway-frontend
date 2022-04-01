@@ -31,7 +31,7 @@ export const CardAPR = () => {
   const { tokenV2 } = useSelector(
     (state: RootState) => state.walletAuthenticator
   );
-  const { currentStep, currentStepIndex, stepFlowStepHistory } = useSelector(
+  const { currentStep, currentStepIndex, stepFlowStepHistory, aprInformation } = useSelector(
     (state: RootState) => state.crucible
   );
 
@@ -44,7 +44,7 @@ export const CardAPR = () => {
     if (tokenV2){
       setShowConnectDialog(false);
     }
-  }, [tokenV2])
+  }, [tokenV2]) 
   
 
   const tableHeads: any[] = [
@@ -74,7 +74,7 @@ export const CardAPR = () => {
       totalDeposited: "127",
       yourDeposit: "$13",
       yourRewards: "$.1",
-      apr: "10%",
+      apr: aprInformation?.cfrmLp,
       network: "BSC",
       id: "6238314dd292da2db05524dd",
       contract: "0x1a59bf30d6dc8e8363c90a14c142dcb85825c5a7", // crucible contract address
@@ -88,7 +88,7 @@ export const CardAPR = () => {
       totalDeposited: "127",
       yourDeposit: "$13",
       yourRewards: "$.2",
-      apr: "20%",
+      apr: aprInformation?.cfrm,
       id: "6238386bd292da2db05524f9",
       contract: "0x1a59bf30d6dc8e8363c90a14c142dcb85825c5a7",
       LpCurrency: "0x1a59bf30d6dc8e8363c90a14c142dcb85825c5a7",
@@ -102,7 +102,7 @@ export const CardAPR = () => {
       totalDeposited: "127",
       yourDeposit: "$13",
       yourRewards: "$.3",
-      apr: "20%",
+      apr: aprInformation?.cfrmXLp,
       network: "BSC",
       id: "62383841d292da2db05524f3",
       contract: "0x176e6504bfa5edf24d3a2665cc766f16959c2633",
@@ -116,7 +116,7 @@ export const CardAPR = () => {
       totalDeposited: "127",
       yourDeposit: "$13",
       yourRewards: "$.4",
-      apr: "40%",
+      apr: aprInformation?.cfrmX,
       id: "62383865d292da2db05524f6",
       contract: "0x176e6504bfa5edf24d3a2665cc766f16959c2633",
       LpCurrency: "0x176e6504bfa5edf24d3a2665cc766f16959c2633",

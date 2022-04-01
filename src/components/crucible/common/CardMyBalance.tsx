@@ -4,7 +4,11 @@ import { ReactComponent as IconFerrum } from "../../../assets/img/icon-ferrum.sv
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../redux/rootReducer";
 import * as CrucibleActions from "../redux/CrucibleActions";
-import { getCABNInformation, getTokenInformationFromWeb3, TruncateWithoutRounding } from "../../../utils/global.utils";
+import {
+  getCABNInformation,
+  getTokenInformationFromWeb3,
+  TruncateWithoutRounding,
+} from "../../../utils/global.utils";
 import {
   CBTTokenContractAddress,
   CBTxTokenContractAddress,
@@ -42,11 +46,23 @@ export const CrucibleMyBalance = () => {
         <FListItem>
           <FItem display={"flex"} alignY={"center"} className="w-100">
             <span className="icon-network f-pr--5">
-              <img src={tokenData["CBTToken"]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} alt="" />
+              <img
+                src={tokenData["cBT"]?.logo}
+                height="22px"
+                width="22px"
+                style={{ marginRight: "3px" }}
+                alt=""
+              />
             </span>
             <FTypo>{tokenData["CBTToken"]?.symbol}</FTypo>
           </FItem>
-          <FTypo size={30} weight={600} align={"end"} display="flex" alignY={"end"}>
+          <FTypo
+            size={30}
+            weight={600}
+            align={"end"}
+            display="flex"
+            alignY={"end"}
+          >
             {TruncateWithoutRounding(tokenData["CBTToken"]?.balance, 3) || 0}
           </FTypo>
         </FListItem>
@@ -54,23 +70,48 @@ export const CrucibleMyBalance = () => {
         <FListItem>
           <FItem display={"flex"} alignY={"center"} className="w-100">
             <span className="icon-network f-pr--5">
-              <img src={tokenData["APELPCFRMBNB"]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} alt="" />
+              <img
+                src={tokenData["APELPCFRMBNB"]?.logo}
+                height="22px"
+                width="22px"
+                style={{ marginRight: "3px" }}
+                alt=""
+              />
             </span>
             <FTypo>{tokenData["APELPCFRMBNB"]?.symbol}</FTypo>
           </FItem>
-          <FTypo size={30} weight={600} align={"end"} display="flex" alignY={"end"}>
-            {TruncateWithoutRounding(tokenData["APELPCFRMBNB"]?.balance, 3) || 0}
+          <FTypo
+            size={30}
+            weight={600}
+            align={"end"}
+            display="flex"
+            alignY={"end"}
+          >
+            {TruncateWithoutRounding(tokenData["APELPCFRMBNB"]?.balance, 3) ||
+              0}
           </FTypo>
         </FListItem>
 
         <FListItem>
           <FItem display={"flex"} alignY={"center"} className="w-100">
             <span className="icon-network f-pr--5">
-              <img src={tokenData["CBTxToken"]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} alt="" />
+              <img
+                src={tokenData["cBTx"]?.logo}
+                height="22px"
+                width="22px"
+                style={{ marginRight: "3px" }}
+                alt=""
+              />
             </span>
             <FTypo>{tokenData["CBTxToken"]?.symbol}</FTypo>
           </FItem>
-          <FTypo size={30} weight={600} align={"end"} display="flex" alignY={"end"}>
+          <FTypo
+            size={30}
+            weight={600}
+            align={"end"}
+            display="flex"
+            alignY={"end"}
+          >
             {TruncateWithoutRounding(tokenData["CBTxToken"]?.balance, 3) || 0}
           </FTypo>
         </FListItem>
@@ -78,12 +119,25 @@ export const CrucibleMyBalance = () => {
         <FListItem>
           <FItem display={"flex"} alignY={"center"} className="w-100">
             <span className="icon-network f-pr--5">
-              <img src={tokenData["APELPCFRMxBNB"]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} alt="" />
+              <img
+                src={tokenData["APELPCFRMxBNB"]?.logo}
+                height="22px"
+                width="22px"
+                style={{ marginRight: "3px" }}
+                alt=""
+              />
             </span>
             <FTypo>{tokenData["APELPCFRMxBNB"]?.symbol}</FTypo>
           </FItem>
-          <FTypo size={30} weight={600} align={"end"} display="flex" alignY={"end"}>
-            {TruncateWithoutRounding(tokenData["APELPCFRMxBNB"]?.balance, 3) || 0}
+          <FTypo
+            size={30}
+            weight={600}
+            align={"end"}
+            display="flex"
+            alignY={"end"}
+          >
+            {TruncateWithoutRounding(tokenData["APELPCFRMxBNB"]?.balance, 3) ||
+              0}
           </FTypo>
         </FListItem>
       </FList>

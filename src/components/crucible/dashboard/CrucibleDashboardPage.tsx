@@ -21,6 +21,7 @@ import * as CrucibleActions from "../redux/CrucibleActions";
 import { crucibleSlice } from "../redux/CrucibleSlice";
 import { CBTTokenContractAddress, CBTxTokenContractAddress, APELPCFRMBNBTokenContractAddress, APELPCFRMxBNBTokenContractAddress, tokenFRMBSCMainnet, tokenFRMxBSCMainnet } from "../../../utils/const.utils";
 import { getCABNInformation, getTokenInformationFromWeb3 } from "../../../utils/global.utils";
+import { getAPRInformationForPublicUser } from "../../../_apis/APRCrud";
 
 
 
@@ -36,6 +37,7 @@ const CrucibleDashboardPage = () => {
       dispatch(loadPricingInfo({}))
       loadTokenData(networkClient)
     }
+    getAPRInformation();
     dispatch(CrucibleActions.resetCrucible());
     // eslint-disable-next-line
   }, [networkClient]);
@@ -43,11 +45,11 @@ const CrucibleDashboardPage = () => {
   const loadTokenData = async (networkClient: any) => {
     const tokens = [
       {
-        token: "CBTToken",
+        token: "cBT",
         currency: CBTTokenContractAddress,
       },
       {
-        token: "CBTxToken",
+        token: "cBTx",
         currency: CBTxTokenContractAddress,
       },
       {
@@ -140,6 +142,15 @@ const CrucibleDashboardPage = () => {
       }
     }
   );
+
+  const getAPRInformation = async () => {
+    let aprResponse: any = await getAPRInformationForPublicUser();
+    aprResponse = aprResponse.data && aprResponse.data.body && aprResponse.data.body.crucibleApr;
+    console.log(aprResponse)
+    dispatch(
+      CrucibleActions.updateAPRData(aprResponse)
+    );
+  }
 
   return (
     <FContainer className="f-ml-0 crucible-dashboard">

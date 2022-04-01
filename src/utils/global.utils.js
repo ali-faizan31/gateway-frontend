@@ -119,12 +119,12 @@ export const getTokenInformationFromWeb3 = async (
     const decimalFactor = 10 ** Number(decimals);
     balance = new Big(balance).div(decimalFactor).toFixed();
   }
-  // setInfo({
-  //   ...info,
-  //   tokenSymbol: symbol,
-  //   balance: balance ? balance : "0",
-  //   decimals,
-  // });
+  setInfo && setInfo({
+    ...info,
+    tokenSymbol: symbol,
+    balance: balance ? balance : "0",
+    decimals,
+  });
   return {
     ...info,
     tokenSymbol: symbol,
@@ -147,12 +147,12 @@ export const getCABNInformation = async (
     cabnResponse.data.body &&
     cabnResponse.data.body.currencyAddressesByNetworks[0];
   if (cabnResponse) {
-    // setInfo({
-    //   ...info,
-    //   name: cabnResponse?.currency?.name,
-    //   symbol: cabnResponse?.currency?.symbol,
-    //   logo: cabnResponse?.currency?.logo,
-    // });
+    setInfo && setInfo({
+      ...info,
+      name: cabnResponse?.currency?.name,
+      symbol: cabnResponse?.currency?.symbol,
+      logo: cabnResponse?.currency?.logo,
+    });
     return {
       name: cabnResponse?.currency?.name,
       symbol: cabnResponse?.currency?.symbol,
