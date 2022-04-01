@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router";
 import { BigUtils } from "../../../../../container-components/web3Client/types";
 import { RootState } from "../../../../../redux/rootReducer";
+import { getAPRValueAgainstFarm } from "../../../common/Helper";
 
 const CrucibleWithdrawFeeCard = () => {
   const { farm } = useParams<{ farm?: string }>();
@@ -22,6 +23,7 @@ const CrucibleWithdrawFeeCard = () => {
   const userCrucibleData = useSelector(
     (state: RootState) => state.crucible.userCrucibleDetails
   );
+  const { aprInformation } = useSelector((state: RootState) => state.crucible);
   let userStake = (userCrucibleData.stakes || []).find(
     (e: any) => e.address.toLowerCase() === location.state.LPstakingAddress
   );
@@ -115,7 +117,7 @@ const CrucibleWithdrawFeeCard = () => {
                     >
                       APR
                     </FTypo>
-                    192%
+                    {getAPRValueAgainstFarm(aprInformation, farm)}
                   </FTypo>
                 </FItem>
               </FGridItem>

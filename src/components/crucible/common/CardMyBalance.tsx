@@ -47,14 +47,14 @@ export const CrucibleMyBalance = () => {
           <FItem display={"flex"} alignY={"center"} className="w-100">
             <span className="icon-network f-pr--5">
               <img
-                src={tokenData["CBTToken"]?.logo}
+                src={tokenData["cBT"]?.logo}
                 height="22px"
                 width="22px"
                 style={{ marginRight: "3px" }}
                 alt=""
               />
             </span>
-            <FTypo>{tokenData["CBTToken"]?.symbol}</FTypo>
+            <FTypo>{tokenData["cBT"]?.symbol}</FTypo>
           </FItem>
           <FTypo
             size={30}
@@ -63,7 +63,7 @@ export const CrucibleMyBalance = () => {
             display="flex"
             alignY={"end"}
           >
-            {TruncateWithoutRounding(tokenData["CBTToken"]?.balance, 3) || 0}
+            {TruncateWithoutRounding(tokenData["cBT"]?.balance, 3) || 0}
           </FTypo>
         </FListItem>
 
@@ -96,14 +96,14 @@ export const CrucibleMyBalance = () => {
           <FItem display={"flex"} alignY={"center"} className="w-100">
             <span className="icon-network f-pr--5">
               <img
-                src={tokenData["CBTxToken"]?.logo}
+                src={tokenData["cBTx"]?.logo}
                 height="22px"
                 width="22px"
                 style={{ marginRight: "3px" }}
                 alt=""
               />
             </span>
-            <FTypo>{tokenData["CBTxToken"]?.symbol}</FTypo>
+            <FTypo>{tokenData["cBTx"]?.symbol}</FTypo>
           </FItem>
           <FTypo
             size={30}
@@ -112,7 +112,7 @@ export const CrucibleMyBalance = () => {
             display="flex"
             alignY={"end"}
           >
-            {TruncateWithoutRounding(tokenData["CBTxToken"]?.balance, 3) || 0}
+            {TruncateWithoutRounding(tokenData["cBTx"]?.balance, 3) || 0}
           </FTypo>
         </FListItem>
 

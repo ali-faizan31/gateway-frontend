@@ -25,6 +25,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import ClipLoader from "react-spinners/ClipLoader";
 import { STEP_FLOW_IDS } from "../../../common/utils";
 import {
+  getAPRValueAgainstFarm,
   getLatestStepToRender,
   getObjectReadableFarmName,
 } from "../../../common/Helper";
@@ -59,9 +60,8 @@ export const Manage = () => {
   let userStake = (userCrucibleData.stakes || []).find(
     (e: any) => e.address.toLowerCase() === location.state.LPstakingAddress
   );
-  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
-    (state: RootState) => state.crucible
-  );
+  const { stepFlowStepHistory, currentStep, currentStepIndex, aprInformation } =
+    useSelector((state: RootState) => state.crucible);
   // const { approveTransactionId } = useSelector((state: RootState) => state.approval);
   const { tokenV2 } = useSelector(
     (state: RootState) => state.walletAuthenticator
@@ -516,7 +516,7 @@ export const Manage = () => {
                         >
                           APR
                         </FTypo>
-                        192%
+                        {getAPRValueAgainstFarm(aprInformation, farm)}
                       </FTypo>
                     </FItem>
                   </FGridItem>

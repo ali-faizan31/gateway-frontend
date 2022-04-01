@@ -13,7 +13,7 @@ import { useHistory, useLocation, useParams } from "react-router";
 import { BigUtils } from "../../../../../container-components/web3Client/types";
 import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
-import { getActualRoute } from "../../../common/Helper";
+import { getActualRoute, getAPRValueAgainstFarm } from "../../../common/Helper";
 
 const CrucibleFeeCard = () => {
   const history = useHistory();
@@ -22,16 +22,13 @@ const CrucibleFeeCard = () => {
   const crucible = useSelector(
     (state: RootState) => state.crucible.selectedCrucible
   );
-
+  const { aprInformation } = useSelector((state: RootState) => state.crucible);
   const userCrucibleData = useSelector(
     (state: RootState) => state.crucible.userCrucibleDetails
   );
   let userStake = (userCrucibleData.stakes || []).find(
     (e: any) => e.address.toLowerCase() === location.state.LPstakingAddress
   );
-  useEffect(() => {
-    console.log("test");
-  }, []);
 
   const onClaimRewardsClick = () => {
     history.push({
@@ -131,7 +128,7 @@ const CrucibleFeeCard = () => {
                     >
                       APR
                     </FTypo>
-                    192%
+                    {getAPRValueAgainstFarm(aprInformation, farm)}
                   </FTypo>
                 </FItem>
               </FGridItem>
