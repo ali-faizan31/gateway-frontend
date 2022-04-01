@@ -55,6 +55,7 @@ export const Manage = () => {
   const { stepFlowStepHistory, currentStep, currentStepIndex, aprInformation } = useSelector((state: RootState) => state.crucible);
   // const { approveTransactionId } = useSelector((state: RootState) => state.approval);
   const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const LPStakingDetails = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
 
   useEffect(() => {
     // if (!isLoading) {
@@ -280,18 +281,34 @@ export const Manage = () => {
       })
     );
 
-    if (crucibleData.data) {
-      dispatch(
-        loadLPStakingInfo({
-          crucibleCurrency: `${(location.state.LpCurrency || "").toLowerCase()}`,
-          userAddress: walletAddress as string,
-          network: location.state.network,
-          stakingAddress: location.state.LPstakingAddress,
-        })
-      );
-      dispatch(loadPricingInfo({ crucible: crucibleData.data }));
-      setIsLoading(false);
+    if (farm?.includes("BNB")) {
+      if (crucibleData.data) {
+        dispatch(
+          loadLPStakingInfo({
+            crucibleCurrency: `${(location.state.LpCurrency || "").toLowerCase()}`,
+            userAddress: walletAddress as string,
+            network: location.state.network,
+            stakingAddress: location.state.LPstakingAddress,
+          })
+        );
+        dispatch(loadPricingInfo({ crucible: crucibleData.data }));
+        setIsLoading(false);
+      }
     }
+  };
+
+  const getRewardAmount = () => {
+    console.log(LPStakingDetails[farm!]);
+    if (farm?.includes("BNB")) {
+      return networkClient?.utils.fromWei(String(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0), "ether");
+    } else {
+      // networkClient?.utils.fromWei(String(userStake?.rewardOf || 0), 'ether')
+      return userStake?.rewardOf || 0;
+    }
+  };
+
+  const getRewardSymbol = () => {
+    return crucible.symbol;
   };
 
   return (
@@ -345,7 +362,8 @@ export const Manage = () => {
                   <FGridItem size={[6, 6, 6]} dir="column">
                     <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB") ? "LP" : ""} Farm Stake </FTypo>
                     <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"} color="#DAB46E">
-                      {Number(userStake?.stakeOf || "0").toFixed(3)}
+                      {farm?.includes("BNB") ? Number(LPStakingDetails[farm!]?.stake || "0") : Number(userStake?.stakeOf || "0").toFixed(3)}
+
                       <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
                         {farm?.includes("BNB") ? `APE-LP ${crucible?.symbol}-BNB` : crucible?.symbol}
                       </FTypo>
@@ -368,7 +386,7 @@ export const Manage = () => {
                   <FGridItem size={[6]} dir="column">
                     <FTypo className="f-pb--2">Your unclaimed Rewards</FTypo>
                     <FTypo color="#DAB46E" size={22} weight={500}>
-                      {Number(userStake?.rewardOf || "0").toFixed(3)} {crucible?.symbol}
+                      {getRewardAmount()} {getRewardSymbol()}
                     </FTypo>
                   </FGridItem>
                   <FGridItem size={[6]} alignY="center" alignX={"end"}>

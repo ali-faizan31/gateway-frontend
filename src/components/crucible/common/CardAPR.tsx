@@ -63,8 +63,8 @@ export const CardAPR = () => {
       logo: (
         <>
           {" "}
-          <img src={IconNetworkCFrmStr} height="22px" width="22px" style={{ marginRight: "3px" }} />
-          <img src={IconNetworkBNB} height="22px" width="22px" style={{ marginRight: "3px" }} />{" "}
+          <img src={IconNetworkCFrmStr} height="22px" width="22px" />
+          <img src={IconNetworkBNB} height="22px" width="22px" />{" "}
         </>
       ),
       apr: aprInformation?.cfrmLp,
@@ -72,7 +72,7 @@ export const CardAPR = () => {
       id: "6238314dd292da2db05524dd",
       contract: "0x5732a2a84ec469fc95ac32e12515fd337e143eed", // crucible contract address
       LpCurrency: "0x9528704e44feda5ea240363ee52731859683b1fb", // ape-lp token for crucible and bnb pair
-      LPstakingAddress: "0xeab8290c54b6307016a736ff2191bf2aaef3b697", // lp farm where lp currency will be staked
+      LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a", // lp farm where lp currency will be staked
       internalName: "cFRM-BNB",
     },
     {
@@ -84,14 +84,13 @@ export const CardAPR = () => {
       apr: aprInformation?.cfrm,
       logo: (
         <>
-          {" "}
-          <img src={IconNetworkCFrmStr} height="22px" width="22px" style={{ marginRight: "3px" }} />
+          <img src={IconNetworkCFrmStr} height="22px" width="22px" />
         </>
       ),
       id: "6238386bd292da2db05524f9",
       contract: "0x5732a2a84ec469fc95ac32e12515fd337e143eed",
       LpCurrency: "0x5732a2a84ec469fc95ac32e12515fd337e143eed",
-      LPstakingAddress: "0xab0433aa0b5e05f1ff0fd293cff8bee15882ccad",
+      LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a",
       network: "BSC",
       internalName: "cFRM",
     },
@@ -103,17 +102,17 @@ export const CardAPR = () => {
       yourRewards: "$.3",
       apr: aprInformation?.cfrmXLp,
       network: "BSC",
-      id: "62383841d292da2db05524f3",
       logo: (
         <>
           {" "}
-          <img src={IconNetworkCFrmxStr} height="22px" width="22px" style={{ marginRight: "3px" }} />
-          <img src={IconNetworkBNB} height="22px" width="22px" style={{ marginRight: "3px" }} />{" "}
+          <img src={IconNetworkCFrmxStr} height="22px" width="22px" />
+          <img src={IconNetworkBNB} height="22px" width="22px" />{" "}
         </>
       ),
+      id: "62383841d292da2db05524f3",
       contract: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
       LpCurrency: "0x84f624617bad7e349e194da0877120ee190e4730",
-      LPstakingAddress: "0xeab8290c54b6307016a736ff2191bf2aaef3b697",
+      LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a",
       internalName: "cFRMx-BNB",
     },
     {
@@ -125,14 +124,13 @@ export const CardAPR = () => {
       apr: aprInformation?.cfrmX,
       logo: (
         <>
-          {" "}
-          <img src={IconNetworkCFrmxStr} height="22px" width="22px" style={{ marginRight: "3px" }} />{" "}
+          <img src={IconNetworkCFrmxStr} height="22px" width="22px" />{" "}
         </>
       ),
       id: "62383865d292da2db05524f6",
       contract: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
       LpCurrency: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
-      LPstakingAddress: "0xab0433aa0b5e05f1ff0fd293cff8bee15882ccad",
+      LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a",
       network: "BSC",
       internalName: "cFRMx",
     },

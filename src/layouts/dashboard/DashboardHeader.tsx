@@ -25,9 +25,7 @@ const DashboardHeader = ({ title }: any) => {
   const history = useHistory();
   const isPublic = pathname.includes("pub");
   const [networkResponse, setNetworkResponse] = useState<any>({});
-  const { isConnected, isConnecting, walletAddress, walletBalance, networkClient, currentWalletNetwork } = useSelector(
-    (state: RootState) => state.walletConnector
-  );
+  const { isConnected, isConnecting, walletAddress, walletBalance, networkClient, currentWalletNetwork } = useSelector((state: RootState) => state.walletConnector);
   const { meV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
   const [FRMTokenInfo, setFRMTokenInfo] = useState<any>({});
@@ -143,12 +141,7 @@ const DashboardHeader = ({ title }: any) => {
                   <FCard variant={"secondary"} className={"no-left-margin custom-padding-1 custom-border-radius-4 custom-min-width-270"}>
                     <FItem display={"flex"} alignY="center">
                       <FCard variant={"secondary"} className={"d-flex custom-padding-10 overflow-visible"}>
-                        <img
-                          src={networkResponse && networkResponse?.networkCurrencyAddressByNetwork?.currency?.logo}
-                          height="22px"
-                          width="22px"
-                          style={{ marginRight: "3px" }}
-                        />
+                        <img src={networkResponse && networkResponse?.networkCurrencyAddressByNetwork?.currency?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} />
                         {getFormattedWalletAddress(walletAddress)}
                       </FCard>
                       <FCard className={"no-left-margin custom-padding-10 d-flex custom-border-radius-4"} variant={"primary"}>
@@ -176,7 +169,8 @@ const DashboardHeader = ({ title }: any) => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                }}>
+                }}
+              >
                 <FaUserCircle color="#cba461" size={"40px"} />
               </Link>
             </>

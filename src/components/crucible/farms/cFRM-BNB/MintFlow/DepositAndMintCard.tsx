@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import Web3 from "web3";
 import { useDispatch, useSelector } from "react-redux";
-import { FButton, FCard, FGrid, FGridItem, FInputText, FItem, FTypo } from "ferrum-design-system";
+import { FButton, FCard, FGrid, FGridItem, FInputText, FItem, FTypo, FLabel } from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
 // import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
 // import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
@@ -31,6 +31,7 @@ export const CrucibleDeposit = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { farm } = useParams<{ farm?: string }>();
+  const [transactionId, setTransactionId] = useState("");
   const {
     isConnected,
     // isConnecting,
@@ -119,6 +120,9 @@ export const CrucibleDeposit = () => {
 
       const response = await client.mintCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress);
       if (response) {
+        console.log(response, "metmask");
+        let transactionId = response.split("|");
+        setTransactionId(transactionId[0]);
         setIsProcessing(false);
         setIsProcessed(true);
         if (currentStep.step.name === "Mint") {
@@ -139,6 +143,30 @@ export const CrucibleDeposit = () => {
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
+  };
+
+  const getOpenCapClass = () => {
+    if (Number(crucible.openCap) > 0) {
+      return "open-cap-label green-cap";
+    } else {
+      return "open-cap-label red-cap";
+    }
+  };
+
+  const getOpenCapInfo = () => {
+    if (Number(crucible.openCap) > 0) {
+      return `Minting Is Open ( ${crucible.openCap} Open Cap )`;
+    } else {
+      return `Minting Is Closed ( ${crucible.openCap} Open Cap )`;
+    }
+  };
+
+  const getDisabledCheck = (isApproveMode: boolean) => {
+    if (isApproveMode) {
+      return false;
+    } else {
+      return Number(userCrucibleData?.baseBalance || "0") === 0 || Number(crucible.openCap) === 0;
+    }
   };
 
   return (
@@ -199,11 +227,11 @@ export const CrucibleDeposit = () => {
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
             You have {Number(userCrucibleData?.baseBalance || "0").toFixed(3)} available in the Base Token {userCrucibleData?.baseSymbol}.
           </FTypo>
-          <FTypo size={15} className={"f-mt-2 f-pl--5"}>
+          <FTypo size={15} className={"f-mt-2 f-pl--5 justify-content-space-between"}>
             Amount you will receive
+            <FLabel className={getOpenCapClass()} text={getOpenCapInfo()}></FLabel>
           </FTypo>
           <FInputText
-            className={"f-mt-1"}
             inputSize="input-lg"
             type={"text"}
             placeholder="0"
@@ -224,7 +252,7 @@ export const CrucibleDeposit = () => {
                     <FButton
                       title={ownProps.isApprovalMode ? "Approve" : "Mint"}
                       className={"w-100"}
-                      // disabled={Number(userCrucibleData?.baseBalance || "0") === 0}
+                      disabled={getDisabledCheck(ownProps.isApprovalMode)}
                       onClick={
                         ownProps.isApprovalMode
                           ? () => ownProps.onApproveClick()
@@ -255,6 +283,7 @@ export const CrucibleDeposit = () => {
             setIsProcessing={setIsProcessing}
             setapprovedDone={false}
             isSubmitted={false}
+            transactionId={transactionId}
             isProcessed={isProcessed}
             crucible={crucible}
             onContinueToNextStepClick={() => onContinueToNextStepClick()}
