@@ -274,14 +274,27 @@ const CompetitionInformation = () => {
                 <FContainer>
                     <FGrid className={'f-mt-1 f-mb-1'}>
                         <FGridItem
-                            size={[6, 6, 6]}
+                            size={[4, 4, 4]}
                             alignX="start"
                             alignY={'end'}
                         >
                             <h1>{competitionData?.name || 'Competition'}</h1>
                         </FGridItem>
                         <FGridItem size={[2, 2, 2]} alignX="start" alignY="end">
-                            {competitionParticipants?.length ? (
+                            {
+                                !isPublicUser && competitionParticipants?.length ? (
+                                    <FButton
+                                        type="button"
+                                        className="btn-create f-ml-1"
+                                        disabled={!isLoading}
+                                        onClick={onExportClick}
+                                        title={' Export to CSV'}
+                                    />
+                                ) : ''
+                            }
+                        </FGridItem>
+                        <FGridItem size={[2, 2, 2]} alignX="start" alignY="end">
+                            {!isPublicUser && competitionParticipants?.length ? (
                                 <FButton
                                     type="button"
                                     className="btn-create f-ml-1"
@@ -308,16 +321,6 @@ const CompetitionInformation = () => {
                                 onChange={onQueryChange}
                                 style={{width: '100%'}}
                             />
-
-                            {!isPublicUser && (
-                                <FButton
-                                    type="button"
-                                    className="btn-create f-ml-1"
-                                    disabled={!isLoading}
-                                    onClick={onExportClick}
-                                    title={' Export to CSV'}
-                                />
-                            )}
                         </FGridItem>
                     </FGrid>
                     {competitionParticipants.length ? (
