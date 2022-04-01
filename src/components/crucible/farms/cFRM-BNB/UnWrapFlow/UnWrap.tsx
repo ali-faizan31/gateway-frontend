@@ -19,7 +19,7 @@ export const UnWrap = () => {
   // const [flowType, setFlowType] = useState("");
 
   return (
-    <FContainer className="f-mr-0 card-manage" width={700}>
+    <FContainer className="card-manage">
       <CrucibleMyBalance />
 
       <CrucibleUnWrap />

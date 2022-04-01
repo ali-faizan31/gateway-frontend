@@ -75,7 +75,7 @@ export const UnstakeAddLiquidity = () => {
           </FItem>
         </FCard>
       ) : (
-        <FContainer className="f-mr-0" width={700}>
+        <FContainer width={700}>
           <CrucibleMyBalance />
           <FCard variant={"secondary"} className="card-crucible-steps">
             <FTypo size={25} weight={700} className={"card-title w-100"} display="flex">

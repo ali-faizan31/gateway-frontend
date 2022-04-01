@@ -17,18 +17,20 @@ import { getAPRValueAgainstFarm } from "../../../common/Helper";
 const CrucibleWithdrawFeeCard = () => {
   const { farm } = useParams<{ farm?: string }>();
   const location: any = useLocation();
-  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
+  const crucible = useSelector(
+    (state: RootState) => state.crucible.selectedCrucible
+  );
   const userCrucibleData = useSelector(
     (state: RootState) => state.crucible.userCrucibleDetails
   );
-  const { aprInformation } = useSelector( (state: RootState) => state.crucible)
+  const { aprInformation } = useSelector((state: RootState) => state.crucible);
   let userStake = (userCrucibleData.stakes || []).find(
     (e: any) => e.address.toLowerCase() === location.state.LPstakingAddress
   );
 
   return (
     <>
-      <FContainer width={650}>
+      <FContainer>
         <FCard className="card-crucible-token-info">
           <FTypo size={20}>Crucible Token Info</FTypo>
           <FGrid className="info-bar">
@@ -79,7 +81,9 @@ const CrucibleWithdrawFeeCard = () => {
           <FCard className={"styled-card align-v your-crucible"}>
             <FGrid>
               <FGridItem size={[6, 6, 6]} dir="column">
-                <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB") ? "LP" : ""} Farm Stake</FTypo>
+                <FTypo className="f-pb--2">
+                  Your Crucible {farm?.includes("BNB") ? "LP" : ""} Farm Stake
+                </FTypo>
                 <FTypo
                   size={24}
                   weight={600}
@@ -89,7 +93,9 @@ const CrucibleWithdrawFeeCard = () => {
                 >
                   {Number(userStake?.stakeOf || "0").toFixed(3)}
                   <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
-                    {farm?.includes("BNB") ? `APE-LP ${crucible?.symbol}-BNB` : crucible?.symbol}
+                    {farm?.includes("BNB")
+                      ? `APE-LP ${crucible?.symbol}-BNB`
+                      : crucible?.symbol}
                   </FTypo>
                 </FTypo>
               </FGridItem>

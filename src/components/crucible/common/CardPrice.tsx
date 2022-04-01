@@ -25,7 +25,7 @@ export const CruciblePrice = () => {
     { name: "cFRMx", network: "cFRMx", price_percentage: "4.8", price: tokenPrices["cFRMx"] || 0 },
   ];
   return (
-    <FCard>
+    <FCard className="card-prices">
       <FTypo className="card-title f-pl-1">Price</FTypo>
       <div className={"card-price-wrapper"}>
         {DATA_PRICE.length

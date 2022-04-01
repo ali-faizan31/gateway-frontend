@@ -147,7 +147,6 @@ export const Manage = () => {
     const web3Helper = new Web3Helper(networkClient as any);
     const client = new CrucibleClient(web3Helper);
     const res = await web3Helper.getTokenPriceFromRouter();
-
     const userCrucibleDetails = await client.getUserCrucibleInfo(ctx.dispatch, payload.crucibleCurrency, walletAddress as string);
     const stakingType = "LP";
     if (!!userCrucibleDetails) {
@@ -296,7 +295,7 @@ export const Manage = () => {
   };
 
   return (
-    <FContainer className="f-mr-0 card-manage" width={700}>
+    <FContainer className="card-manage">
       {isLoading ? (
         <FCard>
           <FItem align={"center"}>
@@ -308,7 +307,7 @@ export const Manage = () => {
           <CrucibleMyBalance />
           {/* <FResponseBar variant="success" title={"Withdraw Transaction Successful. [ 0x06167934...5bvf645949c ]"} /> */}
           <CrucibleManage dashboardAction={dashboardAction} setDashboardAction={setDashboardAction} />
-          <FContainer width={650}>
+          <FContainer>
             <FCard className="card-crucible-token-info">
               <FTypo size={24}>Crucible Token Info</FTypo>
               <FGrid className="info-bar">

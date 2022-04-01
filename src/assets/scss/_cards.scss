@@ -83,21 +83,24 @@ $cardSecondary: #242b35;
     }
   }
 }
-
-.card-price-wrapper {
-  display: flex;
-  overflow-x: auto;
-  padding-bottom: 1rem;
-  margin-bottom: -1rem;
-  .card-price {
-    margin-right: 1rem;
-    flex: auto;
-    position: relative;
-    padding: 1.5rem 1.25rem;
-    min-width: 180px;
-    border-radius: 10px;
-    &:last-child {
-      margin-right: 0;
+.card-prices {
+  max-width: 880px;
+  margin: 0 auto;
+  .card-price-wrapper {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    margin-bottom: -1rem;
+    .card-price {
+      margin-right: 1rem;
+      flex: auto;
+      position: relative;
+      padding: 1.5rem 1.25rem;
+      min-width: 180px;
+      border-radius: 10px;
+      &:last-child {
+        margin-right: 0;
+      }
     }
   }
 }
@@ -123,6 +126,7 @@ $cardSecondary: #242b35;
     border-radius: 0;
     padding-bottom: 1rem;
     margin-bottom: 1rem;
+    min-width: 200px;
     &:last-child {
       padding-bottom: 0;
       margin-bottom: 0;
@@ -134,6 +138,8 @@ $cardSecondary: #242b35;
 .card-apr {
   position: relative;
   padding-bottom: 0;
+  max-width: 880px;
+  margin: 2rem auto;
   .scrollbar-container {
     max-height: max-content !important;
   }
@@ -247,6 +253,17 @@ $cardSecondary: #242b35;
 }
 
 .card-manage {
+  // margin-right: auto;
+  max-width: 650px !important;
+  margin: 0 auto;
+  @media screen and (max-width: 1439px) {
+    // margin-left: 10vw;
+    // margin-right: 16rem;
+  }
+  @media screen and (max-width: 1200px) {
+    margin-left: auto;
+    margin-right: auto;
+  }
   .card-title {
     display: flex;
     align-items: center;
@@ -372,6 +389,7 @@ $cardSecondary: #242b35;
   .card-crucible-token-info {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 0 0 10px 10px;
+    max-width: 600px;
     .info-bar {
       .f-item {
         margin: 1.25rem 0;
@@ -402,6 +420,9 @@ $cardSecondary: #242b35;
 }
 
 .card-get-started {
+  max-width: 800px;
+  margin: 0 auto;
+  margin-right: -7rem;
   .video-wrapper {
     position: relative;
     padding-bottom: 56.25%; /* 16:9 */

@@ -19,16 +19,16 @@ const CrucibleFeeCard = () => {
   const history = useHistory();
   const location: any = useLocation();
   const { farm } = useParams<{ farm?: string }>();
-  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
-  const { aprInformation } = useSelector(
-    (state: RootState) => state.crucible 
+  const crucible = useSelector(
+    (state: RootState) => state.crucible.selectedCrucible
   );
+  const { aprInformation } = useSelector((state: RootState) => state.crucible);
   const userCrucibleData = useSelector(
     (state: RootState) => state.crucible.userCrucibleDetails
   );
   let userStake = (userCrucibleData.stakes || []).find(
     (e: any) => e.address.toLowerCase() === location.state.LPstakingAddress
-  ); 
+  );
 
   const onClaimRewardsClick = () => {
     history.push({
@@ -41,7 +41,7 @@ const CrucibleFeeCard = () => {
 
   return (
     <>
-      <FContainer width={650}>
+      <FContainer>
         <FCard className="card-crucible-token-info">
           <FTypo size={20}>Crucible Token Info</FTypo>
           <FGrid className="info-bar">
@@ -54,8 +54,8 @@ const CrucibleFeeCard = () => {
                   className="f-pb--2"
                 >
                   {`${BigUtils.safeParse(crucible?.feeOnTransferRate || "0")
-                        .times(100)
-                        .toString()}%`}
+                    .times(100)
+                    .toString()}%`}
                 </FTypo>
                 <FTypo size={20}>Transfer Fee</FTypo>
               </FItem>
@@ -69,8 +69,8 @@ const CrucibleFeeCard = () => {
                   className="f-pb--2"
                 >
                   {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0")
-                        .times(100)
-                        .toString()}%`}
+                    .times(100)
+                    .toString()}%`}
                 </FTypo>
                 <FTypo size={20}>Unwrap Fee</FTypo>
               </FItem>
@@ -83,7 +83,7 @@ const CrucibleFeeCard = () => {
                   weight={700}
                   className="f-pb--2"
                 >
-                   {crucible?.symbol}
+                  {crucible?.symbol}
                 </FTypo>
                 <FTypo size={20}>Crucible Token</FTypo>
               </FItem>
@@ -92,7 +92,9 @@ const CrucibleFeeCard = () => {
           <FCard className={"styled-card align-v your-crucible"}>
             <FGrid>
               <FGridItem size={[6, 6, 6]} dir="column">
-                <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB")? "LP": ""} Farm Stake</FTypo>
+                <FTypo className="f-pb--2">
+                  Your Crucible {farm?.includes("BNB") ? "LP" : ""} Farm Stake
+                </FTypo>
                 <FTypo
                   size={24}
                   weight={600}
@@ -100,9 +102,11 @@ const CrucibleFeeCard = () => {
                   display="flex"
                   alignY={"end"}
                 >
-                   {Number(userStake?.stakeOf || "0").toFixed(3)}
+                  {Number(userStake?.stakeOf || "0").toFixed(3)}
                   <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
-                  {farm?.includes("BNB")? `APE-LP ${crucible?.symbol}-BNB`: crucible?.symbol}
+                    {farm?.includes("BNB")
+                      ? `APE-LP ${crucible?.symbol}-BNB`
+                      : crucible?.symbol}
                   </FTypo>
                 </FTypo>
               </FGridItem>
@@ -135,7 +139,8 @@ const CrucibleFeeCard = () => {
               <FGridItem size={[6]} dir="column">
                 <FTypo className="f-pb--2">Your unclaimed Rewards</FTypo>
                 <FTypo color="#DAB46E" size={22} weight={700}>
-                {Number(userStake?.rewardOf || "0").toFixed(3)} {crucible?.symbol}
+                  {Number(userStake?.rewardOf || "0").toFixed(3)}{" "}
+                  {crucible?.symbol}
                 </FTypo>
               </FGridItem>
               <FGridItem size={[6]} alignY="center" alignX={"end"}>
