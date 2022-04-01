@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router";
 import {
   FButton,
@@ -18,6 +18,7 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { getObjectReadableFarmName, getLatestStepToRender } from "../../../common/Helper";
 import { STEP_FLOW_IDS } from "../../../common/utils";
 import { ClipLoader } from "react-spinners";
+import { getNetworkInformationForPublicUser } from "../../../../../_apis/NetworkCrud";
 
 export const UnstakeAddLiquidity = () => {
   const dispatch = useDispatch();
@@ -31,8 +32,28 @@ export const UnstakeAddLiquidity = () => {
   const { tokenV2 } = useSelector(
     (state: RootState) => state.walletAuthenticator
   );
+  const { currentWalletNetwork } = useSelector((state: RootState) => state.walletConnector);
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
+  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
+  const [addLiquidityUrl, setAddLiquidityUrl] = useState('');
+
+  useEffect(() => {
+    if (currentWalletNetwork) {
+      getNetworkInfo();
+    }
+  }, [currentWalletNetwork])
+
+
+  const getNetworkInfo = async () => {
+    let networkResponse: any = await getNetworkInformationForPublicUser(currentWalletNetwork);
+    networkResponse = networkResponse.data && networkResponse.data.body && networkResponse.data.body.network;
+    if (networkResponse) { 
+      let dexUrl = networkResponse.networkCurrencyAddressByNetwork.networkDex.dex.url
+      let addLiquidityUrl = `${dexUrl}add/${crucible.contractAddress}/ETH`;
+      setAddLiquidityUrl(addLiquidityUrl);
+    }
+  }
 
   const onStakeClick = () => {
     setIsLoading(true)
@@ -120,6 +141,7 @@ export const UnstakeAddLiquidity = () => {
                 postfix={<IconArrow />}
                 className="w-100"
                 disabled={!stepTwoCheck}
+                onClick={() => window.open(addLiquidityUrl, "_blank")}
               />
             </span>
           </li>

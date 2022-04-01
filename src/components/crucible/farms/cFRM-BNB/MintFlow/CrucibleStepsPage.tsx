@@ -65,7 +65,7 @@ export const CrucibleStepsPage = () => {
           className={"card-title w-100"}
           display="flex"
         >
-          Crucible Token Sustainable Liquidity Farming teste
+          Crucible Token Sustainable Liquidity Farming  
         </FTypo>
         <ul>
           <li className="step step-success">

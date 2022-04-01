@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router";
 import {
   FButton,
@@ -18,21 +18,43 @@ import { getLatestStepToRender, getObjectReadableFarmName } from "../../../commo
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 import { ClipLoader } from "react-spinners";
+import { getNetworkInformationForPublicUser } from "../../../../../_apis/NetworkCrud";
 
 export const UnstakeRemoveLiquidity = () => {
   const { farm } = useParams<{ farm?: string }>(); 
   const dispatch = useDispatch();
   const location: any = useLocation();
   const [isLoading, setIsLoading] = useState(false);
-  const history = useHistory();
+  const history = useHistory(); 
+  const [stepTwoCheck, setStepTwoCheck] = useState(false);
+  const [stepThreeCheck, setStepThreeCheck] = useState(false);
+
+  const [removeLiquidityUrl, setRemoveLiquidityUrl] = useState('');
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
     (state: RootState) => state.crucible
   );
   const { tokenV2 } = useSelector(
     (state: RootState) => state.walletAuthenticator
-  );
-  const [stepTwoCheck, setStepTwoCheck] = useState(false);
-  const [stepThreeCheck, setStepThreeCheck] = useState(false);
+  ); 
+  const { currentWalletNetwork } = useSelector((state: RootState) => state.walletConnector); 
+
+
+  useEffect(() => {
+    if (currentWalletNetwork) {
+      getNetworkInfo();
+    }
+  }, [currentWalletNetwork])
+
+
+  const getNetworkInfo = async () => {
+    let networkResponse: any = await getNetworkInformationForPublicUser(currentWalletNetwork);
+    networkResponse = networkResponse.data && networkResponse.data.body && networkResponse.data.body.network;
+    if (networkResponse) { 
+      let dexUrl = networkResponse.networkCurrencyAddressByNetwork.networkDex.dex.url
+      let removeLiquidityUrl = `${dexUrl}pool`;
+      setRemoveLiquidityUrl(removeLiquidityUrl);
+    }
+  }
 
   const onStakeClick =() => {
     setIsLoading(true)
@@ -143,6 +165,7 @@ export const UnstakeRemoveLiquidity = () => {
                 postfix={<IconArrow />}
                 className="w-100"
                 disabled={!stepTwoCheck}
+                onClick={() => window.open(removeLiquidityUrl, "_blank")}
               />
             </span>
           </li>
