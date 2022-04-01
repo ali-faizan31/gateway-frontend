@@ -5,10 +5,7 @@ import { ReactComponent as IconApprove } from "../../../../../assets/img/icon-tr
 import { ReactComponent as IconSubmitted } from "../../../../../assets/img/icon-transaction-submitted.svg";
 import Loader from "../../../../../assets/gif/loader.svg";
 // import { PATH_DASHBOARD } from "../../../../../routes/paths";
-import {
-  linkForTransaction,
-  addToken,
-} from "./../../../../../container-components/web3Client/types";
+import { linkForTransaction, addToken } from "./../../../../../container-components/web3Client/types";
 
 export const DialogTransitionStatus = ({
   transitionStatusDialog,
@@ -19,7 +16,7 @@ export const DialogTransitionStatus = ({
   setIsProcessing,
   isSubmitted,
   network,
-  tx,
+  transactionId,
   crucible,
   onContinueToNextStepClick,
 }: any) => {
@@ -68,13 +65,7 @@ export const DialogTransitionStatus = ({
   };
 
   return (
-    <FDialog
-      size={"medium"}
-      show={transitionStatusDialog}
-      onHide={() => onclose()}
-      className="transaction-status text-center"
-      showClose={true}
-    >
+    <FDialog size={"medium"} show={transitionStatusDialog} onHide={() => onclose()} className="transaction-status text-center" showClose={true}>
       {isProcessing ? (
         <React.Fragment>
           <FItem align="center">
@@ -92,18 +83,8 @@ export const DialogTransitionStatus = ({
             <FTypo size={20} weight={600} className="f-mt-1">
               View on Explorer
             </FTypo>
-            <FButton
-              title={"Add Token to Metamask"}
-              outlined
-              variant={"secondary"}
-              className="f-mt-1 f-mb-1"
-            />
-            <FItem
-              bgColor="#1D232B"
-              align={"center"}
-              className="f-pt--5 f-pb--5 f-pl-3 f-pr-3"
-              display={"inline-block"}
-            >
+            <FButton title={"Add Token to Metamask"} outlined variant={"secondary"} className="f-mt-1 f-mb-1" />
+            <FItem bgColor="#1D232B" align={"center"} className="f-pt--5 f-pb--5 f-pl-3 f-pr-3" display={"inline-block"}>
               <FTypo size={16} weight={500}>
                 Tx Processing - Please Wait
               </FTypo>
@@ -118,13 +99,7 @@ export const DialogTransitionStatus = ({
               Transaction Processed
             </FTypo>
             <FTypo size={20} weight={600} className="f-mt-1">
-              <span
-                onClick={() =>
-                  window.open(linkForTransaction(network, tx), "_blank")
-                }
-              >
-                View on Explorer
-              </span>
+              <span onClick={() => window.open(linkForTransaction(crucible.network, transactionId), "_blank")}>View on Explorer</span>
             </FTypo>
             <FItem>
               <FButton
@@ -144,11 +119,7 @@ export const DialogTransitionStatus = ({
               />
             </FItem>
             <FItem>
-              <FButton
-                title={"Continue To Next Step"}
-                className="btn-step f-mt-1 f-mb-1"
-                onClick={() => onContinueToNextStepClick()}
-              />
+              <FButton title={"Continue To Next Step"} className="btn-step f-mt-1 f-mb-1" onClick={() => onContinueToNextStepClick()} />
             </FItem>
           </FItem>
         </React.Fragment>

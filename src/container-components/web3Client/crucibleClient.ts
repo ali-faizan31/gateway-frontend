@@ -221,6 +221,7 @@ export class CrucibleClient {
 				params: [],
 			} );
             if(request.data.data){
+                console.log(request.data)
                 const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])    
                 return web3Helper        
             }

@@ -43,6 +43,7 @@ export const Stake = () => {
   const history = useHistory();
   const [isProcessed, setIsProcessed] = useState(false);
   const [tokenInfo, setTokenInfo] = useState<any>({});
+  const [transactionId, setTransactionId] = useState("");
 
   //@ts-ignore
   const crucible = useSelector((state) => state.crucible.selectedCrucible);
@@ -143,6 +144,8 @@ export const Stake = () => {
         response = await client.StakeCrucible(dispatch, currency, amount, stakingAddress, userAddress, network);
       }
       if (response) {
+        let transactionId = response.split("|");
+        setTransactionId(transactionId[0]);
         setIsProcessing(false);
         setIsProcessed(true);
         getStepCompleted(false);
@@ -222,7 +225,7 @@ export const Stake = () => {
             className={"f-mt-1"}
             inputSize="input-lg"
             type={"text"}
-            value={amount}
+            value={amount === 0 ? "" : amount}
             onChange={(e: any) => setAmount(e.target.value)}
             placeholder="Amount to Stake"
             postfix={
@@ -270,6 +273,7 @@ export const Stake = () => {
             isProcessing={isProcessing}
             setIsProcessing={setIsProcessing}
             setapprovedDone={false}
+            transactionId={transactionId}
             isSubmitted={false}
             isProcessed={isProcessed}
             crucible={crucible}

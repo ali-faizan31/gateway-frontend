@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import { FButton, FCard, FContainer, FGrid, FGridItem, FItem, FResponseBar, FTypo } from "ferrum-design-system";
 import { CrucibleMyBalance } from "./CardMyBalance";
 import { CrucibleDeposit } from "./CardDeposit";
-import { CrucibleManage } from "./CardManage"; 
+import { CrucibleManage } from "./CardManage";
 
 const CrucibleManagePage = () => {
   const [deposit, setDeposit] = useState(false);
   const [unwrap, setUnwrap] = useState(false);
   return (
-    <FContainer className="f-mr-0 card-manage" width={700}>
+    <FContainer className="card-manage">
       <CrucibleMyBalance />
 
       {/* <FResponseBar variant="success" title={"Withdraw Transaction Successful. [ 0x06167934...5bvf645949c ]"} /> */}
       {deposit ? <CrucibleDeposit /> : <CrucibleManage deposit={deposit} setDeposit={setDeposit} />}
-      <FContainer width={650}>
+      <FContainer>
         <FCard className="card-crucible-token-info">
           <FTypo size={20}>Crucible Token Info</FTypo>
           <FGrid className={"info-bar"}>
