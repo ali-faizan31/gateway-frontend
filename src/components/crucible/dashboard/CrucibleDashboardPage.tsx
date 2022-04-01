@@ -111,11 +111,11 @@ const CrucibleDashboardPage = () => {
         },
         {
           token: "cFRM",
-          currency: "0x1a59bf30d6dc8e8363c90a14c142dcb85825c5a7", // done  // change before prod
+          currency: "0x5732a2a84ec469fc95ac32e12515fd337e143eed", // done  // change before prod
         },
         {
           token: "cFRMx",
-          currency: "0x176e6504bfa5edf24d3a2665cc766f16959c2633",
+          currency: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
         },
       ];
 

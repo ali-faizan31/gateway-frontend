@@ -77,8 +77,8 @@ export const CardAPR = () => {
       apr: aprInformation?.cfrmLp,
       network: "BSC",
       id: "6238314dd292da2db05524dd",
-      contract: "0x1a59bf30d6dc8e8363c90a14c142dcb85825c5a7", // crucible contract address
-      LpCurrency: "0x1a59bf30d6dc8e8363c90a14c142dcb85825c5a7",  // ape-lp token for crucible and bnb pair
+      contract: "0x5732a2a84ec469fc95ac32e12515fd337e143eed", // crucible contract address
+      LpCurrency: "0x5732a2a84ec469fc95ac32e12515fd337e143eed",  // ape-lp token for crucible and bnb pair
       LPstakingAddress: "0xeab8290c54b6307016a736ff2191bf2aaef3b697", // lp farm where lp currency will be staked
       internalName: "cFRM-BNB",
     },
@@ -90,8 +90,8 @@ export const CardAPR = () => {
       yourRewards: "$.2",
       apr: aprInformation?.cfrm,
       id: "6238386bd292da2db05524f9",
-      contract: "0x1a59bf30d6dc8e8363c90a14c142dcb85825c5a7",
-      LpCurrency: "0x1a59bf30d6dc8e8363c90a14c142dcb85825c5a7",
+      contract: "0x5732a2a84ec469fc95ac32e12515fd337e143eed",
+      LpCurrency: "0x5732a2a84ec469fc95ac32e12515fd337e143eed",
       LPstakingAddress: "0xab0433aa0b5e05f1ff0fd293cff8bee15882ccad",
       network: "BSC",
       internalName: "cFRM",
@@ -105,8 +105,8 @@ export const CardAPR = () => {
       apr: aprInformation?.cfrmXLp,
       network: "BSC",
       id: "62383841d292da2db05524f3",
-      contract: "0x176e6504bfa5edf24d3a2665cc766f16959c2633",
-      LpCurrency: "0x176e6504bfa5edf24d3a2665cc766f16959c2633",
+      contract: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
+      LpCurrency: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
       LPstakingAddress: "0xeab8290c54b6307016a736ff2191bf2aaef3b697",
       internalName: "cFRMx-BNB",
     },
@@ -118,8 +118,8 @@ export const CardAPR = () => {
       yourRewards: "$.4",
       apr: aprInformation?.cfrmX,
       id: "62383865d292da2db05524f6",
-      contract: "0x176e6504bfa5edf24d3a2665cc766f16959c2633",
-      LpCurrency: "0x176e6504bfa5edf24d3a2665cc766f16959c2633",
+      contract: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
+      LpCurrency: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
       LPstakingAddress: "0xab0433aa0b5e05f1ff0fd293cff8bee15882ccad",
       network: "BSC",
       internalName: "cFRMx",

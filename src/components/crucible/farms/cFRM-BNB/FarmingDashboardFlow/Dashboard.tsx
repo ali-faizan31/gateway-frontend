@@ -66,12 +66,12 @@ export const Manage = () => {
 
   useEffect(() => {
     // if (!isLoading) {
-      // SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
-      //   currentStep._id,
-      //   { status: "completed" },
-      //   tokenV2
-      // );
-      getStepCompletedAndRunCompletionFlow(false);
+    // SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
+    //   currentStep._id,
+    //   { status: "completed" },
+    //   tokenV2
+    // );
+    getStepCompletedAndRunCompletionFlow(false);
     // }
   }, []);
 
@@ -130,12 +130,12 @@ export const Manage = () => {
     }
   };
 
-  const runCompletionFlow = async(stepFlowStepHistory: any) => {
-    for ( let i = 0; i < stepFlowStepHistory.length; i++ ){
-      if (stepFlowStepHistory[i].status === "started"){
+  const runCompletionFlow = async (stepFlowStepHistory: any) => {
+    for (let i = 0; i < stepFlowStepHistory.length; i++) {
+      if (stepFlowStepHistory[i].status === "started") {
         await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
           stepFlowStepHistory[i]._id,
-          {status: "completed" },
+          { status: "completed" },
           tokenV2
         );
       }
@@ -161,7 +161,7 @@ export const Manage = () => {
     setIsLoading(false);
   };
 
-  const onStakeClick = async () => { 
+  const onStakeClick = async () => {
     setIsLoading(true);
     let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].stake;
     location.state.id = nextStepInfo.id;
@@ -225,6 +225,7 @@ export const Manage = () => {
       const web3Helper = new Web3Helper(networkClient as any);
       const client = new CrucibleClient(web3Helper);
       const res = await web3Helper.getTokenPriceFromRouter()
+
       const userCrucibleDetails = await client.getUserCrucibleInfo(
         ctx.dispatch,
         payload.crucibleCurrency,
@@ -238,6 +239,7 @@ export const Manage = () => {
           actions.userCrucibleDetailsLoaded({ data: userCrucibleDetails.data })
         );
       }
+
     }
   );
 
@@ -270,7 +272,7 @@ export const Manage = () => {
             data: {
               ...userStakingDetails.data,
               stakingAddress: payload.stakingAddress,
-              LPaddress: location.state.LpCurrency, 
+              LPaddress: location.state.LpCurrency,
             },
           })
         );
@@ -303,11 +305,11 @@ export const Manage = () => {
         },
         {
           token: "cFRM",
-          currency: "0x1a59bf30d6dc8e8363c90a14c142dcb85825c5a7", // done  // change before prod
+          currency: "0x5732a2a84ec469fc95ac32e12515fd337e143eed", // done  // change before prod
         },
         {
           token: "cFRMx",
-          currency: "0x176e6504bfa5edf24d3a2665cc766f16959c2633",
+          currency: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
         },
       ];
 
@@ -352,9 +354,13 @@ export const Manage = () => {
 
   const getCrucibleDetail = async () => {
     setIsLoading(true);
+    console.log('whyyyyyyyyyyy')
     const web3Helper = new Web3Helper(networkClient as any);
     const client = new CrucibleClient(web3Helper);
     const actions = crucibleSlice.actions;
+    console.log(`${location.state.network.toUpperCase()}:${(
+      location.state.contract || ""
+    ).toLowerCase()}`)
     dispatch(
       loadCrucibleUserInfo({
         crucibleCurrency: `${location.state.network.toUpperCase()}:${(
@@ -377,8 +383,8 @@ export const Manage = () => {
         data: {
           ...crucibleData.data,
           LP_balance: data.balance,
-          LP_symbol: data.symbol,       
-        },  
+          LP_symbol: data.symbol,
+        },
       })
     );
 
@@ -465,7 +471,7 @@ export const Manage = () => {
               <FCard className={"styled-card align-v your-crucible"}>
                 <FGrid>
                   <FGridItem size={[6, 6, 6]} dir="column">
-                    <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB")? "LP": ""} Farm Stake </FTypo>
+                    <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB") ? "LP" : ""} Farm Stake </FTypo>
                     <FTypo
                       size={24}
                       weight={600}
@@ -480,7 +486,7 @@ export const Manage = () => {
                         weight={300}
                         className={"f-pl--7 f-pb--1"}
                       >
-                        {farm?.includes("BNB")? `APE-LP ${crucible?.symbol}-BNB`: crucible?.symbol}
+                        {farm?.includes("BNB") ? `APE-LP ${crucible?.symbol}-BNB` : crucible?.symbol}
                       </FTypo>
                     </FTypo>
                   </FGridItem>

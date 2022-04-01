@@ -97,7 +97,7 @@ export const CrucibleDeposit = () => {
   );
   //@ts-ignore
   const tokenPrices = useSelector((state) => state.crucible.tokenPrices);
-  console.log(tokenPrices, "tokenPricestokenPrices");
+  console.log(tokenPrices, userCrucibleData, "tokenPricestokenPrices");
 
   useEffect(() => {
     console.log(location, crucible);
