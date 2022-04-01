@@ -46,7 +46,7 @@ export const UnStake = () => {
   );
   const { walletAddress, networkClient, } = useSelector((state: RootState) => state.walletConnector);
   const [isProcessed, setIsProcessed] = useState(false);
-  const [amount, setAmount] = useState(); 
+  const [amount, setAmount] = useState(0); 
   const userCrucibleData = useSelector(
     (state: RootState) => state.crucible.userCrucibleDetails
   );
@@ -149,7 +149,7 @@ export const UnStake = () => {
     if (networkClient) {
       let currency: string = "";
       let stakingAddress: string = "";
-      let amount: string = "";
+      let stakeAmount: string = "";
       let  network: string = "";
       let  userAddress: string = "";
       let response: any;
@@ -162,7 +162,7 @@ export const UnStake = () => {
     if (isLPFarm(farm)){
       currency = LPStakingDetails[farm!]?.stakeId;
       stakingAddress = LPStakingDetails[farm!]?.stakingAddress || ""
-      amount = amount.toString();
+      stakeAmount = amount.toString();
       network =  crucible?.network
       userAddress = walletAddress as string
 
@@ -170,7 +170,7 @@ export const UnStake = () => {
         dispatch,
         currency,
         userAddress,
-        amount,
+        stakeAmount,
         stakingAddress,
         network,
       );
@@ -178,14 +178,14 @@ export const UnStake = () => {
     } else if (isSingleTokenFarm(farm)){
       currency = crucible!.currency;
       stakingAddress = (crucible?.staking || [])[0]?.address || ""
-      amount = amount.toString();
+      stakeAmount = amount.toString();
       network =  crucible?.network
       userAddress = walletAddress as string
 
       response = await client.UnStakeCrucible(
         dispatch,
         currency,
-        amount,
+        stakeAmount,
         stakingAddress,
         userAddress,
         network

@@ -44,6 +44,7 @@ const DashboardHeader = ({ title }: any) => {
     currentWalletNetwork
   } = useSelector((state: RootState) => state.walletConnector);
   const { meV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  
   const [FRMTokenInfo, setFRMTokenInfo] = useState<any>({});
 
   const [FRMxTokenInfo, setFRMxTokenInfo] = useState<any>({});
@@ -53,6 +54,7 @@ const DashboardHeader = ({ title }: any) => {
       getCurrentNetworkInformation(currentWalletNetwork);
     }
   }, [currentWalletNetwork])
+  
 
   const getCurrentNetworkInformation = async (currentWalletNetwork: any) => {
     let networkResponse = await getNetworkInformationForPublicUser(currentWalletNetwork);
