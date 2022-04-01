@@ -2,37 +2,24 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import Web3 from "web3";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  FButton,
-  FCard,
-  FGrid,
-  FGridItem,
-  FInputText,
-  FItem,
-  FTypo,
-} from "ferrum-design-system";
+import { FButton, FCard, FGrid, FGridItem, FInputText, FItem, FTypo } from "ferrum-design-system";
 import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
 // import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
 // import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
 import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
-import {
-  ApprovableButtonWrapper,
-  approvalKey,
-} from "./../../../../../container-components/web3Client/approvalButtonWrapper";
+import { ApprovableButtonWrapper, approvalKey } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
 import { useHistory, useLocation, useParams } from "react-router";
 // import { useWeb3React } from "@web3-react/core";
-import {
-  CRUCIBLE_CONTRACTS_V_0_1,
-  STEP_FLOW_IDS,
-} from "./../../../common/utils";
+import { CRUCIBLE_CONTRACTS_V_0_1, STEP_FLOW_IDS } from "./../../../common/utils";
 import { RootState } from "../../../../../redux/rootReducer";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
 import {
-  getLatestStepToRender, getObjectReadableFarmName,
+  getLatestStepToRender,
+  getObjectReadableFarmName,
   // getNextStepFlowStepId
 } from "../../../common/Helper";
 import { MetaMaskConnector } from "../../../../../container-components";
@@ -51,32 +38,18 @@ export const CrucibleDeposit = () => {
     // walletBalance,
     networkClient,
   } = useSelector((state: RootState) => state.walletConnector);
-  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
-    (state: RootState) => state.crucible
-  );
+  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const {
     // approveTransactionId,
     approvals,
   } = useSelector((state: RootState) => state.approval);
-  const { meV2, tokenV2 } = useSelector(
-    (state: RootState) => state.walletAuthenticator
-  );
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
   useEffect(() => {
     // if (approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)] === undefined) {
     //   history.push({ pathname: PATH_DASHBOARD.crucible.index })
     // }
-    if (
-      Number(
-        approvals[
-        approvalKey(
-          walletAddress as string,
-          CRUCIBLE_CONTRACTS_V_0_1["BSC"].router,
-          crucible?.baseCurrency
-        )
-        ]
-      ) > 0
-    ) {
+    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible?.baseCurrency)]) > 0) {
       if (currentStep.step.name === "Approve") {
         getStepCompleted(false);
       }
@@ -92,12 +65,10 @@ export const CrucibleDeposit = () => {
   //@ts-ignore
   const crucible = useSelector((state) => state.crucible.selectedCrucible);
   //@ts-ignore
-  const userCrucibleData = useSelector(
-    (state: RootState) => state.crucible.userCrucibleDetails
-  );
+  const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
   //@ts-ignore
   const tokenPrices = useSelector((state) => state.crucible.tokenPrices);
-  console.log(tokenPrices, "tokenPricestokenPrices");
+  console.log(tokenPrices, userCrucibleData, "tokenPricestokenPrices");
 
   useEffect(() => {
     console.log(location, crucible);
@@ -111,12 +82,10 @@ export const CrucibleDeposit = () => {
   const [isProcessed, setIsProcessed] = useState(false);
 
   const getStepCompleted = async (renderNeeded: any) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
-      let updHistory = stepFlowStepHistory.map((obj, index) =>
-        index === currentStepIndex ? { ...obj, status: "completed" } : obj
-      );
+      let updHistory = stepFlowStepHistory.map((obj, index) => (index === currentStepIndex ? { ...obj, status: "completed" } : obj));
       let data = { status: "completed" };
 
       dispatch(
@@ -132,59 +101,23 @@ export const CrucibleDeposit = () => {
       );
 
       // let updateResponse: any =
-      await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
-        currentStep._id,
-        data,
-        tokenV2
-      );
+      await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
-      getLatestStepToRender(
-        location.state,
-        tokenV2,
-        currentStep,
-        currentStepIndex,
-        stepFlowStepHistory,
-        dispatch,
-        history,
-        farm,
-        setIsLoading,
-        renderNeeded,
-      );
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      let errorResponse =
-        e &&
-        e.response &&
-        e.response.data.status &&
-        e.response.data.status.message;
-      errorResponse
-        ? toast.error(`Error Occured: ${errorResponse}`)
-        : toast.error(`Error Occured: ${e}`);
+      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
+      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
     }
   };
 
-  const onMintClick = async (
-    currency: string,
-    crucibleAddress: string,
-    amount: string,
-    isPublic: boolean,
-    network: string,
-    userAddress: string
-  ) => {
+  const onMintClick = async (currency: string, crucibleAddress: string, amount: string, isPublic: boolean, network: string, userAddress: string) => {
     if (networkClient) {
       setTransitionStatusDialog(true);
       setIsProcessing(true);
       const web3Helper = new Web3Helper(networkClient as any);
       const client = new CrucibleClient(web3Helper);
 
-      const response = await client.mintCrucible(
-        dispatch,
-        currency,
-        crucibleAddress,
-        amount,
-        isPublic,
-        network,
-        userAddress
-      );
+      const response = await client.mintCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress);
       if (response) {
         setIsProcessing(false);
         setIsProcessed(true);
@@ -197,7 +130,7 @@ export const CrucibleDeposit = () => {
 
   const onContinueToNextStepClick = () => {
     let nextStepInfo: any;
-    setIsLoading(true)
+    setIsLoading(true);
     if (farm === "cFRM-BNB" || farm === "cFRMx-BNB") {
       nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].generalAddLiquidity;
     } else if (farm === "cFRM" || farm === "cFRMx") {
@@ -205,17 +138,7 @@ export const CrucibleDeposit = () => {
     }
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
-    getLatestStepToRender(
-      location.state,
-      tokenV2,
-      currentStep,
-      currentStepIndex,
-      stepFlowStepHistory,
-      dispatch,
-      history,
-      farm,
-      setIsLoading
-    );
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
   };
 
   return (
@@ -252,7 +175,7 @@ export const CrucibleDeposit = () => {
             <FGridItem size={[6, 6, 6]}>
               <FItem bgColor="#1C2229" className={"f-p-2"}>
                 <FTypo size={20} className="f-mb-1">
-                {crucible?.symbol} (USD)
+                  {crucible?.symbol} (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
                   ${tokenPrices["cFRM"] || "0"}
@@ -269,19 +192,12 @@ export const CrucibleDeposit = () => {
             onChange={(e: any) => setMintAmount(e.target.value)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1"}>
-                <span
-                  onClick={() =>
-                    setMintAmount(Number(userCrucibleData?.baseBalance || "0"))
-                  }
-                >
-                  Max
-                </span>
+                <span onClick={() => setMintAmount(Number(userCrucibleData?.baseBalance || "0"))}>Max</span>
               </FTypo>
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {Number(userCrucibleData?.baseBalance || "0").toFixed(3)}{" "}
-            available in the Base Token {userCrucibleData?.baseSymbol}.
+            You have {Number(userCrucibleData?.baseBalance || "0").toFixed(3)} available in the Base Token {userCrucibleData?.baseSymbol}.
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5"}>
             Amount you will receive
@@ -295,9 +211,7 @@ export const CrucibleDeposit = () => {
             value={mintAmount}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-                <span onClick={() => setMintAmount(userCrucibleData?.baseBalance)}>
-                {crucible?.symbol}
-                </span>
+                <span onClick={() => setMintAmount(userCrucibleData?.baseBalance)}>{crucible?.symbol}</span>
               </FTypo>
             }
           />
@@ -310,19 +224,11 @@ export const CrucibleDeposit = () => {
                     <FButton
                       title={ownProps.isApprovalMode ? "Approve" : "Mint"}
                       className={"w-100"}
-                      disabled={Number(userCrucibleData?.baseBalance || "0") === 0}
+                      // disabled={Number(userCrucibleData?.baseBalance || "0") === 0}
                       onClick={
                         ownProps.isApprovalMode
                           ? () => ownProps.onApproveClick()
-                          : () =>
-                            onMintClick(
-                              crucible!.baseCurrency,
-                              crucible?.currency || "",
-                              mintAmount.toString(),
-                              true,
-                              crucible?.network,
-                              walletAddress as string
-                            )
+                          : () => onMintClick(crucible!.baseCurrency, crucible?.currency || "", mintAmount.toString(), true, crucible?.network, walletAddress as string)
                       }
                     ></FButton>
                   </div>
