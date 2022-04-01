@@ -210,11 +210,11 @@ export const Manage = () => {
       },
       {
         token: "cFRM",
-        currency: "0x1a59bf30d6dc8e8363c90a14c142dcb85825c5a7", // done  // change before prod
+        currency: "0x5732a2a84ec469fc95ac32e12515fd337e143eed", // done  // change before prod
       },
       {
         token: "cFRMx",
-        currency: "0x176e6504bfa5edf24d3a2665cc766f16959c2633",
+        currency: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
       },
     ];
 
@@ -258,9 +258,11 @@ export const Manage = () => {
 
   const getCrucibleDetail = async () => {
     setIsLoading(true);
+    console.log("whyyyyyyyyyyy");
     const web3Helper = new Web3Helper(networkClient as any);
     const client = new CrucibleClient(web3Helper);
     const actions = crucibleSlice.actions;
+    console.log(`${location.state.network.toUpperCase()}:${(location.state.contract || "").toLowerCase()}`);
     dispatch(
       loadCrucibleUserInfo({
         crucibleCurrency: `${location.state.network.toUpperCase()}:${(location.state.contract || "").toLowerCase()}`,

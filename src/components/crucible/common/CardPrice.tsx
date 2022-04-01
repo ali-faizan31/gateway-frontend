@@ -16,11 +16,13 @@ export const CruciblePrice = () => {
   const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
   const { tokenData } = useSelector((state: RootState) => state.crucible);
 
+  console.log(tokenData, tokenPrices);
+
   const DATA_PRICE = [
     { name: "FRMBSC", network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0 },
-    { name: "CBTToken", network: "cFRM", price_percentage: "4.8", price: tokenPrices["cFRM"] || 0 },
+    { name: "cFRM", network: "cFRM", price_percentage: "4.8", price: tokenPrices["cFRM"] || 0 },
     { name: "FRMxBSC", network: "FRMx", price_percentage: "4.8", price: tokenPrices["FRMx"] || 0 },
-    { name: "CBTxToken", network: "cFRMx", price_percentage: "4.8", price: tokenPrices["cFRMx"] || 0 },
+    { name: "cFRMx", network: "cFRMx", price_percentage: "4.8", price: tokenPrices["cFRMx"] || 0 },
   ];
   return (
     <FCard className="card-prices">

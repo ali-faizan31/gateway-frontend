@@ -94,6 +94,24 @@ export const Success = () => {
     }
   };
 
+  const onStakeClick = () => {
+    setIsLoading(true)
+    let nextStepInfo: any  = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].stake; 
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(
+      location.state,
+      tokenV2,
+      currentStep,
+      currentStepIndex,
+      stepFlowStepHistory,
+      dispatch,
+      history,
+      farm,
+      setIsLoading
+    );
+  }
+
   const onAddLiquidityClick = () => {
     setIsLoading(true)
     let nextStepInfo: any  = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].generalAddLiquidity;
@@ -201,7 +219,7 @@ export const Success = () => {
           </FGridItem>
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={"card-whats-next"}>
-              <div className="card-whats-next-inner">
+              <div className="card-whats-next-inner" onClick={()=>onStakeClick()}>
                 <div className="card-whats-next-front">
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
@@ -209,12 +227,12 @@ export const Success = () => {
                     </span>
                   </div>
                   <FTypo size={20} weight={400} align={"center"}>
-                    Mint cFRM
+                    Stake and Earn Rewards
                   </FTypo>
                 </div>
                 <div className="card-whats-next-back">
                   <FTypo>
-                    You can always mint more cFRM to increase your pool share.
+                  Stake your cFRM to earn rewards generated from every cFRM transaction
                   </FTypo>
                 </div>
               </div>

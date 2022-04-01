@@ -25,11 +25,7 @@ export interface IApprovableButtonWrapperOwnProps {
 function mapStateToProps(state: any): ApprovalState {
   return state.approval;
 }
-export function approvalKey(
-  userAddress: string,
-  contractAddress: string,
-  currency: string
-) {
+export function approvalKey(userAddress: string, contractAddress: string, currency: string) {
   return `${userAddress}|${contractAddress}|${currency}`;
 }
 export const doGetApproval = createAsyncThunk(
@@ -46,11 +42,7 @@ export const doGetApproval = createAsyncThunk(
     const { userAddress, contractAddress, currency, networkClient } = payload;
     const web3Helper = new Web3Helper(networkClient as any);
     const client = new CrucibleClient(web3Helper);
-    const allocation = await client.getContractAllocation(
-      userAddress,
-      contractAddress,
-      currency
-    );
+    const allocation = await client.getContractAllocation(userAddress, contractAddress, currency);
     if (!!allocation && allocation.data) {
       ctx.dispatch(
         approvableButtonSlice.actions.allocationUpdated({
@@ -84,13 +76,7 @@ export const doApprove = createAsyncThunk(
     const { userAddress, contractAddress, currency, networkClient } = payload;
     const web3Helper = new Web3Helper(networkClient as any);
     const client = new CrucibleClient(web3Helper);
-    const transactionId = client.setContractAllocation(
-      ctx.dispatch,
-      userAddress,
-      contractAddress,
-      currency,
-      ""
-    );
+    const transactionId = client.setContractAllocation(ctx.dispatch, userAddress, contractAddress, currency, "");
     if (!!transactionId) {
       ctx.dispatch(
         approvableButtonSlice.actions.approveTransactionReceived({
@@ -110,10 +96,8 @@ export const approvableButtonSlice = createSlice({
   } as ApprovalState,
   reducers: {
     allocationUpdated: (state, action) => {
-      const { userAddress, contractAddress, currency, allocation } =
-        action.payload;
-      state.approvals[approvalKey(userAddress, contractAddress, currency)] =
-        allocation;
+      const { userAddress, contractAddress, currency, allocation } = action.payload;
+      state.approvals[approvalKey(userAddress, contractAddress, currency)] = allocation;
     },
     transactionFailed: (state, action) => {
       state.error = action.payload.message || "Error while getting transaction";
@@ -149,16 +133,9 @@ export const approvableButtonSlice = createSlice({
     });
   },
 });
-async function updateEvent(
-  dispatch: Dispatch<AnyAction>,
-  e: ChainEventBase,
-  networkClient: any
-): Promise<ChainEventBase> {
+async function updateEvent(dispatch: Dispatch<AnyAction>, e: ChainEventBase, networkClient: any): Promise<ChainEventBase> {
   try {
-    const t = await networkClient
-      .getProvider()!
-      .web3()!
-      .eth.getTransaction(e.id);
+    const t = await networkClient.eth.getTransaction(e.id);
     console.log("Checking the transloota ", t);
     if (t && t.blockNumber) {
       console.log("Translo iso componte ", t);
@@ -181,25 +158,18 @@ async function updateEvent(
     return { ...e, status: "failed" };
   }
 }
-export function ApprovableButtonWrapper(
-  ownProps: IApprovableButtonWrapperOwnProps
-) {
+export function ApprovableButtonWrapper(ownProps: IApprovableButtonWrapperOwnProps) {
   const dispatch = useDispatch();
   const props = useSelector(mapStateToProps);
   const [network] = parseCurrency(ownProps.currency || "");
   const { userAddress, contractAddress, currency } = ownProps;
   const { status } = props;
-  const currentApproval =
-    props.approvals[approvalKey(userAddress, contractAddress, currency)];
-  const [networkClient, setNetworkClient] = useState<Web3 | undefined>(
-    undefined
-  );
+  const currentApproval = props.approvals[approvalKey(userAddress, contractAddress, currency)];
+  const [networkClient, setNetworkClient] = useState<Web3 | undefined>(undefined);
   const { library } = useWeb3React();
   useEffect(() => {
     if (userAddress && contractAddress && currency) {
-      dispatch(
-        doGetApproval({ userAddress, contractAddress, currency, networkClient })
-      );
+      dispatch(doGetApproval({ userAddress, contractAddress, currency, networkClient }));
     }
     if (library && !networkClient) {
       console.log("web3 react connect set network client");
@@ -207,12 +177,7 @@ export function ApprovableButtonWrapper(
     }
     // eslint-disable-next-line
   }, [userAddress, contractAddress, currency, status, networkClient]);
-  console.log(
-    currentApproval,
-    BigUtils.safeParse(currentApproval).lt(
-      BigUtils.safeParse(ownProps.amount || "0.0001")
-    )
-  );
+  console.log(currentApproval, BigUtils.safeParse(currentApproval).lt(BigUtils.safeParse(ownProps.amount || "0.0001")));
   return (
     <>
       <div>
@@ -224,14 +189,10 @@ export function ApprovableButtonWrapper(
           updater={(e: any) => updateEvent(dispatch, e, networkClient)}
         >
           <ownProps.View
-            isApprovalMode={BigUtils.safeParse(currentApproval).lt(
-              BigUtils.safeParse(ownProps.amount || "0.0001")
-            )}
+            isApprovalMode={BigUtils.safeParse(currentApproval).lt(BigUtils.safeParse(ownProps.amount || "0.0001"))}
             pendingApproval={props.status === "pending"}
             approvalTransactionId={props.approveTransactionId}
-            onApproveClick={() =>
-              dispatch(doApprove({ networkClient, ...ownProps }))
-            }
+            onApproveClick={() => dispatch(doApprove({ networkClient, ...ownProps }))}
           />
         </ChainEventItem>
       </div>
