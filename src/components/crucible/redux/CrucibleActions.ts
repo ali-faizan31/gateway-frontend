@@ -28,6 +28,9 @@ export const resetCrucible = () => (dispatch: any) => {
   dispatch(actions.resetCrucible());
 };
 
+export const updateAPRData = (crucible: any) => (dispatch: any) => { 
+  dispatch(actions.aprDataLoaded({ crucible }));
+};
 
 export const updateTokenData = (crucible: any) => (dispatch: any) => { 
   dispatch(actions.tokenDataLoaded({ crucible }));

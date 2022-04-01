@@ -36,7 +36,7 @@ import toast from "react-hot-toast";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { ClipLoader } from "react-spinners";
-import { getTokenInformationFromWeb3 } from "../../../../../utils/global.utils";
+import { getTokenInformationFromWeb3, TruncateWithoutRounding } from "../../../../../utils/global.utils";
 
 export const Stake = () => {
   const dispatch = useDispatch();
@@ -70,6 +70,8 @@ export const Stake = () => {
   const tokenPrices = useSelector(
     (state: RootState) => state.crucible.tokenPrices
   );
+
+  const { tokenData } = useSelector((state: RootState) => state.crucible)
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
     (state: RootState) => state.crucible
   );
@@ -158,37 +160,7 @@ export const Stake = () => {
         : toast.error(`Error Occured: ${e}`);
     }
   };
-
-  // const onStakeClick = async (
-  //   currency: string,
-  //   stakingAddress: string,
-  //   amount: string,
-  //   isPublic: boolean,
-  //   network: string,
-  //   userAddress: string
-  // ) => {
-  //   if (networkClient) {
-  //     setTransitionStatusDialog(true);
-  //     setIsProcessing(true);
-  //     const web3Helper = new Web3Helper(networkClient as any);
-  //     const client = new CrucibleClient(web3Helper);
-
-  //     const response = await client.StakeCrucible(
-  //       dispatch,
-  //       currency,
-  //       amount,
-  //       stakingAddress,
-  //       userAddress,
-  //       network
-  //     );
-  //     if (response) {
-  //       setIsProcessing(false);
-  //       setIsProcessed(true);
-  //       getStepCompleted(false);
-  //     }
-  //   }
-  // };
-
+ 
   const onStakeClick = async (amountToStake:number) => {
     if (networkClient) {
       let currency: string = "";
@@ -262,19 +234,12 @@ export const Stake = () => {
       );
     }
   };
-
-  
-  // useEffect(() => {
-  //   if (crucible.contractAddress){
-  //    getTokenInformation(networkClient, walletAddress, crucible.contractAddress, setTokenInfo, tokenInfo)
-  //   }
-  //  }, [crucible])
-
+ 
   const getAmount = () => { 
     if (farm?.includes("BNB")){
-      return crucible?.LP_balance || 0;
+      return Number(TruncateWithoutRounding(crucible?.LP_balance || 0, 3));
     } else {
-      return Number(userCrucibleData?.balance || "0")
+      return Number(TruncateWithoutRounding(userCrucibleData?.balance || "0", 3))
     }
   }
 
@@ -285,9 +250,7 @@ export const Stake = () => {
       return (crucible?.symbol)
     }
   }
-
-  console.log(crucible, 'amount')
-
+ 
   return (
     <>
     {isLoading ? (
@@ -350,7 +313,7 @@ export const Stake = () => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-        You have {tokenInfo.balance} available in Token {getAmountSymbol()} to Stake.
+        You have {getAmount()} available in Token {getAmountSymbol()} to Stake.
       </FTypo>
       {meV2._id && isConnected ? (
         <ApprovableButtonWrapper
