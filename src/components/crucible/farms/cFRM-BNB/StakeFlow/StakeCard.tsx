@@ -36,7 +36,7 @@ import toast from "react-hot-toast";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { ClipLoader } from "react-spinners";
-import { getTokenInformation } from "../../../../../utils/global.utils";
+import { getTokenInformationFromWeb3 } from "../../../../../utils/global.utils";
 
 export const Stake = () => {
   const dispatch = useDispatch();
@@ -264,11 +264,11 @@ export const Stake = () => {
   };
 
   
-  useEffect(() => {
-    if (crucible.contractAddress){
-     getTokenInformation(networkClient, walletAddress, crucible.contractAddress, setTokenInfo, tokenInfo)
-    }
-   }, [crucible])
+  // useEffect(() => {
+  //   if (crucible.contractAddress){
+  //    getTokenInformation(networkClient, walletAddress, crucible.contractAddress, setTokenInfo, tokenInfo)
+  //   }
+  //  }, [crucible])
 
   const getAmount = () => { 
     if (farm?.includes("BNB")){

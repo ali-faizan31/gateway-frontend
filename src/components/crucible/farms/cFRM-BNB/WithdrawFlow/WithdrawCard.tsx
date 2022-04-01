@@ -172,9 +172,7 @@ export const Withdraw = () => {
       // return userStake?.rewardOf || 0
     }
   }
-
-  console.log(networkClient?.utils.fromWei(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount, 'ether'))
-
+ 
   const getRewardSymbol = () => {
     if (farm?.includes("BNB")){
       return crucible.LP_symbol; 
