@@ -483,3 +483,15 @@ export const getLatestStepWithPendingStatus = (currentStepIndex:any, stepRespons
   }
 };
  
+
+export const getAPRValueAgainstFarm = (aprInformation:any, farm: any) => {
+  if ( farm === "cFRM-BNB"){
+    return aprInformation.cfrmLp;
+  } else if ( farm === "cFRMx-BNB"){
+    return aprInformation.cfrmXLp;
+  } else if ( farm === "cFRMx"){
+    return aprInformation.cfrmX;
+  } else if ( farm === "cFRM"){
+    return aprInformation.cfrm;
+  } 
+}

@@ -24,7 +24,7 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import ClipLoader from "react-spinners/ClipLoader";
 import { STEP_FLOW_IDS } from "../../../common/utils";
-import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
+import { getAPRValueAgainstFarm, getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import toast from "react-hot-toast";
@@ -56,7 +56,7 @@ export const Manage = () => {
   let userStake = (userCrucibleData.stakes || []).find(
     (e: any) => e.address.toLowerCase() === location.state.LPstakingAddress
   );
-  const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector(
+  const { stepFlowStepHistory, currentStep, currentStepIndex, aprInformation } = useSelector(
     (state: RootState) => state.crucible
   );
   // const { approveTransactionId } = useSelector((state: RootState) => state.approval);
@@ -502,7 +502,7 @@ export const Manage = () => {
                         >
                           APR
                         </FTypo>
-                        192%
+                        {getAPRValueAgainstFarm(aprInformation, farm)}
                       </FTypo>
                     </FItem>
                   </FGridItem>
