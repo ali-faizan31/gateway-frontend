@@ -160,6 +160,8 @@ export const CardAPR = () => {
       ),
       action: (
         <div className="col-action">
+          { (isConnected && tokenV2) ?
+            <> 
           <FButton
             title={"Manage"}
             onClick={() =>
@@ -188,6 +190,12 @@ export const CardAPR = () => {
               )
             }
           ></FButton>
+    </> : <MetaMaskConnector.WalletConnector
+          WalletConnectView={FButton}
+          WalletConnectModal={ConnectWalletDialog}
+          isAuthenticationNeeded={true}
+          WalletConnectViewProps={{ className: "w-100" }}
+        /> }
         </div>
       ),
     };

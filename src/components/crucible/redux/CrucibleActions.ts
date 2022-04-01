@@ -27,3 +27,9 @@ export const resetCrucible = () => (dispatch: any) => {
   console.log('rset -------------')
   dispatch(actions.resetCrucible());
 };
+
+
+export const updateTokenData = (crucible: any) => (dispatch: any) => { 
+  dispatch(actions.tokenDataLoaded({ crucible }));
+};
+

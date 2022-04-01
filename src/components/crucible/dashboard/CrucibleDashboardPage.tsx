@@ -19,28 +19,74 @@ import { CruciblePrice } from "../common/CardPrice";
 // import { useHistory, useLocation } from "react-router";
 import * as CrucibleActions from "../redux/CrucibleActions";
 import { crucibleSlice } from "../redux/CrucibleSlice";
+import { CBTTokenContractAddress, CBTxTokenContractAddress, APELPCFRMBNBTokenContractAddress, APELPCFRMxBNBTokenContractAddress, tokenFRMBSCMainnet, tokenFRMxBSCMainnet } from "../../../utils/const.utils";
+import { getCABNInformation, getTokenInformationFromWeb3 } from "../../../utils/global.utils";
+
+
 
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
-  const { networkClient } = useSelector(
+  const { networkClient, walletAddress } = useSelector(
     (state: RootState) => state.walletConnector
   );
 
   useEffect(() => {
-    console.log('calling pricing')
-    if (networkClient){
-      console.log('calling pricing 2')
-    dispatch(loadPricingInfo({}))
+    if (networkClient) {
+      dispatch(loadPricingInfo({}))
+      loadTokenData(networkClient)
     }
-    // dispatch(CrucibleActions.resetCrucible());
+    dispatch(CrucibleActions.resetCrucible());
     // eslint-disable-next-line
   }, [networkClient]);
 
+  const loadTokenData = async (networkClient: any) => {
+    const tokens = [
+      {
+        token: "CBTToken",
+        currency: CBTTokenContractAddress,
+      },
+      {
+        token: "CBTxToken",
+        currency: CBTxTokenContractAddress,
+      },
+      {
+        token: "APELPCFRMBNB",
+        currency: APELPCFRMBNBTokenContractAddress,
+      },
+      {
+        token: "APELPCFRMxBNB",
+        currency: APELPCFRMxBNBTokenContractAddress,
+      },
+      {
+        token: "FRMBSC",
+        currency: tokenFRMBSCMainnet
+      },
+      {
+        token: "FRMxBSC",
+        currency: tokenFRMxBSCMainnet
+      }
+    ];
+
+    for (let item of tokens) {
+      const tokenDetails = await getTokenInformationFromWeb3(networkClient, walletAddress, item.currency)
+      const cabnDetails = await getCABNInformation(item.currency);
+      let finalData = { ...tokenDetails, ...cabnDetails };
+      if (!!finalData) {
+        dispatch(
+          CrucibleActions.updateTokenData({
+            token: item.token,
+            ...finalData,
+
+          })
+        );
+      }
+    }
+  }
 
   const loadPricingInfo = createAsyncThunk(
     "crucible/loadUserInfo",
-    async (payload:  {}, ctx) => {
+    async (payload: {}, ctx) => {
       const actions = crucibleSlice.actions;
       const web3Helper = new Web3Helper(networkClient as any);
       const client = new CrucibleClient(web3Helper);

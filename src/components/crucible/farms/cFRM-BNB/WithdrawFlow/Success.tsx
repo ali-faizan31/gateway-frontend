@@ -206,9 +206,9 @@ export const Success = () => {
         </FTypo>
         <FGrid>
           <FGridItem size={[6, 6, 6]}>
-            <FItem bgColor="#1C2229" className={"card-whats-next"}>
-              <div className="card-whats-next-inner">
-                <div className="card-whats-next-front" onClick={()=>onAddLiquidityClick()}>
+            <FItem bgColor="#1C2229" className={"card-whats-next"} >
+              <div className="card-whats-next-inner"  onClick={()=>onAddLiquidityClick()}>
+                <div className="card-whats-next-front">
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
                       <IconNetworkcFRM />
@@ -252,8 +252,8 @@ export const Success = () => {
           </FGridItem>
           <FGridItem size={[6, 6, 6]}>
             <FItem bgColor="#1C2229" className={"card-whats-next"}>
-              <div className="card-whats-next-inner">
-                <div className="card-whats-next-front" onClick={()=>onMintClick()}>
+              <div className="card-whats-next-inner"  onClick={()=>onMintClick()}>
+                <div className="card-whats-next-front">
                   <div className="network-icon-wrapper text-center f-mb-1">
                     <span className="icon-wrap">
                     {farm?.includes("cFRMx") ?  <IconNetworkcFRM /> : <IconNetworkcFRMx />} 
