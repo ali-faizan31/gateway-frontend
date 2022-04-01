@@ -67,10 +67,7 @@ export const UnstakeAddLiquidity = () => {
                   <FTypo className={"f-mb-1"} size={22}>
                     Step 1
                   </FTypo>
-                  <FTypo size={18}>
-                    Congratulations! You have successfully unstaked your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens! Please proceed to step
-                    2.
-                  </FTypo>
+                  <FTypo size={18}>Congratulations! You have successfully unstaked your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens! Please proceed to step 2.</FTypo>
                 </span>
               </li>
               <li>
@@ -79,13 +76,12 @@ export const UnstakeAddLiquidity = () => {
                     Step 2
                   </FTypo>
                   <FTypo size={18}>
-                    In order to deposit LP tokens into the {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} LP Farm (
-                    {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}/BNB pair), you will first need to add liquidity.
+                    In order to deposit LP tokens into the {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} LP Farm ({farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}/BNB pair), you will
+                    first need to add liquidity.
                     <strong>Click ‘Add Liquidity’ to get started.</strong>
                     <br></br>
                     <br></br>
-                    After you add liquidity, you will need to return to this screen and stake the {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} LP
-                    tokens.
+                    After you add liquidity, you will need to return to this screen and stake the {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} LP tokens.
                   </FTypo>
                   <br></br>
                   <FInputCheckbox
@@ -103,17 +99,17 @@ export const UnstakeAddLiquidity = () => {
                     Step 3
                   </FTypo>
                   <FTypo size={18}>
-                    Congratulations! You have successfully added liquidity. You are now able to stake your{" "}
-                    {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} LP tokens to start earning rewards!
+                    Congratulations! You have successfully added liquidity. You are now able to stake your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} LP tokens to start earning
+                    rewards!
                   </FTypo>
                   <br></br>
                   <FInputCheckbox
                     onClick={() => setStepThreeCheck(!stepThreeCheck)}
                     name="step3Check"
                     className="f-mb-1 f-mt-1"
-                    label={`I have added liquidity of ${
+                    label={`I have added liquidity of ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} / BNB pair and have the LP tokens. I’m ready to stake my ${
                       farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
-                    } / BNB pair and have the LP tokens. I’m ready to stake my ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} LP tokens now.`}
+                    } LP tokens now.`}
                   />
                 </span>
               </li>

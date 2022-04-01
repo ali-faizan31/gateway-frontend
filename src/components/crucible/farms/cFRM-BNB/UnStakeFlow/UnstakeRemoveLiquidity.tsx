@@ -83,8 +83,7 @@ export const UnstakeRemoveLiquidity = () => {
                     Step 1
                   </FTypo>
                   <FTypo size={18}>
-                    Congratulations! You have successfully unstaked your APE-LP {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} -BNB tokens! Please
-                    proceed to step 2.
+                    Congratulations! You have successfully unstaked your APE-LP {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} -BNB tokens! Please proceed to step 2.
                   </FTypo>
                 </span>
               </li>
@@ -94,13 +93,12 @@ export const UnstakeRemoveLiquidity = () => {
                     Step 2
                   </FTypo>
                   <FTypo size={18}>
-                    In order to unwrap your LP tokens into the {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB, you will first need to remove
-                    liquidity.
+                    In order to unwrap your LP tokens into the {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB, you will first need to remove liquidity.
                     <strong>Click ‘Remove Liquidity’ to get started.</strong>
                     <br></br>
                     <br></br>
-                    After you remove liquidity, you will need to return to this screen to either unwrap {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"},
-                    Stake {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}, or simply hold.
+                    After you remove liquidity, you will need to return to this screen to either unwrap {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}, Stake{" "}
+                    {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}, or simply hold.
                   </FTypo>
                   <br></br>
                   <FInputCheckbox
@@ -120,8 +118,7 @@ export const UnstakeRemoveLiquidity = () => {
                     Step 3
                   </FTypo>
                   <FTypo size={18}>
-                    Congratulations! You have successfully removed liquidity. You are now able to unwrap or stake your{" "}
-                    {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens.
+                    Congratulations! You have successfully removed liquidity. You are now able to unwrap or stake your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens.
                   </FTypo>
                   <br></br>
                   <FInputCheckbox
