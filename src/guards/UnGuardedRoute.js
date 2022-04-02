@@ -1,12 +1,12 @@
 import React from 'react';
-import { Route, Redirect } from "react-router-dom";
+import { Route } from "react-router-dom";
  
-const UnGuardedRoute = ({component: Component, layout: Layout, auth, ...rest}) => { 
+const UnGuardedRoute = ({component: Component, layout: Layout, headerTitle, auth, ...rest}) => { 
   return <Route exact
     {...rest}
     render={(props) =>
     //   !auth  ? (
-        <Layout>
+        <Layout headerTitle={headerTitle}>
           <Component {...props} />
         </Layout>
     //   ) : (

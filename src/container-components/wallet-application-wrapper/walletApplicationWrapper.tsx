@@ -31,23 +31,35 @@ export const ApplicationWrapper = ({ children }: any) => {
     walletWrapperInitialized,
     // supportedCurrencies,
     groupInfo,
-  } = useSelector((state: RootState) => state.walletApplicationWrapper); 
+  } = useSelector((state: RootState) => state.walletApplicationWrapper);
 
   useEffect(() => {
-    console.log("Attempt to intialize app");
-    // dispatch(applicationWrapperActions.loadWalletDefaults("frm", tokenList)); 
+    // console.log("Attempt to intialize app");
+    // dispatch(applicationWrapperActions.loadWalletDefaults("frm", tokenList));
   }, []);
 
   useEffect(() => {
-    if (isConnected && isWeb3Initialized && networkClient && walletWrapperInitialized  ) {
-       signIntoServer();
-    } else if (!isConnected ||  !isWeb3Initialized || !networkClient ||  !walletWrapperInitialized  ) {
-       dispatch(applicationWrapperActions.resetUserProfile());
-    } 
+    // console.log("intiialalalal");
+    if (
+      isConnected &&
+      isWeb3Initialized &&
+      networkClient &&
+      walletWrapperInitialized
+    ) { 
+      signIntoServer();
+    } else if (
+      !isConnected ||
+      !isWeb3Initialized ||
+      !networkClient ||
+      !walletWrapperInitialized
+    ) { 
+      dispatch(applicationWrapperActions.resetUserProfile());
+    }
+    // eslint-disable-next-line
   }, [isConnected, walletWrapperInitialized]);
 
   const signIntoServer = async () => { 
-    const user = await getUserProfile(); 
+     await getUserProfile(); 
     // dispatch(applicationWrapperActions.getUserProfile(user));
   };
 
@@ -59,7 +71,7 @@ export const ApplicationWrapper = ({ children }: any) => {
       const currentNetwork = userTokens[0]?.currency.split(":")[0];
       const currencies = groupInfo.bridgeCurrencies.filter(
         (currency: any) => currency.split(":")[0] === currentNetwork
-      ); 
+      );
       const addressesF = currencies.map(async (c: any) => {
         const [network, tokenAddr] = c.split(":");
         let symbol: string = "";
@@ -81,18 +93,18 @@ export const ApplicationWrapper = ({ children }: any) => {
           //     balance = "0";
           //   }
           // } else {
-            // const token = TokenInfo[c];
-            // symbol = token.tokenSymbol;
-            const tokenContract = new networkClient.eth.Contract(
-              FerrumJson.abi as AbiItem[],
-              tokenAddr
-            );
-            symbol = await tokenContract.methods.symbol().call();
-            decimals = (await tokenContract.methods.decimals().call()) as any;
-            name = await tokenContract.methods.name().call();
-            balance = await tokenContract.methods.balanceOf(walletAddress).call();
-            const decimalFactor = 10 ** Number(decimals);
-            balance = new Big(balance).div(decimalFactor).toFixed();
+          // const token = TokenInfo[c];
+          // symbol = token.tokenSymbol;
+          const tokenContract = new networkClient.eth.Contract(
+            FerrumJson.abi as AbiItem[],
+            tokenAddr
+          );
+          symbol = await tokenContract.methods.symbol().call();
+          decimals = (await tokenContract.methods.decimals().call()) as any;
+          name = await tokenContract.methods.name().call();
+          balance = await tokenContract.methods.balanceOf(walletAddress).call();
+          const decimalFactor = 10 ** Number(decimals);
+          balance = new Big(balance).div(decimalFactor).toFixed();  
           // }
         }
 

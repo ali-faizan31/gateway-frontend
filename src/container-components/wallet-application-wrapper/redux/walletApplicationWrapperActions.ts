@@ -1,6 +1,6 @@
 import { applicationWrapperSlice } from "./walletApplicationWrapperSlice";
 // import * as serverRequest from "../../../common-client/axiosApiClient";
-import { getFilteredAssets } from "../walletApplicationWrapperHelper";
+// import { getFilteredAssets } from "../walletApplicationWrapperHelper";
 const { actions } = applicationWrapperSlice;
 
 // export const loadWalletDefaults =
