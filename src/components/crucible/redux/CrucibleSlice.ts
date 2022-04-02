@@ -50,6 +50,9 @@ export const crucibleSlice = createSlice({
             state.currentStep = {};
             state.stepFlowStepHistory = [];
             state.currentStepIndex = null;
+            state.selectedCrucible = {};
+            state.userCrucibleDetails = {};
+            state.userLpStakingDetails = {};
         },
     }
 })

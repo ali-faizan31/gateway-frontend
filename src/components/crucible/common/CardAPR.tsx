@@ -35,15 +35,20 @@ export const CardAPR = () => {
 
   const tableHeads: any[] = [
     {
-      width: 200,
+      // width: 200,
       prop: "sustainableCrucibleFarms",
       title: "Sustainable Crucible Farms",
     },
-    { prop: "totalDeposited", title: "Total Deposited" },
-    { prop: "yourDeposit", title: "Your Deposit" },
-    { prop: "yourRewards", title: "Your Rewards" },
+    // { prop: "totalDeposited", title: "Total Deposited" },
+    // { prop: "yourDeposit", title: "Your Deposit" },
+    // { prop: "yourRewards", title: "Your Rewards" },
+    // { prop: "description", title: "Description" },
+    { prop: "first", title: "" },
+    { prop: "second", title: "" },
+    { prop: "third", title: "" },
     {
       prop: "apr",
+      // title: "APR",
       title: (
         <FTypo color="#DAB46E" align={"center"}>
           APR
@@ -57,12 +62,15 @@ export const CardAPR = () => {
     {
       sustainableCrucibleFarms: "cFRM / BNB",
       stepFlowName: "cFRM / BNB Crucible Farm - Farming Dashboard Flow",
-      totalDeposited: "127",
-      yourDeposit: "$13",
-      yourRewards: "$.1",
+      totalDeposited: "10 %",
+      yourDeposit: "10 %",
+      yourRewards: "10 %",
+      first: "Sustainable",
+      second: "Crucible",
+      third: "LP Farm",
+      description: "Sustainable Crucible LP Farm",
       logo: (
         <>
-          {" "}
           <img src={IconNetworkCFrmStr} height="22px" width="22px" />
           <img src={IconNetworkBNB} height="22px" width="22px" />{" "}
         </>
@@ -81,6 +89,9 @@ export const CardAPR = () => {
       totalDeposited: "127",
       yourDeposit: "$13",
       yourRewards: "$.2",
+      first: "Sustainable",
+      second: "Crucible",
+      third: "Farm",
       apr: aprInformation?.cfrm,
       logo: (
         <>
@@ -100,6 +111,9 @@ export const CardAPR = () => {
       totalDeposited: "127",
       yourDeposit: "$13",
       yourRewards: "$.3",
+      first: "Sustainable",
+      second: "Crucible",
+      third: "LP Farm",
       apr: aprInformation?.cfrmXLp,
       network: "BSC",
       logo: (
@@ -121,6 +135,9 @@ export const CardAPR = () => {
       totalDeposited: "127",
       yourDeposit: "$13",
       yourRewards: "$.4",
+      first: "Sustainable",
+      second: "Crucible",
+      third: "Farm",
       apr: aprInformation?.cfrmX,
       logo: (
         <>
@@ -147,7 +164,11 @@ export const CardAPR = () => {
       ),
       totalDeposited: <FTypo className={"col-amount"}>{stepFlow.totalDeposited}</FTypo>,
       yourDeposit: <FTypo className={"col-amount"}>{stepFlow.yourDeposit}</FTypo>,
+      first: <FTypo className={"col-amount"}>{stepFlow.first}</FTypo>,
+      second: <FTypo className={"col-amount"}>{stepFlow.second}</FTypo>,
+      third: <FTypo className={"col-amount"}>{stepFlow.third}</FTypo>,
       yourRewards: <FTypo className={"col-amount"}>{stepFlow.yourRewards}</FTypo>,
+      description: <FTypo className={"col-amount"}>{stepFlow.description}</FTypo>,
       apr: (
         <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}>
           {" "}
@@ -215,8 +236,8 @@ export const CardAPR = () => {
       ) : (
         <FCard className="card-apr f-mt-2">
           <FItem display={"flex"} alignX="between" alignY={"center"} className="f-pb-1 f-m-0">
-            <FTypo className="card-title f-pl-1">APR</FTypo>
-            <FInputText type={"text"} placeholder="Search by Farm Name, Token Name, Token Contract Address" />
+            <FTypo className="card-title f-pl-1">Crucible by Ferrum Network</FTypo>
+            <FInputText type={"text"} placeholder="Search by Farm Name, Token Name, Token Contract Address" disabled />
           </FItem>
           <FTable>
             <Datatable tableBody={body} tableHeaders={tableHeads} rowsPerPage={10} />

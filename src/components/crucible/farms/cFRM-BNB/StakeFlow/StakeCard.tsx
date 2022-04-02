@@ -173,7 +173,8 @@ export const Stake = () => {
 
   const getAmountSymbol = () => {
     if (farm?.includes("BNB")) {
-      return crucible?.LP_symbol;
+      console.log(crucible);
+      return `${crucible?.LP_symbol} ${crucible?.symbol}-BNB`;
     } else {
       return crucible?.symbol;
     }
@@ -235,7 +236,7 @@ export const Stake = () => {
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {getAmount()} available in Token {getAmountSymbol()} {crucible?.symbol}-BNB to Stake.
+            You have {getAmount()} available in Token {getAmountSymbol()} to Stake.
           </FTypo>
           {meV2._id && isConnected ? (
             <ApprovableButtonWrapper

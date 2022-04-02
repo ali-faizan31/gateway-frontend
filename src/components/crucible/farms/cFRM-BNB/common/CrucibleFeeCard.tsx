@@ -5,6 +5,7 @@ import { useHistory, useLocation, useParams } from "react-router";
 import { BigUtils } from "../../../../../container-components/web3Client/types";
 import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
 import { getActualRoute, getAPRValueAgainstFarm } from "../../../common/Helper";
 
 const CrucibleFeeCard = () => {
@@ -29,10 +30,10 @@ const CrucibleFeeCard = () => {
   const getRewardAmount = () => {
     console.log(LPStakingDetails[farm!]);
     if (farm?.includes("BNB")) {
-      return networkClient?.utils.fromWei(String(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0), "ether");
+      return TruncateWithoutRounding(networkClient?.utils.fromWei(String(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0), "ether"), 3);
     } else {
       // networkClient?.utils.fromWei(String(userStake?.rewardOf || 0), 'ether')
-      return userStake?.rewardOf || 0;
+      return TruncateWithoutRounding(userStake?.rewardOf || 0, 3);
     }
   };
 
