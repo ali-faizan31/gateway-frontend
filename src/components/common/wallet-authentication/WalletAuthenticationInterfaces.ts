@@ -9,6 +9,7 @@ export interface WALLET_AUTHENTICATION_STATE {
     meV2: any;
     tokenV2: String;
     profileToken: string;
+    currentNetworkInformation: any
   }
   
   export const defaultWalletAuthenticationState: WALLET_AUTHENTICATION_STATE = {
@@ -21,5 +22,6 @@ export interface WALLET_AUTHENTICATION_STATE {
     getSignatureFromMetamask: false,
     meV2: {},
     tokenV2: "",
-    profileToken:""
+    profileToken:"",
+    currentNetworkInformation:{}
   };

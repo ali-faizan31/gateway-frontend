@@ -1,32 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FCard, FItem, FList, FListItem, FTypo } from "ferrum-design-system";
-import { ReactComponent as IconFerrum } from "../../../assets/img/icon-ferrum.svg";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/rootReducer";
-import * as CrucibleActions from "../redux/CrucibleActions";
-import { getCABNInformation, getTokenInformationFromWeb3, TruncateWithoutRounding } from "../../../utils/global.utils";
-import { cFRMTokenContractAddress, cFRMxTokenContractAddress, APELPCFRMBNBTokenContractAddress, APELPCFRMxBNBTokenContractAddress } from "../../../utils/const.utils";
+import { TruncateWithoutRounding } from "../../../utils/global.utils";
 
 export const CrucibleMyBalance = () => {
-  const dispatch = useDispatch();
-  const [CBTTokenInfo, setCBTTokenInfo] = useState<any>({});
-  const [CBTxTokenInfo, setCBTxTokenInfo] = useState<any>({});
-  const [APELPCFRMTokenInfo, setAPELPCFRMTokenInfo] = useState<any>({});
-  const [APELPCFRMxTokenInfo, setAPELPCFRMxTokenInfo] = useState<any>({});
-
   const { tokenData } = useSelector((state: RootState) => state.crucible);
-
-  useEffect(() => {
-    console.log(tokenData);
-    // getTokenInformation(networkClient, walletAddress, CBTTokenContractAddress, setCBTTokenInfo, CBTTokenInfo, dispatch);
-    // getCABNInformation(CBTTokenContractAddress, setCBTTokenInfo, CBTTokenInfo);
-    // getTokenInformation(networkClient, walletAddress, CBTxTokenContractAddress, setCBTxTokenInfo, CBTxTokenInfo);
-    // getCABNInformation(CBTxTokenContractAddress, setCBTxTokenInfo, CBTxTokenInfo);
-    // getTokenInformation(networkClient, walletAddress, APELPCFRMBNBTokenContractAddress, setAPELPCFRMTokenInfo, APELPCFRMTokenInfo);
-    // getCABNInformation(APELPCFRMBNBTokenContractAddress, setAPELPCFRMTokenInfo, APELPCFRMTokenInfo);
-    // getTokenInformation(networkClient, walletAddress, APELPCFRMxBNBTokenContractAddress, setAPELPCFRMxTokenInfo, APELPCFRMxTokenInfo);
-    // getCABNInformation(APELPCFRMxBNBTokenContractAddress, setAPELPCFRMxTokenInfo, APELPCFRMxTokenInfo);
-  }, []);
 
   return (
     <FCard className="card-my-balance styled-card align-v">

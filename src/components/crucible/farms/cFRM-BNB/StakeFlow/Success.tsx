@@ -25,12 +25,10 @@ export const Success = () => {
   const history = useHistory();
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
-  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
-
-  // const frmxLevelUpSwapUrl = `${dexUrl}swap?inputCurrency=BNB&outputCurrency=${crucible.contractAddress}&exactField=output&exactAmount=`;
+  const { tokenV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
 
   useEffect(() => {
-    // getStepCompleted(false);
+    getStepCompleted(false);
     // eslint-disable-next-line
   }, []);
 
@@ -133,6 +131,17 @@ export const Success = () => {
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, newFarm, setIsLoading);
   };
 
+  const onTradeClick = () => {
+    let dexUrl = currentNetworkInformation?.networkCurrencyAddressByNetwork?.networkDex?.dex?.url;
+    const tradeURL = `${dexUrl}swap?inputCurrency=BNB&outputCurrency=${crucible.contractAddress}&exactField=output&exactAmount=`;
+    window.open(tradeURL, "_blank");
+  };
+
+  const onLeaderboardClick = () => {
+    let leaderboardUrl = `${window.location.origin}/pub/multi/leaderboard/61b6d48337f5125acbbfddeb`;
+    window.open(leaderboardUrl, "_self");
+  };
+
   return (
     <>
       {isLoading ? (
@@ -196,7 +205,7 @@ export const Success = () => {
               </FGridItem>
               <FGridItem size={[6, 6, 6]}>
                 <FItem bgColor="#1C2229" className={"card-whats-next"}>
-                  <div className="card-whats-next-inner">
+                  <div className="card-whats-next-inner" onClick={() => onLeaderboardClick()}>
                     <div className="card-whats-next-front">
                       <div className="network-icon-wrapper text-center f-mb-1">
                         <span className="icon-wrap">
@@ -238,7 +247,7 @@ export const Success = () => {
               </FGridItem>
               <FGridItem size={[6, 6, 6]}>
                 <FItem bgColor="#1C2229" className={"card-whats-next"}>
-                  <div className="card-whats-next-inner">
+                  <div className="card-whats-next-inner" onClick={() => onTradeClick()}>
                     <div className="card-whats-next-front">
                       <div className="network-icon-wrapper text-center f-mb-1">
                         <span className="icon-wrap">

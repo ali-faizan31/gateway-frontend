@@ -21,7 +21,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 import { STEP_FLOW_IDS } from "../../../common/utils";
 import { ClipLoader } from "react-spinners";
-import { getNetworkInformationForPublicUser } from "../../../../../_apis/NetworkCrud";
 
 export const AddLiquidity = () => {
   const history = useHistory();
@@ -33,27 +32,17 @@ export const AddLiquidity = () => {
   const [networkResponse, setNetworkResponse] = useState<any>({});
   const [addLiquidityUrl, setAddLiquidityUrl] = useState("");
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
-  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { tokenV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
-  const { currentWalletNetwork } = useSelector((state: RootState) => state.walletConnector);
   const { farm } = useParams<{ farm?: string }>();
 
   useEffect(() => {
-    if (currentWalletNetwork) {
-      getNetworkInfo();
-    }
-  }, [currentWalletNetwork]);
-
-  const getNetworkInfo = async () => {
-    let networkResponse: any = await getNetworkInformationForPublicUser(currentWalletNetwork);
-    networkResponse = networkResponse.data && networkResponse.data.body && networkResponse.data.body.network;
-    if (networkResponse) {
-      setNetworkResponse(networkResponse);
-      let dexUrl = networkResponse.networkCurrencyAddressByNetwork.networkDex.dex.url;
+    if (currentNetworkInformation) {
+      let dexUrl = currentNetworkInformation?.networkCurrencyAddressByNetwork?.networkDex?.dex?.url;
       let addLiquidityUrl = `${dexUrl}add/${crucible.contractAddress}/ETH`;
       setAddLiquidityUrl(addLiquidityUrl);
     }
-  };
+  }, [currentNetworkInformation]);
 
   const onStakeClick = () => {
     setIsLoading(true);
