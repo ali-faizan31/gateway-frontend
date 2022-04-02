@@ -35,15 +35,20 @@ export const CardAPR = () => {
 
   const tableHeads: any[] = [
     {
-      width: 200,
+      // width: 200,
       prop: "sustainableCrucibleFarms",
       title: "Sustainable Crucible Farms",
     },
-    { prop: "totalDeposited", title: "Total Deposited" },
-    { prop: "yourDeposit", title: "Your Deposit" },
-    { prop: "yourRewards", title: "Your Rewards" },
+    // { prop: "totalDeposited", title: "Total Deposited" },
+    // { prop: "yourDeposit", title: "Your Deposit" },
+    // { prop: "yourRewards", title: "Your Rewards" },
+    // { prop: "description", title: "Description" },
+    { prop: "first", title: "" },
+    { prop: "second", title: "" },
+    { prop: "third", title: "" },
     {
       prop: "apr",
+      // title: "APR",
       title: (
         <FTypo color="#DAB46E" align={"center"}>
           APR
@@ -57,14 +62,17 @@ export const CardAPR = () => {
     {
       sustainableCrucibleFarms: "cFRM / BNB",
       stepFlowName: "cFRM / BNB Crucible Farm - Farming Dashboard Flow",
-      totalDeposited: "127",
-      yourDeposit: "$13",
-      yourRewards: "$.1",
+      totalDeposited: "10 %",
+      yourDeposit: "10 %",
+      yourRewards: "10 %",
+      first: "Sustainable",
+      second: "Crucible",
+      third: "LP Farm",
+      description: "Sustainable Crucible LP Farm",
       logo: (
         <>
-          {" "}
-          <img src={IconNetworkCFrmStr} height="22px" width="22px" style={{ marginRight: "3px" }} />
-          <img src={IconNetworkBNB} height="22px" width="22px" style={{ marginRight: "3px" }} />{" "}
+          <img src={IconNetworkCFrmStr} height="22px" width="22px" />
+          <img src={IconNetworkBNB} height="22px" width="22px" />{" "}
         </>
       ),
       apr: aprInformation?.cfrmLp,
@@ -72,7 +80,7 @@ export const CardAPR = () => {
       id: "6238314dd292da2db05524dd",
       contract: "0x5732a2a84ec469fc95ac32e12515fd337e143eed", // crucible contract address
       LpCurrency: "0x9528704e44feda5ea240363ee52731859683b1fb", // ape-lp token for crucible and bnb pair
-      LPstakingAddress: "0xeab8290c54b6307016a736ff2191bf2aaef3b697", // lp farm where lp currency will be staked
+      LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a", // lp farm where lp currency will be staked
       internalName: "cFRM-BNB",
     },
     {
@@ -81,17 +89,19 @@ export const CardAPR = () => {
       totalDeposited: "127",
       yourDeposit: "$13",
       yourRewards: "$.2",
+      first: "Sustainable",
+      second: "Crucible",
+      third: "Farm",
       apr: aprInformation?.cfrm,
       logo: (
         <>
-          {" "}
-          <img src={IconNetworkCFrmStr} height="22px" width="22px" style={{ marginRight: "3px" }} />
+          <img src={IconNetworkCFrmStr} height="22px" width="22px" />
         </>
       ),
       id: "6238386bd292da2db05524f9",
       contract: "0x5732a2a84ec469fc95ac32e12515fd337e143eed",
       LpCurrency: "0x5732a2a84ec469fc95ac32e12515fd337e143eed",
-      LPstakingAddress: "0xab0433aa0b5e05f1ff0fd293cff8bee15882ccad",
+      LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a",
       network: "BSC",
       internalName: "cFRM",
     },
@@ -101,19 +111,22 @@ export const CardAPR = () => {
       totalDeposited: "127",
       yourDeposit: "$13",
       yourRewards: "$.3",
+      first: "Sustainable",
+      second: "Crucible",
+      third: "LP Farm",
       apr: aprInformation?.cfrmXLp,
       network: "BSC",
-      id: "62383841d292da2db05524f3",
       logo: (
         <>
           {" "}
-          <img src={IconNetworkCFrmxStr} height="22px" width="22px" style={{ marginRight: "3px" }} />
-          <img src={IconNetworkBNB} height="22px" width="22px" style={{ marginRight: "3px" }} />{" "}
+          <img src={IconNetworkCFrmxStr} height="22px" width="22px" />
+          <img src={IconNetworkBNB} height="22px" width="22px" />{" "}
         </>
       ),
+      id: "62383841d292da2db05524f3",
       contract: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
       LpCurrency: "0x84f624617bad7e349e194da0877120ee190e4730",
-      LPstakingAddress: "0xeab8290c54b6307016a736ff2191bf2aaef3b697",
+      LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a",
       internalName: "cFRMx-BNB",
     },
     {
@@ -122,17 +135,19 @@ export const CardAPR = () => {
       totalDeposited: "127",
       yourDeposit: "$13",
       yourRewards: "$.4",
+      first: "Sustainable",
+      second: "Crucible",
+      third: "Farm",
       apr: aprInformation?.cfrmX,
       logo: (
         <>
-          {" "}
-          <img src={IconNetworkCFrmxStr} height="22px" width="22px" style={{ marginRight: "3px" }} />{" "}
+          <img src={IconNetworkCFrmxStr} height="22px" width="22px" />{" "}
         </>
       ),
       id: "62383865d292da2db05524f6",
       contract: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
       LpCurrency: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
-      LPstakingAddress: "0xab0433aa0b5e05f1ff0fd293cff8bee15882ccad",
+      LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a",
       network: "BSC",
       internalName: "cFRMx",
     },
@@ -149,7 +164,11 @@ export const CardAPR = () => {
       ),
       totalDeposited: <FTypo className={"col-amount"}>{stepFlow.totalDeposited}</FTypo>,
       yourDeposit: <FTypo className={"col-amount"}>{stepFlow.yourDeposit}</FTypo>,
+      first: <FTypo className={"col-amount"}>{stepFlow.first}</FTypo>,
+      second: <FTypo className={"col-amount"}>{stepFlow.second}</FTypo>,
+      third: <FTypo className={"col-amount"}>{stepFlow.third}</FTypo>,
       yourRewards: <FTypo className={"col-amount"}>{stepFlow.yourRewards}</FTypo>,
+      description: <FTypo className={"col-amount"}>{stepFlow.description}</FTypo>,
       apr: (
         <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}>
           {" "}
@@ -217,8 +236,8 @@ export const CardAPR = () => {
       ) : (
         <FCard className="card-apr f-mt-2">
           <FItem display={"flex"} alignX="between" alignY={"center"} className="f-pb-1 f-m-0">
-            <FTypo className="card-title f-pl-1">APR</FTypo>
-            <FInputText type={"text"} placeholder="Search by Farm Name, Token Name, Token Contract Address" />
+            <FTypo className="card-title f-pl-1">Crucible by Ferrum Network</FTypo>
+            <FInputText type={"text"} placeholder="Search by Farm Name, Token Name, Token Contract Address" disabled />
           </FItem>
           <FTable>
             <Datatable tableBody={body} tableHeaders={tableHeads} rowsPerPage={10} />

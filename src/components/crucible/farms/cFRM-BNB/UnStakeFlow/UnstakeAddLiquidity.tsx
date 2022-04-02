@@ -18,7 +18,6 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { getObjectReadableFarmName, getLatestStepToRender } from "../../../common/Helper";
 import { STEP_FLOW_IDS } from "../../../common/utils";
 import { ClipLoader } from "react-spinners";
-import { getNetworkInformationForPublicUser } from "../../../../../_apis/NetworkCrud";
 
 export const UnstakeAddLiquidity = () => {
   const dispatch = useDispatch();
@@ -27,28 +26,19 @@ export const UnstakeAddLiquidity = () => {
   const location: any = useLocation();
   const history = useHistory();
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
-  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
-  const { currentWalletNetwork } = useSelector((state: RootState) => state.walletConnector);
+  const { tokenV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
   const [stepTwoCheck, setStepTwoCheck] = useState(false);
   const [stepThreeCheck, setStepThreeCheck] = useState(false);
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
   const [addLiquidityUrl, setAddLiquidityUrl] = useState("");
 
   useEffect(() => {
-    if (currentWalletNetwork) {
-      getNetworkInfo();
-    }
-  }, [currentWalletNetwork]);
-
-  const getNetworkInfo = async () => {
-    let networkResponse: any = await getNetworkInformationForPublicUser(currentWalletNetwork);
-    networkResponse = networkResponse.data && networkResponse.data.body && networkResponse.data.body.network;
-    if (networkResponse) {
-      let dexUrl = networkResponse.networkCurrencyAddressByNetwork.networkDex.dex.url;
+    if (currentNetworkInformation) {
+      let dexUrl = currentNetworkInformation?.networkCurrencyAddressByNetwork?.networkDex?.dex?.url;
       let addLiquidityUrl = `${dexUrl}add/${crucible.contractAddress}/ETH`;
       setAddLiquidityUrl(addLiquidityUrl);
     }
-  };
+  }, [currentNetworkInformation]);
 
   const onStakeClick = () => {
     setIsLoading(true);

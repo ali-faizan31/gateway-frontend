@@ -121,12 +121,6 @@ const CrucibleDashboardPage = () => {
     for (let item of tokens) {
       const priceDetails = await web3Helper.getTokenPriceFromRouter(item.currency);
       console.log(priceDetails);
-      // (await client.getPairPrice(
-      //   ctx.dispatch,
-      //   item.currency,
-      //   item.currency,
-      //   walletAddress as string
-      // )) as any;
       if (!!priceDetails) {
         dispatch(
           actions.priceDataLoaded({

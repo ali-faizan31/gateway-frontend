@@ -6,6 +6,10 @@ export const saveSignature = (walletAuthenticator: any) => (dispatch: any) => {
     dispatch(actions.saveSignature({ walletAuthenticator }));
 };
 
+export const saveNetworkInformation = (networkInformation: any) => (dispatch: any) => {
+    dispatch(actions.saveNetworkInformation({ networkInformation }));
+};
+
 export const saveNonce = (walletAuthenticator: any) => (dispatch: any) => {
     dispatch(actions.saveNonce({ walletAuthenticator }));
 };

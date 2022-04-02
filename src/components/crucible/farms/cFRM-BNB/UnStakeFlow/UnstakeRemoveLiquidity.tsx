@@ -18,7 +18,6 @@ import { getLatestStepToRender, getObjectReadableFarmName } from "../../../commo
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/rootReducer";
 import { ClipLoader } from "react-spinners";
-import { getNetworkInformationForPublicUser } from "../../../../../_apis/NetworkCrud";
 
 export const UnstakeRemoveLiquidity = () => {
   const { farm } = useParams<{ farm?: string }>();
@@ -31,24 +30,15 @@ export const UnstakeRemoveLiquidity = () => {
 
   const [removeLiquidityUrl, setRemoveLiquidityUrl] = useState("");
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
-  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
-  const { currentWalletNetwork } = useSelector((state: RootState) => state.walletConnector);
+  const { tokenV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
 
   useEffect(() => {
-    if (currentWalletNetwork) {
-      getNetworkInfo();
-    }
-  }, [currentWalletNetwork]);
-
-  const getNetworkInfo = async () => {
-    let networkResponse: any = await getNetworkInformationForPublicUser(currentWalletNetwork);
-    networkResponse = networkResponse.data && networkResponse.data.body && networkResponse.data.body.network;
-    if (networkResponse) {
-      let dexUrl = networkResponse.networkCurrencyAddressByNetwork.networkDex.dex.url;
+    if (currentNetworkInformation) {
+      let dexUrl = currentNetworkInformation?.networkCurrencyAddressByNetwork?.networkDex?.dex?.url;
       let removeLiquidityUrl = `${dexUrl}pool`;
       setRemoveLiquidityUrl(removeLiquidityUrl);
     }
-  };
+  }, [currentNetworkInformation]);
 
   const onStakeClick = () => {
     setIsLoading(true);
