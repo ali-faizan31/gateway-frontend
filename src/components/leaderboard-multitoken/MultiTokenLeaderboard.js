@@ -58,10 +58,10 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
   const getTokensHolderList = async (leaderboard) => {
     try{
       let res = await getTokenHolderlistByCABNId(leaderboard?.frmCabn?.id);
-      res = res && res.data && res.data.body && res.data.body.result && res.data.body.result.length 
+      res = res && res.data && res.data.body && res.data.body.result
       let FRMHoldersList = res && filterList(res, leaderboard?.exclusionWalletAddressList);
       let resp = await getTokenHolderlistByCABNId(leaderboard?.frmxCabn?.id);
-      resp = resp && resp.data && resp.data.body && resp.data.body.result && resp.data.body.result.length
+      resp = resp && resp.data && resp.data.body && resp.data.body.result
       let FRMxHoldersList = resp && filterList(resp, leaderboard?.exclusionWalletAddressList); 
       mapTokenHolderData(FRMxHoldersList, FRMHoldersList, leaderboard);
       setIsLoading(false);
