@@ -1,13 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
+  FCard,
   // FCard,
   FContainer,
+  FItem,
   // FGrid,
   // FGridItem,
   // FItem,
   FTypo,
 } from "ferrum-design-system";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CrucibleClient } from "../../../container-components/web3Client/crucibleClient";
 import { Web3Helper } from "../../../container-components/web3Client/web3Helper";
@@ -26,101 +28,120 @@ import {
   APELPCFRMxBNBTokenContractAddress,
   tokenFRMBSCMainnet,
   tokenFRMxBSCMainnet,
+  Crucible_Farm_Address_Details,
+  Pricing_Tokens,
 } from "../../../utils/const.utils";
 import { getCABNInformation, getTokenInformationFromWeb3 } from "../../../utils/global.utils";
 import { getAPRInformationForPublicUser } from "../../../_apis/APRCrud";
+import { ClipLoader } from "react-spinners";
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const { networkClient, walletAddress } = useSelector((state: RootState) => state.walletConnector);
+  const { selectedCrucible, userCrucibleDetails, userLpStakingDetails } = useSelector((state: RootState) => state.crucible);
+
+  useEffect(() => {
+    console.log("selectedCrucible", selectedCrucible);
+  }, [selectedCrucible]);
+
+  useEffect(() => {
+    console.log("userCrucibleDetails", userCrucibleDetails);
+  }, [userCrucibleDetails]);
+
+  useEffect(() => {
+    console.log("userLpStakingDetails", userLpStakingDetails);
+  }, [userLpStakingDetails]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getAPRInformation();
+    dispatch(CrucibleActions.resetCrucible());
+  }, []);
 
   useEffect(() => {
     if (networkClient) {
-      dispatch(loadPricingInfo({}));
-      loadTokenData(networkClient);
-    }
-    getAPRInformation();
-    dispatch(CrucibleActions.resetCrucible());
-    // eslint-disable-next-line
-  }, [networkClient]);
-
-  const loadTokenData = async (networkClient: any) => {
-    const tokens = [
-      {
-        token: "cFRM",
-        currency: cFRMTokenContractAddress,
-      },
-      {
-        token: "cFRMx",
-        currency: cFRMxTokenContractAddress,
-      },
-      {
-        token: "APELPCFRMBNB",
-        currency: APELPCFRMBNBTokenContractAddress,
-      },
-      {
-        token: "APELPCFRMxBNB",
-        currency: APELPCFRMxBNBTokenContractAddress,
-      },
-      {
-        token: "FRMBSC",
-        currency: tokenFRMBSCMainnet,
-      },
-      {
-        token: "FRMxBSC",
-        currency: tokenFRMxBSCMainnet,
-      },
-    ];
-
-    for (let item of tokens) {
-      const tokenDetails = await getTokenInformationFromWeb3(networkClient, walletAddress, item.currency);
-      const cabnDetails = await getCABNInformation(item.currency);
-      let finalData = { ...tokenDetails, ...cabnDetails };
-      if (!!finalData) {
-        dispatch(
-          CrucibleActions.updateTokenData({
-            token: item.token,
-            ...finalData,
-          })
-        );
+      dispatch(loadPricingInfo());
+      for (let farm of Crucible_Farm_Address_Details) {
+        getCrucibleDetail(farm);
       }
     }
+  }, [networkClient]);
+
+  const getCrucibleDetail = async (farm: any) => {
+    const web3Helper = new Web3Helper(networkClient as any);
+    const client = new CrucibleClient(web3Helper);
+    const actions = crucibleSlice.actions;
+    dispatch(
+      loadCrucibleUserInfo({
+        crucibleCurrency: `${farm.network.toUpperCase()}:${(farm.contract || "").toLowerCase()}`,
+        farm,
+      })
+    );
+    const crucibleData = await client.getCrucibleDetails(dispatch, farm.network, farm.contract, walletAddress as string);
+    const data = await web3Helper.getTokenData(walletAddress as string, farm.LpCurrency);
+    dispatch(
+      actions.selectedCrucible({
+        token: `${farm.internalName}`,
+        data: { ...crucibleData.data, LP_balance: data.balance, LP_symbol: data.symbol },
+      })
+    );
+
+    if (farm?.internalName.includes("BNB")) {
+      if (crucibleData.data) {
+        dispatch(loadLPStakingInfo({ farm }));
+        setIsLoading(false);
+      }
+    }
+    setIsLoading(false);
   };
 
-  const loadPricingInfo = createAsyncThunk("crucible/loadUserInfo", async (payload: {}, ctx) => {
+  const loadCrucibleUserInfo = createAsyncThunk("crucible/loadUserInfo", async (payload: { crucibleCurrency: string; farm: any }, ctx) => {
     const actions = crucibleSlice.actions;
     const web3Helper = new Web3Helper(networkClient as any);
     const client = new CrucibleClient(web3Helper);
-    const tokens = [
-      {
-        token: "FRM",
-        currency: "0xa719b8ab7ea7af0ddb4358719a34631bb79d15dc", // done
-      },
-      {
-        token: "FRMx",
-        currency: "0x8523518001ad5d24b2a04e8729743c0643a316c0", // done
-      },
-      {
-        token: "cFRM-BNB",
-        currency: "0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc",
-      },
-      {
-        token: "cFRMx-BNB",
-        currency: "0x8523518001ad5d24b2A04e8729743C0643A316c0",
-      },
-      {
-        token: "cFRM",
-        currency: "0x5732a2a84ec469fc95ac32e12515fd337e143eed", // done  // change before prod
-      },
-      {
-        token: "cFRMx",
-        currency: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
-      },
-    ];
+    const res = await web3Helper.getTokenPriceFromRouter();
+    const userCrucibleDetails = await client.getUserCrucibleInfo(ctx.dispatch, payload.crucibleCurrency, walletAddress as string);
+    const stakingType = "LP";
+    if (!!userCrucibleDetails) {
+      if (stakingType === "LP") {
+      }
+      dispatch(actions.userCrucibleDetailsLoaded({ token: `${payload.farm.internalName}`, data: userCrucibleDetails.data }));
+    }
+  });
 
-    for (let item of tokens) {
+  const loadLPStakingInfo = createAsyncThunk("crucible/loadUserInfo", async (payload: { farm: any }, ctx) => {
+    const actions = crucibleSlice.actions;
+    const web3Helper = new Web3Helper(networkClient as any);
+    const client = new CrucibleClient(web3Helper);
+    const userStakingDetails = await client.getLPStakingInfo(
+      ctx.dispatch,
+      `${(payload.farm.LpCurrency || "").toLowerCase()}`,
+      walletAddress as string,
+      payload.farm.LPstakingAddress,
+      payload.farm.network
+    );
+    if (!!userStakingDetails) {
+      dispatch(
+        actions.userLpStakingDetailsLoaded({
+          token: `${payload.farm.internalName}`,
+          data: {
+            ...userStakingDetails.data,
+            stakingAddress: payload.farm.LPstakingAddress,
+            LPaddress: payload.farm.LpCurrency,
+          },
+        })
+      );
+    }
+  });
+
+  const loadPricingInfo = createAsyncThunk("crucible/loadUserInfo", async () => {
+    const actions = crucibleSlice.actions;
+    const web3Helper = new Web3Helper(networkClient as any);
+    const client = new CrucibleClient(web3Helper);
+
+    for (let item of Pricing_Tokens) {
       const priceDetails = await web3Helper.getTokenPriceFromRouter(item.currency);
-      console.log(priceDetails);
       if (!!priceDetails) {
         dispatch(
           actions.priceDataLoaded({
@@ -130,7 +151,6 @@ const CrucibleDashboardPage = () => {
             },
           })
         );
-        console.log(priceDetails);
       }
     }
   });
@@ -138,16 +158,25 @@ const CrucibleDashboardPage = () => {
   const getAPRInformation = async () => {
     let aprResponse: any = await getAPRInformationForPublicUser();
     aprResponse = aprResponse.data && aprResponse.data.body && aprResponse.data.body.crucibleApr;
-    console.log(aprResponse);
     dispatch(CrucibleActions.updateAPRData(aprResponse));
   };
 
   return (
     <FContainer className="f-ml-0 crucible-dashboard">
-      <CrucibleMyBalance />
-      <FTypo className="page-title">Dashboard</FTypo>
-      <CruciblePrice />
-      <CardAPR />
+      {isLoading ? (
+        <FCard>
+          <FItem align={"center"}>
+            <ClipLoader color="#cba461" loading={true} size={150} />
+          </FItem>
+        </FCard>
+      ) : (
+        <>
+          <CrucibleMyBalance />
+          <FTypo className="page-title">Dashboard</FTypo>
+          <CruciblePrice />
+          <CardAPR />
+        </>
+      )}
     </FContainer>
   );
 };

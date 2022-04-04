@@ -16,6 +16,19 @@ export const getHumanReadableFarmName = (farm: any) => {
   }
 };
 
+export const getFarmNameFromObject = (farm: any) => {
+  switch (farm) {
+    case "cFRM_BNB":
+      return "cFRM-BNB";
+    case "cFRMx_BNB":
+      return "cFRMx-BNB";
+    case "cFRM":
+      return "cFRM";
+    case "cFRMx":
+      return "cFRMx";
+  }
+};
+
 export const getObjectReadableFarmName = (farm: any) => {
   switch (farm) {
     case "cFRM-BNB":

@@ -74,15 +74,13 @@ export class Web3Helper {
         // [currency,"0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c","0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"]
         [currency, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56", "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"]
 
-      ).call()
-      console.log(response, currency, 'pricing response')
-      if (response.length > 0) {
-        console.log(response, 'pricing response')
+      ).call() 
+      if (response.length > 0) { 
         return await this.amountToHuman(response[2], 18)
       }
       return 0
     } catch (e) {
-      console.log(e)
+      // console.log(e)
     }
   }
 
