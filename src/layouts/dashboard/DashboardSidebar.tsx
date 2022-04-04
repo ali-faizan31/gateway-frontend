@@ -31,17 +31,11 @@ import { ME_TAG, TOKEN_TAG } from "../../utils/const.utils";
 // import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 
 const DashboardSidebar = () => {
+  let showCrucibleMenu = false;
   const { id }: any = useParams();
   const { pathname } = useLocation();
   let token = localStorage.getItem(TOKEN_TAG);
   const [sideConfig, setSideConfig]: any = useState([]);
-  // const [sideMenuItems, setSideMenuItems] = useState([]);
-  // const { competitionList } = useSelector(
-  //   (state: RootStateOrAny) => state.competition
-  // );
-  // const { leaderboardList } = useSelector(
-  //   (state: RootStateOrAny) => state.leaderboard
-  // );
   const isPublic = pathname.includes("/pub");
   const isPublicLeaderboard = pathname.includes("/pub/leader");
   const isStakingLeaderboard = pathname.includes("/staking");
@@ -133,11 +127,7 @@ const DashboardSidebar = () => {
   useEffect(() => {
     if (id !== ":id") {
       if (isPublic) {
-        if (
-          isStakingLeaderboard ||
-          isPublicLeaderboard ||
-          isPublicMultiLeaderboard
-        ) {
+        if (isStakingLeaderboard || isPublicLeaderboard || isPublicMultiLeaderboard) {
           getPublicLeaderboard();
         }
         if (isPublicCompetition) {
@@ -195,9 +185,7 @@ const DashboardSidebar = () => {
   };
 
   const updatePublicLeaderboardConfig = (list: any) => {
-    setSideConfig([
-      { title: "Leaderboard", path: PATH_DASHBOARD.general.competition },
-    ]);
+    setSideConfig([{ title: "Leaderboard", path: PATH_DASHBOARD.general.competition }]);
     if (isPublicMultiLeaderboard) {
       setSideConfig([]);
       const np: any = [list[0]];
@@ -237,9 +225,7 @@ const DashboardSidebar = () => {
   };
 
   const updatePublicCompetitionConfig = (list: any) => {
-    setSideConfig([
-      { title: "Competition", path: PATH_DASHBOARD.general.competition },
-    ]);
+    setSideConfig([{ title: "Competition", path: PATH_DASHBOARD.general.competition }]);
     if (isPublicCompetition) {
       setSideConfig([]);
       let np: any = publicCompetitionConfig[0].children;
@@ -279,26 +265,14 @@ const DashboardSidebar = () => {
     return items.map((item: any, index: any) => (
       <>
         {
-          <FSiderItem
-            to={item.path}
-            title={item.title}
-            prefix={item.icon}
-            key={index}
-            target={item.target && item.target}
-          >
+          <FSiderItem to={item.path} title={item.title} prefix={item.icon} key={index} target={item.target && item.target}>
             {item?.children?.length && (
               <FSiderSubMenuItem>
                 {item.children.map((subItem: any, sudIndex: any) => (
                   <FSiderItem
                     to={subItem.path}
                     title={subItem.title}
-                    prefix={
-                      <img
-                        src="/ferrum/bullet.png"
-                        height={"4px"}
-                        alt="side menut item"
-                      />
-                    }
+                    prefix={<img src="/ferrum/bullet.png" height={"4px"} alt="side menut item" />}
                     key={sudIndex}
                     target={subItem.target && subItem.target}
                   ></FSiderItem>
@@ -315,14 +289,13 @@ const DashboardSidebar = () => {
     <FSider>
       {renderContent(homeSidebarConfig)}
       {/* {renderContent(sideMenuItems)} */}
-      {localStorageHelper.load(ME_TAG)?.role === "organizationAdmin" &&
-        renderContent(sidebarConfig)}
+      {localStorageHelper.load(ME_TAG)?.role === "organizationAdmin" && renderContent(sidebarConfig)}
       {/* {(isPublicLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig)}  */}
       {isStakingLeaderboard && renderContent(sideConfig)}
       {renderContent(communityLeaderboardSidebarConfig)}
       {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
-      {renderContent(crucibleConfig)}
+      {showCrucibleMenu && renderContent(crucibleConfig)}
     </FSider>
   );
 };
