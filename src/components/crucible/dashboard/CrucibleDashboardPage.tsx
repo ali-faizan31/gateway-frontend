@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CrucibleClient } from "../../../container-components/web3Client/crucibleClient";
 import { Web3Helper } from "../../../container-components/web3Client/web3Helper";
 import { RootState } from "../../../redux/rootReducer";
+import Loading from "../../../assets/gif/Loading.gif"
 // import { RootState } from "../../../redux/rootReducer";
 import { CardAPR } from "../common/CardAPR";
 import { CrucibleMyBalance } from "../common/CardMyBalance";
@@ -30,7 +31,7 @@ import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWallet
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { networkClient, walletAddress, isConnected } = useSelector((state: RootState) => state.walletConnector);
   const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const { selectedCrucible, userCrucibleDetails, userLpStakingDetails } = useSelector((state: RootState) => state.crucible);
@@ -153,26 +154,33 @@ const CrucibleDashboardPage = () => {
       {isLoading ? (
         <FCard>
           <FItem align={"center"}>
-            <ClipLoader color="#cba461" loading={true} size={150} />
+            <img src={Loading}/>
+            {/* <ClipLoader color="#cba461" loading={true} size={150} /> */}
           </FItem>
         </FCard>
       ) : (
         <>
-          <CrucibleMyBalance />
-          <FTypo className="page-title">Dashboard</FTypo>
-          <CruciblePrice />
+
           {isConnected && tokenV2 ? (
-            <CardAPR />
+            <>
+              <CrucibleMyBalance />
+              <FTypo className="page-title">Dashboard</FTypo>
+              <CruciblePrice />
+              <CardAPR />
+            </>
           ) : (
-            <FCard className="card-apr f-mt-2 f-mb-2 f-pb-2">
-              <MetaMaskConnector.WalletConnector
-                WalletConnectView={FButton}
-                WalletConnectModal={ConnectWalletDialog}
-                isAuthenticationNeeded={true}
-                WalletConnectViewProps={{ className: "w-100" }}
-              />
-            </FCard>
-          )}
+            <>
+              <FCard className="card-apr f-mt-2 f-mb-2 f-pb-2">
+                <FTypo className="card-title f-pl-1">Please Connect to your wallet to proceed to crucible</FTypo>
+                <MetaMaskConnector.WalletConnector
+                  WalletConnectView={FButton}
+                  WalletConnectModal={ConnectWalletDialog}
+                  isAuthenticationNeeded={true}
+                  WalletConnectViewProps={{ className: "w-100" }}
+                />
+              </FCard>
+            </>)
+          }
         </>
       )}
     </FContainer>
