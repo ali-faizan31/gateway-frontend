@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CrucibleClient } from "../../../container-components/web3Client/crucibleClient";
 import { Web3Helper } from "../../../container-components/web3Client/web3Helper";
 import { RootState } from "../../../redux/rootReducer";
-import Loading from "../../../assets/gif/Loading.gif"
+import Loader from "../../../assets/gif/loading.gif" 
 // import { RootState } from "../../../redux/rootReducer";
 import { CardAPR } from "../common/CardAPR";
 import { CrucibleMyBalance } from "../common/CardMyBalance";
@@ -31,7 +31,7 @@ import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWallet
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { networkClient, walletAddress, isConnected } = useSelector((state: RootState) => state.walletConnector);
   const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const { selectedCrucible, userCrucibleDetails, userLpStakingDetails } = useSelector((state: RootState) => state.crucible);
@@ -82,6 +82,7 @@ const CrucibleDashboardPage = () => {
         setIsLoading(false);
       }
     }
+    setIsLoading(false);
   };
 
   const loadCrucibleUserInfo = createAsyncThunk("crucible/loadUserInfo", async (payload: { crucibleCurrency: string; farm: any }, ctx) => {
@@ -154,7 +155,7 @@ const CrucibleDashboardPage = () => {
       {isLoading ? (
         <FCard>
           <FItem align={"center"}>
-            <img src={Loading}/>
+            <img src={Loader}/> 
             {/* <ClipLoader color="#cba461" loading={true} size={150} /> */}
           </FItem>
         </FCard>
@@ -171,7 +172,7 @@ const CrucibleDashboardPage = () => {
           ) : (
             <>
               <FCard className="card-apr f-mt-2 f-mb-2 f-pb-2">
-                <FTypo className="card-title f-pl-1">Please Connect to your wallet to proceed to crucible</FTypo>
+                <FTypo className="card-title f-pl-1">Connect your wallet to access Crucible Dashboard</FTypo>
                 <MetaMaskConnector.WalletConnector
                   WalletConnectView={FButton}
                   WalletConnectModal={ConnectWalletDialog}

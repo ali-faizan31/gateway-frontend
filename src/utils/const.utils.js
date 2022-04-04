@@ -1,4 +1,5 @@
-export const baseUrl = "https://api-leaderboard.dev.svcs.ferrumnetwork.io"; // dev
+export const baseUrl = 
+"https://api-leaderboard.dev.svcs.ferrumnetwork.io"; // dev
 // "https://api-gateway-v1.svcs.ferrumnetwork.io" // prod-gateway
 // "https://api-gateway-v1.stage.svcs.ferrumnetwork.io" // staging-gateway
 export const apiKeyForApplicationUser =
