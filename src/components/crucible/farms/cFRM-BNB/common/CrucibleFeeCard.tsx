@@ -1,30 +1,35 @@
 import { FCard, FTypo, FGrid, FGridItem, FItem, FButton, FContainer } from "ferrum-design-system";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router";
 import { BigUtils } from "../../../../../container-components/web3Client/types";
 import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
-import { getActualRoute, getAPRValueAgainstFarm } from "../../../common/Helper";
+import { getActualRoute, getAPRValueAgainstFarm, getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
+import { STEP_FLOW_IDS } from "../../../common/utils";
 
 const CrucibleFeeCard = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const location: any = useLocation();
   const { farm } = useParams<{ farm?: string }>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
-  const { aprInformation } = useSelector((state: RootState) => state.crucible);
+  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { currentStep, currentStepIndex, stepFlowStepHistory, aprInformation } = useSelector((state: RootState) => state.crucible);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
   const LPStakingDetails = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
-  let userStake = (userCrucibleData.stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
+  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
   const { networkClient } = useSelector((state: RootState) => state.walletConnector);
-  console.log(userCrucibleData, LPStakingDetails, location.state.LPstakingAddress);
 
   const onClaimRewardsClick = () => {
-    //need to be done
-    history.push({
-      pathname: getActualRoute(farm, PATH_DASHBOARD.crucible.crucibleActionRoutes.withdraw.withdraw),
-    });
+    setIsLoading(true);
+    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].withdraw;
+    location.state.id = nextStepInfo.id;
+    location.state.stepFlowName = nextStepInfo.name;
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
+    setIsLoading(false);
   };
 
   const getRewardAmount = () => {
@@ -38,7 +43,8 @@ const CrucibleFeeCard = () => {
   };
 
   const getRewardSymbol = () => {
-    return crucible.symbol;
+    console.log(crucible);
+    return crucible[farm!]?.symbol;
   };
 
   return (
@@ -50,7 +56,7 @@ const CrucibleFeeCard = () => {
             <FGridItem size={[4, 4, 4]}>
               <FItem align={"center"}>
                 <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                  {`${BigUtils.safeParse(crucible?.feeOnTransferRate || "0")
+                  {`${BigUtils.safeParse(crucible[farm!]?.feeOnTransferRate || "0")
                     .times(100)
                     .toString()}%`}
                 </FTypo>
@@ -60,7 +66,7 @@ const CrucibleFeeCard = () => {
             <FGridItem size={[4, 4, 4]}>
               <FItem align={"center"}>
                 <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                  {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0")
+                  {`${BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0")
                     .times(100)
                     .toString()}%`}
                 </FTypo>
@@ -70,7 +76,7 @@ const CrucibleFeeCard = () => {
             <FGridItem size={[4, 4, 4]}>
               <FItem align={"center"}>
                 <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                  {crucible?.symbol}
+                  {crucible[farm!]?.symbol}
                 </FTypo>
                 <FTypo size={20}>Crucible Token</FTypo>
               </FItem>
@@ -83,7 +89,7 @@ const CrucibleFeeCard = () => {
                 <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
                   {farm?.includes("BNB") ? Number(LPStakingDetails[farm!]?.stake || "0") : Number(userStake?.stakeOf || "0").toFixed(3)}
                   <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
-                    {farm?.includes("BNB") ? `APE-LP ${crucible?.symbol}-BNB` : crucible?.symbol}
+                    {farm?.includes("BNB") ? `APE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
                   </FTypo>
                 </FTypo>
               </FGridItem>

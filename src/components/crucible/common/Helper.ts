@@ -295,7 +295,7 @@ const saveCurrentPreferncesInNewSequence = async (newSequence: any, oldHistory: 
   for ( let i = 0; i < oldHistory.length; i++ ){
     if (oldHistory[i].status === "skip"){
       for ( let j = 0; j < newSequence.length; j++ ){
-        if (newSequence[j].step._id === oldHistory[i].step._id){ 
+        if (newSequence[j].step._id === oldHistory[i].step._id && newSequence[j].status !== "skip"){ 
           await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
             newSequence[j]._id,
             { status: "skip" },

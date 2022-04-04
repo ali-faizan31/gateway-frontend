@@ -44,17 +44,8 @@ export const Stake = () => {
   const [isProcessed, setIsProcessed] = useState(false);
   const [tokenInfo, setTokenInfo] = useState<any>({});
   const [transactionId, setTransactionId] = useState("");
-
-  //@ts-ignore
-  const crucible = useSelector((state) => state.crucible.selectedCrucible);
-  const {
-    isConnected,
-    // isConnecting,
-    walletAddress,
-    // walletBalance,
-    networkClient,
-  } = useSelector((state: RootState) => state.walletConnector);
-  //@ts-ignore
+  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
+  const { isConnected, walletAddress, networkClient } = useSelector((state: RootState) => state.walletConnector);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
   const LPStakingDetails = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
   const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
@@ -72,10 +63,10 @@ export const Stake = () => {
       approvals,
       walletAddress,
       CRUCIBLE_CONTRACTS_V_0_1["BSC"].router,
-      crucible?.baseCurrency,
-      approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible?.baseCurrency)]
+      crucible[farm!]?.baseCurrency,
+      approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.baseCurrency)]
     );
-    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible?.baseCurrency)]) > 0) {
+    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.baseCurrency)]) > 0) {
       if (currentStep.step.name === "Approve" && currentStep.status !== "completed") {
         getStepCompleted(false);
       }
@@ -130,15 +121,15 @@ export const Stake = () => {
         currency = LPStakingDetails[farm!]?.stakeId;
         stakingAddress = LPStakingDetails[farm!]?.stakingAddress || "";
         amount = amountToStake.toString();
-        network = crucible?.network;
+        network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
         response = await client.stakeLPToken(dispatch, currency, userAddress, stakingAddress, network, amount);
       } else if (isSingleTokenFarm(farm)) {
-        currency = crucible!.currency;
-        stakingAddress = (crucible?.staking || [])[0]?.address || "";
+        currency = crucible[farm!]!.currency;
+        stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
         amount = amountToStake.toString();
-        network = crucible?.network;
+        network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
         response = await client.StakeCrucible(dispatch, currency, amount, stakingAddress, userAddress, network);
@@ -165,7 +156,7 @@ export const Stake = () => {
 
   const getAmount = () => {
     if (farm?.includes("BNB")) {
-      return Number(TruncateWithoutRounding(crucible?.LP_balance || 0, 3));
+      return Number(TruncateWithoutRounding(crucible[farm!]?.LP_balance || 0, 3));
     } else {
       return Number(TruncateWithoutRounding(userCrucibleData?.balance || "0", 3));
     }
@@ -174,9 +165,9 @@ export const Stake = () => {
   const getAmountSymbol = () => {
     if (farm?.includes("BNB")) {
       console.log(crucible);
-      return `${crucible?.LP_symbol} ${crucible?.symbol}-BNB`;
+      return `${crucible[farm!]?.LP_symbol} ${crucible[farm!]?.symbol}-BNB`;
     } else {
-      return crucible?.symbol;
+      return crucible[farm!]?.symbol;
     }
   };
 
@@ -254,7 +245,7 @@ export const Stake = () => {
                 </div>
               )}
               // currency={crucible!.baseCurrency}
-              currency={isSingleTokenFarm(farm) ? crucible!.baseCurrency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
+              currency={isSingleTokenFarm(farm) ? crucible[farm!]!.baseCurrency : isLPFarm(farm) && `${crucible[farm!]?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
               contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
               userAddress={walletAddress as string}
               amount={"0.0001"}
@@ -277,7 +268,7 @@ export const Stake = () => {
             transactionId={transactionId}
             isSubmitted={false}
             isProcessed={isProcessed}
-            crucible={crucible}
+            crucible={crucible[farm!]}
             onContinueToNextStepClick={() => onContinueToNextStepClick()}
           />
         </FCard>

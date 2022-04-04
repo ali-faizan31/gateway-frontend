@@ -29,6 +29,8 @@ import {
 } from "../../../common/Helper";
 import { useHistory, useLocation, useParams } from "react-router";
 import { ClipLoader } from "react-spinners";
+import { MetaMaskConnector } from "../../../../../container-components";
+import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 // import eitherConverter from "ether-converter";
 
 export const Withdraw = () => {
@@ -41,13 +43,13 @@ export const Withdraw = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isProcessed, setIsProcessed] = useState(false);
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
-  const { walletAddress, networkClient } = useSelector((state: RootState) => state.walletConnector);
+  const { isConnected, walletAddress, networkClient } = useSelector((state: RootState) => state.walletConnector);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
-  let userStake = (userCrucibleData.stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
+  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
   const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
   const LPStakingDetails = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
-  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const [transactionId, setTransactionId] = useState("");
 
   const getStepCompleted = async (renderNeeded: any) => {
@@ -100,7 +102,7 @@ export const Withdraw = () => {
   };
 
   const getRewardSymbol = () => {
-    return crucible.symbol;
+    return crucible[farm!]?.symbol;
   };
 
   const onWithdrawClick = async () => {
@@ -121,15 +123,15 @@ export const Withdraw = () => {
         currency = LPStakingDetails[farm!]?.stakeId;
         stakingAddress = LPStakingDetails[farm!]?.stakingAddress || "";
         amount = "0";
-        network = crucible?.network;
+        network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
         response = await client.withdrawRewardsLPToken(dispatch, currency, userAddress, stakingAddress, network);
       } else if (isSingleTokenFarm(farm)) {
-        currency = crucible!.currency;
-        stakingAddress = (crucible?.staking || [])[0]?.address || "";
+        currency = crucible[farm!]?.currency;
+        stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
         amount = userStake?.rewardOf;
-        network = crucible?.network;
+        network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
         response = await client.withdrawRewards(dispatch, network, amount, currency, stakingAddress, userAddress);
@@ -143,7 +145,7 @@ export const Withdraw = () => {
       }
     }
   };
-
+  console.log(tokenPrices, farm);
   return (
     <>
       {isLoading ? (
@@ -171,7 +173,7 @@ export const Withdraw = () => {
                   {getBaseTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
-                  ${tokenPrices[farm!]}
+                  ${tokenPrices[getBaseTokenName(farm)!]}
                 </FTypo>
               </FItem>
             </FGridItem>
@@ -200,32 +202,40 @@ export const Withdraw = () => {
               </FItem>
             </FGridItem>
           </FGrid>
-
-          <div className="btn-wrap f-mt-2">
-            <ApprovableButtonWrapper
-              View={(ownProps) => (
-                <FButton
-                  title={"Withdraw Rewards"}
-                  className={"w-100"}
-                  disabled={Number(getRewardAmount()) === 0}
-                  onClick={
-                    ownProps.isApprovalMode ? () => ownProps.onApproveClick() : () => onWithdrawClick()
-                    // crucible!.currency,
-                    // (crucible?.staking || [])[0]?.address || "",
-                    // userStake?.rewardOf || 0,
-                    // true,
-                    // crucible?.network,
-                    // walletAddress as string
-                  }
-                ></FButton>
-              )}
-              // currency={crucible!.currency}
-              currency={isSingleTokenFarm(farm) ? crucible!.currency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
-              contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
-              userAddress={walletAddress as string}
-              amount={"0.0001"}
+          {meV2._id && isConnected ? (
+            <div className="btn-wrap f-mt-2">
+              <ApprovableButtonWrapper
+                View={(ownProps) => (
+                  <FButton
+                    title={"Withdraw Rewards"}
+                    className={"w-100"}
+                    disabled={Number(getRewardAmount()) === 0}
+                    onClick={
+                      ownProps.isApprovalMode ? () => ownProps.onApproveClick() : () => onWithdrawClick()
+                      // crucible!.currency,
+                      // (crucible?.staking || [])[0]?.address || "",
+                      // userStake?.rewardOf || 0,
+                      // true,
+                      // crucible?.network,
+                      // walletAddress as string
+                    }
+                  ></FButton>
+                )}
+                // currency={crucible!.currency}
+                currency={isSingleTokenFarm(farm) ? crucible[farm!]?.currency : isLPFarm(farm) && `${crucible[farm!]?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
+                contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
+                userAddress={walletAddress as string}
+                amount={"0.0001"}
+              />
+            </div>
+          ) : (
+            <MetaMaskConnector.WalletConnector
+              WalletConnectView={FButton}
+              WalletConnectModal={ConnectWalletDialog}
+              isAuthenticationNeeded={true}
+              WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
             />
-          </div>
+          )}
 
           <DialogTransitionStatus
             transitionStatusDialog={transitionStatusDialog}
@@ -236,7 +246,7 @@ export const Withdraw = () => {
             setapprovedDone={false}
             isSubmitted={false}
             isProcessed={isProcessed}
-            crucible={crucible}
+            crucible={crucible[farm!]}
             onContinueToNextStepClick={() => onContinueToNextStepClick()}
           />
         </FCard>

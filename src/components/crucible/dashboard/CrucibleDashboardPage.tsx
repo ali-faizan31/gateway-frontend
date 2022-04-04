@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
+  FButton,
   FCard,
   // FCard,
   FContainer,
@@ -21,46 +22,33 @@ import { CruciblePrice } from "../common/CardPrice";
 // import { useHistory, useLocation } from "react-router";
 import * as CrucibleActions from "../redux/CrucibleActions";
 import { crucibleSlice } from "../redux/CrucibleSlice";
-import {
-  cFRMTokenContractAddress,
-  cFRMxTokenContractAddress,
-  APELPCFRMBNBTokenContractAddress,
-  APELPCFRMxBNBTokenContractAddress,
-  tokenFRMBSCMainnet,
-  tokenFRMxBSCMainnet,
-  Crucible_Farm_Address_Details,
-  Pricing_Tokens,
-} from "../../../utils/const.utils";
-import { getCABNInformation, getTokenInformationFromWeb3 } from "../../../utils/global.utils";
+import { Crucible_Farm_Address_Details, Pricing_Tokens } from "../../../utils/const.utils";
 import { getAPRInformationForPublicUser } from "../../../_apis/APRCrud";
 import { ClipLoader } from "react-spinners";
+import { MetaMaskConnector } from "../../../container-components";
+import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const { networkClient, walletAddress } = useSelector((state: RootState) => state.walletConnector);
+  const { networkClient, walletAddress, isConnected } = useSelector((state: RootState) => state.walletConnector);
+  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const { selectedCrucible, userCrucibleDetails, userLpStakingDetails } = useSelector((state: RootState) => state.crucible);
 
-  useEffect(() => {
-    console.log("selectedCrucible", selectedCrucible);
-  }, [selectedCrucible]);
+  // useEffect(() => {
+  //   if (userLpStakingDetails && userLpStakingDetails["cFRM-BNB"] && userLpStakingDetails["cFRM-BNB"].openCap) {
+  //     setIsLoading(false);
+  //   }
+  // }, [userLpStakingDetails]);
 
   useEffect(() => {
-    console.log("userCrucibleDetails", userCrucibleDetails);
-  }, [userCrucibleDetails]);
-
-  useEffect(() => {
-    console.log("userLpStakingDetails", userLpStakingDetails);
-  }, [userLpStakingDetails]);
-
-  useEffect(() => {
-    setIsLoading(true);
     getAPRInformation();
     dispatch(CrucibleActions.resetCrucible());
   }, []);
 
   useEffect(() => {
     if (networkClient) {
+      setIsLoading(true);
       dispatch(loadPricingInfo());
       for (let farm of Crucible_Farm_Address_Details) {
         getCrucibleDetail(farm);
@@ -93,7 +81,6 @@ const CrucibleDashboardPage = () => {
         setIsLoading(false);
       }
     }
-    setIsLoading(false);
   };
 
   const loadCrucibleUserInfo = createAsyncThunk("crucible/loadUserInfo", async (payload: { crucibleCurrency: string; farm: any }, ctx) => {
@@ -174,7 +161,18 @@ const CrucibleDashboardPage = () => {
           <CrucibleMyBalance />
           <FTypo className="page-title">Dashboard</FTypo>
           <CruciblePrice />
-          <CardAPR />
+          {isConnected && tokenV2 ? (
+            <CardAPR />
+          ) : (
+            <FCard className="card-apr f-mt-2 f-mb-2 f-pb-2">
+              <MetaMaskConnector.WalletConnector
+                WalletConnectView={FButton}
+                WalletConnectModal={ConnectWalletDialog}
+                isAuthenticationNeeded={true}
+                WalletConnectViewProps={{ className: "w-100" }}
+              />
+            </FCard>
+          )}
         </>
       )}
     </FContainer>

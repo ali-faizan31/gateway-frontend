@@ -12,22 +12,17 @@ import {
 import { CrucibleManage } from "../common/CardManage";
 import { CrucibleMyBalance } from "../../../common/CardMyBalance";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
-import { useWeb3React } from "@web3-react/core";
-import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
-import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
-// import Web3 from "web3";
 import { useHistory, useLocation, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { crucibleSlice } from "./../../../redux/CrucibleSlice";
 import { BigUtils } from "./../../../../../container-components/web3Client/types";
 import { RootState } from "../../../../../redux/rootReducer";
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import ClipLoader from "react-spinners/ClipLoader";
 import { STEP_FLOW_IDS } from "../../../common/utils";
 import { getAPRValueAgainstFarm, getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import toast from "react-hot-toast";
+import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
 
 export const Manage = () => {
   const history = useHistory();
@@ -40,21 +35,12 @@ export const Manage = () => {
   const { stepFlowStepHistory, currentStep, currentStepIndex, aprInformation } = useSelector((state: RootState) => state.crucible);
   const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
-  const LPStakingDetailsList = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
-  const crucibleList = useSelector((state: RootState) => state.crucible.selectedCrucible);
-  const userCrucibleDataList = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
-
-  const LPStakingDetails = LPStakingDetailsList[farm!];
-  const crucible = crucibleList[farm!];
-  const userCrucibleData = userCrucibleDataList[farm!];
-  console.log(userCrucibleData);
-  // let userStake = (userCrucibleData.stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
-  let userStake: any = [];
+  const LPStakingDetails = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
+  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
+  const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
+  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
 
   useEffect(() => {
-    console.log("lp staking data", LPStakingDetails);
-    console.log("crucible", crucible);
-    console.log("user crucible data", userCrucibleData);
     getStepCompletedAndRunCompletionFlow(false);
   }, []);
 
@@ -65,7 +51,6 @@ export const Manage = () => {
   }, [location]);
 
   const getStepCompletedAndRunCompletionFlow = async (renderNeeded: any) => {
-    console.log("here");
     setIsLoading(true);
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
@@ -90,6 +75,7 @@ export const Manage = () => {
       runCompletionFlow(stepFlowStepHistory);
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, true, true);
     } catch (e: any) {
+      setIsLoading(false);
       let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
       errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
     }
@@ -141,15 +127,15 @@ export const Manage = () => {
 
   const getRewardAmount = () => {
     if (farm?.includes("BNB")) {
-      return networkClient?.utils.fromWei(String(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0), "ether");
+      return TruncateWithoutRounding(networkClient?.utils.fromWei(String(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0), "ether"), 3);
     } else {
-      // networkClient?.utils.fromWei(String(userStake?.rewardOf || 0), 'ether')
-      return userStake?.rewardOf || 0;
+      let userStake = ((userCrucibleData[farm!] && userCrucibleData[farm!].stakes) || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
+      return TruncateWithoutRounding(userStake?.rewardOf || 0, 3);
     }
   };
 
   const getRewardSymbol = () => {
-    return crucible.symbol;
+    return crucible[farm!]?.symbol;
   };
 
   return (
@@ -172,7 +158,7 @@ export const Manage = () => {
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
                     <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                      {`${BigUtils.safeParse(crucible?.feeOnTransferRate || "0")
+                      {`${BigUtils.safeParse(crucible[farm!]?.feeOnTransferRate || "0")
                         .times(100)
                         .toString()}%`}
                     </FTypo>
@@ -182,7 +168,7 @@ export const Manage = () => {
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
                     <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                      {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0")
+                      {`${BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0")
                         .times(100)
                         .toString()}%`}
                     </FTypo>
@@ -192,7 +178,7 @@ export const Manage = () => {
                 <FGridItem size={[4, 4, 4]}>
                   <FItem align={"center"}>
                     <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                      {crucible?.symbol}
+                      {crucible[farm!]?.symbol}
                     </FTypo>
                     <FTypo size={20}>Crucible Token</FTypo>
                   </FItem>
@@ -206,7 +192,7 @@ export const Manage = () => {
                       {farm?.includes("BNB") ? Number(LPStakingDetails[farm!]?.stake || "0") : Number(userStake?.stakeOf || "0").toFixed(3)}
 
                       <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
-                        {farm?.includes("BNB") ? `APE-LP ${crucible?.symbol}-BNB` : crucible?.symbol}
+                        {farm?.includes("BNB") ? `APE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
                       </FTypo>
                     </FTypo>
                   </FGridItem>

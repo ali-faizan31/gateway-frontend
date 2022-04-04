@@ -15,6 +15,7 @@ import { ClipLoader } from "react-spinners";
 import { RootState } from "../../../redux/rootReducer";
 import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
+import { TruncateWithoutRounding } from "../../../utils/global.utils";
 
 export const CardAPR = () => {
   const history = useHistory();
@@ -22,33 +23,30 @@ export const CardAPR = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showConnectDialog, setShowConnectDialog] = useState(false);
   const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
-  const { currentStep, currentStepIndex, stepFlowStepHistory, aprInformation } = useSelector((state: RootState) => state.crucible);
+  const { currentStep, currentStepIndex, stepFlowStepHistory, aprInformation, selectedCrucible, userCrucibleDetails, userLpStakingDetails } = useSelector(
+    (state: RootState) => state.crucible
+  );
 
-  // const [isSet, setIsSet] = useState(false);
-  const { isConnected } = useSelector((state: RootState) => state.walletConnector);
+  const { isConnected, networkClient } = useSelector((state: RootState) => state.walletConnector);
 
   useEffect(() => {
-    if (tokenV2) {
-      setShowConnectDialog(false);
-    }
-  }, [tokenV2]);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, []);
 
   const tableHeads: any[] = [
     {
-      // width: 200,
+      width: 200,
       prop: "sustainableCrucibleFarms",
       title: "Sustainable Crucible Farms",
     },
-    // { prop: "totalDeposited", title: "Total Deposited" },
-    // { prop: "yourDeposit", title: "Your Deposit" },
-    // { prop: "yourRewards", title: "Your Rewards" },
-    // { prop: "description", title: "Description" },
-    { prop: "first", title: "" },
-    { prop: "second", title: "" },
-    { prop: "third", title: "" },
+    { prop: "totalDeposited", title: "Total Deposited" },
+    { prop: "yourDeposit", title: "Your Deposit" },
+    { prop: "yourRewards", title: "Your Rewards" },
     {
       prop: "apr",
-      // title: "APR",
       title: (
         <FTypo color="#DAB46E" align={"center"}>
           APR
@@ -58,17 +56,33 @@ export const CardAPR = () => {
     { prop: "action", title: <></> },
   ];
 
+  const getTotalDeposited = (farm: any) => {
+    let leftCap = Number(selectedCrucible[farm!]?.openCap) - Number(selectedCrucible[farm!]?.leftFromCap);
+    return `${leftCap} / 100`;
+  };
+
+  const getYourDeposited = (farm: any, lpAddress: any) => {
+    let userStake = (userCrucibleDetails[farm!]?.stakes || []).find((e: any) => e.address.toLowerCase() === lpAddress);
+    return farm?.includes("BNB") ? Number(userLpStakingDetails[farm!]?.stake || "0") : Number(userStake?.stakeOf || "0").toFixed(3);
+  };
+
+  const getYourRewards = (farm: any, lpAddress: any) => {
+    let userStake = (userCrucibleDetails[farm!]?.stakes || []).find((e: any) => e.address.toLowerCase() === lpAddress);
+    if (farm?.includes("BNB")) {
+      return TruncateWithoutRounding(networkClient?.utils.fromWei(String(userLpStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0), "ether"), 3);
+    } else {
+      return TruncateWithoutRounding(userStake?.rewardOf || 0, 3);
+    }
+  };
+
   const stepFlowsMock = [
     {
       sustainableCrucibleFarms: "cFRM / BNB",
+      internalName: "cFRM-BNB",
       stepFlowName: "cFRM / BNB Crucible Farm - Farming Dashboard Flow",
-      totalDeposited: "10 %",
-      yourDeposit: "10 %",
-      yourRewards: "10 %",
-      first: "Sustainable",
-      second: "Crucible",
-      third: "LP Farm",
-      description: "Sustainable Crucible LP Farm",
+      totalDeposited: getTotalDeposited("cFRM-BNB"),
+      yourDeposit: getYourDeposited("cFRM-BNB", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
+      yourRewards: getYourRewards("cFRM-BNB", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
       logo: (
         <>
           <img src={IconNetworkCFrmStr} height="22px" width="22px" />
@@ -81,17 +95,13 @@ export const CardAPR = () => {
       contract: "0x5732a2a84ec469fc95ac32e12515fd337e143eed", // crucible contract address
       LpCurrency: "0x9528704e44feda5ea240363ee52731859683b1fb", // ape-lp token for crucible and bnb pair
       LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a", // lp farm where lp currency will be staked
-      internalName: "cFRM-BNB",
     },
     {
       sustainableCrucibleFarms: "cFRM",
       stepFlowName: "cFRM Crucible Farm - Farming Dashboard Flow",
-      totalDeposited: "127",
-      yourDeposit: "$13",
-      yourRewards: "$.2",
-      first: "Sustainable",
-      second: "Crucible",
-      third: "Farm",
+      totalDeposited: getTotalDeposited("cFRM"),
+      yourDeposit: getYourDeposited("cFRM", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
+      yourRewards: getYourRewards("cFRM", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
       apr: aprInformation?.cfrm,
       logo: (
         <>
@@ -108,17 +118,13 @@ export const CardAPR = () => {
     {
       sustainableCrucibleFarms: "cFRMx / BNB",
       stepFlowName: "cFRMx / BNB Crucible Farm - Farming Dashboard Flow",
-      totalDeposited: "127",
-      yourDeposit: "$13",
-      yourRewards: "$.3",
-      first: "Sustainable",
-      second: "Crucible",
-      third: "LP Farm",
+      totalDeposited: getTotalDeposited("cFRMx-BNB"),
+      yourDeposit: getYourDeposited("cFRMx-BNB", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
+      yourRewards: getYourRewards("cFRMx-BNB", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
       apr: aprInformation?.cfrmXLp,
       network: "BSC",
       logo: (
         <>
-          {" "}
           <img src={IconNetworkCFrmxStr} height="22px" width="22px" />
           <img src={IconNetworkBNB} height="22px" width="22px" />{" "}
         </>
@@ -132,12 +138,9 @@ export const CardAPR = () => {
     {
       sustainableCrucibleFarms: "cFRMx",
       stepFlowName: "cFRMx Crucible Farm - Farming Dashboard Flow",
-      totalDeposited: "127",
-      yourDeposit: "$13",
-      yourRewards: "$.4",
-      first: "Sustainable",
-      second: "Crucible",
-      third: "Farm",
+      totalDeposited: getTotalDeposited("cFRMx"),
+      yourDeposit: getYourDeposited("cFRMx", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
+      yourRewards: getYourRewards("cFRMx", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
       apr: aprInformation?.cfrmX,
       logo: (
         <>
@@ -164,11 +167,7 @@ export const CardAPR = () => {
       ),
       totalDeposited: <FTypo className={"col-amount"}>{stepFlow.totalDeposited}</FTypo>,
       yourDeposit: <FTypo className={"col-amount"}>{stepFlow.yourDeposit}</FTypo>,
-      first: <FTypo className={"col-amount"}>{stepFlow.first}</FTypo>,
-      second: <FTypo className={"col-amount"}>{stepFlow.second}</FTypo>,
-      third: <FTypo className={"col-amount"}>{stepFlow.third}</FTypo>,
       yourRewards: <FTypo className={"col-amount"}>{stepFlow.yourRewards}</FTypo>,
-      description: <FTypo className={"col-amount"}>{stepFlow.description}</FTypo>,
       apr: (
         <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}>
           {" "}

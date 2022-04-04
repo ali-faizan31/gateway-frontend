@@ -12,7 +12,7 @@ import { CrucibleClient } from "./../../../../../container-components/web3Client
 import { ApprovableButtonWrapper, approvalKey } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
 import { useHistory, useLocation, useParams } from "react-router";
 // import { useWeb3React } from "@web3-react/core";
-import { CRUCIBLE_CONTRACTS_V_0_1, STEP_FLOW_IDS } from "./../../../common/utils";
+import { CRUCIBLE_CONTRACTS_V_0_1, getBaseTokenName, getCrucibleTokenName, STEP_FLOW_IDS } from "./../../../common/utils";
 import { RootState } from "../../../../../redux/rootReducer";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
@@ -63,23 +63,11 @@ export const CrucibleDeposit = () => {
   const dispatch = useDispatch();
   const location: any = useLocation();
   const history = useHistory();
-  //@ts-ignore
-  const crucible = useSelector((state) => state.crucible.selectedCrucible);
-  //@ts-ignore
+  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
-  //@ts-ignore
-  const tokenPrices = useSelector((state) => state.crucible.tokenPrices);
+  const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
   console.log(tokenPrices, userCrucibleData, "tokenPricestokenPrices");
-
-  useEffect(() => {
-    console.log(location, crucible);
-    // eslint-disable-next-line
-  }, [location]);
-
-  // const [approvedDone, setapprovedDone] = useState(false);
-  // const [isApproving, setIsApproving] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  // const [isSubmitted, setIsSubmitted] = useState(false);
   const [isProcessed, setIsProcessed] = useState(false);
 
   const getStepCompleted = async (renderNeeded: any) => {
@@ -146,7 +134,7 @@ export const CrucibleDeposit = () => {
   };
 
   const getOpenCapClass = () => {
-    if (Number(crucible.openCap) > 0) {
+    if (Number(crucible[farm!]?.openCap) > 0) {
       return "open-cap-label green-cap";
     } else {
       return "open-cap-label red-cap";
@@ -154,10 +142,10 @@ export const CrucibleDeposit = () => {
   };
 
   const getOpenCapInfo = () => {
-    if (Number(crucible.openCap) > 0) {
-      return `Minting Is Open ( ${crucible.openCap} Open Cap )`;
+    if (Number(crucible[farm!]?.openCap) > 0) {
+      return `Minting Is Open ( ${crucible[farm!]?.openCap} Open Cap )`;
     } else {
-      return `Minting Is Closed ( ${crucible.openCap} Open Cap )`;
+      return `Minting Is Closed ( ${crucible[farm!]?.openCap} Open Cap )`;
     }
   };
 
@@ -165,7 +153,7 @@ export const CrucibleDeposit = () => {
     if (isApproveMode) {
       return false;
     } else {
-      return Number(userCrucibleData?.baseBalance || "0") === 0 || Number(crucible.openCap) === 0;
+      return Number(userCrucibleData[farm!]?.baseBalance || "0") === 0 || Number(crucible[farm!]?.openCap) === 0;
     }
   };
 
@@ -193,20 +181,20 @@ export const CrucibleDeposit = () => {
             <FGridItem size={[6, 6, 6]}>
               <FItem bgColor="#1C2229" className={"f-p-2"}>
                 <FTypo size={20} className="f-mb-1">
-                  FRM Price (USD)
+                  {getBaseTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
-                  ${tokenPrices["FRM"] || "0"}
+                  ${tokenPrices[getBaseTokenName(farm)!]}
                 </FTypo>
               </FItem>
             </FGridItem>
             <FGridItem size={[6, 6, 6]}>
               <FItem bgColor="#1C2229" className={"f-p-2"}>
                 <FTypo size={20} className="f-mb-1">
-                  {crucible?.symbol} (USD)
+                  {getCrucibleTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
-                  ${tokenPrices["cFRM"] || "0"}
+                  ${tokenPrices[getCrucibleTokenName(farm)!]}
                 </FTypo>
               </FItem>
             </FGridItem>
@@ -220,12 +208,12 @@ export const CrucibleDeposit = () => {
             onChange={(e: any) => setMintAmount(e.target.value)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1"}>
-                <span onClick={() => setMintAmount(Number(userCrucibleData?.baseBalance || "0"))}>Max</span>
+                <span onClick={() => setMintAmount(Number(userCrucibleData[farm!]?.baseBalance || "0"))}>Max</span>
               </FTypo>
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {Number(userCrucibleData?.baseBalance || "0").toFixed(3)} available in the Base Token {userCrucibleData?.baseSymbol}.
+            You have {Number(userCrucibleData[farm!]?.baseBalance || "0").toFixed(3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5 justify-content-space-between"}>
             Amount you will receive
@@ -239,7 +227,7 @@ export const CrucibleDeposit = () => {
             value={mintAmount}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-                <span onClick={() => setMintAmount(userCrucibleData?.baseBalance)}>{crucible?.symbol}</span>
+                <span onClick={() => setMintAmount(userCrucibleData[farm!]?.baseBalance)}>{crucible[farm!]?.symbol}</span>
               </FTypo>
             }
           />
@@ -256,13 +244,21 @@ export const CrucibleDeposit = () => {
                       onClick={
                         ownProps.isApprovalMode
                           ? () => ownProps.onApproveClick()
-                          : () => onMintClick(crucible!.baseCurrency, crucible?.currency || "", mintAmount.toString(), true, crucible?.network, walletAddress as string)
+                          : () =>
+                              onMintClick(
+                                crucible[farm!]?.baseCurrency,
+                                crucible[farm!]?.currency || "",
+                                mintAmount.toString(),
+                                true,
+                                crucible[farm!]?.network,
+                                walletAddress as string
+                              )
                       }
                     ></FButton>
                   </div>
                 );
               }}
-              currency={crucible!.baseCurrency}
+              currency={crucible[farm!]?.baseCurrency}
               contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
               userAddress={walletAddress as string}
               amount={"0.0001"}
@@ -285,7 +281,7 @@ export const CrucibleDeposit = () => {
             isSubmitted={false}
             transactionId={transactionId}
             isProcessed={isProcessed}
-            crucible={crucible}
+            crucible={crucible[farm!]}
             onContinueToNextStepClick={() => onContinueToNextStepClick()}
           />
         </FCard>
