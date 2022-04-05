@@ -16,14 +16,11 @@ import { CSVLink } from "react-csv";
 import moment from "moment";
 import {
   getLeaderboardById,
-  getLeaderboardByIdForPublicUser,
-  getCovalenthqResponse,
-  getTokenHolderListByContractAddressAndChainID,
-  getStakingBalanceByCABN,
-  getTokenHolderlistByContractAddressBSC
+  getLeaderboardByIdForPublicUser, 
+  getTokenHolderlistByCABNId
 } from "../../_apis/LeaderboardCrud";
-import { arraySortByKeyDescending } from "../../utils/global.utils";
-import { stakingContractAddressListFOMO, TOKEN_TAG } from "../../utils/const.utils";
+import { arraySortByKeyDescending, getFormattedWalletAddress } from "../../utils/global.utils";
+import { PUBLIC_TAG, TOKEN_TAG } from "../../utils/const.utils";
 import { filterList } from "./LeaderboardHelper";
 
 const LeaderboardInformation = () => {
@@ -31,18 +28,13 @@ const LeaderboardInformation = () => {
   const exportRef = useRef();
   const { pathname } = useLocation();
   let token = localStorage.getItem(TOKEN_TAG);
-  const isPublicUser = pathname.includes("/pub");
+  const isPublicUser = pathname.includes(PUBLIC_TAG);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isQueryChange, setIsQueryChange] = useState(false);
   const [leaderboardData, setLeaderboardData] = useState({});
   const [tokenHolderList, setTokenHolderList] = useState([]);
-  const [filteredTokenHolderList, setFilteredTokenHolderList] = useState([]);
-  const [LeaderboardTokenHolderList, setLeaderboardTokenHolderList] = useState([]);
-  const [stakingTokenHolderList, setStakingTokenHolderList] = useState([]);
-  const [stakingCount, setStakingCount] = useState(0);
-
-  let finalstakingList = [];
+  const [filteredTokenHolderList, setFilteredTokenHolderList] = useState([]); 
 
   useEffect(() => {
     setIsLoading(true);
@@ -57,7 +49,7 @@ const LeaderboardInformation = () => {
     if (isQueryChange) {
       if (tokenHolderList) { 
         const tempData = tokenHolderList.map(
-          (x) => x.TokenHolderAddress.toLowerCase().includes(query.toLowerCase()) && x
+          (x) => x.tokenHolderAddress.toLowerCase().includes(query.toLowerCase()) && x
         );
         setFilteredTokenHolderList(tempData.filter((x) => x && x));
         setIsQueryChange(false);
@@ -70,21 +62,24 @@ const LeaderboardInformation = () => {
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
           const { leaderboard } = res.data.body;
-          const cabn1 =
-            res?.data?.body?.leaderboard
-              ?.leaderboardCurrencyAddressesByNetwork[0];
-          const tempObj = {
-            name: leaderboard?.name,
-            exclusionWalletAddressList: leaderboard?.exclusionWalletAddressList,
-            cabn: {
-              tokenContractAddress:
-                cabn1?.currencyAddressesByNetwork?.tokenContractAddress,
-              dexUrl: cabn1?.currencyAddressesByNetwork?.networkDex?.dex?.url,
-              chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
-            },
-          };
-          getTokenHolderlist(tempObj);
-          setLeaderboardData(tempObj);
+          const cabn1 = res?.data?.body?.leaderboard?.leaderboardCurrencyAddressesByNetwork[0];
+          if (cabn1 && cabn1.currencyAddressesByNetwork && cabn1.currencyAddressesByNetwork.tokenContractAddress && cabn1.currencyAddressesByNetwork.networkDex.dex.url){
+              const tempObj = {
+              name: leaderboard?.name,
+              exclusionWalletAddressList: leaderboard?.exclusionWalletAddressList,
+              cabn: {
+                tokenContractAddress: cabn1?.currencyAddressesByNetwork?.tokenContractAddress,
+                dexUrl: cabn1?.currencyAddressesByNetwork?.networkDex?.dex?.url,
+                chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
+                id: cabn1?.currencyAddressesByNetwork?._id
+              },
+            };
+            getTokenHolderlist(tempObj);
+            setLeaderboardData(tempObj);
+          } else {
+            setIsLoading(false);
+            toast.error(`Error occured: Leaderboard Information is not correct`)
+          }
         }
       })
       .catch((e) => {
@@ -101,22 +96,25 @@ const LeaderboardInformation = () => {
     getLeaderboardById(id, token)
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
-          const { leaderboard } = res.data.body;
-          const cabn1 =
-            res?.data?.body?.leaderboard
-              ?.leaderboardCurrencyAddressesByNetwork[0];
-          const tempObj = {
-            name: leaderboard?.name,
-            exclusionWalletAddressList: leaderboard?.exclusionWalletAddressList,
-            cabn: {
-              tokenContractAddress:
-                cabn1?.currencyAddressesByNetwork?.tokenContractAddress,
-              dexUrl: cabn1?.currencyAddressesByNetwork?.networkDex?.dex?.url,
-              chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
-            },
-          };
-          getTokenHolderlist(tempObj);
-          setLeaderboardData(tempObj);
+          const { leaderboard } = res.data.body; 
+          const cabn1 = res?.data?.body?.leaderboard?.leaderboardCurrencyAddressesByNetwork[0];
+          if (cabn1 && cabn1.currencyAddressesByNetwork && cabn1.currencyAddressesByNetwork.tokenContractAddress && cabn1.currencyAddressesByNetwork.networkDex.dex.url){
+            const tempObj = {
+              name: leaderboard?.name,
+              exclusionWalletAddressList: leaderboard?.exclusionWalletAddressList,
+              cabn: {
+                tokenContractAddress: cabn1?.currencyAddressesByNetwork?.tokenContractAddress,
+                dexUrl: cabn1?.currencyAddressesByNetwork?.networkDex?.dex?.url,
+                chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
+                id: cabn1?.currencyAddressesByNetwork?._id
+              },
+            }; 
+            getTokenHolderlist(tempObj);
+            setLeaderboardData(tempObj);
+          } else {
+            setIsLoading(false);
+            toast.error(`Error occured: Leaderboard Information is not correct`)
+          }
         }
       })
       .catch((e) => {
@@ -130,155 +128,27 @@ const LeaderboardInformation = () => {
   };
 
   const getTokenHolderlist = (leaderboard) => {
-    getTokenHolderlistByContractAddressBSC(leaderboard.cabn.tokenContractAddress)
-    .then((res)=>{
-      console.log(res.data.result);
-      const filteredList = filterList(res.data.result, leaderboard?.exclusionWalletAddressList);
-      console.log(filteredList)
-      setLeaderboardTokenHolderList(filteredList);
-      if(leaderboard.cabn.tokenContractAddress === "0x484215873a674f9af73367a8f94c2c591e997521"){ //fomo //staking
-        let count = 0;
-        getDynamicStakingBalances(leaderboard, filteredList, count);
-      } else { 
-        mapTokenHolderData(filteredList, [], leaderboard)
-      }
+    getTokenHolderlistByCABNId(leaderboard.cabn.id)
+    .then((res)=>{ 
+      const filteredList = filterList(res.data.body.result, leaderboard?.exclusionWalletAddressList); 
+      mapTokenHolderData(filteredList, leaderboard)
+       
     })
     .catch((e)=>{
         toast.error(`Error occured: ${e}`)
     })
   }
- 
-  const getDynamicStakingBalances = (leaderboard, leaderboardHoldersList, count) => {
-    if (count < stakingContractAddressListFOMO.length) {
-      getStakingBalanceLimit(leaderboard, stakingContractAddressListFOMO[count], count, leaderboardHoldersList );
-    } else {
-      getUniqueStakingAddressListAndMapData(leaderboardHoldersList,leaderboard);
-    }
-  };
-
-  const getUniqueStakingAddressListAndMapData = (LeaderboardTokenHolderList, leaderboardData) => {
-    const uniqueStakingList = [];
-    finalstakingList.forEach((i) => {
-      const id = i.from_address;
-      i.points = Number(eitherConverter(i.transfers[0].delta, "wei").ether);
-      i.transfers[0].delta = Number(
-        eitherConverter(i.transfers[0].delta, "wei").ether
-      );
-
-      if (!uniqueStakingList[id]) {
-        return (uniqueStakingList[id] = i);
-      }
-      return (uniqueStakingList[id].transfers[0].delta += i.points);
-    });
-
-    const stakingMergedList = [];
-    Object.keys(uniqueStakingList).forEach((key) => {
-      stakingMergedList.push(uniqueStakingList[key]);
-    });
-    mapTokenHolderData( LeaderboardTokenHolderList, stakingMergedList, leaderboardData);
-  };
-
-  const getStakingBalanceLimit = (
-    leaderboard,
-    stakingContractaddress,
-    count,
-    leaderboardHoldersList
-  ) => {
-    getStakingBalanceByCABN(
-      leaderboard?.cabn?.chainId,
-      leaderboard?.cabn?.tokenContractAddress,
-      stakingContractaddress
-    )
-      .then((res) => {
-        if (
-          res &&
-          res.data &&
-          res.data.data &&
-          res.data.data.pagination &&
-          res.data.data.pagination.total_count >= 0
-        ) {
-          const limit = res.data.data.pagination.total_count + 100;
-          getStakingBalanceByCurrencyAddressByNetwork(
-            leaderboard,
-            stakingContractaddress,
-            count,
-            leaderboardHoldersList,
-            limit
-          );
-        }
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (e?.response?.data?.error_message) {
-          toast.error(e?.response?.data?.error_message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
-
-  const getStakingBalanceByCurrencyAddressByNetwork = (
-    leaderboard,
-    stakingContractaddress,
-    count,
-    leaderboardHoldersList,
-    limit
-  ) => {
-    getStakingBalanceByCABN(
-      leaderboard?.cabn?.chainId,
-      leaderboard?.cabn?.tokenContractAddress,
-      stakingContractaddress,
-      limit
-    )
-      .then((res) => {
-        if (res && res.data && res.data.data && res.data.data.items) {
-          if (res.data.data.items.length > 0) {
-            const { items } = res.data.data;
-            finalstakingList = [...finalstakingList, ...items];
-            count = count + 1;
-            getDynamicStakingBalances(
-              leaderboard,
-              leaderboardHoldersList,
-              count
-            );
-          } else {
-            count = count + 1;
-            getDynamicStakingBalances(
-              leaderboard,
-              leaderboardHoldersList,
-              count
-            );
-          }
-        }
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (e?.response?.data?.error_message) {
-          toast.error(e?.response?.data?.error_message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
-
-  const mapTokenHolderData = (leaderboardHoldersList, stakingHoldersList, leaderboard) => {
-    let mergedList = [];
-    if(stakingHoldersList.length > 0){ //fomo
-      mergedList = filterList( mapHoldersBalances(leaderboardHoldersList, stakingHoldersList), leaderboard.exclusionWalletAddressList);
-    } else { 
-      mergedList = getFormattedBalanceHoldersList(leaderboardHoldersList);
-    } 
-
-    const list = arraySortByKeyDescending(mergedList, "balance");
-    console.log(list, 'sorted');
+  
+  const mapTokenHolderData = (leaderboardHoldersList, leaderboard) => {
+    let mergedList = getFormattedBalanceHoldersList(leaderboardHoldersList);
+    
+    const list = arraySortByKeyDescending(mergedList, "balance"); 
 
     const levelUpSwapUrl = `${leaderboard?.cabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`;
     for (let i = 0; i < list.length; i += 1) {
-      if (list[i].TokenHolderAddress) {
+      if (list[i].tokenHolderAddress) {
         list[i].rank = i + 1; 
-        list[i].formattedAddress = `${list[i].TokenHolderAddress.substr(0, 6)}...${list[
-          i
-        ].TokenHolderAddress.substr(list[i].TokenHolderAddress.length - 4)}`;
+        list[i].formattedAddress =  getFormattedWalletAddress(list[i].tokenHolderAddress);
 
         list[i].formattedBalance = TruncateWithoutRounding(list[i].balance, 2).toLocaleString("en-US");
 
@@ -302,82 +172,12 @@ const LeaderboardInformation = () => {
 
 const getFormattedBalanceHoldersList = (list) => {
   list.forEach((holder)=>{
-    holder.balance = Number(eitherConverter(holder.TokenHolderQuantity, 'wei').ether);
+    holder.balance = Number(eitherConverter(holder.tokenHolderQuantity, 'wei').ether);
   })
   return list;
 }
 
-  const mapHoldersBalances = (leaderboardHoldersList, stakingHoldersList) => {
-    const leaderboardWallets = [];
-    let stakingWallets = [];
-    let matchedWallets = [];
-
-    const onlyInLeft = (stakingList, leaderboardList) =>
-      stakingList.map((stakingValue) => {
-        const sameEntry = leaderboardList.filter(
-          (leaderboardValue) =>
-            stakingValue.from_address === leaderboardValue.address
-        )[0];
-        let tempObj = {};
-        const initialSum = 0;
-        if (!sameEntry || undefined) {
-          // const sum = stakingValue.transfers.reduce(
-          //   (previousValue, currentValue) => previousValue + Number(eitherConverter(currentValue.delta, 'wei').ether),
-          //   initialSum
-          // );
-          tempObj = {
-            address: stakingValue.from_address,
-            balance: stakingValue.transfers[0].delta,
-            status: "staking",
-          };
-        }
-        return Object.keys(tempObj).length > 0 && tempObj;
-      });
-
-    const inBoth = (leaderboardList, stakingList) =>
-      leaderboardList.map((leaderboardValue) => {
-        const sameEntry = stakingList.filter(
-          (stakingValue) =>
-            leaderboardValue.address === stakingValue.from_address
-        )[0];
-        let tempObj = {};
-        const initialSum = 0;
-        if (sameEntry) {
-          // const sum = sameEntry.transfers.reduce(
-          //   (previousValue, currentValue) => previousValue + Number(eitherConverter(currentValue.delta, 'wei').ether),
-          //   initialSum
-          // );
-          const combinedSum =
-            sameEntry.transfers[0].delta +
-            Number(eitherConverter(leaderboardValue.balance, "wei").ether); // of both list
-          tempObj = {
-            address: sameEntry.from_address,
-            balance: combinedSum,
-            status: "Matched",
-          }; // both
-        } else {
-          let temp = {};
-          temp = {
-            status: "leaderboard",
-            balance: eitherConverter(leaderboardValue.balance, "wei").ether,
-            address: leaderboardValue.address,
-          };
-          leaderboardWallets.push(temp); // leaderboard
-        }
-        return Object.keys(tempObj).length > 0 && tempObj;
-      });
-
-    stakingWallets = onlyInLeft(
-      stakingHoldersList,
-      leaderboardHoldersList
-    ).filter((obj) => obj && obj);
-    matchedWallets = inBoth(leaderboardHoldersList, stakingHoldersList).filter(
-      (obj) => obj && obj
-    );
-
-    return [...stakingWallets, ...leaderboardWallets, ...matchedWallets];
-  };
-
+   
   const TruncateWithoutRounding = (value, decimals) => {
     const parts = value.toString().split(".");
 
@@ -492,8 +292,7 @@ const getFormattedBalanceHoldersList = (list) => {
               {!isPublicUser && (
                 <FButton
                   type="button"
-                  className="btn-create"
-                  className={"f-ml-1"}
+                  className="btn-create f-ml-1" 
                   disabled={isLoading}
                   onClick={onExportClick}
                   title={" Export to CSV"}

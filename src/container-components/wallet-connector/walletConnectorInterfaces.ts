@@ -33,4 +33,5 @@ export interface WalletConnectorProps {
   WalletConnectView: any;
   WalletConnectModal: any;
   WalletConnectViewProps?: any;
+  isAuthenticationNeeded?: boolean;
 }

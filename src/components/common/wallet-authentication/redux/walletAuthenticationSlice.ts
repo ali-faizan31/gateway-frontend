@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ME_TAG } from "../../../../utils/const.utils";
+// import { ME_TAG } from "../../../../utils/const.utils";
 import { WALLET_AUTHENTICATION_STATE, defaultWalletAuthenticationState } from "../WalletAuthenticationInterfaces";
 
 const initialWalletAUthenticationState: WALLET_AUTHENTICATION_STATE = {
@@ -36,6 +36,9 @@ export const walletConnectorSlice = createSlice({
       },
       saveToken: (state, action) => { 
         state.tokenV2 = action.payload.walletAuthenticator.tokenV2;
+      },
+      saveNetworkInformation: (state, action) => {  
+        state.currentNetworkInformation = action.payload.networkInformation.networkResponse;
       },
       saveCommunityMemberProfileToken: (state, action) => { 
         state.profileToken = action.payload.walletAuthenticator.profileToken;

@@ -7,9 +7,13 @@ import {
   WalletApplicationWrapper 
 } from "../container-components";
 import { walletConnectorSlice } from "../components/common/wallet-authentication/redux/walletAuthenticationSlice";
+import { crucibleSlice } from '../components/crucible/redux/CrucibleSlice';
 // slices
 import competitionReducer from './slices/competition';
 import leaderboardReducer from './slices/leaderboard';
+import phraseReducer from './slices/phrase';
+import { approvableButtonSlice } from "../container-components/web3Client/approvalButtonWrapper";
+import { chainEventsSlice } from "../container-components/web3Client/chainEventItem"; 
 
 const walletConnectorPersistConfig = {
   key: "walletConnector",
@@ -17,12 +21,19 @@ const walletConnectorPersistConfig = {
   blacklist: ["error", "isConnecting",   "networkClient", "isWeb3Initialized"],
 };
 
+
 // const walletApplicationWrapperPersistConfig = {
 //   key: "walletApplicationWrapper",
 //   storage: localStorage,
 //   whitelist: ["tokenList" ],
 //   timeout: 172800,
 // };
+
+const cruciblePersistConfig = {
+  key: "crucible",
+  storage: localStorage,
+  // whitelist: [ "stepFlowStepHistory", "currentStep", "currentStepIndex"] 
+};
 
 const walletAutheticatorPersistConfig = {
     key: "walletAutheticator",
@@ -45,8 +56,12 @@ const rootReducer = combineReducers({
     walletAutheticatorPersistConfig,
      walletConnectorSlice.reducer
   ),
+  approval: approvableButtonSlice.reducer,
+  watchEvents: chainEventsSlice.reducer,
+  crucible: persistReducer(cruciblePersistConfig, crucibleSlice.reducer),
   competition: competitionReducer,
-  leaderboard: leaderboardReducer 
+  leaderboard: leaderboardReducer,
+  phrase: phraseReducer, 
 });
   
 export type RootState = ReturnType<typeof rootReducer>;

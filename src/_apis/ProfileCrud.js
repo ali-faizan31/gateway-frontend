@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseUrl, apiKey } from "../utils/const.utils";
+import { baseUrl } from "../utils/const.utils";
 
 export function sendOTP(token, profileToken, values) {
   return axios.put(

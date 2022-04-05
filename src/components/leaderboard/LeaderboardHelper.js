@@ -19,7 +19,7 @@ export const chainIdList = [
 
   export const filterList = (items, addressList) => {  
     if (items && items.length > 0 && addressList && addressList.length > 0) { 
-      const filteredList =  items.filter((element2) => addressList.map((element1) => element1).indexOf(element2.TokenHolderAddress) === -1);  
+      const filteredList =  items.filter((element2) => addressList.map((element1) => element1).indexOf(element2.tokenHolderAddress) === -1);  
       return filteredList;
     }  
   };
