@@ -156,7 +156,7 @@ const CrucibleDashboardPage = () => {
       aprResponse = aprResponse.data && aprResponse.data.body && aprResponse.data.body.crucibleApr;
       dispatch(CrucibleActions.updateAPRData(aprResponse));
     } catch (e: any) {
-      if (e.response) {
+      if (e?.response) {
         if (e?.response?.data?.status?.phraseKey !== '') {
           const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
           toast.error(fetchedMessage);
