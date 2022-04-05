@@ -30,6 +30,8 @@ import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { getCrucibleDetail } from "../common/Helper";
+import { T } from '../../../utils/translationHelper';
+import toast from 'react-hot-toast';
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
@@ -149,9 +151,22 @@ const CrucibleDashboardPage = () => {
   });
 
   const getAPRInformation = async () => {
-    let aprResponse: any = await getAPRInformationForPublicUser();
-    aprResponse = aprResponse.data && aprResponse.data.body && aprResponse.data.body.crucibleApr;
-    dispatch(CrucibleActions.updateAPRData(aprResponse));
+    try {
+      let aprResponse: any = await getAPRInformationForPublicUser();
+      aprResponse = aprResponse.data && aprResponse.data.body && aprResponse.data.body.crucibleApr;
+      dispatch(CrucibleActions.updateAPRData(aprResponse));
+    } catch (e: any) {
+      if (e.response) {
+        if (e?.response?.data?.status?.phraseKey !== '') {
+          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+          toast.error(fetchedMessage);
+        } else {
+          toast.error(e?.response?.data?.status?.message);
+        }
+      } else {
+        toast.error('Something went wrong. Try again later!');
+      }
+    }
   };
 
   return (
