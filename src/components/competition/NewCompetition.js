@@ -29,6 +29,7 @@ import { addCompetition } from "../../_apis/CompetitionCrud";
 // import "./Competition.scss";
 import { chainIdList } from "../leaderboard/LeaderboardHelper";
 import { TOKEN_TAG } from "../../utils/const.utils";
+import { T } from '../../utils/translationHelper';
 
 export default function NewCompetition() {
   // const dispatch = useDispatch();
@@ -99,7 +100,12 @@ export default function NewCompetition() {
       })
       .catch((e) => {
         if (e.response) {
-          toast.error(e.response.data.status.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
