@@ -97,7 +97,7 @@ export const UnStake = () => {
 
         response = await client.unstakeLPToken(dispatch, currency, userAddress, stakeAmount, stakingAddress, network);
       } else if (isSingleTokenFarm(farm)) {
-        currency = crucible[farm!]!.currency;
+        currency = crucible[farm!]?.currency;
         stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
         stakeAmount = amount.toString();
         network = crucible[farm!]?.network;
@@ -210,7 +210,7 @@ export const UnStake = () => {
                     onClick={ownProps.isApprovalMode ? () => ownProps.onApproveClick() : () => onUnStakeClick()}
                   ></FButton>
                 )}
-                currency={isSingleTokenFarm(farm) ? crucible[farm!]!.baseCurrency : isLPFarm(farm) && `${crucible[farm!]?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
+                currency={isSingleTokenFarm(farm) ? crucible[farm!]?.baseCurrency : isLPFarm(farm) && `${crucible[farm!]?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
                 contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
                 userAddress={walletAddress as string}
                 amount={"0.0001"}

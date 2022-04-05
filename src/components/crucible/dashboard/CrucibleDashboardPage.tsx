@@ -36,6 +36,8 @@ const CrucibleDashboardPage = () => {
   const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const { selectedCrucible, userCrucibleDetails, userLpStakingDetails } = useSelector((state: RootState) => state.crucible);
 
+  
+
   // useEffect(() => {
   //   if (userLpStakingDetails && userLpStakingDetails["cFRM-BNB"] && userLpStakingDetails["cFRM-BNB"].openCap) {
   //     setIsLoading(false);

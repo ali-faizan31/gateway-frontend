@@ -155,12 +155,12 @@ export const UnWrap = () => {
             onChange={(e: any) => setAmount(e.target.value)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1"}>
-                <span onClick={() => setAmount(userCrucibleData?.balance || "0")}>Max</span>
+                <span onClick={() => setAmount(userCrucibleData[farm!]?.balance || "0")}>Max</span>
               </FTypo>
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {userCrucibleData?.balance || "0"} available in Token {userCrucibleData?.symbol}.
+            You have {userCrucibleData[farm!]?.balance || "0"} available in Token {userCrucibleData[farm!]?.symbol}.
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5"}>
             Amount you will receive
@@ -171,7 +171,7 @@ export const UnWrap = () => {
             type={"text"}
             placeholder="0"
             disabled={true}
-            value={Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0").times(100)) / 100)}
+            value={Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
                 FRM
@@ -185,16 +185,16 @@ export const UnWrap = () => {
                   <FButton
                     title={"Unwrap"}
                     className={"w-100"}
-                    disabled={Number(userCrucibleData?.balance) === 0}
+                    disabled={Number(userCrucibleData[farm!]?.balance) === 0}
                     onClick={
                       ownProps.isApprovalMode
                         ? () => ownProps.onApproveClick()
-                        : () => onUnWrapClick(crucible!.baseCurrency, crucible?.currency || "", amount.toString(), true, crucible?.network, walletAddress as string)
+                        : () => onUnWrapClick(crucible[farm!]?.baseCurrency, crucible[farm!]?.currency || "", amount.toString(), true, crucible[farm!]?.network, walletAddress as string)
                     }
                   ></FButton>
                 </div>
               )}
-              currency={crucible!.currency}
+              currency={crucible[farm!].currency}
               contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
               userAddress={walletAddress as string}
               amount={"0.0001"}
@@ -217,7 +217,7 @@ export const UnWrap = () => {
             transactionId={transactionId}
             isSubmitted={false}
             isProcessed={isProcessed}
-            crucible={crucible}
+            crucible={crucible[farm!]}
             onContinueToNextStepClick={() => onContinueToNextStepClick()}
           />
         </FCard>

@@ -29,6 +29,8 @@ export const CardAPR = () => {
 
   const { isConnected, networkClient } = useSelector((state: RootState) => state.walletConnector);
 
+  console.log(selectedCrucible, userLpStakingDetails)
+
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
@@ -75,14 +77,23 @@ export const CardAPR = () => {
     }
   };
 
+  
+  const getRewardSymbol = (farm: any) => {
+    return selectedCrucible[farm!]?.symbol;
+  };
+
+  const getDepositedSymbol = (farm: any) => {
+    return farm?.includes("BNB") ? `APE-LP ${selectedCrucible[farm!]?.symbol}-BNB` : selectedCrucible[farm!]?.symbol
+  }
+
   const stepFlowsMock = [
     {
       sustainableCrucibleFarms: "cFRM / BNB",
       internalName: "cFRM-BNB",
       stepFlowName: "cFRM / BNB Crucible Farm - Farming Dashboard Flow",
       totalDeposited: getTotalDeposited("cFRM-BNB"),
-      yourDeposit: getYourDeposited("cFRM-BNB", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
-      yourRewards: getYourRewards("cFRM-BNB", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
+      yourDeposit: `${getYourDeposited("cFRM-BNB", "0xd87f304ca205fb104dc014696227742d20c8f10a")}`,
+      yourRewards: `${getYourRewards("cFRM-BNB", "0xd87f304ca205fb104dc014696227742d20c8f10a")}`,
       logo: (
         <>
           <img src={IconNetworkCFrmStr} height="22px" width="22px" />
@@ -100,8 +111,8 @@ export const CardAPR = () => {
       sustainableCrucibleFarms: "cFRM",
       stepFlowName: "cFRM Crucible Farm - Farming Dashboard Flow",
       totalDeposited: getTotalDeposited("cFRM"),
-      yourDeposit: getYourDeposited("cFRM", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
-      yourRewards: getYourRewards("cFRM", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
+      yourDeposit: `${getYourDeposited("cFRM", "0xd87f304ca205fb104dc014696227742d20c8f10a")}`,
+      yourRewards: `${getYourRewards("cFRM", "0xd87f304ca205fb104dc014696227742d20c8f10a")}`,
       apr: aprInformation?.cfrm,
       logo: (
         <>

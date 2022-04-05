@@ -57,15 +57,7 @@ export const Stake = () => {
 
   console.log("stake payload", LPStakingDetails);
 
-  useEffect(() => {
-    console.log(
-      "appr val",
-      approvals,
-      walletAddress,
-      CRUCIBLE_CONTRACTS_V_0_1["BSC"].router,
-      crucible[farm!]?.baseCurrency,
-      approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.baseCurrency)]
-    );
+  useEffect(() => { 
     if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.baseCurrency)]) > 0) {
       if (currentStep.step.name === "Approve" && currentStep.status !== "completed") {
         getStepCompleted(false);
@@ -126,8 +118,12 @@ export const Stake = () => {
 
         response = await client.stakeLPToken(dispatch, currency, userAddress, stakingAddress, network, amount);
       } else if (isSingleTokenFarm(farm)) {
-        currency = crucible[farm!]!.currency;
-        stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
+        if (farm === "cFRMx"){
+          stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
+        } else if (farm === "cFRM"){
+          stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
+        }
+        currency = crucible[farm!].currency; 
         amount = amountToStake.toString();
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
@@ -155,10 +151,11 @@ export const Stake = () => {
   };
 
   const getAmount = () => {
+    console.log(crucible, crucible[farm!], userCrucibleData, userCrucibleData[farm!])
     if (farm?.includes("BNB")) {
       return Number(TruncateWithoutRounding(crucible[farm!]?.LP_balance || 0, 3));
     } else {
-      return Number(TruncateWithoutRounding(userCrucibleData?.balance || "0", 3));
+      return Number(TruncateWithoutRounding(userCrucibleData[farm!]?.balance || "0", 3));
     }
   };
 
@@ -245,7 +242,7 @@ export const Stake = () => {
                 </div>
               )}
               // currency={crucible!.baseCurrency}
-              currency={isSingleTokenFarm(farm) ? crucible[farm!]!.baseCurrency : isLPFarm(farm) && `${crucible[farm!]?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
+              currency={isSingleTokenFarm(farm) ? crucible[farm!]?.baseCurrency : isLPFarm(farm) && `${crucible[farm!]?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
               contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
               userAddress={walletAddress as string}
               amount={"0.0001"}
