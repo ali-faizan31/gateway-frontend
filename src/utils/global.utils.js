@@ -1,7 +1,8 @@
 import eitherConverter from "ether-converter";
-import FerrumJson from './FerrumToken.json';
+import FerrumJson from "./FerrumToken.json";
 import { Big } from "big.js";
-import { getCABNInformationForPublicUser } from '../_apis/CABNCrud';
+import { getCABNInformationForPublicUser } from "../_apis/CABNCrud";
+import * as CrucibleActions from "../components/crucible/redux/CrucibleActions";
 
 export const arraySortByKeyDescending = (array, key) =>
   array.slice().sort((a, b) => b[key] - a[key]);
@@ -94,38 +95,71 @@ export const TruncateWithoutRounding = (value, decimals) => {
   }
 };
 
-export const getTokenInformation = async (networkClient, walletAddress, tokenContractAddress, setInfo, info) => {
+export const getTokenInformationFromWeb3 = async (
+  networkClient,
+  walletAddress,
+  tokenContractAddress,
+  setInfo,
+  info,
+  dispatch
+) => {
   let symbol,
     decimals,
     name,
-    balance = null; 
-    if (networkClient) {
-      const tokenContract = new networkClient.eth.Contract(
-        FerrumJson.abi,
-        tokenContractAddress
-      );
-      symbol = await tokenContract.methods.symbol().call();
-      decimals = (await tokenContract.methods.decimals().call());
-      name = await tokenContract.methods.name().call();
-      balance = await tokenContract.methods.balanceOf(walletAddress).call();
-      const decimalFactor = 10 ** Number(decimals);
-      balance = new Big(balance).div(decimalFactor).toFixed();
-    }
-    setInfo({
-      ...info,
-      tokenSymbol: symbol,
-      balance: balance ? balance : "0", 
-      decimals,
-    }); 
+    balance = null;
+  if (networkClient) {
+    const tokenContract = new networkClient.eth.Contract(
+      FerrumJson.abi,
+      tokenContractAddress
+    );
+    symbol = await tokenContract.methods.symbol().call();
+    decimals = await tokenContract.methods.decimals().call();
+    name = await tokenContract.methods.name().call();
+    balance = await tokenContract.methods.balanceOf(walletAddress).call();
+    const decimalFactor = 10 ** Number(decimals);
+    balance = new Big(balance).div(decimalFactor).toFixed();
+  }
+  setInfo && setInfo({
+    ...info,
+    tokenSymbol: symbol,
+    balance: balance ? balance : "0",
+    decimals,
+  });
+  return {
+    ...info,
+    tokenSymbol: symbol,
+    balance: balance ? balance : "0",
+    decimals,
+  };
+  // dispatch(CrucibleActions.updateTokenData({data:{}}))
 };
 
-export const getCABNInformation = async (tokenContractAddress, setInfo, info) => {
-  let cabnResponse = await getCABNInformationForPublicUser(tokenContractAddress);
-  cabnResponse = cabnResponse.data && cabnResponse.data.body && cabnResponse.data.body.currencyAddressesByNetworks[0]; 
-  if (cabnResponse){
-  setInfo({ ...info, name:cabnResponse?.currency?.name, symbol: cabnResponse?.currency?.symbol, logo: cabnResponse?.currency?.logo })
+export const getCABNInformation = async (
+  tokenContractAddress,
+  setInfo,
+  info
+) => {
+  let cabnResponse = await getCABNInformationForPublicUser(
+    tokenContractAddress
+  );
+  cabnResponse =
+    cabnResponse.data &&
+    cabnResponse.data.body &&
+    cabnResponse.data.body.currencyAddressesByNetworks[0];
+  if (cabnResponse) {
+    setInfo && setInfo({
+      ...info,
+      name: cabnResponse?.currency?.name,
+      symbol: cabnResponse?.currency?.symbol,
+      logo: cabnResponse?.currency?.logo,
+    });
+    return {
+      name: cabnResponse?.currency?.name,
+      symbol: cabnResponse?.currency?.symbol,
+      logo: cabnResponse?.currency?.logo,
+    };
   }
-}
+};
 
 // export const getLatestStepWithPendingStatus = (stepResponse) => {
 //   let previous = {};

@@ -48,7 +48,7 @@ export class Web3Helper {
     return txIds.join(",") + "|" + JSON.stringify(payload || "");
   }
 
-  async getTokenData (walletAddress:string,tokenAddr:string) {
+  async getTokenData(walletAddress: string, tokenAddr: string) {
     const tokenContract = new this.web3Client.eth.Contract(
       FerrumJson.abi as AbiItem[],
       tokenAddr
@@ -59,28 +59,32 @@ export class Web3Helper {
     let balance = await tokenContract.methods.balanceOf(walletAddress).call();
     const decimalFactor = 10 ** Number(decimals);
     balance = new Big(balance).div(decimalFactor).toFixed();
-    return {symbol,decimals,balance}
+    return { symbol, decimals, balance }
     // console.log("symbolsymbolsymbol",symbol,balance)
   }
 
-  async getTokenPriceFromRouter (currency = "0x1A59BF30D6dC8e8363c90A14C142dCb85825C5a7") {
-    const ApeContract = new this.web3Client.eth.Contract(ApeRouterJson.abi as AbiItem[],
-      "0xcF0feBd3f17CEf5b47b0cD257aCf6025c5BFf3b7"
-    );
+  async getTokenPriceFromRouter(currency = "0x5732a2a84ec469fc95ac32e12515fd337e143eed") {
+    try {
+      const ApeContract = new this.web3Client.eth.Contract(ApeRouterJson.abi as AbiItem[],
+        "0xcF0feBd3f17CEf5b47b0cD257aCf6025c5BFf3b7"
+      );
 
-    const response = await ApeContract.methods.getAmountsOut(
-      "1000000000000000000",
-      [currency,"0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c","0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"]
-    ).call()
-    console.log(response, currency, 'pricing response')
-    if(response.length > 0){
-      console.log(response, 'pricing response')
-      return await this.amountToHuman(response[2],18)
+      const response = await ApeContract.methods.getAmountsOut(
+        "1000000000000000000",
+        // [currency,"0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c","0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"]
+        [currency, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56", "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"]
+
+      ).call() 
+      if (response.length > 0) { 
+        return await this.amountToHuman(response[2], 18)
+      }
+      return 0
+    } catch (e) {
+      // console.log(e)
     }
-    return 0
   }
 
-  async amountToHuman (amount: string,decimal:number) {
+  async amountToHuman(amount: string, decimal: number) {
     const decimalFactor = 10 ** decimal;
     return new Big(amount).div(decimalFactor).toFixed();
   }

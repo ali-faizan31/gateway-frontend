@@ -10,13 +10,19 @@ export const crucibleSlice = createSlice({
     initialState: initialCrucibleState,
     reducers: {
         userCrucibleDetailsLoaded: (state, action) => {
-            state.userCrucibleDetails = action.payload.data
+            state.userCrucibleDetails[action.payload.token] = action.payload.data
         },
         priceDataLoaded: (state, action) => {
             state.tokenPrices[action.payload.data.token] = action.payload.data.price
         },
+        tokenDataLoaded: (state, action) => { 
+            state.tokenData[action.payload.crucible.token] = action.payload.crucible
+        },
+        aprDataLoaded: (state, action) => {  
+            state.aprInformation = action.payload.crucible
+        },
         selectedCrucible: (state, action) => {
-            state.selectedCrucible = action.payload.data
+            state.selectedCrucible[action.payload.token] = action.payload.data
         },
         userLpStakingDetailsLoaded: (state, action) => {
             state.userLpStakingDetails[action.payload.token] = action.payload.data
@@ -44,6 +50,9 @@ export const crucibleSlice = createSlice({
             state.currentStep = {};
             state.stepFlowStepHistory = [];
             state.currentStepIndex = null;
+            state.selectedCrucible = {};
+            state.userCrucibleDetails = {};
+            state.userLpStakingDetails = {};
         },
     }
 })

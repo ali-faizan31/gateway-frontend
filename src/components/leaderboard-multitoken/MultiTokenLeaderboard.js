@@ -58,10 +58,11 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
   const getTokensHolderList = async (leaderboard) => {
     try{
       let res = await getTokenHolderlistByCABNId(leaderboard?.frmCabn?.id);
-      let FRMHoldersList = filterList(res?.data?.body?.result, leaderboard?.exclusionWalletAddressList);
+      res = res && res.data && res.data.body && res.data.body.result
+      let FRMHoldersList = res && filterList(res, leaderboard?.exclusionWalletAddressList);
       let resp = await getTokenHolderlistByCABNId(leaderboard?.frmxCabn?.id);
-      let FRMxHoldersList = filterList(resp?.data?.body?.result, leaderboard?.exclusionWalletAddressList);
-      console.log(FRMxHoldersList, FRMHoldersList) 
+      resp = resp && resp.data && resp.data.body && resp.data.body.result
+      let FRMxHoldersList = resp && filterList(resp, leaderboard?.exclusionWalletAddressList); 
       mapTokenHolderData(FRMxHoldersList, FRMHoldersList, leaderboard);
       setIsLoading(false);
     } catch (e) {
@@ -119,7 +120,7 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
     let matchedWallets = [];
 
     const onlyInLeft = (frmxList, frmList) =>
-      frmxList.map((frmx) => {
+    frmxList && frmxList.length && frmxList.map((frmx) => {
         const sameEntry = frmList.filter(
           (frm) => frmx.tokenHolderAddress === frm.tokenHolderAddress
         )[0];
@@ -139,7 +140,7 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
       });
 
     const inBoth = (frmList, frmxList) =>
-      frmList.map((frm) => {
+    frmList && frmList.length && frmList.map((frm) => {
         const sameEntry = frmxList.filter(
           (frmx) => frm.tokenHolderAddress === frmx.tokenHolderAddress
         )[0];

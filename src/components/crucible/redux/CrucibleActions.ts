@@ -27,3 +27,12 @@ export const resetCrucible = () => (dispatch: any) => {
   console.log('rset -------------')
   dispatch(actions.resetCrucible());
 };
+
+export const updateAPRData = (crucible: any) => (dispatch: any) => { 
+  dispatch(actions.aprDataLoaded({ crucible }));
+};
+
+export const updateTokenData = (crucible: any) => (dispatch: any) => { 
+  dispatch(actions.tokenDataLoaded({ crucible }));
+};
+
