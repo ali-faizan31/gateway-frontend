@@ -174,7 +174,7 @@ export const UnWrap = () => {
             value={Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-                FRM
+               {crucible[farm!]?.symbol}
               </FTypo>
             }
           />

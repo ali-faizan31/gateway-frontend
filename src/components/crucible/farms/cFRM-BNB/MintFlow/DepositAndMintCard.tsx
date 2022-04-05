@@ -227,7 +227,9 @@ export const CrucibleDeposit = () => {
             value={mintAmount}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-                <span onClick={() => setMintAmount(userCrucibleData[farm!]?.baseBalance)}>{crucible[farm!]?.symbol}</span>
+                {/* <span onClick={() => setMintAmount(userCrucibleData[farm!]?.baseBalance)}> */}
+                  {crucible[farm!]?.symbol}
+                  {/* </span> */}
               </FTypo>
             }
           />
