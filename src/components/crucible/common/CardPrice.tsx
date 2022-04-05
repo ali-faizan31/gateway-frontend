@@ -16,8 +16,6 @@ export const CruciblePrice = () => {
   const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
   const { tokenData } = useSelector((state: RootState) => state.crucible);
 
-  console.log(tokenData, tokenPrices);
-
   const DATA_PRICE = [
     { name: "FRMBSC", network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0 },
     { name: "cFRM", network: "cFRM", price_percentage: "4.8", price: tokenPrices["cFRM"] || 0 },
