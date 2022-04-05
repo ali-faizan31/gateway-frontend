@@ -37,12 +37,12 @@ export const AddLiquidity = () => {
   const { farm } = useParams<{ farm?: string }>();
 
   useEffect(() => {
-    if (currentNetworkInformation) {
+    if (currentNetworkInformation && crucible[farm!]) {
       let dexUrl = currentNetworkInformation?.networkCurrencyAddressByNetwork?.networkDex?.dex?.url;
-      let addLiquidityUrl = `${dexUrl}add/${crucible.contractAddress}/ETH`;
+      let addLiquidityUrl = `${dexUrl}add/${crucible[farm!]?.contractAddress}/ETH`;
       setAddLiquidityUrl(addLiquidityUrl);
     }
-  }, [currentNetworkInformation]);
+  }, [currentNetworkInformation, crucible]);
 
   const onStakeClick = () => {
     setIsLoading(true);
