@@ -2,6 +2,10 @@ import { PATH_DASHBOARD } from "../../../routes/paths";
 import * as SFSH_API from "../../../_apis/StepFlowStepHistory";
 import * as CrucibleActions from "../redux/CrucibleActions";
 import toast from "react-hot-toast";
+import { Web3Helper } from "../../../container-components/web3Client/web3Helper";
+import { CrucibleClient } from "../../../container-components/web3Client/crucibleClient";
+import { crucibleSlice } from "../redux/CrucibleSlice";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getHumanReadableFarmName = (farm: any) => {
   switch (farm) {
@@ -508,3 +512,75 @@ export const getAPRValueAgainstFarm = (aprInformation:any, farm: any) => {
     return aprInformation.cfrm;
   } 
 }
+
+export const getCrucibleDetail = async (farm: any, networkClient: any, walletAddress: any,  dispatch: any,  setIsLoading: any) => {
+  const web3Helper = new Web3Helper(networkClient as any);
+  const client = new CrucibleClient(web3Helper);
+  const actions = crucibleSlice.actions;
+  dispatch(
+    loadCrucibleUserInfo({
+      crucibleCurrency: `${farm.network.toUpperCase()}:${(farm.contract || "").toLowerCase()}`,
+      farm,
+      networkClient,
+      walletAddress,
+      dispatch
+    })
+  );
+  const crucibleData = await client.getCrucibleDetails(dispatch, farm.network, farm.contract, walletAddress as string);
+  const data = await web3Helper.getTokenData(walletAddress as string, farm.LpCurrency);
+  dispatch(
+    actions.selectedCrucible({
+      token: `${farm.internalName}`,
+      data: { ...crucibleData.data, LP_balance: data.balance, LP_symbol: data.symbol },
+    })
+  );
+
+  if (farm?.internalName.includes("BNB")) {
+    if (crucibleData.data) {
+      dispatch(loadLPStakingInfo({ farm, networkClient,
+        walletAddress,
+        dispatch }));
+      setIsLoading(false);
+    }
+  }
+  setIsLoading(false);
+};
+
+export const loadCrucibleUserInfo = createAsyncThunk("crucible/loadUserInfo", async (payload: { crucibleCurrency: string; farm: any, networkClient: any, walletAddress: any,  dispatch: any }, ctx) => {
+  const actions = crucibleSlice.actions;
+  const web3Helper = new Web3Helper(payload.networkClient as any);
+  const client = new CrucibleClient(web3Helper);
+  const res = await web3Helper.getTokenPriceFromRouter();
+  const userCrucibleDetails = await client.getUserCrucibleInfo(ctx.dispatch, payload.crucibleCurrency, payload.walletAddress as string);
+  const stakingType = "LP";
+  if (!!userCrucibleDetails) {
+    if (stakingType === "LP") {
+    }
+    payload.dispatch(actions.userCrucibleDetailsLoaded({ token: `${payload.farm.internalName}`, data: userCrucibleDetails.data }));
+  }
+});
+
+export const loadLPStakingInfo = createAsyncThunk("crucible/loadUserInfo", async (payload: { farm: any, networkClient: any, walletAddress: any,  dispatch: any }, ctx) => {
+  const actions = crucibleSlice.actions;
+  const web3Helper = new Web3Helper(payload.networkClient as any);
+  const client = new CrucibleClient(web3Helper);
+  const userStakingDetails = await client.getLPStakingInfo(
+    ctx.dispatch,
+    `${(payload.farm.LpCurrency || "").toLowerCase()}`,
+    payload.walletAddress as string,
+    payload.farm.LPstakingAddress,
+    payload.farm.network
+  );
+  if (!!userStakingDetails) {
+    payload.dispatch(
+      actions.userLpStakingDetailsLoaded({
+        token: `${payload.farm.internalName}`,
+        data: {
+          ...userStakingDetails.data,
+          stakingAddress: payload.farm.LPstakingAddress,
+          LPaddress: payload.farm.LpCurrency,
+        },
+      })
+    );
+  }
+});

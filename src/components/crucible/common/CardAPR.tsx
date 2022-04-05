@@ -44,7 +44,7 @@ export const CardAPR = () => {
       prop: "sustainableCrucibleFarms",
       title: "Sustainable Crucible Farms",
     },
-    { prop: "totalDeposited", title: "Total Deposited" },
+    { prop: "totalDeposited", title: "Remaining Cap" },
     { prop: "yourDeposit", title: "Your Deposit" },
     { prop: "yourRewards", title: "Your Rewards" },
     {
@@ -59,8 +59,10 @@ export const CardAPR = () => {
   ];
 
   const getTotalDeposited = (farm: any) => {
-    let leftCap = Number(selectedCrucible[farm!]?.openCap) - Number(selectedCrucible[farm!]?.leftFromCap);
-    return `${leftCap} / 100`;
+    return Number(selectedCrucible[farm!]?.leftFromCap)
+    // return TruncateWithoutRounding(Number(selectedCrucible[farm!]?.leftFromCap), 3);
+    // let leftCap = Number(selectedCrucible[farm!]?.openCap) - Number(selectedCrucible[farm!]?.leftFromCap);
+    // return `${leftCap} / 100`;
   };
 
   const getYourDeposited = (farm: any, lpAddress: any) => {

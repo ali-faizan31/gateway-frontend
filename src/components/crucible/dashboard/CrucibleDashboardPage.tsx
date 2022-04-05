@@ -24,10 +24,12 @@ import { CruciblePrice } from "../common/CardPrice";
 import * as CrucibleActions from "../redux/CrucibleActions";
 import { crucibleSlice } from "../redux/CrucibleSlice";
 import { Crucible_Farm_Address_Details, Pricing_Tokens } from "../../../utils/const.utils";
+import { Crucible_Farm_Address_Detail } from "../common/utils";
 import { getAPRInformationForPublicUser } from "../../../_apis/APRCrud";
 import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
+import { getCrucibleDetail } from "../common/Helper";
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
@@ -53,13 +55,13 @@ const CrucibleDashboardPage = () => {
     if (networkClient) {
       setIsLoading(true);
       dispatch(loadPricingInfo());
-      for (let farm of Crucible_Farm_Address_Details) {
-        getCrucibleDetail(farm);
-      }
+      Object.keys(Crucible_Farm_Address_Details).forEach((farm: string) =>{  
+        getCrucibleDetail(Crucible_Farm_Address_Detail[farm], networkClient, walletAddress, dispatch, setIsLoading) 
+      })
     }
   }, [networkClient]);
 
-  const getCrucibleDetail = async (farm: any) => {
+  const getCrucibleDetails = async (farm: any) => {
     const web3Helper = new Web3Helper(networkClient as any);
     const client = new CrucibleClient(web3Helper);
     const actions = crucibleSlice.actions;

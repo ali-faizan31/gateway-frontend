@@ -10,6 +10,7 @@ import { useHistory, useLocation, useParams } from "react-router";
 import {
   // CFRM_BNB_STEP_FLOW_IDS,
   CRUCIBLE_CONTRACTS_V_0_1,
+  Crucible_Farm_Address_Detail,
   getBaseTokenName,
   getCrucibleTokenName,
 } from "./../../../common/utils";
@@ -18,6 +19,7 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
 import {
+  getCrucibleDetail,
   getLatestStepToRender,
   isLPFarm,
   isSingleTokenFarm,
@@ -55,9 +57,21 @@ export const Stake = () => {
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const { approvals } = useSelector((state: RootState) => state.approval);
 
-  console.log("stake payload", LPStakingDetails);
 
-  useEffect(() => { 
+
+  useEffect(() => {
+    if (networkClient && farm) {
+      getCrucibleDetail(Crucible_Farm_Address_Detail[farm!], networkClient, walletAddress, dispatch, setIsLoading)
+    }
+  }, [networkClient, farm])
+
+  useEffect(() => {
+    console.log("stake payload", LPStakingDetails, userCrucibleData);
+  }, [userCrucibleData, LPStakingDetails])
+
+
+
+  useEffect(() => {
     if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.baseCurrency)]) > 0) {
       if (currentStep.step.name === "Approve" && currentStep.status !== "completed") {
         getStepCompleted(false);
@@ -118,12 +132,13 @@ export const Stake = () => {
 
         response = await client.stakeLPToken(dispatch, currency, userAddress, stakingAddress, network, amount);
       } else if (isSingleTokenFarm(farm)) {
-        if (farm === "cFRMx"){
-          stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
-        } else if (farm === "cFRM"){
-          stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
-        }
-        currency = crucible[farm!].currency; 
+        // if (farm === "cFRMx") {
+        //   stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
+        // } else if (farm === "cFRM") {
+        //   stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
+        // }
+        stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
+        currency = crucible[farm!].currency;
         amount = amountToStake.toString();
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
