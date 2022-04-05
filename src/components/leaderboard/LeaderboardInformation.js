@@ -49,7 +49,7 @@ const LeaderboardInformation = () => {
     if (isQueryChange) {
       if (tokenHolderList) { 
         const tempData = tokenHolderList.map(
-          (x) => x.TokenHolderAddress.toLowerCase().includes(query.toLowerCase()) && x
+          (x) => x.tokenHolderAddress.toLowerCase().includes(query.toLowerCase()) && x
         );
         setFilteredTokenHolderList(tempData.filter((x) => x && x));
         setIsQueryChange(false);

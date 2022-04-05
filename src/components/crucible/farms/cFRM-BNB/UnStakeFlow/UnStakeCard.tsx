@@ -22,6 +22,8 @@ import {
   // getNextStepFlowStepId
 } from "../../../common/Helper";
 import { ClipLoader } from "react-spinners";
+import { MetaMaskConnector } from "../../../../../container-components";
+import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 
 export const UnStake = () => {
   const dispatch = useDispatch();
@@ -34,14 +36,15 @@ export const UnStake = () => {
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
   const LPStakingDetails = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
   const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
-  const { walletAddress, networkClient } = useSelector((state: RootState) => state.walletConnector);
+  const { isConnected, walletAddress, networkClient } = useSelector((state: RootState) => state.walletConnector);
   const [isProcessed, setIsProcessed] = useState(false);
   const [amount, setAmount] = useState(0);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
-  let userStake = (userCrucibleData.stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
+  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
-  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const [transactionId, setTransactionId] = useState("");
+
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
     try {
@@ -89,15 +92,15 @@ export const UnStake = () => {
         currency = LPStakingDetails[farm!]?.stakeId;
         stakingAddress = LPStakingDetails[farm!]?.stakingAddress || "";
         stakeAmount = amount.toString();
-        network = crucible?.network;
+        network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
         response = await client.unstakeLPToken(dispatch, currency, userAddress, stakeAmount, stakingAddress, network);
       } else if (isSingleTokenFarm(farm)) {
-        currency = crucible!.currency;
-        stakingAddress = (crucible?.staking || [])[0]?.address || "";
+        currency = crucible[farm!]?.currency;
+        stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
         stakeAmount = amount.toString();
-        network = crucible?.network;
+        network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
         response = await client.UnStakeCrucible(dispatch, currency, stakeAmount, stakingAddress, userAddress, network);
@@ -124,9 +127,9 @@ export const UnStake = () => {
 
   const getAmountSymbol = () => {
     if (farm?.includes("BNB")) {
-      return crucible?.LP_symbol;
+      return crucible[farm!]?.LP_symbol;
     } else {
-      return crucible?.symbol;
+      return crucible[farm!]?.symbol;
     }
   };
 
@@ -165,7 +168,7 @@ export const UnStake = () => {
                   {getBaseTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
-                  ${tokenPrices[farm!]}
+                  ${tokenPrices[getBaseTokenName(farm)!]}
                 </FTypo>
               </FItem>
             </FGridItem>
@@ -196,31 +199,31 @@ export const UnStake = () => {
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
             You have {getAmount()} {getAmountSymbol()} available to unstake.
           </FTypo>
-
-          <div className="btn-wrap f-mt-2">
-            <ApprovableButtonWrapper
-              View={(ownProps) => (
-                <FButton
-                  title={"Unstake Crucible"}
-                  className={"w-100"}
-                  disabled={Number(getAmount()) === 0}
-                  onClick={
-                    ownProps.isApprovalMode ? () => ownProps.onApproveClick() : () => onUnStakeClick()
-                    // crucible!.currency,
-                    // (crucible?.staking || [])[0]?.address || "",
-                    // amount.toString(),
-                    // true,
-                    // crucible?.network,
-                    // walletAddress as string
-                  }
-                ></FButton>
-              )}
-              currency={isSingleTokenFarm(farm) ? crucible!.baseCurrency : isLPFarm(farm) && `${crucible?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
-              contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
-              userAddress={walletAddress as string}
-              amount={"0.0001"}
+          {meV2._id && isConnected ? (
+            <div className="btn-wrap f-mt-2">
+              <ApprovableButtonWrapper
+                View={(ownProps) => (
+                  <FButton
+                    title={"Unstake Crucible"}
+                    className={"w-100"}
+                    disabled={Number(getAmount()) === 0}
+                    onClick={ownProps.isApprovalMode ? () => ownProps.onApproveClick() : () => onUnStakeClick()}
+                  ></FButton>
+                )}
+                currency={isSingleTokenFarm(farm) ? crucible[farm!]?.baseCurrency : isLPFarm(farm) && `${crucible[farm!]?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
+                contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
+                userAddress={walletAddress as string}
+                amount={"0.0001"}
+              />
+            </div>
+          ) : (
+            <MetaMaskConnector.WalletConnector
+              WalletConnectView={FButton}
+              WalletConnectModal={ConnectWalletDialog}
+              isAuthenticationNeeded={true}
+              WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
             />
-          </div>
+          )}
 
           <DialogTransitionStatus
             transitionStatusDialog={transitionStatusDialog}
@@ -231,7 +234,7 @@ export const UnStake = () => {
             transactionId={transactionId}
             isSubmitted={false}
             isProcessed={isProcessed}
-            crucible={crucible}
+            crucible={crucible[farm!]}
             onContinueToNextStepClick={() => onContinueToNextStepClick()}
           />
         </FCard>

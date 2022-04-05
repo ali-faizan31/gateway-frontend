@@ -35,7 +35,7 @@ export const UnstakeAddLiquidity = () => {
   useEffect(() => {
     if (currentNetworkInformation) {
       let dexUrl = currentNetworkInformation?.networkCurrencyAddressByNetwork?.networkDex?.dex?.url;
-      let addLiquidityUrl = `${dexUrl}add/${crucible.contractAddress}/ETH`;
+      let addLiquidityUrl = `${dexUrl}add/${crucible[farm!].contractAddress}/ETH`;
       setAddLiquidityUrl(addLiquidityUrl);
     }
   }, [currentNetworkInformation]);

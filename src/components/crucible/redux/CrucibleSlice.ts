@@ -10,7 +10,7 @@ export const crucibleSlice = createSlice({
     initialState: initialCrucibleState,
     reducers: {
         userCrucibleDetailsLoaded: (state, action) => {
-            state.userCrucibleDetails = action.payload.data
+            state.userCrucibleDetails[action.payload.token] = action.payload.data
         },
         priceDataLoaded: (state, action) => {
             state.tokenPrices[action.payload.data.token] = action.payload.data.price
@@ -22,7 +22,7 @@ export const crucibleSlice = createSlice({
             state.aprInformation = action.payload.crucible
         },
         selectedCrucible: (state, action) => {
-            state.selectedCrucible = action.payload.data
+            state.selectedCrucible[action.payload.token] = action.payload.data
         },
         userLpStakingDetailsLoaded: (state, action) => {
             state.userLpStakingDetails[action.payload.token] = action.payload.data

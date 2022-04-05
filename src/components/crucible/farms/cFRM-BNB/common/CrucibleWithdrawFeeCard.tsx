@@ -21,7 +21,7 @@ const CrucibleWithdrawFeeCard = () => {
   const LPStakingDetails = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
   const { aprInformation } = useSelector((state: RootState) => state.crucible);
-  let userStake = (userCrucibleData.stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
+  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
 
   return (
     <>
@@ -32,7 +32,7 @@ const CrucibleWithdrawFeeCard = () => {
             <FGridItem size={[4, 4, 4]}>
               <FItem align={"center"}>
                 <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                  {`${BigUtils.safeParse(crucible?.feeOnTransferRate || "0")
+                  {`${BigUtils.safeParse(crucible[farm!]?.feeOnTransferRate || "0")
                     .times(100)
                     .toString()}%`}
                 </FTypo>
@@ -42,7 +42,7 @@ const CrucibleWithdrawFeeCard = () => {
             <FGridItem size={[4, 4, 4]}>
               <FItem align={"center"}>
                 <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                  {`${BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0")
+                  {`${BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0")
                     .times(100)
                     .toString()}%`}
                 </FTypo>
@@ -52,7 +52,7 @@ const CrucibleWithdrawFeeCard = () => {
             <FGridItem size={[4, 4, 4]}>
               <FItem align={"center"}>
                 <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
-                  {crucible?.symbol}
+                  {crucible[farm!]?.symbol}
                 </FTypo>
                 <FTypo size={20}>Crucible Token</FTypo>
               </FItem>
@@ -66,7 +66,7 @@ const CrucibleWithdrawFeeCard = () => {
                   {farm?.includes("BNB") ? Number(LPStakingDetails[farm!]?.stake || "0") : Number(userStake?.stakeOf || "0").toFixed(3)}
 
                   <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
-                    {farm?.includes("BNB") ? `APE-LP ${crucible?.symbol}-BNB` : crucible?.symbol}
+                    {farm?.includes("BNB") ? `APE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
                   </FTypo>
                 </FTypo>
               </FGridItem>

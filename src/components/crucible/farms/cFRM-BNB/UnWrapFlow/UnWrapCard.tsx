@@ -10,7 +10,7 @@ import { CrucibleClient } from "./../../../../../container-components/web3Client
 import { ApprovableButtonWrapper } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
 import { useHistory, useLocation, useParams } from "react-router";
 // import { useWeb3React } from "@web3-react/core";
-import { CRUCIBLE_CONTRACTS_V_0_1 } from "./../../../common/utils";
+import { CRUCIBLE_CONTRACTS_V_0_1, getBaseTokenName, getCrucibleTokenName } from "./../../../common/utils";
 import { RootState } from "../../../../../redux/rootReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { BigUtils } from "./../../../../../container-components/web3Client/types";
@@ -22,6 +22,8 @@ import {
   //  getNextStepFlowStepId
 } from "../../../common/Helper";
 import { ClipLoader } from "react-spinners";
+import { MetaMaskConnector } from "../../../../../container-components";
+import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 
 export const UnWrap = () => {
   const location: any = useLocation();
@@ -30,21 +32,16 @@ export const UnWrap = () => {
   const { farm } = useParams<{ farm?: string }>();
   const dispatch = useDispatch();
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
-  // const [approvedDone, setapprovedDone] = useState(false);
-  // const [isApproving, setIsApproving] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isProcessed, setIsProcessed] = useState(false);
-  // const [isSubmitted, setIsSubmitted] = useState(false);
-  //@ts-ignore
-  const crucible = useSelector((state) => state.crucible.selectedCrucible);
-  //@ts-ignore
+  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
   const [transactionId, setTransactionId] = useState("");
-  const { walletAddress, networkClient } = useSelector((state: RootState) => state.walletConnector);
+  const { isConnected, walletAddress, networkClient } = useSelector((state: RootState) => state.walletConnector);
   const [amount, setAmount] = useState(0);
-
+  const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
-  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
 
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
@@ -131,20 +128,20 @@ export const UnWrap = () => {
             <FGridItem size={[6, 6, 6]}>
               <FItem bgColor="#1C2229" className={"f-p-2"}>
                 <FTypo size={20} className="f-mb-1">
-                  FRM Price (USD)
+                  {getBaseTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
-                  $0.072
+                  ${tokenPrices[getBaseTokenName(farm)!]}
                 </FTypo>
               </FItem>
             </FGridItem>
             <FGridItem size={[6, 6, 6]}>
               <FItem bgColor="#1C2229" className={"f-p-2"}>
                 <FTypo size={20} className="f-mb-1">
-                  cFRM Price (USD)
+                  {getCrucibleTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
-                  $0.072
+                  ${tokenPrices[getCrucibleTokenName(farm)!]}
                 </FTypo>
               </FItem>
             </FGridItem>
@@ -158,12 +155,12 @@ export const UnWrap = () => {
             onChange={(e: any) => setAmount(e.target.value)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1"}>
-                <span onClick={() => setAmount(userCrucibleData?.balance || "0")}>Max</span>
+                <span onClick={() => setAmount(userCrucibleData[farm!]?.balance || "0")}>Max</span>
               </FTypo>
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {userCrucibleData?.balance || "0"} available in Token {userCrucibleData?.symbol}.
+            You have {userCrucibleData[farm!]?.balance || "0"} available in Token {userCrucibleData[farm!]?.symbol}.
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5"}>
             Amount you will receive
@@ -174,35 +171,42 @@ export const UnWrap = () => {
             type={"text"}
             placeholder="0"
             disabled={true}
-            value={Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0").times(100)) / 100)}
+            value={Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-                FRM
+               {crucible[farm!]?.symbol}
               </FTypo>
             }
           />
-          {
+          {meV2._id && isConnected ? (
             <ApprovableButtonWrapper
               View={(ownProps) => (
                 <div className="btn-wrap f-mt-2">
                   <FButton
                     title={"Unwrap"}
                     className={"w-100"}
-                    disabled={Number(userCrucibleData?.balance) === 0}
+                    disabled={Number(userCrucibleData[farm!]?.balance) === 0}
                     onClick={
                       ownProps.isApprovalMode
                         ? () => ownProps.onApproveClick()
-                        : () => onUnWrapClick(crucible!.baseCurrency, crucible?.currency || "", amount.toString(), true, crucible?.network, walletAddress as string)
+                        : () => onUnWrapClick(crucible[farm!]?.baseCurrency, crucible[farm!]?.currency || "", amount.toString(), true, crucible[farm!]?.network, walletAddress as string)
                     }
                   ></FButton>
                 </div>
               )}
-              currency={crucible!.currency}
+              currency={crucible[farm!].currency}
               contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
               userAddress={walletAddress as string}
               amount={"0.0001"}
             />
-          }
+          ) : (
+            <MetaMaskConnector.WalletConnector
+              WalletConnectView={FButton}
+              WalletConnectModal={ConnectWalletDialog}
+              isAuthenticationNeeded={true}
+              WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
+            />
+          )}
 
           <DialogTransitionStatus
             transitionStatusDialog={transitionStatusDialog}
@@ -213,7 +217,7 @@ export const UnWrap = () => {
             transactionId={transactionId}
             isSubmitted={false}
             isProcessed={isProcessed}
-            crucible={crucible}
+            crucible={crucible[farm!]}
             onContinueToNextStepClick={() => onContinueToNextStepClick()}
           />
         </FCard>

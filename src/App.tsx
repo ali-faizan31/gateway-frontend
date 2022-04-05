@@ -78,7 +78,7 @@ function App() {
         <Switch>
           <Route exact path="/">
             {" "}
-            <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" />{" "}
+            <Redirect to="/dashboard/crucible" />{" "}
           </Route>
           {/* new routes ---------------------- */}
           {/* cfrm-bnb routes */}
