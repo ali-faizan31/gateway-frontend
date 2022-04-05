@@ -5,7 +5,7 @@ export class crucibleApi {
     jwtToken = '';
 
     async signInToServer(userAddress) {
-            const res = await axios.post(`https://xxda22hwpy.us-east-2.awsapprunner.com/`, {
+            const res = await axios.post(`https://imqx88xczt.us-east-2.awsapprunner.com/`, {
                 command: 'signInUsingAddress',
                 data: { userAddress },
                 params: []
@@ -17,7 +17,7 @@ export class crucibleApi {
         }
         //https://4ikenxgwge.execute-api.us-east-2.amazonaws.com/default/kb-staging-backend
     crucibleApi(data) {
-        return axios.post(`https://xxda22hwpy.us-east-2.awsapprunner.com/`,
+        return axios.post(`https://imqx88xczt.us-east-2.awsapprunner.com/`,
             data, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
