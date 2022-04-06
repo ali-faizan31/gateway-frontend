@@ -18,6 +18,7 @@ import { sendForgotPasswordLink } from "../../../_apis/OnboardingCrud";
 // import { PATH_AUTH } from "../../../routes/paths";
 // import * as validations from "../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader";
+import { T } from '../../../utils/translationHelper';
 
 const ForgotPasswordForm = () => {
   //   const history = useHistory();
@@ -31,9 +32,14 @@ const ForgotPasswordForm = () => {
         toast.success(response?.data?.status?.message);
         reset();
       })
-      .catch((e) => {
+      .catch((e: any) => {
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }

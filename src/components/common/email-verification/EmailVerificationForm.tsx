@@ -13,6 +13,7 @@ import { EmailVerify } from "../../../_apis/OnboardingCrud";
 import { PATH_AUTH } from "../../../routes/paths";
 import ClipLoader from "react-spinners/ClipLoader";
 import { ME_TAG, TOKEN_TAG } from "../../../utils/const.utils";
+import { T } from '../../../utils/translationHelper';
 
 const EmailVerificationForm = (children: any) => {
   const { parsedUser } = children;
@@ -33,7 +34,12 @@ const EmailVerificationForm = (children: any) => {
       })
       .catch((e) => {
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+            if (e?.response?.data?.status?.phraseKey !== '') {
+                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+                toast.error(fetchedMessage);
+            } else {
+                toast.error(e?.response?.data?.status?.message);
+            }
         } else {
           toast.error("Something went wrong. Try again later!");
         }

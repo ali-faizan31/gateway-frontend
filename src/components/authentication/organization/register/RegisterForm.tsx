@@ -19,6 +19,7 @@ import { PATH_AUTH } from "../../../../routes/paths";
 // import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader";
 import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils";
+import { T } from '../../../../utils/translationHelper';
 
 const RegisterForm = () => {
   const history = useHistory();
@@ -37,9 +38,14 @@ const RegisterForm = () => {
         toast.success(response?.data?.status?.message);
         history.push(PATH_AUTH.emailVerify);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }

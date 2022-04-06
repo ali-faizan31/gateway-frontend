@@ -18,6 +18,7 @@ import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader"; 
 import { connectWeb3 } from "../../../../utils/connect-wallet/connetWalletHelper";
 import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils";
+import { T } from '../../../../utils/translationHelper';
 
 const LoginForm = () => {
   const history = useHistory();
@@ -108,7 +109,12 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
       })
       .catch((e) => {
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+            if (e?.response?.data?.status?.phraseKey !== '') {
+                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+                toast.error(fetchedMessage);
+            } else {
+                toast.error(e?.response?.data?.status?.message);
+            }
         } else {
           toast.error("Something went wrong. Try again later!");
         }

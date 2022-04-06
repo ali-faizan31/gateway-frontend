@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { ResendEmailVerifyCode } from "../../../_apis/OnboardingCrud";
 import { PATH_AUTH } from "../../../routes/paths";
 import { ClipLoader } from "react-spinners";
+import { T } from '../../../utils/translationHelper';
 
 const ResendEmailVerificationForm = () => {
   const history = useHistory();
@@ -20,7 +21,12 @@ const ResendEmailVerificationForm = () => {
       })
       .catch((e) => {
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }

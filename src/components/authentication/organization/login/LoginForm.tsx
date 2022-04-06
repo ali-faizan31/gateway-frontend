@@ -27,6 +27,7 @@ import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils";
 import { walletConnectorActions } from "../../../../container-components/wallet-connector";
 import * as walletAuthenticatorActions from "../../../common/wallet-authentication/redux/walletAuthenticationActions";
 import { useDispatch } from "react-redux";
+import { T } from '../../../../utils/translationHelper';
 
 const LoginForm = () => {
   const history = useHistory();
@@ -148,9 +149,14 @@ const LoginForm = () => {
           //     }
         }
       })
-      .catch((e) => {
+      .catch((e: any) => {
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
