@@ -20,6 +20,7 @@ import { addLeaderboard } from "../../_apis/LeaderboardCrud";
 // import { getAllLeaderboardsDispatch } from '../../redux/slices/leaderboard';
 // import { chainIdList, dexUrlList } from './LeaderboardHelper';
 import { TOKEN_TAG } from "../../utils/const.utils";
+import { T } from '../../utils/translationHelper';
 
 export default function NewLeaderboard() {
   // const dispatch = useDispatch();
@@ -73,9 +74,14 @@ export default function NewLeaderboard() {
         toast.success(response.data.status.message);
         history.push(PATH_DASHBOARD.general.leaderboardManagement);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         if (e.response) {
-          toast.error(e.response.data.status.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }

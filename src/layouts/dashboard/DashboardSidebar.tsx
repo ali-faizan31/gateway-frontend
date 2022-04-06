@@ -178,7 +178,12 @@ const DashboardSidebar = () => {
       })
       .catch((e: any) => {
         if (e.response) {
-          toast.error(e?.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }

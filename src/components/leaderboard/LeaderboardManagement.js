@@ -14,6 +14,7 @@ import { getAllLeaderboards, updateLeaderboardStatusById } from "../../_apis/Lea
 import { chainIdList } from "./LeaderboardHelper";
 import { useHistory } from "react-router-dom";
 import { TOKEN_TAG } from "../../utils/const.utils";
+import { T } from '../../utils/translationHelper';
 
 const LeaderboardManagement = () => {
   const limit = 10;
@@ -53,7 +54,12 @@ const LeaderboardManagement = () => {
       })
       .catch((e) => {
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
@@ -134,7 +140,12 @@ const LeaderboardManagement = () => {
           console.log(e);
           setShowDialog(false);
           if (e.response) {
-            toast.error(e?.response?.data?.status?.message);
+            if (e?.response?.data?.status?.phraseKey !== '') {
+              const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+              toast.error(fetchedMessage);
+            } else {
+              toast.error(e?.response?.data?.status?.message);
+            }
           } else {
             toast.error(`Something went wrong. Try again later! ${e}`);
           }
