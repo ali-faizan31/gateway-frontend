@@ -210,7 +210,7 @@ export const Stake = () => {
                   {getBaseTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={36} weight={500}>
-                  ${tokenPrices[farm!]}
+                  ${tokenPrices[getBaseTokenName(farm)!]}
                 </FTypo>
               </FItem>
             </FGridItem>
@@ -257,7 +257,7 @@ export const Stake = () => {
                 </div>
               )}
               // currency={crucible!.baseCurrency}
-              currency={isSingleTokenFarm(farm) ? crucible[farm!]?.baseCurrency : isLPFarm(farm) && `${crucible[farm!]?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
+              currency={isSingleTokenFarm(farm) ? crucible[farm!]?.currency : isLPFarm(farm) && `${crucible[farm!]?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
               contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
               userAddress={walletAddress as string}
               amount={"0.0001"}
