@@ -18,6 +18,7 @@ import {
 } from "../../../_apis/OnboardingCrud";
 // import { PATH_AUTH } from "../../../routes/paths";
 import ClipLoader from "react-spinners/ClipLoader";
+import { T } from '../../../utils/translationHelper';
 
 const ResetPasswordForm = (props: any) => {
   const { token }: any = useParams();
@@ -67,9 +68,18 @@ const ResetPasswordForm = (props: any) => {
         props.setIsPasswordChanged(true);
       }
     } catch (e: any) {
-      console.log(e);
-      console.log(e.response.data.status.message);
-      toast.error(`Error occured: ${e?.response?.data?.status?.message}! `);
+      if (e.response) {
+        if (e?.response?.data?.status?.phraseKey !== '') {
+          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+          toast.error(fetchedMessage);
+        } else {
+          console.log(e);
+          console.log(e.response.data.status.message);
+          toast.error(`Error occurred: ${e?.response?.data?.status?.message}! `);
+        }
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
     }
   };
 

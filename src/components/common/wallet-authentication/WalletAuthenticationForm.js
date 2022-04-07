@@ -15,6 +15,7 @@ import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog }  from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { useSelector } from 'react-redux'; 
 import { TOKEN_TAG } from "../../../utils/const.utils";
+import { T } from '../../../utils/translationHelper';
 
 const checkSession = async () => {
   const session = localStorage.getItem(TOKEN_TAG); 
@@ -64,8 +65,17 @@ export function Web3AuthWrapper(props) {
     try {
       const res = await checkUniqueWalletAddressAndAuthenticated(`${address}`, network, applicationUserToken)
       return res.data.body.isUnique;
-    } catch (e) { 
-      throw (e?.response?.data?.status?.message)
+    } catch (e) {
+        if (e.response) {
+            if (e?.response?.data?.status?.phraseKey !== '') {
+                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+                throw (fetchedMessage);
+            } else {
+                throw (e?.response?.data?.status?.message);
+            }
+        } else {
+            throw ("Something went wrong. Try again later!");
+        }
     }
   }
   
@@ -73,8 +83,17 @@ export function Web3AuthWrapper(props) {
     try {
       const res = await saveAddressAndGenerateNonce(userId, values, applicationUserToken)
       return res?.data?.body?.address?.nonce;
-    } catch (e) { 
-      throw (e?.response?.data?.status?.message)
+    } catch (e) {
+        if (e.response) {
+            if (e?.response?.data?.status?.phraseKey !== '') {
+                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+                throw (fetchedMessage);
+            } else {
+                throw (e?.response?.data?.status?.message);
+            }
+        } else {
+            throw ("Something went wrong. Try again later!");
+        }
     }
   }
 
@@ -82,8 +101,17 @@ export function Web3AuthWrapper(props) {
      try {
       const res = await verifySignatureAndUpdateNonce(userId, values, applicationUserToken)
       return res?.data?.body;
-    } catch (e) { 
-      throw (e?.response?.data?.status?.message)
+    } catch (e) {
+         if (e.response) {
+             if (e?.response?.data?.status?.phraseKey !== '') {
+                 const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+                 throw (fetchedMessage);
+             } else {
+                 throw (e?.response?.data?.status?.message);
+             }
+         } else {
+             throw ("Something went wrong. Try again later!");
+         }
     }
   }
 
@@ -92,8 +120,17 @@ export function Web3AuthWrapper(props) {
     try {  
       const res = await isFerrumNetworkIdentifierAllowedonGateway(identifier, applicationUserToken)
       return res.data.body;
-    } catch (e) { 
-      throw (e?.response?.data?.status?.message)
+    } catch (e) {
+        if (e.response) {
+            if (e?.response?.data?.status?.phraseKey !== '') {
+                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+                throw (fetchedMessage);
+            } else {
+                throw (e?.response?.data?.status?.message);
+            }
+        } else {
+            throw ("Something went wrong. Try again later!");
+        }
     }
   }
 

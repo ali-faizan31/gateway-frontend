@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { sentenceCase,
-  //  paramCase 
+  //  paramCase
   } from "change-case";
 import toast, { Toaster } from "react-hot-toast";
 import * as Yup from "yup";
@@ -22,7 +22,7 @@ import { RiFileCopy2Fill, RiMailOpenLine, RiEdit2Fill } from "react-icons/ri";
 import Datatable from "react-bs-datatable";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
-import { 
+import {
   // PATH_ADMIN,
    PATH_DASHBOARD } from "../../routes/paths";
 import {
@@ -30,6 +30,7 @@ import {
   updateCompetitionStatusById,
 } from "../../_apis/CompetitionCrud";
 import { TOKEN_TAG } from "../../utils/const.utils";
+import { T } from '../../utils/translationHelper';
 
 const CompetitionManagement = () => {
   const history = useHistory();
@@ -177,7 +178,12 @@ const CompetitionManagement = () => {
       })
       .catch((e) => {
         if (e.response) {
-          toast.error(e?.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+              const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+              toast.error(fetchedMessage);
+          } else {
+              toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
@@ -225,7 +231,12 @@ const CompetitionManagement = () => {
           console.log(e);
           setShowDialog(false);
           if (e.response) {
-            toast.error(e?.response?.data?.status?.message);
+            if (e?.response?.data?.status?.phraseKey !== '') {
+              const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+              toast.error(fetchedMessage);
+            } else {
+              toast.error(e?.response?.data?.status?.message);
+            }
           } else {
             toast.error(`Something went wrong. Try again later! ${e}`);
           }
