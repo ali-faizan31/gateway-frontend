@@ -55,8 +55,17 @@ const LoginForm = () => {
       const res = await walletAddressAuthenticateCheckOnSignin(userId,  walletInformation?.address, walletInformation?.network, applicationUserToken  );
       return res.data.body.isAuthenticated;
     } catch (e) {
-      console.log(e.response.data.status.message);
-      throw e?.response?.data?.status?.message;
+        if (e.response) {
+            if (e?.response?.data?.status?.phraseKey !== '') {
+                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+                throw (fetchedMessage);
+            } else {
+                console.log(e.response.data.status.message);
+                throw (e?.response?.data?.status?.message);
+            }
+        } else {
+            throw ("Something went wrong. Try again later!");
+        }
     }
   };
 
@@ -69,7 +78,12 @@ const LoginForm = () => {
       })
       .catch((e) => {
         if (e.response) {
-          toast.error(e.response.data.status.message);
+            if (e?.response?.data?.status?.phraseKey !== '') {
+                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+                toast.error(fetchedMessage);
+            } else {
+                toast.error(e?.response?.data?.status?.message);
+            }
         } else {
           toast.error("Something went wrong. Try again later!");
         }

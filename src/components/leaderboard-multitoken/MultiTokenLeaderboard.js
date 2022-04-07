@@ -21,6 +21,7 @@ import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 import { filterList } from "../leaderboard/LeaderboardHelper";
 import { TOKEN_TAG, ME_TAG, PUBLIC_TAG, } from "../../utils/const.utils";
 import { arraySortByKeyDescending, getFormattedWalletAddress } from "../../utils/global.utils";
+import { T } from '../../utils/translationHelper';
 
 const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboardData}) => {
   const exportRef = useRef();
@@ -338,7 +339,16 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
         exportRef?.current?.link?.click();
       }, 3000);
     } catch (e) {
-        toast.error(`Error occured: ${e?.response?.data?.status?.message}`)
+      if (e.response) {
+        if (e?.response?.data?.status?.phraseKey !== '') {
+          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+          toast.error(fetchedMessage);
+        } else {
+          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
+        }
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
     }
   }
 

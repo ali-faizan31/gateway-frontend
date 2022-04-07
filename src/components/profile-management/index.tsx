@@ -109,9 +109,12 @@ const ProfileSettings = () => {
           })
         );
         if (e.response) {
-          toast.error(
-            ` Error Occured: nonce ${e?.response?.data?.status?.message}`
-          );
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(`Error Occurred: nonce ${e?.response?.data?.status?.message}`);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
