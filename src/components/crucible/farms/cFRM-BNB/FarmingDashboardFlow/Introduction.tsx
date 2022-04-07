@@ -20,6 +20,7 @@ import { useWeb3React } from "@web3-react/core";
 import toast, { Toaster } from "react-hot-toast";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import { ClipLoader } from "react-spinners";
+import { T } from '../../../../../utils/translationHelper';
 
 export const Introduction = () => {
   const history = useHistory();
@@ -72,8 +73,16 @@ export const Introduction = () => {
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      if (e.response) {
+        if (e?.response?.data?.status?.phraseKey !== '') {
+          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+          toast.error(fetchedMessage);
+        } else {
+          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
+        }
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
     }
   };
 
