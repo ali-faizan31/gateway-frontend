@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CrucibleClient } from "../../../container-components/web3Client/crucibleClient";
 import { Web3Helper } from "../../../container-components/web3Client/web3Helper";
 import { RootState } from "../../../redux/rootReducer";
-import Loader from "../../../assets/gif/loading.gif" 
+import Loader from "../../../assets/gif/Loading.gif" 
 // import { RootState } from "../../../redux/rootReducer";
 import { CardAPR } from "../common/CardAPR";
 import { CrucibleMyBalance } from "../common/CardMyBalance";
