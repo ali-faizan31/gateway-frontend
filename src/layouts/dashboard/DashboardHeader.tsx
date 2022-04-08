@@ -34,6 +34,7 @@ const DashboardHeader = ({ title }: any) => {
   const { meV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
 
   const { tokenData } = useSelector((state: RootState) => state.crucible);
+  console.log(currentNetworkInformation)
 
   useEffect(() => {
     if (meV2 && meV2.role === COMMUNITY_ROLE_TAG) {
@@ -144,7 +145,7 @@ const DashboardHeader = ({ title }: any) => {
                         {getFormattedWalletAddress(walletAddress)}
                       </FCard>
                       <FCard className={"no-left-margin custom-padding-10 d-flex custom-border-radius-4"} variant={"primary"}>
-                        {TruncateWithoutRounding(getFormattedBalance(walletBalance), 3)} {currentNetworkInformation && currentNetworkInformation?.networkCurrencySymbol}
+                        {TruncateWithoutRounding(getFormattedBalance(walletBalance), 3)} {currentNetworkInformation && currentNetworkInformation?.mainnetCurrencySymbol}
                       </FCard>
                     </FItem>
                   </FCard>

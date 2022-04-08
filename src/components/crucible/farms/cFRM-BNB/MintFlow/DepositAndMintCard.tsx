@@ -220,7 +220,7 @@ export const CrucibleDeposit = () => {
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
             You have {Number(userCrucibleData[farm!]?.baseBalance || "0").toFixed(3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
-            You can mint maximum {Number(maxCap)} {userCrucibleData[farm!]?.baseSymbol}.
+            You can mint maximum { (maxCap)} {userCrucibleData[farm!]?.baseSymbol}.
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5 justify-content-space-between"}>
             Amount you will receive
