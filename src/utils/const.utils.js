@@ -1,11 +1,11 @@
 export const baseUrl = 
 // "https://api-leaderboard.dev.svcs.ferrumnetwork.io"; // dev
-"https://api-gateway-v1.svcs.ferrumnetwork.io" // prod-gateway
-// "https://api-gateway-v1.stage.svcs.ferrumnetwork.io" // staging-gateway
+// "https://api-gateway-v1.svcs.ferrumnetwork.io" // prod-gateway
+"https://api-gateway-v1.stage.svcs.ferrumnetwork.io" // staging-gateway
 export const apiKeyForApplicationUser =
-    // "66fadbfe-b625-48d1-9255-2c6317adf0bf"; // staging
+    "66fadbfe-b625-48d1-9255-2c6317adf0bf"; // staging
     // "b63d9502-1ddd-4ccb-b0bd-e59a3531d7f6"; // dev
-"66fadbfe-b625-48d1-9255-2c6317adf0bf"; // prod
+// "66fadbfe-b625-48d1-9255-2c6317adf0bf"; // prod
 export const tokenFRMBSCMainnet = "0xa719b8ab7ea7af0ddb4358719a34631bb79d15dc";
 export const tokenFRMxBSCMainnet = "0x8523518001ad5d24b2a04e8729743c0643a316c0";
 export const tokenUSDCBSCMainnet = "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d";
