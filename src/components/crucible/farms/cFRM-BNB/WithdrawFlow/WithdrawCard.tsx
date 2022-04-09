@@ -129,7 +129,7 @@ export const Withdraw = () => {
         response = await client.withdrawRewardsLPToken(dispatch, currency, userAddress, stakingAddress, network);
       } else if (isSingleTokenFarm(farm)) {
         currency = crucible[farm!]?.currency;
-        stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
+        stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
         amount = userStake?.rewardOf;
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
