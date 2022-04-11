@@ -26,27 +26,28 @@ import { ClipLoader } from "react-spinners";
 import { getCrucibleMaxMintCap } from "../../../../../_apis/CrucibleCapCrud";
 
 export const CrucibleDeposit = () => {
+  const dispatch = useDispatch();
+  const location: any = useLocation();
+  const history = useHistory();
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { farm } = useParams<{ farm?: string }>();
   const [transactionId, setTransactionId] = useState("");
+  const [maxCap, setMaxCap] = useState("");
+  const [mintAmount, setMintAmount] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessed, setIsProcessed] = useState(false); 
+  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
+  const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
+  const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
   const { isConnected, walletAddress, networkClient, } = useSelector((state: RootState) => state.walletConnector);
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const { approvals, } = useSelector((state: RootState) => state.approval);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
-  const [maxCap, setMaxCap] = useState("");
 
   useEffect(() => {
     getMaxCapInformation();
   }, [])
-
-  const getMaxCapInformation = async () => {
-    let response = await getCrucibleMaxMintCap();
-    let maxCapResponse = response && response.data && response.data.body && response.data.body.crucibleMintCap;
-    console.log(maxCapResponse);
-    farm?.includes('cFRMx') ? setMaxCap(maxCapResponse.cFRMxMaxCap) : setMaxCap(maxCapResponse.cFRMMaxCap);
-  }
-
 
   useEffect(() => {
     if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible?.baseCurrency)]) > 0) {
@@ -57,18 +58,11 @@ export const CrucibleDeposit = () => {
     // eslint-disable-next-line
   }, [approvals]);
 
-  const [mintAmount, setMintAmount] = useState(0);
-  const dispatch = useDispatch();
-  const location: any = useLocation();
-  const history = useHistory();
-  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
-  const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
-  const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [isProcessed, setIsProcessed] = useState(false);
-
-
-  console.log(tokenPrices, userCrucibleData, "tokenPricestokenPrices");
+  const getMaxCapInformation = async () => {
+    let response = await getCrucibleMaxMintCap();
+    let maxCapResponse = response && response.data && response.data.body && response.data.body.crucibleMintCap; 
+    farm?.includes('cFRMx') ? setMaxCap(maxCapResponse.cFRMxMaxCap) : setMaxCap(maxCapResponse.cFRMMaxCap);
+  }
 
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
