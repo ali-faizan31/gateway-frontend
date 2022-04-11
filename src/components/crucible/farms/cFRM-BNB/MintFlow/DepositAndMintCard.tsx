@@ -119,7 +119,7 @@ export const CrucibleDeposit = () => {
           }
         }
       } else { 
-        toast.error(`Error occured: You can't mint more than ${Number(maxCap)} ${userCrucibleData[farm!]?.baseSymbol}`)
+        toast.error(`You have entered an amount that exceeds your minting limit. Please enter a valid amount.`)
       }
     }
   };
