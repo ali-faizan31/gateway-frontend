@@ -218,8 +218,17 @@ export const Success = () => {
                       </FTypo>
                     </div>
                     <div className="card-whats-next-back">
-                      <FTypo>You can always mint more {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} to increase your pool share.</FTypo>
-                    </div>
+                    <span className="icon-wrap">
+                          {farm?.includes("cFRMx") ? (
+                            <img src={IconNetworkCFrmStr} height="40px" width="40px" alt="" />
+                          ) : (
+                            <img src={IconNetworkCFrmxStr} height="40px" width="40px" alt="" />
+                          )}
+                        </span>
+                      <FTypo size={20} weight={400} align={"center"}>
+                        Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
+                      </FTypo>
+                      </div> 
                   </div>
                 </FItem>
               </FGridItem>
