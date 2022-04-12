@@ -24,6 +24,7 @@ import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { ClipLoader } from "react-spinners";
 import { getCrucibleMaxMintCap } from "../../../../../_apis/CrucibleCapCrud";
+import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
 
 export const CrucibleDeposit = () => {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ export const CrucibleDeposit = () => {
   const [maxCap, setMaxCap] = useState("");
   const [mintAmount, setMintAmount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isProcessed, setIsProcessed] = useState(false); 
+  const [isProcessed, setIsProcessed] = useState(false);
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
   const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
@@ -50,8 +51,8 @@ export const CrucibleDeposit = () => {
   }, [])
 
   useEffect(() => {
-    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible?.baseCurrency)]) > 0) {
-      if (currentStep.step.name === "Approve") {
+     if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.baseCurrency)]) > 0) {
+       if (currentStep.step.name === "Approve" && currentStep.status !== "completed") { 
         getStepCompleted(false);
       }
     }
@@ -60,7 +61,7 @@ export const CrucibleDeposit = () => {
 
   const getMaxCapInformation = async () => {
     let response = await getCrucibleMaxMintCap();
-    let maxCapResponse = response && response.data && response.data.body && response.data.body.crucibleMintCap; 
+    let maxCapResponse = response && response.data && response.data.body && response.data.body.crucibleMintCap;
     farm?.includes('cFRMx') ? setMaxCap(maxCapResponse.cFRMxMaxCap) : setMaxCap(maxCapResponse.cFRMMaxCap);
   }
 
@@ -95,8 +96,8 @@ export const CrucibleDeposit = () => {
 
   const onMintClick = async (currency: string, crucibleAddress: string, amount: string, isPublic: boolean, network: string, userAddress: string) => {
     if (networkClient) {
-
       if (Number(amount) <= Number(maxCap)) {
+        dispatch(CrucibleActions.transactionProcessing())
         setTransitionStatusDialog(true);
         setIsProcessing(true);
         const web3Helper = new Web3Helper(networkClient as any);
@@ -104,6 +105,7 @@ export const CrucibleDeposit = () => {
 
         const response = await client.mintCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress);
         if (response) {
+          dispatch(CrucibleActions.transactionProcessed())
           let transactionId = response.split("|");
           setTransactionId(transactionId[0]);
           setIsProcessing(false);
@@ -112,7 +114,7 @@ export const CrucibleDeposit = () => {
             getStepCompleted(false);
           }
         }
-      } else { 
+      } else {
         toast.error(`You have entered an amount that exceeds your minting limit. Please enter a valid amount.`)
       }
     }
@@ -141,7 +143,7 @@ export const CrucibleDeposit = () => {
 
   const getOpenCapInfo = () => {
     if (Number(crucible[farm!]?.openCap) > 0) {
-      return `Minting Is Open ( ${crucible[farm!]?.openCap} Open Cap )`;
+      return `Minting Is Open ( ${TruncateWithoutRounding(crucible[farm!]?.openCap || "0", 3)} Open Cap )`;
     } else {
       return `Minting Is Closed ( ${crucible[farm!]?.openCap} Open Cap )`;
     }
@@ -214,7 +216,7 @@ export const CrucibleDeposit = () => {
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
             You have {Number(userCrucibleData[farm!]?.baseBalance || "0").toFixed(3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
-            You can mint maximum { (maxCap)} {userCrucibleData[farm!]?.baseSymbol}.
+            You can mint maximum {(maxCap)} {userCrucibleData[farm!]?.baseSymbol}.
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5 justify-content-space-between"}>
             Amount you will receive

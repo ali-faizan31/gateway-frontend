@@ -83,6 +83,7 @@ export const UnStake = () => {
       let userAddress: string = "";
       let response: any;
 
+      dispatch(CrucibleActions.transactionProcessing())
       setTransitionStatusDialog(true);
       setIsProcessing(true);
       const web3Helper = new Web3Helper(networkClient as any);
@@ -106,6 +107,7 @@ export const UnStake = () => {
         response = await client.UnStakeCrucible(dispatch, currency, stakeAmount, stakingAddress, userAddress, network);
       }
       if (response) {
+        dispatch(CrucibleActions.transactionProcessed())
         let transactionId = response.split("|");
         setTransactionId(transactionId[0]);
         setIsProcessing(false);

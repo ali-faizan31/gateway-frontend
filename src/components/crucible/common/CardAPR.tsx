@@ -29,7 +29,7 @@ export const CardAPR = () => {
 
   const { isConnected, networkClient } = useSelector((state: RootState) => state.walletConnector);
 
-  console.log(selectedCrucible, userLpStakingDetails)
+  // console.log(selectedCrucible, userLpStakingDetails)
 
   useEffect(() => {
     setIsLoading(true);
@@ -59,7 +59,7 @@ export const CardAPR = () => {
   ];
 
   const getTotalDeposited = (farm: any) => {
-    return Number(selectedCrucible[farm!]?.leftFromCap)
+    return Number(TruncateWithoutRounding(selectedCrucible[farm!]?.leftFromCap || "0", 3))
     // return TruncateWithoutRounding(Number(selectedCrucible[farm!]?.leftFromCap), 3);
     // let leftCap = Number(selectedCrucible[farm!]?.openCap) - Number(selectedCrucible[farm!]?.leftFromCap);
     // return `${leftCap} / 100`;
@@ -67,7 +67,7 @@ export const CardAPR = () => {
 
   const getYourDeposited = (farm: any, lpAddress: any) => {
     let userStake = (userCrucibleDetails[farm!]?.stakes || []).find((e: any) => e.address.toLowerCase() === lpAddress);
-    return farm?.includes("BNB") ? Number(userLpStakingDetails[farm!]?.stake || "0") : Number(userStake?.stakeOf || "0").toFixed(3);
+    return farm?.includes("BNB") ? Number(TruncateWithoutRounding(userLpStakingDetails[farm!]?.stake || "0", 3)) : Number(TruncateWithoutRounding(userStake?.stakeOf || "0", 3));
   };
 
   const getYourRewards = (farm: any, lpAddress: any) => {
@@ -220,7 +220,7 @@ export const CardAPR = () => {
   const getStepToRender = async (id: any, stepFlowName: any, contract: string, network: string, LpCurrency?: string, LPstakingAddress?: string, farm?: any) => {
     if (isConnected && tokenV2) {
       setIsLoading(true);
-      console.log("on manage click", currentStep, currentStepIndex, stepFlowStepHistory);
+      // console.log("on manage click", currentStep, currentStepIndex, stepFlowStepHistory);
       getLatestStepToRender(
         { id, stepFlowName, contract, network, LpCurrency, LPstakingAddress },
         tokenV2,

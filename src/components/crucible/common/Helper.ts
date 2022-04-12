@@ -71,7 +71,7 @@ export const renderComponent = (
   farm: any
 ) => {
   // console.log(state, stepFlowStepName, "render");
-  console.log(stepFlowStepName, farm, state);
+  // console.log(stepFlowStepName, farm, state);
   switch (state.stepFlowName) {
     case `${getHumanReadableFarmName(
       farm
@@ -336,7 +336,7 @@ export const getLatestStepToRender = async (
     );
     latestResponse = latestResponse.data && latestResponse.data.body && latestResponse.data.body.stepFlowStepsHistory;
     if ( saveCurrentPrefernces ){
-      console.log('save prefence flow')
+      // console.log('save prefence flow')
       saveCurrentPreferncesInNewSequence(latestResponse, stepFlowStepsHistory, token)
     }
     setIsLoading(false);
@@ -346,14 +346,14 @@ export const getLatestStepToRender = async (
     // dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: sequenceResponse }));
     // renderNeeded && renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
   } catch (e: any) {
-    console.log("restart failed");
-    console.log("state : ", state);
-    console.log("token : ", token);
-    console.log("currentStep : ", currentStep);
-    console.log("currentStepIndex : ", currentStepIndex);
-    console.log("stepFlowStepsHistory : ", stepFlowStepsHistory);
-    console.log("renderNeeded : ", renderNeeded);
-    console.log("farm : ", farm);
+    // console.log("restart failed");
+    // console.log("state : ", state);
+    // console.log("token : ", token);
+    // console.log("currentStep : ", currentStep);
+    // console.log("currentStepIndex : ", currentStepIndex);
+    // console.log("stepFlowStepsHistory : ", stepFlowStepsHistory);
+    // console.log("renderNeeded : ", renderNeeded);
+    // console.log("farm : ", farm);
     let errorResponse = e && e.response && e.response.data.status;
     if (errorResponse?.code === 400) {
       try {
@@ -371,13 +371,13 @@ export const getLatestStepToRender = async (
           latestResponse.data &&
           latestResponse.data.body &&
           latestResponse.data.body.stepFlowStepsHistory;
-          console.log('latest response:' ,latestResponse )
+          // console.log('latest response:' ,latestResponse )
         let pendingStepInfo = getLatestStepWithPendingStatus(currentStepIndex, latestResponse);
 
-        console.log(pendingStepInfo, "pendingstep");
+        // console.log(pendingStepInfo, "pendingstep");
         if ( currentStepIndex && currentStepIndex + 1 === stepFlowStepsHistory.length) {
           //last step, move onto next step flow
-          console.log("last step condition");
+          // console.log("last step condition");
           dispatch(
             CrucibleActions.updateCurrentStep({
               currentStep: pendingStepInfo?.pendingStep,
@@ -402,7 +402,7 @@ export const getLatestStepToRender = async (
           pendingStepInfo?.pendingStep.step.name === currentStep?.step?.name
         ) {
           //same step rendered
-          console.log("same step condition");
+          // console.log("same step condition");
           dispatch(
             CrucibleActions.updateCurrentStep({
               currentStep: pendingStepInfo?.pendingStep,
@@ -416,7 +416,7 @@ export const getLatestStepToRender = async (
           );
         } 
         else {
-          console.log("next step condition", pendingStepInfo);
+          // console.log("next step condition", pendingStepInfo);
           dispatch(
             CrucibleActions.updateStepFlowStepHistory({
               stepFlowStepHistory: latestResponse,
@@ -472,7 +472,7 @@ export const getLatestStepToRender = async (
 export const getLatestStepWithPendingStatus = (currentStepIndex:any, stepResponse: any) => {
   let previous: any = {};
   let current: any = {};
-  console.log('in pending step')
+  // console.log('in pending step')
   for (let i = 0; i < stepResponse.length; i++) {
     if (i === 0) {
       previous = stepResponse[i];
@@ -483,7 +483,7 @@ export const getLatestStepWithPendingStatus = (currentStepIndex:any, stepRespons
       //   return { pendingStep: previous, index: i };
       // }
       if (previous.status === "pending") {
-        console.log('returning pending:', previous)
+        // console.log('returning pending:', previous)
         return { pendingStep: previous, index: i };
       }
     } else {
@@ -493,7 +493,7 @@ export const getLatestStepWithPendingStatus = (currentStepIndex:any, stepRespons
         (previous.status === "skip" || previous.status === "started" || previous.status === "completed") && 
         ( current.status === "pending")
       ) {
-        console.log('returning pending:', current)
+        // console.log('returning pending:', current)
         return { pendingStep: current, index: i };
       }
     }

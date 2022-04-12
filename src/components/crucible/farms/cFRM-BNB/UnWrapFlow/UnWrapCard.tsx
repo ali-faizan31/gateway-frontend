@@ -24,6 +24,7 @@ import {
 import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
+import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
 
 export const UnWrap = () => {
   const location: any = useLocation();
@@ -98,8 +99,7 @@ export const UnWrap = () => {
     if (currentStep.status === "pending") {
       location.state.id = currentStep.stepFlow;
       let splitted = currentStep.stepFlowStep.name.split("-");
-      location.state.name = splitted[0].trim() + " - " + splitted[1].trim();
-      console.log(currentStep, location);
+      location.state.name = splitted[0].trim() + " - " + splitted[1].trim(); 
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
     }
   };
@@ -150,8 +150,8 @@ export const UnWrap = () => {
             className={"f-mt-1"}
             inputSize="input-lg"
             type={"text"}
-            placeholder="0"
-            value={amount}
+            placeholder="0" 
+            value={amount === 0 ? "" : amount}
             onChange={(e: any) => setAmount(e.target.value)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1"}>
@@ -160,7 +160,7 @@ export const UnWrap = () => {
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {userCrucibleData[farm!]?.balance || "0"} available in Token {userCrucibleData[farm!]?.symbol}.
+            You have {TruncateWithoutRounding(userCrucibleData[farm!]?.balance || "0", 3)} available in Token {userCrucibleData[farm!]?.symbol}.
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5"}>
             Amount you will receive
@@ -194,7 +194,7 @@ export const UnWrap = () => {
                   ></FButton>
                 </div>
               )}
-              currency={crucible[farm!].currency}
+              currency={crucible[farm!]?.currency}
               contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
               userAddress={walletAddress as string}
               amount={"0.0001"}

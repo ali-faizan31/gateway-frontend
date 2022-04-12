@@ -72,7 +72,12 @@ export const Stake = () => {
 
 
   useEffect(() => {
-    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.baseCurrency)]) > 0) {
+    // console.log(Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
+    // console.log((approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
+    // console.log(approvals)
+    // console.log(crucible[farm!]?.currency)
+    // console.log(crucible[farm!])
+    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]) > 0) {
       if (currentStep.step.name === "Approve" && currentStep.status !== "completed") {
         getStepCompleted(false);
       }
@@ -117,7 +122,8 @@ export const Stake = () => {
       let network: string = "";
       let userAddress: string = "";
       let response: any;
-
+      
+      dispatch(CrucibleActions.transactionProcessing())
       setTransitionStatusDialog(true);
       setIsProcessing(true);
       const web3Helper = new Web3Helper(networkClient as any);
@@ -131,12 +137,7 @@ export const Stake = () => {
         userAddress = walletAddress as string;
 
         response = await client.stakeLPToken(dispatch, currency, userAddress, stakingAddress, network, amount);
-      } else if (isSingleTokenFarm(farm)) {
-        // if (farm === "cFRMx") {
-        //   stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
-        // } else if (farm === "cFRM") {
-        //   stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
-        // }
+      } else if (isSingleTokenFarm(farm)) { 
         stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
         currency = crucible[farm!].currency;
         amount = amountToStake.toString();
@@ -146,6 +147,7 @@ export const Stake = () => {
         response = await client.StakeCrucible(dispatch, currency, amount, stakingAddress, userAddress, network);
       }
       if (response) {
+        dispatch(CrucibleActions.transactionProcessed())
         let transactionId = response.split("|");
         setTransactionId(transactionId[0]);
         setIsProcessing(false);
@@ -165,8 +167,7 @@ export const Stake = () => {
     }
   };
 
-  const getAmount = () => {
-    console.log(crucible, crucible[farm!], userCrucibleData, userCrucibleData[farm!])
+  const getAmount = () => { 
     if (farm?.includes("BNB")) {
       return Number(TruncateWithoutRounding(crucible[farm!]?.LP_balance || 0, 3));
     } else {
@@ -175,8 +176,7 @@ export const Stake = () => {
   };
 
   const getAmountSymbol = () => {
-    if (farm?.includes("BNB")) {
-      console.log(crucible);
+    if (farm?.includes("BNB")) { 
       return `${crucible[farm!]?.LP_symbol} ${crucible[farm!]?.symbol}-BNB`;
     } else {
       return crucible[farm!]?.symbol;

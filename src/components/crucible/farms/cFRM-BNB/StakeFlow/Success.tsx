@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import { STEP_FLOW_IDS } from "../../../common/utils";
 import { ClipLoader } from "react-spinners";
+import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 export const Success = () => {
   const dispatch = useDispatch();
@@ -28,11 +29,18 @@ export const Success = () => {
   const { tokenV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
 
   useEffect(() => {
-    getStepCompleted(false);
-    // eslint-disable-next-line
+    if (location.state === undefined) {
+      history.push({ pathname: PATH_DASHBOARD.crucible.index });
+    } 
   }, []);
+  
+  useEffect(() => { 
+    if ( currentStep && currentStep._id && currentStep.status === "pending" ){ 
+      getStepCompleted(false);
+    } 
+  }, [currentStep]);
 
-  const getStepCompleted = async (renderNeeded: any) => {
+  const getStepCompleted = async (renderNeeded: any) => { 
     setIsLoading(true);
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
@@ -58,7 +66,7 @@ export const Success = () => {
     } catch (e: any) {
       let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
       errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
-    }
+    } 
   };
 
   const getFistCardData = (direction: any) => {
@@ -151,7 +159,7 @@ export const Success = () => {
           </FItem>
         </FCard>
       ) : (
-        <FContainer className="f-mr-0">
+        <FContainer  width={700}>
           <CrucibleMyBalance />
           <FCard variant={"secondary"} className="card-congrats">
             <FItem align="center">

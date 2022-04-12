@@ -16,6 +16,7 @@ import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import { STEP_FLOW_IDS } from "../../../common/utils";
 import { ClipLoader } from "react-spinners";
+import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 export const Success = () => {
   const dispatch = useDispatch();
@@ -26,12 +27,19 @@ export const Success = () => {
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const { tokenV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
-
+  
   useEffect(() => {
-    getStepCompleted(false);
-    // eslint-disable-next-line
+    if (location.state === undefined) {
+      history.push({ pathname: PATH_DASHBOARD.crucible.index });
+    } 
   }, []);
-
+  
+  useEffect(() => { 
+    if ( currentStep && currentStep._id && currentStep.status === "pending" ){ 
+      getStepCompleted(false);
+    } 
+  }, [currentStep]);
+  
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
     try {
@@ -107,7 +115,7 @@ export const Success = () => {
           </FItem>
         </FCard>
       ) : (
-        <FContainer className="f-mr-0">
+        <FContainer  width={700}>
           <CrucibleMyBalance />
           <FCard variant={"secondary"} className="card-congrats">
             <FItem align="center">

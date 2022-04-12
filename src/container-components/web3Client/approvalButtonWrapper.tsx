@@ -172,12 +172,12 @@ export function ApprovableButtonWrapper(ownProps: IApprovableButtonWrapperOwnPro
       dispatch(doGetApproval({ userAddress, contractAddress, currency, networkClient }));
     }
     if (library && !networkClient) {
-      console.log("web3 react connect set network client");
+      // console.log("web3 react connect set network client");
       setNetworkClient(library);
     }
     // eslint-disable-next-line
-  }, [userAddress, contractAddress, currency, status, networkClient]);
-  console.log(currentApproval, BigUtils.safeParse(currentApproval).lt(BigUtils.safeParse(ownProps.amount || "0.0001")));
+  }, [userAddress, contractAddress, currency, status, networkClient]); 
+  
   return (
     <>
       <div>

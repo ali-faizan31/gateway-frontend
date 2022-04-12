@@ -40,19 +40,19 @@ export const chainEventsSlice = createSlice({
   initialState: {} as { [k: string]: ChainEventBase },
   reducers: {
     watchEvent: (state, action) => {
-      console.log("WATCH CALLED!", action);
+      // console.log("WATCH CALLED!", action);
       if (!state[action.payload.id]) {
         state[action.payload.id] = action.payload;
       }
     },
     unwatchEvent: (state, action) => {
-      console.log("UNWATCH CALLED!", action);
+      // console.log("UNWATCH CALLED!", action);
       if (!!state[action.payload.id]) {
         delete state[action.payload.id];
       }
     },
     eventUpdated: (state, action) => {
-      console.log("UPDATING ACTION", action.payload.id);
+      // console.log("UPDATING ACTION", action.payload.id);
       state[action.payload.id] = action.payload;
     },
   },
@@ -64,7 +64,7 @@ const refreshPendingThunk = createAsyncThunk(
     // Only applies to the fully signed in and initialized state...
     const we = state.watchEvents;
     const items = Object.values(we);
-    console.log("WATCHING ", { we });
+    // console.log("WATCHING ", { we });
     // Group by event type..
     items.forEach(async (et) => {
       const eventItem = et;
@@ -73,10 +73,10 @@ const refreshPendingThunk = createAsyncThunk(
         d: Dispatch<AnyAction>
       ) => Promise<ChainEventBase> = (eventItem as any).updater;
       const res = await updater(eventItem as any, thunk.dispatch);
-      console.log("UPDATED EVENT", { res });
+      // console.log("UPDATED EVENT", { res });
       if (!!res) {
         if (res.status !== "pending") {
-          console.log("UNWATCHING", { res });
+          // console.log("UNWATCHING", { res });
           thunk.dispatch(chainEventsSlice.actions.unwatchEvent(res));
         } else {
           thunk.dispatch(chainEventsSlice.actions.eventUpdated(res));
