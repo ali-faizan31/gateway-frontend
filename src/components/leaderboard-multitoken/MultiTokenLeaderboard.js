@@ -327,8 +327,7 @@ const MultiTokenLeaderboardInformation = ({frmUsdcValue, frmxUsdcValue,leaderboa
       let userList = res.data.body.users; 
       filteredTokenHolderList.forEach((holder) => {
         userList.forEach((user) => { 
-              if (user.addresses.find((x) => x.address === holder.address)) {
-                console.log(user, holder);
+              if (user.addresses.find((x) => x.address === holder.address)) { 
                 holder.email = user.email 
             };
           });

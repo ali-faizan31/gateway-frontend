@@ -144,7 +144,7 @@ const DashboardHeader = ({ title }: any) => {
                         {getFormattedWalletAddress(walletAddress)}
                       </FCard>
                       <FCard className={"no-left-margin custom-padding-10 d-flex custom-border-radius-4"} variant={"primary"}>
-                        {TruncateWithoutRounding(getFormattedBalance(walletBalance), 3)} {currentNetworkInformation && currentNetworkInformation?.networkCurrencySymbol}
+                        {TruncateWithoutRounding(getFormattedBalance(walletBalance), 3)} {currentNetworkInformation && currentNetworkInformation?.mainnetCurrencySymbol}
                       </FCard>
                     </FItem>
                   </FCard>
@@ -152,8 +152,7 @@ const DashboardHeader = ({ title }: any) => {
               )}
               <MetaMaskConnector.WalletConnector
                 WalletConnectView={FButton}
-                WalletConnectModal={ConnectWalletDialog}
-                isAuthenticationNeeded={true}
+                WalletConnectModal={ConnectWalletDialog} 
                 WalletConnectViewProps={{
                   className: isConnected ? "no-left-margin connect-button-left-borders" : "no-left-margin",
                 }}
