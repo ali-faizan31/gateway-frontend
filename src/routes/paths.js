@@ -63,6 +63,7 @@ export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   general: {
     leaderboard: "/pub/multi/leaderboard/61b6d48337f5125acbbfddeb",
+    singleLeaderboardForDashboard: "/dashboard/leaderboard",
     leaderboardForDashboard: "/dashboard/multi/leaderboard",
     createLeaderboard: path(ROOTS_DASHBOARD, "/leaderboard/create"),
     leaderboardManagement: path(ROOTS_DASHBOARD, "/leaderboard/management"),

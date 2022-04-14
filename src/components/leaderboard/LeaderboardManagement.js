@@ -61,7 +61,11 @@ const LeaderboardManagement = () => {
   };
 
   const onDetailClick = (row) => {
-    history.push(`${PATH_DASHBOARD.general.leaderboardForDashboard}/${row._id}`);
+    if(row && row.leaderboardCurrencyAddressesByNetwork && row.leaderboardCurrencyAddressesByNetwork.length > 1){
+      history.push(`${PATH_DASHBOARD.general.leaderboardForDashboard}/${row._id}`);
+    }else {
+      history.push(`${PATH_DASHBOARD.general.singleLeaderboardForDashboard}/${row._id}`);
+    }
   };
 
   const openCreateLeaderboard = () => {
@@ -155,7 +159,13 @@ const LeaderboardManagement = () => {
   };
 
   const copyPublicUrl = (row) => {
-    const publicUrl = `${window.location.origin}/pub/leaderboard/${row._id}`;
+
+    let publicUrl = ""
+    if(row && row.leaderboardCurrencyAddressesByNetwork && row.leaderboardCurrencyAddressesByNetwork.length > 1){
+      publicUrl = `${window.location.origin}/pub/multi/leaderboard/${row._id}`;
+    }else {
+      publicUrl = `${window.location.origin}/pub/leaderboard/${row._id}`;
+    }
     const { clipboard } = navigator;
 
     if (clipboard !== undefined && clipboard !== "undefined") {
@@ -168,11 +178,19 @@ const LeaderboardManagement = () => {
         }
       );
     }
+
   };
 
   const openPublicUrl = (row) => {
-    const publicUrl = `${window.location.origin}/pub/leaderboard/${row._id}`;
+
+    let publicUrl = ""
+    if(row && row.leaderboardCurrencyAddressesByNetwork && row.leaderboardCurrencyAddressesByNetwork.length > 1){
+      publicUrl = `${window.location.origin}/pub/multi/leaderboard/${row._id}`;
+    }else {
+      publicUrl = `${window.location.origin}/pub/leaderboard/${row._id}`;
+    }
     window.open(publicUrl, "_blank");
+    
   };
 
   const publicUrlActions = (params) => (
