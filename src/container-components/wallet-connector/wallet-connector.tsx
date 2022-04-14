@@ -14,8 +14,7 @@ import * as walletAuthenticatorActions from "../../components/common/wallet-auth
 
 export const WalletConnector = ({
   WalletConnectView,
-  WalletConnectModal,
-  isAuthenticationNeeded,
+  WalletConnectModal, 
   WalletConnectViewProps,
 }: WalletConnectorProps) => {
   const [showWalletDialog, setShowWalletDialog] = useState<boolean>(false);
@@ -34,10 +33,7 @@ export const WalletConnector = ({
     //  signature, isAllowedonGateway, allowedNetworksonGateway, getSignatureFromMetamask, tokenV2, meV2
   } = useSelector((state: RootState) => state.walletAuthenticator);
 
-  useEffect(() => {
-    // console.log(isAuthenticationNeeded, "isAuthenticationNeeded");
-  }, [isAuthenticationNeeded]);
-
+  
   useEffect(() => {
     if (
       account &&

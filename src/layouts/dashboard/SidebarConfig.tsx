@@ -4,6 +4,7 @@ import {
   // PATH_ADMIN,
   PATH_DASHBOARD,
 } from "../../routes/paths";
+import { cFRMx_Competition_Details, cFRM_Competition_Details, FRM_FRMx_leaderboard_Details } from "../../utils/const.utils";
 
 const getSideMenuIcon = (name: any) => (
   <img
@@ -99,7 +100,26 @@ export const publicMultiLeaderboardConfig = [
   },
 ];
 
-export const sidebarConfig = [
+export const orgLeaderboardAndCompetitionSidebarConfig = [
+  {
+    title: "Leaderboard",
+    path: PATH_DASHBOARD.root,
+    icon: ICONS.leaderboard,
+    children: [
+      {
+        title: "Create Leaderboard",
+        path: PATH_DASHBOARD.general.createLeaderboard,
+      },
+      {
+        title: "Leaderboard Management",
+        path: PATH_DASHBOARD.general.leaderboardManagement,
+      },
+      {
+        title: `${FRM_FRMx_leaderboard_Details.name}`,
+        path: `${PATH_DASHBOARD.general.multiLeaderboardForDashboard}/${FRM_FRMx_leaderboard_Details.id}`,
+      },
+    ],
+  },
   {
     title: "Competition",
     path: PATH_DASHBOARD.general.competition,
@@ -113,6 +133,28 @@ export const sidebarConfig = [
         title: "Competition Management",
         path: PATH_DASHBOARD.general.competitionManagement,
       },
+      {
+        title: `${cFRM_Competition_Details.name}`,
+        path: `${PATH_DASHBOARD.general.competition}/${cFRM_Competition_Details.id}`,
+      },
+      {
+        title: `${cFRMx_Competition_Details.name}`,
+        path: `${PATH_DASHBOARD.general.competition}/${cFRMx_Competition_Details.id}`,
+      }
+    ],
+  }, 
+];
+
+export const publicLeaderboardAndCompetitionSidebarConfig = [
+  {
+    title: "Leaderboard",
+    path: PATH_PUBLIC_USER.root,
+    icon: ICONS.leaderboard,
+    children: [
+      {
+        title: `${FRM_FRMx_leaderboard_Details.name}`,
+        path: `${PATH_PUBLIC_USER.multiLeaderboard.root}/${FRM_FRMx_leaderboard_Details.id}`,
+      },
     ],
   },
   {
@@ -121,40 +163,15 @@ export const sidebarConfig = [
     icon: ICONS.competition,
     children: [
       {
-        title: "A2 Competition",
-        path: PATH_DASHBOARD.general.specificCompetition,
+        title: `${cFRM_Competition_Details.name}`,
+        path: `${PATH_PUBLIC_USER.competition.root}/${cFRM_Competition_Details.id}`,
+      },
+      {
+        title: `${cFRMx_Competition_Details.name}`,
+        path: `${PATH_PUBLIC_USER.competition.root}/${cFRMx_Competition_Details.id}`,
       }
     ],
-  },
-  {
-    title: "Leaderboard",
-    path: PATH_DASHBOARD.general.leaderboard,
-    icon: ICONS.leaderboard,
-    children: [
-      {
-        title: "Create Leaderboard",
-        path: PATH_DASHBOARD.general.createLeaderboard,
-      },
-      {
-        title: "Leaderboard Management",
-        path: PATH_DASHBOARD.general.leaderboardManagement,
-      },
-    ],
-  },
-];
-
-export const communityLeaderboardSidebarConfig = [
-  {
-    title: "Leaderboard",
-    path: PATH_DASHBOARD.general.leaderboard,
-    icon: ICONS.leaderboard,
-    children: [
-      {
-        title: "FRM & FRMx BSC Leaderboard",
-        path: PATH_DASHBOARD.general.leaderboard,
-      },
-    ],
-  },
+  }
 ];
 
 export const tokensSidebarConfig = [
@@ -185,7 +202,7 @@ export const homeSidebarConfig = [
   {
     title: "Home",
     icon: ICONS.home,
-    path: PATH_DASHBOARD.general.leaderboard,
+    path: `${PATH_PUBLIC_USER.competition.root}/${cFRMx_Competition_Details.id}`,
   },
 ];
 

@@ -4,13 +4,13 @@ import toast from "react-hot-toast";
 // import { useSelector, RootStateOrAny } from "react-redux";
 import {
   publicLeaderboardConfig,
-  sidebarConfig,
+  orgLeaderboardAndCompetitionSidebarConfig,
   publicMultiLeaderboardConfig,
   publicCompetitionConfig,
   tokensSidebarConfig,
   bridgeSidebarConfig,
   homeSidebarConfig,
-  communityLeaderboardSidebarConfig,
+  publicLeaderboardAndCompetitionSidebarConfig,
   crucibleConfig,
   // GET_PATHS,
   // GET_ICONS,
@@ -27,7 +27,7 @@ import {
   // getAllCompetitions,
 } from "../../_apis/CompetitionCrud";
 import { localStorageHelper } from "../../utils/global.utils";
-import { ME_TAG, TOKEN_TAG } from "../../utils/const.utils";
+import { ME_TAG, ORG_ROLE_TAG, TOKEN_TAG } from "../../utils/const.utils";
 // import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 
 const DashboardSidebar = () => {
@@ -287,12 +287,12 @@ const DashboardSidebar = () => {
 
   return (
     <FSider>
-      {renderContent(homeSidebarConfig)}
       {/* {renderContent(sideMenuItems)} */}
-      {localStorageHelper.load(ME_TAG)?.role === "organizationAdmin" && renderContent(sidebarConfig)}
-      {/* {(isPublicLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig)}  */}
-      {isStakingLeaderboard && renderContent(sideConfig)}
-      {renderContent(communityLeaderboardSidebarConfig)}
+      {renderContent(homeSidebarConfig)}
+      {localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG ? 
+      renderContent(orgLeaderboardAndCompetitionSidebarConfig) :
+      renderContent(publicLeaderboardAndCompetitionSidebarConfig)} 
+      {/* {isStakingLeaderboard && renderContent(sideConfig)}  update for fomo */} 
       {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
       {showCrucibleMenu && renderContent(crucibleConfig)}
