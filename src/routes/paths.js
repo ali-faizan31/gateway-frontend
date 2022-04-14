@@ -62,8 +62,9 @@ export const PATH_PUBLIC_USER = {
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   general: {
-    leaderboard: "/pub/multi/leaderboard/61b6d48337f5125acbbfddeb",
-    leaderboardForDashboard: "/dashboard/multi/leaderboard",
+    // leaderboard: "/pub/multi/leaderboard/61b6d48337f5125acbbfddeb",
+    singleLeaderboardForDashboard: "/dashboard/leaderboard",
+    multiLeaderboardForDashboard: "/dashboard/multi/leaderboard",
     createLeaderboard: path(ROOTS_DASHBOARD, "/leaderboard/create"),
     leaderboardManagement: path(ROOTS_DASHBOARD, "/leaderboard/management"),
     detailLeaderBoardById: path(ROOTS_DASHBOARD, "/leaderboard:id"),

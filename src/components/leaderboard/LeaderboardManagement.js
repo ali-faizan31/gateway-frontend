@@ -39,8 +39,7 @@ const LeaderboardManagement = () => {
       .then((res) => {
         if (query === "") {
           if (res?.data?.body?.leaderboards?.length) {
-            const { leaderboards } = res.data.body;
-            console.log(leaderboards);
+            const { leaderboards } = res.data.body; 
             setLeaderboardList(leaderboards);
           }
         } else if (query) {
@@ -61,7 +60,11 @@ const LeaderboardManagement = () => {
   };
 
   const onDetailClick = (row) => {
-    history.push(`${PATH_DASHBOARD.general.leaderboardForDashboard}/${row._id}`);
+    if(row && row.leaderboardCurrencyAddressesByNetwork && row.leaderboardCurrencyAddressesByNetwork.length > 1){
+      history.push(`${PATH_DASHBOARD.general.multiLeaderboardForDashboard}/${row._id}`);
+    }else {
+      history.push(`${PATH_DASHBOARD.general.singleLeaderboardForDashboard}/${row._id}`);
+    }
   };
 
   const openCreateLeaderboard = () => {
@@ -144,8 +147,7 @@ const LeaderboardManagement = () => {
 
   const networkFormatter = (params) => {
     let network;
-    let chainId = params?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId;
-    console.log(params);
+    let chainId = params?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.network?.chainId; 
     for (let i = 0; i < chainIdList.length; i += 1) {
       if (chainIdList[i].id === chainId) {
         network = chainIdList[i].label;
@@ -155,7 +157,13 @@ const LeaderboardManagement = () => {
   };
 
   const copyPublicUrl = (row) => {
-    const publicUrl = `${window.location.origin}/pub/leaderboard/${row._id}`;
+
+    let publicUrl = ""
+    if(row && row.leaderboardCurrencyAddressesByNetwork && row.leaderboardCurrencyAddressesByNetwork.length > 1){
+      publicUrl = `${window.location.origin}/pub/multi/leaderboard/${row._id}`;
+    }else {
+      publicUrl = `${window.location.origin}/pub/leaderboard/${row._id}`;
+    }
     const { clipboard } = navigator;
 
     if (clipboard !== undefined && clipboard !== "undefined") {
@@ -168,11 +176,19 @@ const LeaderboardManagement = () => {
         }
       );
     }
+
   };
 
   const openPublicUrl = (row) => {
-    const publicUrl = `${window.location.origin}/pub/leaderboard/${row._id}`;
+
+    let publicUrl = ""
+    if(row && row.leaderboardCurrencyAddressesByNetwork && row.leaderboardCurrencyAddressesByNetwork.length > 1){
+      publicUrl = `${window.location.origin}/pub/multi/leaderboard/${row._id}`;
+    }else {
+      publicUrl = `${window.location.origin}/pub/leaderboard/${row._id}`;
+    }
     window.open(publicUrl, "_blank");
+    
   };
 
   const publicUrlActions = (params) => (

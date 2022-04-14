@@ -4,17 +4,17 @@ import toast from "react-hot-toast";
 // import { useSelector, RootStateOrAny } from "react-redux";
 import {
   publicLeaderboardConfig,
-  sidebarConfig,
+  orgLeaderboardAndCompetitionSidebarConfig,
   publicMultiLeaderboardConfig,
   publicCompetitionConfig,
   tokensSidebarConfig,
   bridgeSidebarConfig,
   homeSidebarConfig,
-  communityLeaderboardSidebarConfig,
+  publicLeaderboardAndCompetitionSidebarConfig,
   crucibleConfig,
   // GET_PATHS,
-  // GET_ICONS,
-  // getCurrencyIcon,
+  // // GET_ICONS,
+  // getIcon,
 } from "./SidebarConfig";
 import { useLocation, useParams } from "react-router-dom";
 import { PATH_DASHBOARD } from "../../routes/paths";
@@ -27,11 +27,11 @@ import {
   // getAllCompetitions,
 } from "../../_apis/CompetitionCrud";
 import { localStorageHelper } from "../../utils/global.utils";
-import { ME_TAG, TOKEN_TAG } from "../../utils/const.utils";
+import { ME_TAG, ORG_ROLE_TAG, TOKEN_TAG } from "../../utils/const.utils";
 // import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 
 const DashboardSidebar = () => {
-  let showCrucibleMenu = true;
+  let showCrucibleMenu = false;
   const { id }: any = useParams();
   const { pathname } = useLocation();
   let token = localStorage.getItem(TOKEN_TAG);
@@ -261,7 +261,7 @@ const DashboardSidebar = () => {
   //   await setSideConfig(mappedData);
   // };
 
-  const renderContent = (items: any) => {
+  const renderContent = (items: any) => { 
     return items.map((item: any, index: any) => (
       <>
         {
@@ -272,7 +272,7 @@ const DashboardSidebar = () => {
                   <FSiderItem
                     to={subItem.path}
                     title={subItem.title}
-                    prefix={<img src="/ferrum/bullet.png" height={"4px"} alt="side menut item" />}
+                    prefix={subItem.icon ? subItem.icon : <img src="/ferrum/bullet.png" className="side-menu-img" alt="side menut item" />}
                     key={sudIndex}
                     target={subItem.target && subItem.target}
                   ></FSiderItem>
@@ -287,12 +287,12 @@ const DashboardSidebar = () => {
 
   return (
     <FSider>
-      {renderContent(homeSidebarConfig)}
       {/* {renderContent(sideMenuItems)} */}
-      {localStorageHelper.load(ME_TAG)?.role === "organizationAdmin" && renderContent(sidebarConfig)}
-      {/* {(isPublicLeaderboard || isPublicMultiLeaderboard || isPublicCompetition)  && renderContent(sideConfig)}  */}
-      {isStakingLeaderboard && renderContent(sideConfig)}
-      {renderContent(communityLeaderboardSidebarConfig)}
+      {renderContent(homeSidebarConfig)}
+      {localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG ? 
+      renderContent(orgLeaderboardAndCompetitionSidebarConfig) :
+      renderContent(publicLeaderboardAndCompetitionSidebarConfig)} 
+      {/* {isStakingLeaderboard && renderContent(sideConfig)}  update for fomo */} 
       {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
       {showCrucibleMenu && renderContent(crucibleConfig)}

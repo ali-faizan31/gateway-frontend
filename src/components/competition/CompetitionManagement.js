@@ -66,8 +66,7 @@ const CompetitionManagement = () => {
     );
   };
 
-  const onEditStatusClick = (params) => {
-    console.log(params);
+  const onEditStatusClick = (params) => { 
     setSelectedCompetitionData(params);
     setShowDialog(true);
   };
