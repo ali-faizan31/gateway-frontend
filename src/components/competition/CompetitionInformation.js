@@ -41,7 +41,7 @@ const CompetitionInformation = () => {
     useEffect(() => {
         setIsLoading(true);
         getCompetition();
-    }, []);
+    }, [id]);
 
     useEffect(() => {
         if (Object.keys(leaderboardData).length) {
@@ -110,6 +110,7 @@ const CompetitionInformation = () => {
                     });
                     setCompetitionParticipants(formattedRes);
                     setCompetitionParticipantsFiltered(formattedRes);
+                    setIsLoading(false);
                 } else {
                     setIsLoading(false);
                 }
@@ -281,17 +282,16 @@ const CompetitionInformation = () => {
                             <h1>{competitionData?.name || 'Competition'}</h1>
                         </FGridItem>
                         <FGridItem size={[2, 2, 2]} alignX="start" alignY="end">
-                            {competitionParticipants?.length ? (
+                            {(!isPublicUser) && (
                                 <FButton
                                     type="button"
                                     className="btn-create f-ml-1"
+                                    disabled={isLoading || !competitionParticipants?.length }
                                     onClick={showAllWallets}
                                     title={`${
                                         showWallets ? 'Hide' : 'Show'
                                     } Wallets`}
                                 />
-                            ) : (
-                                ''
                             )}
                         </FGridItem>
                         <FGridItem
@@ -313,7 +313,7 @@ const CompetitionInformation = () => {
                                 <FButton
                                     type="button"
                                     className="btn-create f-ml-1"
-                                    disabled={!isLoading}
+                                    disabled={isLoading || !competitionParticipants?.length }
                                     onClick={onExportClick}
                                     title={' Export to CSV'}
                                 />
