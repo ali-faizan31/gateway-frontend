@@ -13,8 +13,8 @@ import {
   publicLeaderboardAndCompetitionSidebarConfig,
   crucibleConfig,
   // GET_PATHS,
-  // GET_ICONS,
-  // getCurrencyIcon,
+  // // GET_ICONS,
+  // getIcon,
 } from "./SidebarConfig";
 import { useLocation, useParams } from "react-router-dom";
 import { PATH_DASHBOARD } from "../../routes/paths";
@@ -261,7 +261,7 @@ const DashboardSidebar = () => {
   //   await setSideConfig(mappedData);
   // };
 
-  const renderContent = (items: any) => {
+  const renderContent = (items: any) => { 
     return items.map((item: any, index: any) => (
       <>
         {
@@ -272,7 +272,7 @@ const DashboardSidebar = () => {
                   <FSiderItem
                     to={subItem.path}
                     title={subItem.title}
-                    prefix={<img src="/ferrum/bullet.png" height={"4px"} alt="side menut item" />}
+                    prefix={subItem.icon ? subItem.icon : <img src="/ferrum/bullet.png" className="side-menu-img" alt="side menut item" />}
                     key={sudIndex}
                     target={subItem.target && subItem.target}
                   ></FSiderItem>

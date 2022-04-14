@@ -5,6 +5,8 @@ import {
   PATH_DASHBOARD,
 } from "../../routes/paths";
 import { cFRMx_Competition_Details, cFRM_Competition_Details, FRM_FRMx_leaderboard_Details } from "../../utils/const.utils";
+import IconNetworkCFrmStr from "../../assets/img/icon-network-cfrm.svg";
+import IconNetworkCFrmxStr from "../../assets/img/icon-network-cfrmx.svg";
 
 const getSideMenuIcon = (name: any) => (
   <img
@@ -17,7 +19,7 @@ const getSideMenuIcon = (name: any) => (
   />
 );
 
-export const getCurrencyIcon = (src: any) => (
+export const getIcon = (src: any) => (
   <img
     alt="side menu item"
     src={`${src}`}
@@ -136,10 +138,12 @@ export const orgLeaderboardAndCompetitionSidebarConfig = [
       {
         title: `${cFRM_Competition_Details.name}`,
         path: `${PATH_DASHBOARD.general.competition}/${cFRM_Competition_Details.id}`,
+        icon: getIcon(IconNetworkCFrmStr),
       },
       {
         title: `${cFRMx_Competition_Details.name}`,
         path: `${PATH_DASHBOARD.general.competition}/${cFRMx_Competition_Details.id}`,
+        icon: getIcon(IconNetworkCFrmxStr),
       }
     ],
   }, 
@@ -165,10 +169,12 @@ export const publicLeaderboardAndCompetitionSidebarConfig = [
       {
         title: `${cFRM_Competition_Details.name}`,
         path: `${PATH_PUBLIC_USER.competition.root}/${cFRM_Competition_Details.id}`,
+        icon: getIcon(IconNetworkCFrmStr),
       },
       {
         title: `${cFRMx_Competition_Details.name}`,
         path: `${PATH_PUBLIC_USER.competition.root}/${cFRMx_Competition_Details.id}`,
+        icon: getIcon(IconNetworkCFrmxStr),
       }
     ],
   }
