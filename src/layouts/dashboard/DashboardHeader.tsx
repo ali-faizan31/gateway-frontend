@@ -144,7 +144,7 @@ const DashboardHeader = ({ title }: any) => {
                         {getFormattedWalletAddress(walletAddress)}
                       </FCard>
                       <FCard className={"no-left-margin custom-padding-10 d-flex custom-border-radius-4"} variant={"primary"}>
-                        {TruncateWithoutRounding(getFormattedBalance(walletBalance), 3)} {currentNetworkInformation && currentNetworkInformation?.mainnetCurrencySymbol}
+                        {TruncateWithoutRounding(getFormattedBalance(walletBalance), 3)} {currentNetworkInformation && currentNetworkInformation?.networkCurrencySymbol}
                       </FCard>
                     </FItem>
                   </FCard>
