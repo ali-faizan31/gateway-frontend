@@ -18,12 +18,7 @@ import { Deployer as CrucibleDeployer } from "./components/crucible/common/Deplo
 import { useSelector } from "react-redux";
 import { WalletAuthencationOnSignIn } from "./components/common/wallet-authentication/WalletAuthenticationSignIn";
 import { RootState } from "./redux/rootReducer";
-import {
-  // cFRMModule,
-  cFRMBNBModule,
-  // cFRMxBNBModule,
-  // cFRMxModule,
-} from "./components/crucible/farms";
+import { cFRMBNBModule } from "./components/crucible/farms";
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -76,9 +71,9 @@ function App() {
     <WalletApplicationWrapper.ApplicationWrapper>
       <>
         <Switch>
-          <Route exact path="/"> 
-            <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" /> 
-          </Route> 
+          <Route exact path="/">
+            <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" />
+          </Route>
           <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.manage}
             component={cFRMBNBModule.cFRMBNBFarmingDashboardFlowManage}
@@ -92,7 +87,7 @@ function App() {
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
-          /> 
+          />
           <UnGuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.mint.mint}
             component={cFRMBNBModule.cFRMBNBFarmingMintFlowMint}
@@ -197,83 +192,36 @@ function App() {
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
-          /> 
-          <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.public}
-            component={CruciblePublic}
-            auth={isAuthenticated}
-            layout={DashboardLayout}
-            headerTitle="Crucible"
           />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.public} component={CruciblePublic} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
 
           <UnGuardedRoute path="/home" component={Dashboard} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" />
           <UnGuardedRoute path="/auth/forgot-password" component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />
           <UnGuardedRoute path="/auth/verify" component={EmailVerification} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />
           <UnGuardedRoute path="/auth/resend-code" component={ResendEmailVerification} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />
           <UnGuardedRoute path="/auth/reset-password/:token" component={ResetPassword} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />
-          <UnGuardedRoute
-            path="/auth/wallet-authentication"
-            component={WalletAuthentication}
-            auth={isAuthenticated}
-            layout={AuthLayout}
-            headerTitle=""
-          />
+          <UnGuardedRoute path="/auth/wallet-authentication" component={WalletAuthentication} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />
           {/* <UnGuardedRoute path='/auth/login' component={CommunityLogin} auth={isAuthenticated} layout={AuthLayout}/>
           <UnGuardedRoute path='/auth/register' component={CommunityRegister} auth={isAuthenticated} layout={AuthLayout}/> */}
           <UnGuardedRoute path="/auth/org/register" component={OrganizationRegister} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />
           <UnGuardedRoute path="/auth/org/login" component={OrganizationLogin} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />
           <UnGuardedRoute path="/pub/leaderboard/:id" component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" />
-          <UnGuardedRoute
-            path="/pub/multi/leaderboard/:id"
-            component={MultiTokenLeaderboardById}
-            auth={isAuthenticated}
-            layout={DashboardLayout}
-            headerTitle=""
-          />
+          <UnGuardedRoute path="/pub/multi/leaderboard/:id" component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" />
           <UnGuardedRoute path="/pub/competition/:id" component={CompetitionById} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" />
-          <UnGuardedRoute
-            path="/pub/staking/leaderboard/:id"
-            component={StakingLeaderboard}
-            auth={isAuthenticated}
-            layout={DashboardLayout}
-            headerTitle=""
-          />
+          <UnGuardedRoute path="/pub/staking/leaderboard/:id" component={StakingLeaderboard} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" />
           <GuardedRoute path="/dashboard/leaderboard/management" component={LeaderboardManagement} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/leaderboard/create" component={CreateLeaderboard} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/competition/create" component={CreateCompetition} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/competition/management" component={CompetitionManagement} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/competition/:id" component={CompetitionById} auth={isAuthenticated} layout={DashboardLayout} />
-          <GuardedRoute
-            path="/dashboard/multi/leaderboard/:id"
-            component={MultiTokenLeaderboardById}
-            auth={isAuthenticated}
-            layout={DashboardLayout}
-          />
+          <GuardedRoute path="/dashboard/multi/leaderboard/:id" component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/leaderboard/:id" component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout} />
-          <UnGuardedRoute
-            path={PATH_DASHBOARD.general.profile}
-            component={ProfileSettings}
-            auth={isAuthenticated}
-            layout={DashboardLayout}
-            headerTitle="My Profile"
-          />
+          <UnGuardedRoute path={PATH_DASHBOARD.general.profile} component={ProfileSettings} auth={isAuthenticated} layout={DashboardLayout} headerTitle="My Profile" />
 
           {/* new routes ---------------------- */}
 
-          <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.deployer}
-            component={CrucibleDeployer}
-            auth={isAuthenticated}
-            layout={DashboardLayout}
-            headerTitle="Crucible"
-          />
-          <UnGuardedRoute
-            path={PATH_DASHBOARD.crucible.index}
-            component={CrucibleDashboardPage}
-            auth={isAuthenticated}
-            layout={DashboardLayout}
-            headerTitle="Crucible"
-          />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.deployer} component={CrucibleDeployer} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.index} component={CrucibleDashboardPage} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
 
           <Route path="*" component={Page404}></Route>
         </Switch>

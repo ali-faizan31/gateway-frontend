@@ -27,11 +27,10 @@ import {
   // getAllCompetitions,
 } from "../../_apis/CompetitionCrud";
 import { localStorageHelper } from "../../utils/global.utils";
-import { ME_TAG, ORG_ROLE_TAG, TOKEN_TAG } from "../../utils/const.utils";
+import { ME_TAG, ORG_ROLE_TAG, showCrucibleMenu, TOKEN_TAG } from "../../utils/const.utils";
 // import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 
 const DashboardSidebar = () => {
-  let showCrucibleMenu = false;
   const { id }: any = useParams();
   const { pathname } = useLocation();
   let token = localStorage.getItem(TOKEN_TAG);
@@ -261,7 +260,7 @@ const DashboardSidebar = () => {
   //   await setSideConfig(mappedData);
   // };
 
-  const renderContent = (items: any) => { 
+  const renderContent = (items: any) => {
     return items.map((item: any, index: any) => (
       <>
         {
@@ -289,10 +288,10 @@ const DashboardSidebar = () => {
     <FSider>
       {/* {renderContent(sideMenuItems)} */}
       {renderContent(homeSidebarConfig)}
-      {localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG ? 
-      renderContent(orgLeaderboardAndCompetitionSidebarConfig) :
-      renderContent(publicLeaderboardAndCompetitionSidebarConfig)} 
-      {/* {isStakingLeaderboard && renderContent(sideConfig)}  update for fomo */} 
+      {localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG
+        ? renderContent(orgLeaderboardAndCompetitionSidebarConfig)
+        : renderContent(publicLeaderboardAndCompetitionSidebarConfig)}
+      {/* {isStakingLeaderboard && renderContent(sideConfig)}  update for fomo */}
       {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
       {showCrucibleMenu && renderContent(crucibleConfig)}
