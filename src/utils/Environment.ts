@@ -9,17 +9,17 @@ export class Environment {
         local: {
            baseUrl : "https://api-leaderboard.dev.svcs.ferrumnetwork.io",
            apiKeyForApplicationUser : "b63d9502-1ddd-4ccb-b0bd-e59a3531d7f6",
-           crucibleBaseUrl: "https://imqx88xczt.us-east-2.awsapprunner.com/"
+           crucibleBaseUrl: "https://22phwrgczz.us-east-2.awsapprunner.com/"
         }, 
 		dev: {
             baseUrl : "https://api-leaderboard.dev.svcs.ferrumnetwork.io",
             apiKeyForApplicationUser : "b63d9502-1ddd-4ccb-b0bd-e59a3531d7f6",
-            crucibleBaseUrl: "https://imqx88xczt.us-east-2.awsapprunner.com/"
+            crucibleBaseUrl: "https://22phwrgczz.us-east-2.awsapprunner.com/"
          }, 
 		staging: {
             baseUrl : "https://api-gateway-v1.stage.svcs.ferrumnetwork.io",
             apiKeyForApplicationUser : "66fadbfe-b625-48d1-9255-2c6317adf0bf",
-            crucibleBaseUrl: "https://imqx88xczt.us-east-2.awsapprunner.com/"
+            crucibleBaseUrl: "https://xxda22hwpy.us-east-2.awsapprunner.com/"
          }, 
 		prod: {
             baseUrl : "https://api-gateway-v1.svcs.ferrumnetwork.io",
