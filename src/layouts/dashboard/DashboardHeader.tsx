@@ -26,12 +26,12 @@ import * as CrucibleActions from "../../components/crucible/redux/CrucibleAction
 
 const DashboardHeader = ({ title }: any) => {
   const dispatch = useDispatch();
-  const { pathname } = useLocation(); 
+  const { pathname } = useLocation();
   const history = useHistory();
   const isPublic = pathname.includes("pub");
   const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
   const { meV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
-  const { tokenData, isProcessed, isProcessing } = useSelector((state: RootState) => state.crucible); 
+  const { tokenData, isProcessed, isProcessing } = useSelector((state: RootState) => state.crucible);
 
   useEffect(() => {
     if (meV2 && meV2.role === COMMUNITY_ROLE_TAG) {
@@ -43,11 +43,18 @@ const DashboardHeader = ({ title }: any) => {
   }, [isConnected, isConnecting]);
 
   useEffect(() => {
+    if (networkClient) {
+      loadTokenData(networkClient);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadTokenData(networkClient);
     if (networkClient && isProcessed === true && isProcessing === false) {
       loadTokenData(networkClient);
     }
   }, [networkClient, isProcessed, isProcessing]);
-  
+
   const handleLogout = async () => {
     // let data = {};
     try {
@@ -91,7 +98,7 @@ const DashboardHeader = ({ title }: any) => {
 
     for (let item of tokens) {
       const tokenDetails = await getTokenInformationFromWeb3(networkClient, walletAddress, item.currency);
-      const cabnDetails = await getCABNInformation(item.currency); 
+      const cabnDetails = await getCABNInformation(item.currency);
       let finalData = { ...tokenDetails, ...cabnDetails };
       if (!!finalData) {
         dispatch(
@@ -151,7 +158,7 @@ const DashboardHeader = ({ title }: any) => {
               )}
               <MetaMaskConnector.WalletConnector
                 WalletConnectView={FButton}
-                WalletConnectModal={ConnectWalletDialog} 
+                WalletConnectModal={ConnectWalletDialog}
                 WalletConnectViewProps={{
                   className: isConnected ? "no-left-margin connect-button-left-borders" : "no-left-margin",
                 }}
