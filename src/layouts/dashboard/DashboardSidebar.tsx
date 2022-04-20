@@ -12,6 +12,9 @@ import {
   homeSidebarConfig,
   publicLeaderboardAndCompetitionSidebarConfig,
   crucibleConfig,
+  GET_ICONS,
+  GET_PATHS,
+  getIcon,
   // GET_PATHS,
   // // GET_ICONS,
   // getIcon,
@@ -28,13 +31,15 @@ import {
 } from "../../_apis/CompetitionCrud";
 import { localStorageHelper } from "../../utils/global.utils";
 import { ME_TAG, ORG_ROLE_TAG, showCrucibleMenu, TOKEN_TAG } from "../../utils/const.utils";
-// import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
+import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 
 const DashboardSidebar = () => {
   const { id }: any = useParams();
   const { pathname } = useLocation();
   let token = localStorage.getItem(TOKEN_TAG);
   const [sideConfig, setSideConfig]: any = useState([]);
+  const [sideMenuItems, setSideMenuItems] = useState();
+
   const isPublic = pathname.includes("/pub");
   const isPublicLeaderboard = pathname.includes("/pub/leader");
   const isStakingLeaderboard = pathname.includes("/staking");
@@ -42,86 +47,80 @@ const DashboardSidebar = () => {
   const isPublicCompetition = pathname.includes("/pub/competition");
 
   useEffect(() => {
-    // getSideMenuInformation();
+    getSideMenuInformation();
   }, []);
 
-  // const getSiteName = (url: string, indexA: string, indexB: string) => {
-  //   let substr = url.indexOf(indexA) + indexA.length;
-  //   return url.substring(substr, url.indexOf(indexB, substr));
-  // };
+  const getSiteName = (url: string, indexA: string, indexB: string) => {
+    let substr = url.indexOf(indexA) + indexA.length;
+    return url.substring(substr, url.indexOf(indexB, substr));
+  };
 
-  // const getCurrenciesAgainstOrganization = (currencies: any) => {
-  //   let currencyArray: any = [];
-  //   currencies.length &&
-  //     currencies.forEach((currency: any) => {
-  //       currencyArray.push({
-  //         title: currency.name,
-  //         icon: getCurrencyIcon(currency.logo),
-  //         target: "_blank",
-  //         path: `${currency?.cabn?.networkDex?.dex?.url}swap?inputCurrency=BNB&outputCurrency=${currency?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`,
-  //       });
-  //     });
-  //   return currencyArray;
-  // };
+  const getCurrenciesAgainstOrganization = (currencies: any) => {
+    let currencyArray: any = [];
+    currencies.length &&
+      currencies.forEach((currency: any) => {
+        currencyArray.push({
+          title: currency.name,
+          icon: getIcon(currency.logo),
+          target: "_blank",
+          path: `${currency?.cabn?.networkDex?.dex?.url}swap?inputCurrency=BNB&outputCurrency=${currency?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`,
+        });
+      });
+    return currencyArray;
+  };
 
-  // const getSubscriptionListAgainstOrganization = (
-  //   subscriptionResponse: any
-  // ) => {
-  //   const { subscriptions } = subscriptionResponse;
-  //   let subsciptionArray: any = [];
-  //   subscriptions.forEach((item: any) => {
-  //     let productName = item.product.name;
-  //     if (item[productName]) {
-  //       item[productName].length > 0 &&
-  //         item[productName].forEach((child: any) => {
-  //           child.title = child.name;
-  //           child.path = GET_PATHS(
-  //             productName,
-  //             child._id,
-  //             child.numberOfCurrencies
-  //           );
-  //         });
-  //       subsciptionArray.push({
-  //         title: productName,
-  //         path: "",
-  //         icon: GET_ICONS(productName),
-  //         children: item[productName],
-  //       });
-  //     }
-  //   });
-  //   let currencies = getCurrenciesAgainstOrganization(
-  //     subscriptionResponse.currencies
-  //   );
-  //   if (currencies.length && currencies.length > 1) {
-  //     subsciptionArray.push({
-  //       title: "Get Token",
-  //       path: "",
-  //       icon: GET_ICONS("Token"),
-  //       children: currencies,
-  //     });
-  //   } else {
-  //     subsciptionArray.push(...currencies);
-  //   }
-  //   return subsciptionArray;
-  // };
+  const getSubscriptionListAgainstOrganization = (subscriptionResponse: any) => {
+    const { subscriptions } = subscriptionResponse;
+    let subsciptionArray: any = [];
+    subscriptions.forEach((item: any) => {
+      let productName = item.product.name;
+      console.log(productName, item)
+      if (item[productName]) {
+        console.log(item[productName])
+        item[productName].length > 0 &&
+          item[productName].forEach((child: any) => {
+            child.title = child.name;
+            child.path = GET_PATHS(
+              productName,
+              child._id,
+              child.numberOfCurrencies
+            );
+          });
+        subsciptionArray.push({
+          title: productName,
+          path: "",
+          icon: GET_ICONS(productName),
+          children: item[productName],
+        });
+      }
+    });
+    let currencies = getCurrenciesAgainstOrganization(subscriptionResponse.currencies);
+    if (currencies.length && currencies.length > 1) {
+      subsciptionArray.push({ title: "Get Token", path: "", icon: GET_ICONS("Token"), children: currencies, });
+    } else {
+      subsciptionArray.push(...currencies);
+    }
+    return subsciptionArray;
+  };
 
-  // const getSideMenuInformation = async () => {
-  //   try {
-  //     let siteName = getSiteName(pathname, "/", "/");
-  //     let response =
-  //       await getSubscriptionInformationForAssociatedOrganizationBySiteName(
-  //         siteName
-  //       );
-  //     let subscriptionResponse =
-  //       response && response.data && response.data.body;
-  //     let productList =
-  //       getSubscriptionListAgainstOrganization(subscriptionResponse);
-  //     setSideMenuItems(productList);
-  //   } catch (e: any) {
-  //     console.log(`Error occured: ${e?.response?.data?.status?.message}`);
-  //     // toast.error(`Error occured: ${e.response.data.status.message}`)
-  //   }
-  // };
+  const getSideMenuInformation = async () => {
+    try {
+      let siteName = getSiteName(pathname, "/", "/");
+      let response =
+        await getSubscriptionInformationForAssociatedOrganizationBySiteName(
+          // siteName
+          "dev.ferrumnetwork.io"
+        );
+      let subscriptionResponse =
+        response && response.data && response.data.body;
+      let productList =
+        getSubscriptionListAgainstOrganization(subscriptionResponse);
+      setSideMenuItems(productList);
+    } catch (e: any) {
+      console.log(`Error occured: ${e?.response?.data?.status?.message}`);
+      // toast.error(`Error occured: ${e.response.data.status.message}`)
+    }
+  };
 
   useEffect(() => {
     if (id !== ":id") {
@@ -265,7 +264,7 @@ const DashboardSidebar = () => {
       <>
         {
           <FSiderItem to={item.path} title={item.title} prefix={item.icon} key={index} target={item.target && item.target}>
-            {item?.children?.length && (
+            {item?.children?.length ? (
               <FSiderSubMenuItem>
                 {item.children.map((subItem: any, sudIndex: any) => (
                   <FSiderItem
@@ -277,7 +276,7 @@ const DashboardSidebar = () => {
                   ></FSiderItem>
                 ))}
               </FSiderSubMenuItem>
-            )}
+            ) : ""}
           </FSiderItem>
         }
       </>
@@ -286,15 +285,15 @@ const DashboardSidebar = () => {
 
   return (
     <FSider>
-      {/* {renderContent(sideMenuItems)} */}
       {renderContent(homeSidebarConfig)}
-      {localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG
+      {sideMenuItems && renderContent(sideMenuItems)}
+      {/* {localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG
         ? renderContent(orgLeaderboardAndCompetitionSidebarConfig)
-        : renderContent(publicLeaderboardAndCompetitionSidebarConfig)}
+        : renderContent(publicLeaderboardAndCompetitionSidebarConfig)} */}
       {/* {isStakingLeaderboard && renderContent(sideConfig)}  update for fomo */}
-      {renderContent(tokensSidebarConfig)}
+      {/* {renderContent(tokensSidebarConfig)}
       {renderContent(bridgeSidebarConfig)}
-      {showCrucibleMenu && renderContent(crucibleConfig)}
+      {showCrucibleMenu && renderContent(crucibleConfig)} */}
     </FSider>
   );
 };
