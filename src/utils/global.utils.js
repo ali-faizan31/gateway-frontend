@@ -3,6 +3,8 @@ import FerrumJson from "./FerrumToken.json";
 import { Big } from "big.js";
 import { getCABNInformationForPublicUser } from "../_apis/CABNCrud";
 import * as CrucibleActions from "../components/crucible/redux/CrucibleActions";
+import { T } from './translationHelper';
+import toast from 'react-hot-toast';
 
 export const arraySortByKeyDescending = (array, key) =>
   array.slice().sort((a, b) => b[key] - a[key]);
@@ -139,26 +141,39 @@ export const getCABNInformation = async (
   setInfo,
   info
 ) => {
-  let cabnResponse = await getCABNInformationForPublicUser(
-    tokenContractAddress
-  );
-  cabnResponse =
-    cabnResponse.data &&
-    cabnResponse.data.body &&
-    cabnResponse.data.body.currencyAddressesByNetworks[0];
-  if (cabnResponse) {
-    setInfo && setInfo({
-      ...info,
-      name: cabnResponse?.currency?.name,
-      symbol: cabnResponse?.currency?.symbol,
-      logo: cabnResponse?.currency?.logo,
-    });
-    return {
-      name: cabnResponse?.currency?.name,
-      symbol: cabnResponse?.currency?.symbol,
-      logo: cabnResponse?.currency?.logo,
-    };
-  }
+ try {
+   let cabnResponse = await getCABNInformationForPublicUser(
+       tokenContractAddress
+   );
+   cabnResponse =
+       cabnResponse.data &&
+       cabnResponse.data.body &&
+       cabnResponse.data.body.currencyAddressesByNetworks[0];
+   if (cabnResponse) {
+     setInfo && setInfo({
+       ...info,
+       name: cabnResponse?.currency?.name,
+       symbol: cabnResponse?.currency?.symbol,
+       logo: cabnResponse?.currency?.logo,
+     });
+     return {
+       name: cabnResponse?.currency?.name,
+       symbol: cabnResponse?.currency?.symbol,
+       logo: cabnResponse?.currency?.logo,
+     };
+   }
+ } catch (e) {
+   if (e?.response) {
+     if (e?.response?.data?.status?.phraseKey !== '') {
+       const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+       toast.error(fetchedMessage);
+     } else {
+       toast.error(e?.response?.data?.status?.message);
+     }
+   } else {
+     toast.error('Something went wrong. Try again later!');
+   }
+ }
 };
 
 // export const getLatestStepWithPendingStatus = (stepResponse) => {

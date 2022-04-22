@@ -20,6 +20,7 @@ import { generateNonceForCommunityMember } from "../../_apis/WalletAuthencation"
 
 // import { checkSession, localStorageHelper } from "../../utils/global.utils";
 import * as walletAuthenticatorActions from "../common/wallet-authentication/redux/walletAuthenticationActions";
+import { T } from '../../utils/translationHelper';
 // import { TOKEN_TAG } from "../../utils/const.utils";
 
 const ProfileSettings = () => {
@@ -69,9 +70,14 @@ const ProfileSettings = () => {
         .then((response: any) => {
           setUser(response.data.body.user);
         })
-        .catch((e) => {
+        .catch((e: any) => {
           if (e.response) {
-            toast.error(e.response?.data?.status?.message);
+            if (e?.response?.data?.status?.phraseKey !== '') {
+              const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+              toast.error(fetchedMessage);
+            } else {
+              toast.error(e?.response?.data?.status?.message);
+            }
           } else {
             toast.error("Something went wrong. Try again later!");
           }
@@ -103,9 +109,12 @@ const ProfileSettings = () => {
           })
         );
         if (e.response) {
-          toast.error(
-            ` Error Occured: nonce ${e?.response?.data?.status?.message}`
-          );
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(`Error Occurred: nonce ${e?.response?.data?.status?.message}`);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }

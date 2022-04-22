@@ -22,6 +22,7 @@ import {
 import { arraySortByKeyDescending, getFormattedWalletAddress } from "../../utils/global.utils";
 import { PUBLIC_TAG, TOKEN_TAG } from "../../utils/const.utils";
 import { filterList } from "./LeaderboardHelper";
+import { T } from '../../utils/translationHelper';
 
 const LeaderboardInformation = () => {
   const { id } = useParams();
@@ -85,7 +86,12 @@ const LeaderboardInformation = () => {
       .catch((e) => {
         setIsLoading(false);
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
@@ -120,7 +126,12 @@ const LeaderboardInformation = () => {
       .catch((e) => {
         setIsLoading(false);
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
@@ -132,10 +143,18 @@ const LeaderboardInformation = () => {
     .then((res)=>{ 
       const filteredList = filterList(res.data.body.result, leaderboard?.exclusionWalletAddressList); 
       mapTokenHolderData(filteredList, leaderboard)
-       
     })
     .catch((e)=>{
-        toast.error(`Error occured: ${e}`)
+      if (e.response) {
+        if (e?.response?.data?.status?.phraseKey !== '') {
+          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+          toast.error(fetchedMessage);
+        } else {
+          toast.error(e?.response?.data?.status?.message);
+        }
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
     })
   }
   

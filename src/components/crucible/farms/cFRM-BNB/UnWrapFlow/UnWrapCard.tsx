@@ -24,6 +24,7 @@ import {
 import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
+import { T } from '../../../../../utils/translationHelper';
 
 export const UnWrap = () => {
   const location: any = useLocation();
@@ -67,8 +68,16 @@ export const UnWrap = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      if (e.response) {
+        if (e?.response?.data?.status?.phraseKey !== '') {
+          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+          toast.error(fetchedMessage);
+        } else {
+          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
+        }
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
     }
   };
 
