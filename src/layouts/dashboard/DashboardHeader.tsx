@@ -152,8 +152,7 @@ const DashboardHeader = ({ title }: any) => {
               )}
               <MetaMaskConnector.WalletConnector
                 WalletConnectView={FButton}
-                WalletConnectModal={ConnectWalletDialog}
-                isAuthenticationNeeded={true}
+                WalletConnectModal={ConnectWalletDialog} 
                 WalletConnectViewProps={{
                   className: isConnected ? "no-left-margin connect-button-left-borders" : "no-left-margin",
                 }}

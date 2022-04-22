@@ -231,7 +231,7 @@ const getFormattedBalanceHoldersList = (list) => {
 
   const csvHeaders = [
     { label: "Rank", key: "rank" },
-    { label: "Wallet Address", key: "address" },
+    { label: "Wallet Address", key: "tokenHolderAddress" },
     { label: "Balance", key: "formattedBalance" },
     { label: "Level Up Amount", key: "formattedLevelUpAmount" },
     { label: "Get Token", key: "levelUpUrl" },

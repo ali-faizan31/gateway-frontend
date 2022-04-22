@@ -96,8 +96,7 @@ export default function MultiTokenLeaderboardIndex() {
                 chainId: cabn2?.currencyAddressesByNetwork?.network?.chainId,
                 id: cabn2?.currencyAddressesByNetwork?._id
               },
-            };
-            console.log(leaderboard, tempObj)
+            }; 
             getFrmTokenUSDCValue( tempObj.frmCabn.chainId, tempObj.frmCabn.tokenContractAddress, tokenUSDCBSCMainnet, tempObj );
             setLeaderboardData(tempObj);
           } else { 
