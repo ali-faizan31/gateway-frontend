@@ -6,6 +6,7 @@ import { Web3Helper } from "../../../container-components/web3Client/web3Helper"
 import { CrucibleClient } from "../../../container-components/web3Client/crucibleClient";
 import { crucibleSlice } from "../redux/CrucibleSlice";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { T } from '../../../utils/translationHelper';
 
 export const getHumanReadableFarmName = (farm: any) => {
   switch (farm) {
@@ -355,6 +356,13 @@ export const getLatestStepToRender = async (
     // console.log("renderNeeded : ", renderNeeded);
     // console.log("farm : ", farm);
     let errorResponse = e && e.response && e.response.data.status;
+    if (errorResponse?.phraseKey !== '') {
+      const fetchedMessage = T(errorResponse?.phraseKey);
+      toast.error(fetchedMessage);
+    } else {
+      toast.error(errorResponse?.message);
+    }
+
     if (errorResponse?.code === 400) {
       try {
         let latestResponse =
@@ -438,14 +446,16 @@ export const getLatestStepToRender = async (
             );
         }
       } catch (e: any) {
-        let errorResponse =
-          e &&
-          e.response &&
-          e.response.data.status &&
-          e.response.data.status.message;
-        errorResponse
-          ? toast.error(`Error Occured: ${errorResponse}`)
-          : toast.error(`Error Occured: ${e}`);
+        if (e.response) {
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
+          }
+        } else {
+          toast.error("Something went wrong. Try again later!");
+        }
       }
       // let errorResponse =
       //   e &&
@@ -456,14 +466,16 @@ export const getLatestStepToRender = async (
       // ? toast.error(`Error Occured: ${errorResponse}`)
       // : toast.error(`Error Occured: ${e}`);
     } else {
-      let errorResponse =
-        e &&
-        e.response &&
-        e.response.data.status &&
-        e.response.data.status.message;
-      errorResponse
-        ? toast.error(`Error Occured: ${errorResponse}`)
-        : toast.error(`Error Occured: ${e}`);
+      if (e.response) {
+        if (e?.response?.data?.status?.phraseKey !== '') {
+          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+          toast.error(fetchedMessage);
+        } else {
+          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
+        }
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
       history.push({ pathname: PATH_DASHBOARD.crucible.index });
     }
   }
