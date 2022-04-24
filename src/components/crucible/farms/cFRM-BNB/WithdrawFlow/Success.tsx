@@ -17,6 +17,7 @@ import { useHistory, useLocation, useParams } from "react-router";
 import { STEP_FLOW_IDS } from "../../../common/utils";
 import { ClipLoader } from "react-spinners";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { T } from '../../../../../utils/translationHelper';
 // import { CFRM_BNB_STEP_FLOW_IDS } from "../../../common/utils";
 
 export const Success = () => {
@@ -33,15 +34,15 @@ export const Success = () => {
   useEffect(() => {
     if (location.state === undefined) {
       history.push({ pathname: PATH_DASHBOARD.crucible.index });
-    } 
+    }
   }, []);
-  
-  useEffect(() => { 
-    if ( currentStep && currentStep._id && currentStep.status === "pending" ){ 
+
+  useEffect(() => {
+    if (currentStep && currentStep._id && currentStep.status === "pending") {
       getStepCompleted(false);
-    } 
+    }
   }, [currentStep]);
-  
+
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
     try {
@@ -66,8 +67,16 @@ export const Success = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      if (e.response) {
+        if (e?.response?.data?.status?.phraseKey !== '') {
+          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+          toast.error(fetchedMessage);
+        } else {
+          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
+        }
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
     }
   };
 
@@ -145,7 +154,7 @@ export const Success = () => {
           </FItem>
         </FCard>
       ) : (
-        <FContainer  width={700}>
+        <FContainer width={700}>
           <CrucibleMyBalance />
           <FCard variant={"secondary"} className="card-congrats">
             <FItem align="center">

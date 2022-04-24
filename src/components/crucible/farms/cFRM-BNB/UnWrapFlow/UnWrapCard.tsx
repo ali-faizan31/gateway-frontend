@@ -25,6 +25,7 @@ import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
+import { T } from '../../../../../utils/translationHelper';
 
 export const UnWrap = () => {
   const location: any = useLocation();
@@ -68,8 +69,16 @@ export const UnWrap = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      if (e.response) {
+        if (e?.response?.data?.status?.phraseKey !== '') {
+          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+          toast.error(fetchedMessage);
+        } else {
+          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
+        }
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
     }
   };
 
@@ -99,7 +108,7 @@ export const UnWrap = () => {
     if (currentStep.status === "pending") {
       location.state.id = currentStep.stepFlow;
       let splitted = currentStep.stepFlowStep.name.split("-");
-      location.state.name = splitted[0].trim() + " - " + splitted[1].trim(); 
+      location.state.name = splitted[0].trim() + " - " + splitted[1].trim();
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
     }
   };
@@ -150,7 +159,7 @@ export const UnWrap = () => {
             className={"f-mt-1"}
             inputSize="input-lg"
             type={"text"}
-            placeholder="0" 
+            placeholder="0"
             value={amount === 0 ? "" : amount}
             onChange={(e: any) => setAmount(e.target.value)}
             postfix={
@@ -174,7 +183,7 @@ export const UnWrap = () => {
             value={Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-               {crucible[farm!]?.symbol}
+                {crucible[farm!]?.symbol}
               </FTypo>
             }
           />

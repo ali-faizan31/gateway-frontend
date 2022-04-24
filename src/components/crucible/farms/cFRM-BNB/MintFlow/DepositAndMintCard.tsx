@@ -25,6 +25,8 @@ import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/Connect
 import { ClipLoader } from "react-spinners";
 import { getCrucibleMaxMintCap } from "../../../../../_apis/CrucibleCapCrud";
 import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
+import { T } from '../../../../../utils/translationHelper';
+// import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 export const CrucibleDeposit = () => {
   const dispatch = useDispatch();
@@ -51,8 +53,8 @@ export const CrucibleDeposit = () => {
   }, [])
 
   useEffect(() => {
-     if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.baseCurrency)]) > 0) {
-       if (currentStep.step.name === "Approve" && currentStep.status !== "completed") { 
+    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.baseCurrency)]) > 0) {
+      if (currentStep.step.name === "Approve" && currentStep.status !== "completed") {
         getStepCompleted(false);
       }
     }
@@ -89,8 +91,16 @@ export const CrucibleDeposit = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      if (e.response) {
+        if (e?.response?.data?.status?.phraseKey !== '') {
+          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+          toast.error(fetchedMessage);
+        } else {
+          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
+        }
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
     }
   };
 

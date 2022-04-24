@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import eitherConverter from 'ether-converter';
 import { getAllLeaderboards, getTokenPriceFrom1Inch } from '../../_apis/LeaderboardCrud';
+import { T } from '../../utils/translationHelper';
 
 const initialState = {
   isLoading: false,
@@ -53,7 +54,12 @@ export const getAllLeaderboardsDispatch = (token) => (dispatch) => {
     })
     .catch((e) => {
       if (e.response) {
-        dispatch(slice.actions.hasError(e?.response?.data?.status?.message));
+        if (e?.response?.data?.status?.phraseKey !== '') {
+          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+          dispatch(slice.actions.hasError(fetchedMessage));
+        } else {
+          dispatch(slice.actions.hasError(e?.response?.data?.status?.message));
+        }
       } else {
         dispatch(slice.actions.hasError('Something went wrong. Try again later!'));
       }

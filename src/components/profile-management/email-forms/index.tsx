@@ -8,6 +8,7 @@ import { sendOTP, updateEmail } from "../../../_apis/ProfileCrud";
 // import { AiOutlineMail } from "react-icons/ai";
 // import { TOKEN_TAG } from "../../../utils/const.utils";
 import { RootState } from "../../../redux/rootReducer";
+import { T } from '../../../utils/translationHelper';
 
 interface EmailSectionProps {
   profileToken: string;
@@ -40,9 +41,14 @@ const EmailSection = ({
         setEmailedTo(values.email);
         setOtpSent(true);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
@@ -56,9 +62,14 @@ const EmailSection = ({
         setProfileToken("");
         getUserInfo();
       })
-      .catch((e) => {
+      .catch((e: any) => {
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
