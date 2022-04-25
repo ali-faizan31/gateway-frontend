@@ -176,16 +176,17 @@ const DashboardSidebar = () => {
         }
       })
       .catch((e: any) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        console.log(`Error occured: ${e?.response?.data?.status?.message}`)
+        // if (e.response) {
+        //   if (e?.response?.data?.status?.phraseKey !== '') {
+        //     const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+        //     toast.error(fetchedMessage);
+        //   } else {
+        //     toast.error(e?.response?.data?.status?.message);
+        //   }
+        // } else {
+        //   toast.error("Something went wrong. Try again later!");
+        // }
       });
   };
 
@@ -221,16 +222,17 @@ const DashboardSidebar = () => {
         }
       })
       .catch((e: any) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        console.log(`Error occured: ${e?.response?.data?.status?.message}`)
+        //   if (e.response) {
+        //     if (e?.response?.data?.status?.phraseKey !== '') {
+        //       const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+        //       toast.error(fetchedMessage);
+        //     } else {
+        //       toast.error(e?.response?.data?.status?.message);
+        //     }
+        //   } else {
+        //     toast.error("Something went wrong. Try again later!");
+        //   }
       });
   };
 
