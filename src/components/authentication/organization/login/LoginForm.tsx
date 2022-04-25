@@ -144,6 +144,9 @@ const LoginForm = () => {
         const { token } = response.data.body;
         localStorage.setItem(ME_TAG, JSON.stringify(user));
         localStorage.setItem(TOKEN_TAG, token);
+        dispatch(walletAuthenticatorActions.saveME({ meV2: user }));
+        dispatch(walletAuthenticatorActions.saveToken({ tokenV2: token, })
+        );
         if (token) {
           history.push(PATH_DASHBOARD.general.leaderboardManagement);
           //     if (user.isEmailAuthenticated === true) {

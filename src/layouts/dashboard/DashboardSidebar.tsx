@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { FSider, FSiderItem, FSiderSubMenuItem } from "ferrum-design-system";
-import toast from "react-hot-toast";
-// import { useSelector, RootStateOrAny } from "react-redux";
 import {
   publicLeaderboardConfig,
   orgLeaderboardAndCompetitionSidebarConfig,
@@ -20,37 +18,26 @@ import {
   // getIcon,
 } from "./SidebarConfig";
 import { useLocation, useParams } from "react-router-dom";
-import { PATH_DASHBOARD } from "../../routes/paths";
-import {
-  getLeaderboardByIdForPublicUser,
-  // getAllLeaderboards,
-} from "../../_apis/LeaderboardCrud";
-import {
-  getCompetitionByIdForPublicUser,
-  // getAllCompetitions,
-} from "../../_apis/CompetitionCrud";
-import { localStorageHelper } from "../../utils/global.utils";
-import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
-import { ME_TAG, TOKEN_TAG } from "../../utils/const.utils";
+import { getSideMenuForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
+import { ME_TAG, TOKEN_TAG, showCrucibleMenu } from "../../utils/const.utils";
 import { T } from '../../utils/translationHelper';
-// import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/rootReducer";
 
 const DashboardSidebar = () => {
   const { id }: any = useParams();
   const { pathname } = useLocation();
-  let token = localStorage.getItem(TOKEN_TAG);
   const [sideConfig, setSideConfig]: any = useState([]);
   const [sideMenuItems, setSideMenuItems] = useState();
 
-  const isPublic = pathname.includes("/pub");
-  const isPublicLeaderboard = pathname.includes("/pub/leader");
   const isStakingLeaderboard = pathname.includes("/staking");
-  const isPublicMultiLeaderboard = pathname.includes("/pub/multi/leaderboard");
-  const isPublicCompetition = pathname.includes("/pub/competition");
+
+  const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator)
 
   useEffect(() => {
-    getSideMenuInformation();
-  }, []);
+    console.log(tokenV2)
+    getSideMenuInformation(tokenV2);
+  }, [tokenV2]);
 
   const getSiteName = (url: string, indexA: string, indexB: string) => {
     let substr = url.indexOf(indexA) + indexA.length;
@@ -59,217 +46,83 @@ const DashboardSidebar = () => {
 
   const getCurrenciesAgainstOrganization = (currencies: any) => {
     let currencyArray: any = [];
+    console.log(currencies)
     currencies.length &&
-      currencies.forEach((currency: any) => {
+      currencies.forEach((item: any) => {
         currencyArray.push({
-          title: currency.name,
-          icon: getIcon(currency.logo),
+          title: `Buy ${item.currency.symbol}`,
+          icon: getIcon(item.icon),
           target: "_blank",
-          path: `${currency?.cabn?.networkDex?.dex?.url}swap?inputCurrency=BNB&outputCurrency=${currency?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`,
+          path: `${item?.currency?.currencyAddressesByNetwork[0]?.networkDex?.dex?.url}swap?inputCurrency=BNB&outputCurrency=${item?.currency?.currencyAddressesByNetwork[0]?.tokenContractAddress}&exactField=output&exactAmount=`,
         });
       });
+    console.log(currencyArray)
     return currencyArray;
   };
 
-  const getSubscriptionListAgainstOrganization = (subscriptionResponse: any) => {
-    const { subscriptions } = subscriptionResponse;
-    let subsciptionArray: any = [];
-    subscriptions.forEach((item: any) => {
-      let productName = item.product.name;
-      console.log(productName, item)
-      if (item[productName]) {
-        console.log(item[productName])
-        item[productName].length > 0 &&
-          item[productName].forEach((child: any) => {
-            child.title = child.name;
-            child.path = GET_PATHS(
-              productName,
-              child._id,
-              child.numberOfCurrencies
-            );
-          });
-        subsciptionArray.push({
-          title: productName,
-          path: "",
-          icon: GET_ICONS(productName),
-          children: item[productName],
-        });
+  const getSubscriptionListAgainstOrganization = (sideMenuItems: any) => {
+    const { menu } = sideMenuItems;
+    console.log(menu)
+    let sideMenuArray: any = [];
+    menu && menu.length && menu.forEach((item: any) => {
+      if (item.tags.includes("currencies")) {
+        let currencies = getCurrenciesAgainstOrganization(item.menuItems);
+        if (currencies.length && currencies.length > 1) {
+          sideMenuArray.push({ title: "Get Token", path: "", icon: GET_ICONS("Token"), children: currencies });
+        } else {
+          sideMenuArray.push(...currencies);
+        }
+      } else if (item.menuItems.length > 0) {
+
+      } else {
+
       }
+
+
+
+      // let productName = item.product.name;
+      // console.log(productName, item)
+      // if (item[productName]) {
+      //   console.log(item[productName])
+      //   item[productName].length > 0 &&
+      //     item[productName].forEach((child: any) => {
+      //       child.title = child.name;
+      //       child.path = GET_PATHS(
+      //         productName,
+      //         child._id,
+      //         child.numberOfCurrencies
+      //       );
+      //     });
+      //   sideMenuArray.push({
+      //     title: productName,
+      //     path: "",
+      //     icon: GET_ICONS(productName),
+      //     children: item[productName],
+      //   });
+      // }
     });
-    let currencies = getCurrenciesAgainstOrganization(subscriptionResponse.currencies);
-    if (currencies.length && currencies.length > 1) {
-      subsciptionArray.push({ title: "Get Token", path: "", icon: GET_ICONS("Token"), children: currencies, });
-    } else {
-      subsciptionArray.push(...currencies);
-    }
-    return subsciptionArray;
+    // let currencies = getCurrenciesAgainstOrganization(sideMenuItems.currencies);
+    // if (currencies.length && currencies.length > 1) {
+    //   sideMenuArray.push({ title: "Get Token", path: "", icon: GET_ICONS("Token"), children: currencies, });
+    // } else {
+    //   sideMenuArray.push(...currencies);
+    // }
+    console.log(sideMenuArray)
+    return sideMenuArray;
   };
 
-  const getSideMenuInformation = async () => {
+  const getSideMenuInformation = async (token: any) => {
     try {
       let siteName = getSiteName(pathname, "/", "/");
-      let response =
-        await getSubscriptionInformationForAssociatedOrganizationBySiteName(
-          // siteName
-          "dev.ferrumnetwork.io"
-        );
-      let subscriptionResponse =
-        response && response.data && response.data.body;
-      let productList =
-        getSubscriptionListAgainstOrganization(subscriptionResponse);
+      let response = await getSideMenuForAssociatedOrganizationBySiteName("fixadmin.ferrumnetwork.io", token, showCrucibleMenu ? false : true);
+      let sideMenuItems = response && response.data && response.data.body;
+      console.log(sideMenuItems)
+      let productList = getSubscriptionListAgainstOrganization(sideMenuItems);
       setSideMenuItems(productList);
     } catch (e: any) {
       console.log(`Error occured: ${e?.response?.data?.status?.message}`);
-      // toast.error(`Error occured: ${e.response.data.status.message}`)
     }
   };
-
-  useEffect(() => {
-    if (id !== ":id") {
-      if (isPublic) {
-        if (isStakingLeaderboard || isPublicLeaderboard || isPublicMultiLeaderboard) {
-          getPublicLeaderboard();
-        }
-        if (isPublicCompetition) {
-          getPublicCompetition();
-        }
-      }
-      // else {
-      //   getSidebarItems();
-      // }
-    }
-    // eslint-disable-next-line
-  }, [id]);
-
-  const getPublicLeaderboard = () => {
-    getLeaderboardByIdForPublicUser(id)
-      .then((res: any) => {
-        if (res?.data?.body?.leaderboard) {
-          const { leaderboard } = res.data.body;
-          let mappedData = [];
-          if (isPublicMultiLeaderboard) {
-            mappedData = [
-              {
-                title: leaderboard.name,
-                _id: leaderboard._id,
-                path: `/pub/multi/leaderboard/${leaderboard._id}`,
-              },
-            ];
-          } else if (isStakingLeaderboard) {
-            mappedData = [
-              {
-                title: leaderboard.name,
-                _id: leaderboard._id,
-                path: `/pub/staking/leaderboard/${leaderboard._id}`,
-              },
-            ];
-          } else {
-            mappedData = [
-              {
-                title: leaderboard.name,
-                _id: leaderboard._id,
-                path: `/pub/leaderboard/${leaderboard._id}`,
-              },
-            ];
-          }
-          updatePublicLeaderboardConfig(mappedData);
-        }
-      })
-      .catch((e: any) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
-
-  const updatePublicLeaderboardConfig = (list: any) => {
-    setSideConfig([{ title: "Leaderboard", path: PATH_DASHBOARD.general.competition }]);
-    if (isPublicMultiLeaderboard) {
-      setSideConfig([]);
-      const np: any = [list[0]];
-      publicMultiLeaderboardConfig[0].children = np;
-      setSideConfig(publicMultiLeaderboardConfig);
-    } else if (isPublicLeaderboard || isStakingLeaderboard) {
-      setSideConfig([]);
-      let np: any = publicLeaderboardConfig[0].children;
-      np = [...np, list[0]];
-      publicLeaderboardConfig[0].children = np;
-      setSideConfig(publicLeaderboardConfig);
-    }
-  };
-
-  const getPublicCompetition = () => {
-    getCompetitionByIdForPublicUser(id, token)
-      .then((res: any) => {
-        if (res?.data?.body?.competition) {
-          const { competition } = res.data.body;
-          const mappedData = [
-            {
-              title: competition.name,
-              _id: competition._id,
-              path: `/pub/competition/${competition._id}`,
-            },
-          ];
-          updatePublicCompetitionConfig(mappedData);
-        }
-      })
-      .catch((e: any) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
-
-  const updatePublicCompetitionConfig = (list: any) => {
-    setSideConfig([{ title: "Competition", path: PATH_DASHBOARD.general.competition }]);
-    if (isPublicCompetition) {
-      setSideConfig([]);
-      let np: any = publicCompetitionConfig[0].children;
-      np = [...np, list[0]];
-      publicCompetitionConfig[0].children = np;
-      setSideConfig(publicCompetitionConfig);
-    }
-  };
-
-  // const getSidebarItems = async () => {
-  //   let leaderboardResponse = await getAllLeaderboards(0, 0, token);
-  //   await mapList(leaderboardResponse?.data?.body?.leaderboards, "leaderboard");
-  //   let competitionResponse = await getAllCompetitions(0, 0);
-  //   await mapList(leaderboardResponse?.data?.body?.competitions, "competition");
-  // };
-
-  // const mapList = async (list: any, component: any) => {
-  //   const mappedData: any = [];
-  //   if (list.length) {
-  //     list.forEach((item: any) => {
-  //       const temp = {
-  //         title: item.name,
-  //         _id: item._id,
-  //         path:
-  //           component === "leaderboard"
-  //             ? `/dashboard/leaderboard/${item._id}`
-  //             : `/dashboard/competition/${item._id}`,
-  //       };
-  //       mappedData.push(temp);
-  //     });
-  //   }
-  //   // setLeaderboardList(mappedData);
-  //   await setSideConfig(mappedData);
-  // };
 
   const renderContent = (items: any) => {
     return items.map((item: any, index: any) => (
