@@ -1,41 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { FSider, FSiderItem, FSiderSubMenuItem } from "ferrum-design-system";
-import {
-  publicLeaderboardConfig,
-  orgLeaderboardAndCompetitionSidebarConfig,
-  publicMultiLeaderboardConfig,
-  publicCompetitionConfig,
-  tokensSidebarConfig,
-  bridgeSidebarConfig,
-  homeSidebarConfig,
-  publicLeaderboardAndCompetitionSidebarConfig,
-  crucibleConfig,
-  GET_ICONS,
-  GET_PATHS,
-  getIcon,
-  // GET_PATHS,
-  // // GET_ICONS,
-  // getIcon,
-} from "./SidebarConfig";
-import { useLocation, useParams } from "react-router-dom";
+import { getIcon } from "./SidebarConfig";
+import { useLocation } from "react-router-dom";
 import { getSideMenuForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
-import { ME_TAG, TOKEN_TAG, showCrucibleMenu } from "../../utils/const.utils";
-import { T } from '../../utils/translationHelper';
+import { CRUCIBLE_SITE_TAG } from "../../utils/const.utils";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
 
 const DashboardSidebar = () => {
-  const { id }: any = useParams();
   const { pathname } = useLocation();
-  const [sideConfig, setSideConfig]: any = useState([]);
   const [sideMenuItems, setSideMenuItems] = useState();
-
-  const isStakingLeaderboard = pathname.includes("/staking");
 
   const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator)
 
   useEffect(() => {
-    console.log(tokenV2)
     getSideMenuInformation(tokenV2);
   }, [tokenV2]);
 
@@ -46,21 +24,65 @@ const DashboardSidebar = () => {
 
   const getCurrenciesAgainstOrganization = (currencies: any) => {
     let currencyArray: any = [];
-    console.log(currencies)
     currencies.length &&
       currencies.forEach((item: any) => {
         currencyArray.push({
           title: `Buy ${item.currency.symbol}`,
-          icon: getIcon(item.icon),
+          icon: item.icon && getIcon(item.icon),
           target: "_blank",
           path: `${item?.currency?.currencyAddressesByNetwork[0]?.networkDex?.dex?.url}swap?inputCurrency=BNB&outputCurrency=${item?.currency?.currencyAddressesByNetwork[0]?.tokenContractAddress}&exactField=output&exactAmount=`,
+          id: item._id
         });
       });
-    console.log(currencyArray)
     return currencyArray;
   };
 
-  const getSubscriptionListAgainstOrganization = (sideMenuItems: any) => {
+  const getSubMenuItemMenu = (item: any) => {
+    let subMenuItemArray: any = [];
+    let children: any = [];
+    item.menuItems.forEach((subMenuItem: any) => {
+      children.push({
+        title: subMenuItem.name,
+        icon: subMenuItem.icon && getIcon(subMenuItem.icon),
+        path: `${subMenuItem.path}`,
+        id: subMenuItem._id
+      })
+    })
+    subMenuItemArray.push({
+      title: item.name,
+      icon: item.icon && getIcon(item.icon),
+      path: item.path,
+      children: children,
+      id: item._id
+    })
+    return subMenuItemArray;
+  }
+
+  const getMenuItemInfoFromMetaData = (item: any) => {
+    let menuItem: any = [];
+    let externalPathData = item.metaData.find((x: any) => x.key === "externalDynamicPath");
+    if (externalPathData.value) {
+      menuItem.push({
+        title: item.name,
+        icon: item.icon && getIcon(item.icon),
+        path: externalPathData.value,
+        id: item._id,
+        target: "_blank"
+      })
+    } else {
+      let internalPathData = item.metaData.find((x: any) => x.key === "internalStaticPath");
+      menuItem.push({
+        title: item.name,
+        icon: item.icon && getIcon(item.icon),
+        path: internalPathData.value,
+        id: item._id
+      })
+    }
+
+    return menuItem;
+  }
+
+  const getSideMenuAgainstOrganization = (sideMenuItems: any) => {
     const { menu } = sideMenuItems;
     console.log(menu)
     let sideMenuArray: any = [];
@@ -68,56 +90,28 @@ const DashboardSidebar = () => {
       if (item.tags.includes("currencies")) {
         let currencies = getCurrenciesAgainstOrganization(item.menuItems);
         if (currencies.length && currencies.length > 1) {
-          sideMenuArray.push({ title: "Get Token", path: "", icon: GET_ICONS("Token"), children: currencies });
+          sideMenuArray.push({ title: "Get Token", path: "", icon: item.icon && getIcon(item.icon), id: item._id, children: currencies });
         } else {
           sideMenuArray.push(...currencies);
         }
       } else if (item.menuItems.length > 0) {
-
+        let subMenuItemMenu = getSubMenuItemMenu(item);
+        sideMenuArray.push(...subMenuItemMenu);
       } else {
-
+        let menuItem = getMenuItemInfoFromMetaData(item);
+        sideMenuArray.push(...menuItem)
       }
-
-
-
-      // let productName = item.product.name;
-      // console.log(productName, item)
-      // if (item[productName]) {
-      //   console.log(item[productName])
-      //   item[productName].length > 0 &&
-      //     item[productName].forEach((child: any) => {
-      //       child.title = child.name;
-      //       child.path = GET_PATHS(
-      //         productName,
-      //         child._id,
-      //         child.numberOfCurrencies
-      //       );
-      //     });
-      //   sideMenuArray.push({
-      //     title: productName,
-      //     path: "",
-      //     icon: GET_ICONS(productName),
-      //     children: item[productName],
-      //   });
-      // }
     });
-    // let currencies = getCurrenciesAgainstOrganization(sideMenuItems.currencies);
-    // if (currencies.length && currencies.length > 1) {
-    //   sideMenuArray.push({ title: "Get Token", path: "", icon: GET_ICONS("Token"), children: currencies, });
-    // } else {
-    //   sideMenuArray.push(...currencies);
-    // }
-    console.log(sideMenuArray)
     return sideMenuArray;
   };
 
   const getSideMenuInformation = async (token: any) => {
     try {
       let siteName = getSiteName(pathname, "/", "/");
-      let response = await getSideMenuForAssociatedOrganizationBySiteName("fixadmin.ferrumnetwork.io", token, showCrucibleMenu ? false : true);
+      let response = await getSideMenuForAssociatedOrganizationBySiteName("fixadmin.ferrumnetwork.io", token, pathname.includes(CRUCIBLE_SITE_TAG) ? false : true);
       let sideMenuItems = response && response.data && response.data.body;
-      console.log(sideMenuItems)
-      let productList = getSubscriptionListAgainstOrganization(sideMenuItems);
+      let productList = getSideMenuAgainstOrganization(sideMenuItems);
+      console.log(productList)
       setSideMenuItems(productList);
     } catch (e: any) {
       console.log(`Error occured: ${e?.response?.data?.status?.message}`);
@@ -125,40 +119,28 @@ const DashboardSidebar = () => {
   };
 
   const renderContent = (items: any) => {
-    return items.map((item: any, index: any) => (
-      <>
-        {
-          <FSiderItem to={item.path} title={item.title} prefix={item.icon} key={index} target={item.target && item.target}>
-            {item?.children?.length ? (
-              <FSiderSubMenuItem>
-                {item.children.map((subItem: any, sudIndex: any) => (
-                  <FSiderItem
-                    to={subItem.path}
-                    title={subItem.title}
-                    prefix={subItem.icon ? subItem.icon : <img src="/ferrum/bullet.png" className="side-menu-img" alt="side menut item" />}
-                    key={sudIndex}
-                    target={subItem.target && subItem.target}
-                  ></FSiderItem>
-                ))}
-              </FSiderSubMenuItem>
-            ) : ""}
-          </FSiderItem>
-        }
-      </>
-    ));
+    return items.map((item: any) => {
+      return <FSiderItem to={item.path} title={item.title} prefix={item.icon} key={item.id} target={item.target && item.target}>
+        {item?.children?.length ? (
+          <FSiderSubMenuItem>
+            {item.children.map((subItem: any) => {
+              return <FSiderItem
+                to={subItem.path}
+                title={subItem.title}
+                prefix={subItem.icon ? subItem.icon : <img src="/ferrum/bullet.png" className="side-menu-img" alt="side menu item" />}
+                key={subItem.id}
+                target={subItem.target && subItem.target}
+              ></FSiderItem>
+            })}
+          </FSiderSubMenuItem>
+        ) : ""}
+      </FSiderItem>
+    });
   };
 
   return (
     <FSider>
-      {renderContent(homeSidebarConfig)}
       {sideMenuItems && renderContent(sideMenuItems)}
-      {/* {localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG
-        ? renderContent(orgLeaderboardAndCompetitionSidebarConfig)
-        : renderContent(publicLeaderboardAndCompetitionSidebarConfig)} */}
-      {/* {isStakingLeaderboard && renderContent(sideConfig)}  update for fomo */}
-      {/* {renderContent(tokensSidebarConfig)}
-      {renderContent(bridgeSidebarConfig)}
-      {showCrucibleMenu && renderContent(crucibleConfig)} */}
     </FSider>
   );
 };
