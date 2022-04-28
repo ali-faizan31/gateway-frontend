@@ -23,6 +23,7 @@ import {
 } from "../../utils/const.utils";
 import { getFormattedBalance, getFormattedWalletAddress } from "../../utils/global.utils";
 import * as CrucibleActions from "../../components/crucible/redux/CrucibleActions";
+import * as walletAuthenticatorActions from "../../components/common/wallet-authentication/redux/walletAuthenticationActions";
 
 const DashboardHeader = ({ title }: any) => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const DashboardHeader = ({ title }: any) => {
   const history = useHistory();
   const isPublic = pathname.includes("pub");
   const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
-  const { meV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { meV2, currentNetworkInformation, applicationUserToken } = useSelector((state: RootState) => state.walletAuthenticator);
   const { tokenData, isProcessed, isProcessing } = useSelector((state: RootState) => state.crucible);
 
   useEffect(() => {
@@ -65,7 +66,8 @@ const DashboardHeader = ({ title }: any) => {
       }
       localStorageHelper.removeItem(ME_TAG);
       localStorageHelper.removeItem(TOKEN_TAG);
-    } catch (e) {}
+      dispatch(walletAuthenticatorActions.removeSession({ userToken: applicationUserToken }))
+    } catch (e) { }
   };
 
   const loadTokenData = async (networkClient: any) => {

@@ -74,126 +74,126 @@ function App() {
           <Route exact path="/">
             <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" />
           </Route>
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.manage}
             component={cFRMBNBModule.cFRMBNBFarmingDashboardFlowManage}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.introduction}
             component={cFRMBNBModule.cFRMBNBFarmingDashboardFlowIntroduction}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.mint.mint}
             component={cFRMBNBModule.cFRMBNBFarmingMintFlowMint}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.stakingMint.steps}
             component={cFRMBNBModule.cFRMBNBFarmingStakingMintFlowIntroduction}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.stakingMint.success}
             component={cFRMBNBModule.cFRMBNBFarmingStakingMintFlowSuccess}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.stake.success}
             component={cFRMBNBModule.cFRMBNBFarmingStakeFlowSucess}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.stake.stake}
             component={cFRMBNBModule.cFRMBNBFarmingStakeFlowStake}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.success}
             component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowSucess}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.unstake}
             component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowUnStake}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.addLiquidity}
             component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowAddLiquidity}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.removeLiquidity}
             component={cFRMBNBModule.cFRMBNBFarmingUnStakeFlowRemoveLiquidity}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.liquidity}
             component={cFRMBNBModule.cFRMBNBFarmingLiquidityFlow}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.withdraw.success}
             component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowSucess}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.withdraw.withdraw}
             component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowWithdraw}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.withdraw.steps}
             component={cFRMBNBModule.cFRMBNBFarmingWithdrawFlowSteps}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unwrap.unwrap}
             component={cFRMBNBModule.cFRMBNBFarmingUnWrapFlowUnWrap}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.unwrap.success}
             component={cFRMBNBModule.cFRMBNBFarmingUnWrapFlowSuccess}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
           />
-          <UnGuardedRoute path={PATH_DASHBOARD.crucible.public} component={CruciblePublic} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          {/* <UnGuardedRoute path={PATH_DASHBOARD.crucible.public} component={CruciblePublic} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" /> */}
 
           <UnGuardedRoute path="/home" component={Dashboard} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" />
           <UnGuardedRoute path="/auth/forgot-password" component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />
@@ -217,10 +217,7 @@ function App() {
           <GuardedRoute path="/dashboard/multi/leaderboard/:id" component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/leaderboard/:id" component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout} />
           <UnGuardedRoute path={PATH_DASHBOARD.general.profile} component={ProfileSettings} auth={isAuthenticated} layout={DashboardLayout} headerTitle="My Profile" />
-
-          {/* new routes ---------------------- */}
-
-          <UnGuardedRoute path={PATH_DASHBOARD.crucible.deployer} component={CrucibleDeployer} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          {/* <UnGuardedRoute path={PATH_DASHBOARD.crucible.deployer} component={CrucibleDeployer} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" /> */}
           <UnGuardedRoute path={PATH_DASHBOARD.crucible.index} component={CrucibleDashboardPage} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
 
           <Route path="*" component={Page404}></Route>
