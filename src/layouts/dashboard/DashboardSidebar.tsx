@@ -108,7 +108,10 @@ const DashboardSidebar = () => {
   const getSideMenuInformation = async (token: any) => {
     try {
       let siteName = getSiteName(pathname, "/", "/");
-      let response = await getSideMenuForAssociatedOrganizationBySiteName("fixadmin.ferrumnetwork.io", token, pathname.includes(CRUCIBLE_SITE_TAG) ? false : true);
+      let response = await getSideMenuForAssociatedOrganizationBySiteName("fixadmin.ferrumnetwork.io", token,
+        //  pathname.includes(CRUCIBLE_SITE_TAG) ? false : true
+        false
+      );
       let sideMenuItems = response && response.data && response.data.body;
       let productList = getSideMenuAgainstOrganization(sideMenuItems);
       console.log(productList)
