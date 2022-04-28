@@ -5,6 +5,15 @@ export function uniqueOrganizationSiteName(name) {
   return axios.get(`${defaultEndPointDetails.baseUrl}/api/v1/organizations/?search=${name}`);
 }
 
-export function getSubscriptionInformationForAssociatedOrganizationBySiteName(name) {
-  return axios.get(`${defaultEndPointDetails.baseUrl}/api/v1/subscriptions/details/of/organization/by/sitename/${name}`);
+export function getSideMenuForAssociatedOrganizationBySiteName(name, token, isForGateway) {
+  if (token) {
+    return axios.get(`${defaultEndPointDetails.baseUrl}/api/v1/products/menu?siteName=${name}&isForGateway=${isForGateway}`, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "Application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+  return axios.get(`${defaultEndPointDetails.baseUrl}/api/v1/products/menu?siteName=${name}&isForGateway=${isForGateway}`);
 }
