@@ -111,11 +111,8 @@ export default function MultiTokenLeaderboardIndex() {
       .catch((e) => {
         if (e.response) {
           if (e?.response?.data?.status?.phraseKey !== "") {
-            // const fetchedMessage = GetPhraseString(e?.response?.data?.status?.phraseKey, values);
-            const fetchedMessage = activeTranslation.values[e?.response?.data?.status?.phraseKey]
-              ? activeTranslation.values[e?.response?.data?.status?.phraseKey]
-              : e?.response?.data?.status?.message;
-            toast.error(fetchedMessage);
+            const fetchedMessage = GetPhraseString(e?.response?.data?.status, activeTranslation);
+            toast.error(`Error occured: ${fetchedMessage}`);
           }
         } else {
           toast.error("Something went wrong. Try again later!");

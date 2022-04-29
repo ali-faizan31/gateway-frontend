@@ -177,11 +177,12 @@ export const getCABNInformation = async (tokenContractAddress, setInfo, info) =>
 //   }
 // };
 
-export const GetPhraseString = (key, values) => {
-  console.log(values, key);
-  let translation = key;
+export const GetPhraseString = (response, activateTranslation) => {
+  const { values } = activateTranslation;
+  console.log(values);
+  let translation;
   if (values) {
-    translation = values[`${key}`];
+    translation = values[`${response.phraseKey}`];
   }
-  return translation ? translation : key;
+  return translation ? translation : response.message;
 };
