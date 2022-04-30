@@ -31,7 +31,7 @@ import { ME_TAG, ORG_ROLE_TAG, TOKEN_TAG } from "../../utils/const.utils";
 // import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 
 const DashboardSidebar = () => {
-  let showCrucibleMenu = false;
+  let showCrucibleMenu = true;
   const { id }: any = useParams();
   const { pathname } = useLocation();
   let token = localStorage.getItem(TOKEN_TAG);
@@ -289,7 +289,7 @@ const DashboardSidebar = () => {
     <FSider>
       {/* {renderContent(sideMenuItems)} */}
       {renderContent(homeSidebarConfig)}
-      {localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG ? 
+      {localStorageHelper.load(ME_TAG)?.role === "ORG_ROLE_TAG" ? 
       renderContent(orgLeaderboardAndCompetitionSidebarConfig) :
       renderContent(publicLeaderboardAndCompetitionSidebarConfig)} 
       {/* {isStakingLeaderboard && renderContent(sideConfig)}  update for fomo */} 

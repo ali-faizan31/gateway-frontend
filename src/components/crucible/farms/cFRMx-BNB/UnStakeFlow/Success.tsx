@@ -42,9 +42,9 @@ export const Success = () => {
             Crucible Token Sustainable Liquidity Farming
           </FTypo>
           <FTypo size={16} className="f-mt-1">
-            Congrats! You have successfully unstaked your APE-LP cFRMx - BNB
+            Congrats! You have successfully unstaked your CAKE-LP cFRMx - BNB
             tokens. You can now use the tokens to generate even more rewards by
-            compounding or trading them. You can also unwrap the APE-LP cFRMx -
+            compounding or trading them. You can also unwrap the CAKE-LP cFRMx -
             BNB tokens.{" "}
           </FTypo>
         </FItem>

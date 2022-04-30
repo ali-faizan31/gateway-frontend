@@ -21,7 +21,7 @@ const CrucibleWithdrawFeeCard = () => {
   const LPStakingDetails = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
   const { aprInformation } = useSelector((state: RootState) => state.crucible);
-  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
+  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress.toLowerCase());
 
   return (
     <>
@@ -66,7 +66,7 @@ const CrucibleWithdrawFeeCard = () => {
                   {farm?.includes("BNB") ? Number(LPStakingDetails[farm!]?.stake || "0") : Number(userStake?.stakeOf || "0").toFixed(3)}
 
                   <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
-                    {farm?.includes("BNB") ? `APE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
+                    {farm?.includes("BNB") ? `CAKE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
                   </FTypo>
                 </FTypo>
               </FGridItem>
