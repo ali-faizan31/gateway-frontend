@@ -137,7 +137,7 @@ export const Stake = () => {
         // } else if (farm === "cFRM") {
         //   stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
         // }
-        stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
+        stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
         currency = crucible[farm!].currency;
         amount = amountToStake.toString();
         network = crucible[farm!]?.network;

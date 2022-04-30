@@ -65,6 +65,11 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
 
   const [selectedToken, setSelectedToken] = useState<any>();
 
+  const handleSelectedToken = (option:any) => {
+    window.open(option.url)
+    setSelectedToken(option)
+  }
+
   const selectTokens = [
     {
       value: "frm",
@@ -76,6 +81,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <span>FRM</span>
         </FItem>
       ),
+      url: "https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc&exactField=output&exactAmount=0"
     },
     {
       value: "frmx",
@@ -87,6 +93,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <span>FRMx</span>
         </FItem>
       ),
+      url: 'https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x8523518001ad5d24b2A04e8729743C0643A316c0&exactField=output&exactAmount=0'
     },
     {
       value: "cfrm",
@@ -98,6 +105,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <span>cFRM</span>
         </FItem>
       ),
+      url: 'https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE&exactField=output&exactAmount=0'
     },
     {
       value: "cfrmx",
@@ -109,18 +117,8 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <span>cFRMx</span>
         </FItem>
       ),
-    },
-    {
-      value: "bnb",
-      label: (
-        <FItem display={"flex"} alignY="center">
-          <span className="icon-wrap">
-            <IconNetworkBnb />
-          </span>{" "}
-          <span>BNB</span>
-        </FItem>
-      ),
-    },
+      url: 'https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xaf329a957653675613D0D98f49fc93326AeB36Fc&exactField=output&exactAmount=0'
+    }
   ];
 
   return (
@@ -178,7 +176,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
                 placeholder="Buy Token"
                 options={selectTokens}
                 value={selectedToken}
-                onChange={(option: any) => setSelectedToken(option)}
+                onChange={(option: any) => handleSelectedToken(option)}
               />
             </FGridItem>
 

@@ -85,7 +85,7 @@ export const CrucibleStepsPage = () => {
                 Step 3
               </FTypo>
               <FTypo size={18}>
-                Congratulations! You have successfully added liquidity. You are now able to stake your APE-LP cFRM-BNB tokens to start earning
+                Congratulations! You have successfully added liquidity. You are now able to stake your CAKE-LP cFRM-BNB tokens to start earning
                 rewards!
               </FTypo>
               <br></br>
@@ -93,7 +93,7 @@ export const CrucibleStepsPage = () => {
                 onClick={() => setStepThreeCheck(!stepThreeCheck)}
                 name="step3Check"
                 className="f-mb-1 f-mt-1"
-                label={"I have added liquidity of APE-LP cFRM-BNB pair and have the LP tokens. I’m ready to stake my APE-LP cFRM-BNB tokens now."}
+                label={"I have added liquidity of CAKE-LP cFRM-BNB pair and have the LP tokens. I’m ready to stake my CAKE-LP cFRM-BNB tokens now."}
               />
               {/* <FButton title="Add Liquidity" postfix={<IconArrow />} className="w-100" disabled={!stepThreeCheck} /> */}
             </span>
