@@ -19,6 +19,7 @@ import {
 } from '../../_apis/CompetitionCrud';
 
 import { TOKEN_TAG } from '../../utils/const.utils';
+import { T } from '../../utils/translationHelper';
 
 const CompetitionInformation = () => {
     const {id} = useParams();
@@ -118,7 +119,12 @@ const CompetitionInformation = () => {
             .catch((e) => {
                 setIsLoading(false);
                 if (e.response) {
-                    toast.error(e?.response?.data?.status?.message);
+                    if (e?.response?.data?.status?.phraseKey !== '') {
+                        const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+                        toast.error(fetchedMessage);
+                    } else {
+                        toast.error(e?.response?.data?.status?.message);
+                    }
                 } else {
                     toast.error('Something went wrong. Try again later!');
                 }
@@ -138,7 +144,12 @@ const CompetitionInformation = () => {
             .catch((e) => {
                 setIsLoading(false);
                 if (e.response) {
-                    toast.error(e?.response?.data?.status?.message);
+                    if (e?.response?.data?.status?.phraseKey !== '') {
+                        const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+                        toast.error(fetchedMessage);
+                    } else {
+                        toast.error(e?.response?.data?.status?.message);
+                    }
                 } else {
                     toast.error('Something went wrong. Try again later!');
                 }
@@ -275,7 +286,7 @@ const CompetitionInformation = () => {
                 <FContainer>
                     <FGrid className={'f-mt-1 f-mb-1'}>
                         <FGridItem
-                            size={[6, 6, 6]}
+                            size={[4, 4, 4]}
                             alignX="start"
                             alignY={'end'}
                         >
@@ -308,7 +319,6 @@ const CompetitionInformation = () => {
                                 onChange={onQueryChange}
                                 style={{width: '100%'}}
                             />
-
                             {!isPublicUser && (
                                 <FButton
                                     type="button"

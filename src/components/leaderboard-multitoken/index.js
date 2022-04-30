@@ -13,6 +13,7 @@ import {
   tokenUSDCBSCMainnet,
   TOKEN_TAG,
 } from "../../utils/const.utils";
+import { T } from '../../utils/translationHelper';
 
 export default function MultiTokenLeaderboardIndex() {
   const { id } = useParams();
@@ -105,7 +106,12 @@ export default function MultiTokenLeaderboardIndex() {
       })
       .catch((e) => {
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
@@ -146,7 +152,12 @@ export default function MultiTokenLeaderboardIndex() {
       })
       .catch((e) => {
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }

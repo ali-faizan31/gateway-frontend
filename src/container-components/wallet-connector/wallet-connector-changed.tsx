@@ -19,6 +19,7 @@ import { sign } from "crypto";
 import { locale } from "moment";
 import { localStorageHelper, checkSession } from "../../utils/global.utils";
 import { ME_TAG, TOKEN_TAG } from "../../utils/const.utils";
+import { T } from '../../utils/translationHelper';
 
 
 export const WalletConnector = ({WalletConnectView,  WalletConnectModal,  WalletConnectViewProps, }: WalletConnectorProps) => {
@@ -268,9 +269,14 @@ useEffect(() => {
           dispatch( walletAuthenticatorActions.saveApplicationUserToken({ userToken: res.data.body.token }) ); 
         }
       })
-      .catch((e) => {
+      .catch((e: any) => {
         if (e.response) {
-          toast.error(` Error Occured: user token ${e?.response?.data?.status?.message}`);
+            if (e?.response?.data?.status?.phraseKey !== '') {
+                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+                toast.error(fetchedMessage);
+            } else {
+                toast.error(`Error Occurred: user token ${e?.response?.data?.status?.message}`);
+            }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
@@ -289,7 +295,12 @@ useEffect(() => {
       })
       .catch((e) => {
         if (e.response) {
-          toast.error(` Error Occured: allowed on gateway ${e?.response?.data?.status?.message}`);
+            if (e?.response?.data?.status?.phraseKey !== '') {
+                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+                toast.error(fetchedMessage);
+            } else {
+                toast.error(`Error Occurred: allowed on gateway ${e?.response?.data?.status?.message}`);
+            }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
@@ -309,7 +320,12 @@ useEffect(() => {
     .catch((e) => {
       refreshAuthenticationVariables()
       if (e.response) {
-        toast.error(` Error Occured: nonce ${e?.response?.data?.status?.message}`);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+              const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+              toast.error(fetchedMessage);
+          } else {
+              toast.error(`Error Occurred: nonce ${e?.response?.data?.status?.message}`);
+          }
       } else {
         toast.error("Something went wrong. Try again later!");
       }
@@ -335,7 +351,12 @@ useEffect(() => {
       refreshAuthenticationVariables();
       setGetSignatureForSignin(false);
       if (e.response) {
-        toast.error(` Error Occured: nonce ${e?.response?.data?.status?.message}`);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+              const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+              toast.error(fetchedMessage);
+          } else {
+              toast.error(`Error Occurred: nonce ${e?.response?.data?.status?.message}`);
+          }
       } else {
         toast.error("Something went wrong. Try again later!");
       }
@@ -357,14 +378,19 @@ useEffect(() => {
       refreshAuthenticationVariables()
       dispatch( walletAuthenticatorActions.getSignatureFromMetamask({getSignatureFromMetamask: false}))
       if (e.response) {
-        toast.error(`You attempted authentication with  
+          if (e?.response?.data?.status?.phraseKey !== '') {
+              const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+              toast.error(fetchedMessage);
+          } else {
+              toast.error(`You attempted authentication with  
         account: ${account} on network: ${currentWalletNetwork} which doesn't match the address you are signed in with. Please retry authentication with the correct address and network to continue.
         \n Wallet Authentication is required to edit profile!`, {
-          style:{
-            maxWidth:'650px '
-          },
-          duration: 4000 
-        })
+                  style:{
+                      maxWidth:'650px '
+                  },
+                  duration: 4000
+              })
+          }
       } else {
         toast.error("Something went wrong. Try again later!");
       }

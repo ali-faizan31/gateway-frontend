@@ -27,7 +27,8 @@ import {
   // getAllCompetitions,
 } from "../../_apis/CompetitionCrud";
 import { localStorageHelper } from "../../utils/global.utils";
-import { ME_TAG, ORG_ROLE_TAG, TOKEN_TAG } from "../../utils/const.utils";
+import { ME_TAG, TOKEN_TAG } from "../../utils/const.utils";
+import { T } from '../../utils/translationHelper';
 // import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 
 const DashboardSidebar = () => {
@@ -177,7 +178,12 @@ const DashboardSidebar = () => {
       })
       .catch((e: any) => {
         if (e.response) {
-          toast.error(e?.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
@@ -217,7 +223,12 @@ const DashboardSidebar = () => {
       })
       .catch((e: any) => {
         if (e.response) {
-          toast.error(e?.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
