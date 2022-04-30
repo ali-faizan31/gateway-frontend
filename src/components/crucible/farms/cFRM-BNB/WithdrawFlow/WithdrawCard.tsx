@@ -45,7 +45,7 @@ export const Withdraw = () => {
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
   const { isConnected, walletAddress, networkClient } = useSelector((state: RootState) => state.walletConnector);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
-  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
+  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress.toLowerCase());
   const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
   const LPStakingDetails = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
@@ -129,7 +129,7 @@ export const Withdraw = () => {
         response = await client.withdrawRewardsLPToken(dispatch, currency, userAddress, stakingAddress, network);
       } else if (isSingleTokenFarm(farm)) {
         currency = crucible[farm!]?.currency;
-        stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
+        stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
         amount = userStake?.rewardOf;
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
