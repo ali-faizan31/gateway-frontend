@@ -51,7 +51,7 @@ const CrucibleFeeCard = () => {
                 <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
                   13.929
                   <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
-                    APE-LP cFRM-BNB
+                    CAKE-LP cFRM-BNB
                   </FTypo>
                 </FTypo>
               </FGridItem>
