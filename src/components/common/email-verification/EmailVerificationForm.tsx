@@ -13,11 +13,14 @@ import { EmailVerify } from "../../../_apis/OnboardingCrud";
 import { PATH_AUTH } from "../../../routes/paths";
 import ClipLoader from "react-spinners/ClipLoader";
 import { ME_TAG, TOKEN_TAG } from "../../../utils/const.utils";
-import { T } from '../../../utils/translationHelper';
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/rootReducer";
+import { getErrorMessage } from "../../../utils/global.utils";
 
 const EmailVerificationForm = (children: any) => {
   const { parsedUser } = children;
   const history = useHistory();
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   const onSubmit = async (values: any) => {
     values.email = parsedUser.email;
@@ -33,16 +36,7 @@ const EmailVerificationForm = (children: any) => {
         history.push(PATH_AUTH.walletAuthentication);
       })
       .catch((e) => {
-        if (e.response) {
-            if (e?.response?.data?.status?.phraseKey !== '') {
-                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-                toast.error(fetchedMessage);
-            } else {
-                toast.error(e?.response?.data?.status?.message);
-            }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 

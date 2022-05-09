@@ -19,11 +19,15 @@ import { PATH_AUTH } from "../../../../routes/paths";
 import ClipLoader from "react-spinners/ClipLoader";
 import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils";
 import { T } from '../../../../utils/translationHelper';
+import { RootState } from "../../../../redux/rootReducer";
+import { useSelector } from "react-redux";
+import { getErrorMessage } from "../../../../utils/global.utils";
 
 const RegisterForm = () => {
   const history = useHistory();
   const [viewPassword, setViewPassword] = useState(false);
   const [viewConfirmPassword, setViewConfirmPassword] = useState(false);
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   const onSubmit = async (values: any) => {
     await communityMemberRegister(values)
@@ -36,16 +40,7 @@ const RegisterForm = () => {
         history.push(PATH_AUTH.emailVerify);
       })
       .catch((e: any) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 

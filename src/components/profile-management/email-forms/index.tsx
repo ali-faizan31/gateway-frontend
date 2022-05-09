@@ -8,7 +8,8 @@ import { sendOTP, updateEmail } from "../../../_apis/ProfileCrud";
 // import { AiOutlineMail } from "react-icons/ai";
 // import { TOKEN_TAG } from "../../../utils/const.utils";
 import { RootState } from "../../../redux/rootReducer";
-import { T } from '../../../utils/translationHelper';
+import { getErrorMessage } from "../../../utils/global.utils";
+
 
 interface EmailSectionProps {
   profileToken: string;
@@ -29,6 +30,7 @@ const EmailSection = ({
   const walletAuthenticator = useSelector(
     (state: RootState) => state.walletAuthenticator
   );
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   const resendCode = () => {
     setOtpSent(false);
@@ -42,16 +44,7 @@ const EmailSection = ({
         setOtpSent(true);
       })
       .catch((e: any) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 
@@ -63,16 +56,7 @@ const EmailSection = ({
         getUserInfo();
       })
       .catch((e: any) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 

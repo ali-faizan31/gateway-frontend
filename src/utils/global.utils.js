@@ -179,10 +179,22 @@ export const getCABNInformation = async (tokenContractAddress, setInfo, info) =>
 
 export const GetPhraseString = (response, activateTranslation) => {
   const { values } = activateTranslation;
-  console.log(values);
   let translation;
   if (values) {
     translation = values[`${response.phraseKey}`];
   }
   return translation ? translation : response.message;
+};
+
+export const getErrorMessage = (e, activeTranslation) => {
+  if (e.response) {
+    if (e?.response?.data?.status?.phraseKey !== "") {
+      const fetchedMessage = GetPhraseString(e?.response?.data?.status, activeTranslation);
+      toast.error(`Error occured: ${fetchedMessage}`);
+    } else {
+      toast.error(`Error occured: ${e?.response?.data?.status?.message}`);
+    }
+  } else {
+    toast.error("Something went wrong. Try again later!");
+  }
 };

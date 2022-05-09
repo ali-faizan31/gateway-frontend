@@ -6,8 +6,7 @@ import { useParams, useLocation } from "react-router-dom";
 import MultiTokenLeaderboardInformation from "./MultiTokenLeaderboard";
 import { getLeaderboardById, getLeaderboardByIdForPublicUser, getTokenPriceFrom1Inch } from "../../_apis/LeaderboardCrud";
 import { tokenUSDCBSCMainnet, TOKEN_TAG } from "../../utils/const.utils";
-import { GetPhraseString } from "../../utils/global.utils";
-import { T } from "../../utils/translationHelper";
+import { getErrorMessage } from "../../utils/global.utils";
 import { useSelector } from "react-redux";
 
 export default function MultiTokenLeaderboardIndex() {
@@ -109,14 +108,7 @@ export default function MultiTokenLeaderboardIndex() {
         }
       })
       .catch((e) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== "") {
-            const fetchedMessage = GetPhraseString(e?.response?.data?.status, activeTranslation);
-            toast.error(`Error occured: ${fetchedMessage}`);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 
@@ -161,17 +153,7 @@ export default function MultiTokenLeaderboardIndex() {
         }
       })
       .catch((e) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== "") {
-            // const fetchedMessage = values[e?.response?.data?.status?.phraseKey];
-            const fetchedMessage = activeTranslation.values[e?.response?.data?.status?.phraseKey]
-              ? activeTranslation.values[e?.response?.data?.status?.phraseKey]
-              : e?.response?.data?.status?.message;
-            toast.error(fetchedMessage);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 

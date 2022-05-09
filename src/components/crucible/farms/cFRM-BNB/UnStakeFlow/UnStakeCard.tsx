@@ -24,7 +24,7 @@ import {
 import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
-import { T } from '../../../../../utils/translationHelper';
+import { getErrorMessage } from "../../../../../utils/global.utils";
 
 export const UnStake = () => {
   const dispatch = useDispatch();
@@ -45,6 +45,7 @@ export const UnStake = () => {
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const [transactionId, setTransactionId] = useState("");
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
@@ -70,16 +71,7 @@ export const UnStake = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      if (e.response) {
-        if (e?.response?.data?.status?.phraseKey !== '') {
-          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-          toast.error(fetchedMessage);
-        } else {
-          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
-        }
-      } else {
-        toast.error("Something went wrong. Try again later!");
-      }
+      getErrorMessage(e, activeTranslation)
     }
   };
 

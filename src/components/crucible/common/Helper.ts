@@ -7,6 +7,7 @@ import { CrucibleClient } from "../../../container-components/web3Client/crucibl
 import { crucibleSlice } from "../redux/CrucibleSlice";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { T } from '../../../utils/translationHelper';
+import { GetPhraseString } from "../../../utils/global.utils";
 
 export const getHumanReadableFarmName = (farm: any) => {
   switch (farm) {
@@ -447,7 +448,7 @@ export const getLatestStepToRender = async (
       } catch (e: any) {
         if (e.response) {
           if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            const fetchedMessage = GetPhraseString(e?.response?.data?.status?.phraseKey);
             toast.error(fetchedMessage);
           } else {
             toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
@@ -467,7 +468,7 @@ export const getLatestStepToRender = async (
     } else {
       if (e.response) {
         if (e?.response?.data?.status?.phraseKey !== '') {
-          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+          const fetchedMessage = GetPhraseString(e?.response?.data?.status?.phraseKey);
           toast.error(fetchedMessage);
         } else {
           toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);

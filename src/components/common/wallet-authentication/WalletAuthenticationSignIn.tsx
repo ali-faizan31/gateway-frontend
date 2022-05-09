@@ -11,7 +11,7 @@ import {
 import * as walletAuthenticatorActions from "./redux/walletAuthenticationActions";
 import { walletConnectorActions } from "../../../container-components/wallet-connector";
 import toast from "react-hot-toast";
-import { localStorageHelper } from "../../../utils/global.utils";
+import { getErrorMessage, GetPhraseString, localStorageHelper } from "../../../utils/global.utils";
 import { ME_TAG, TOKEN_TAG } from "../../../utils/const.utils";
 import { FDialog, FItem, FList, FButton, FGridItem } from "ferrum-design-system";
 import { getNetworkInformationForPublicUser } from "../../../_apis/NetworkCrud";
@@ -25,15 +25,8 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
   );
   const [allowedNetworkModal, setAllowedNetworkModal] = useState<boolean>(false);
   const [getSignatureForSignin, setGetSignatureForSignin] = useState<boolean>(false);
-  // const [isValidated, setIsValidated] = useState<boolean | undefined>(
-  //   undefined
-  // );
   const [isForSigninFlow, setIsForSigninFlow] = useState<boolean | undefined>(undefined);
-  // const [isValidationCompleted, setIsValidationCompleted] = useState<
-  //   boolean | undefined
-  // >(undefined);
-  // const [connectedAndVerifiedWallet, setConnectedAndVerifiedWallet] =
-  //   useState("");
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   useEffect(() => {
     if (isConnected && !applicationUserToken && isConnecting === false) {
@@ -161,16 +154,7 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
         }
       })
       .catch((e: any) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(`Error Occurred: user token ${e?.response?.data?.status?.message}`);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 
@@ -193,16 +177,7 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
         }
       })
       .catch((e) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(`Error Occurred: allowed on gateway ${e?.response?.data?.status?.message}`);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 
@@ -221,16 +196,7 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
       })
       .catch((e) => {
         refreshAuthenticationVariables();
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(`Error Occurred: nonce ${e?.response?.data?.status?.message}`);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 
@@ -265,16 +231,7 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
       .catch((e) => {
         refreshAuthenticationVariables();
         setGetSignatureForSignin(false);
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(`Error Occurred: nonce ${e?.response?.data?.status?.message}`);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 
@@ -302,19 +259,19 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
         );
         if (e.response) {
           if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            const fetchedMessage = GetPhraseString(e?.response?.data?.status?.phraseKey);
             toast.error(fetchedMessage);
           } else {
             toast.error(
-                `You attempted authentication with  
+              `You attempted authentication with  
       account: ${account} on network: ${currentWalletNetwork} which doesn't match the address you are signed in with. Please retry authentication with the correct address and network to continue.
       \n Wallet Authentication is required to edit profile!`,
-                {
-                  style: {
-                    maxWidth: "650px ",
-                  },
-                  duration: 4000,
-                }
+              {
+                style: {
+                  maxWidth: "650px ",
+                },
+                duration: 4000,
+              }
             );
           }
         } else {

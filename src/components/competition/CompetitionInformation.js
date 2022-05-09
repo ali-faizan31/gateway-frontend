@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 
 import { TOKEN_TAG } from "../../utils/const.utils";
 import { T } from "../../utils/translationHelper";
+import { getErrorMessage } from "../../utils/global.utils";
 
 const CompetitionInformation = () => {
   const { id } = useParams();
@@ -27,8 +28,6 @@ const CompetitionInformation = () => {
   const [competitionParticipantsFiltered, setCompetitionParticipantsFiltered] = useState([]);
   const [showWallets, setShowWallets] = useState(false);
   const { activeTranslation } = useSelector((state) => state.phrase);
-
-  console.log(activeTranslation);
 
   useEffect(() => {
     setIsLoading(true);
@@ -90,19 +89,7 @@ const CompetitionInformation = () => {
       })
       .catch((e) => {
         setIsLoading(false);
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== "") {
-            // const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            const fetchedMessage = activeTranslation.values[e?.response?.data?.status?.phraseKey]
-              ? activeTranslation.values[e?.response?.data?.status?.phraseKey]
-              : e?.response?.data?.status?.phraseKey;
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 
@@ -118,17 +105,7 @@ const CompetitionInformation = () => {
       })
       .catch((e) => {
         setIsLoading(false);
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== "") {
-            // const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            const fetchedMessage = activeTranslation.values[e?.response?.data?.status?.phraseKey];
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 
