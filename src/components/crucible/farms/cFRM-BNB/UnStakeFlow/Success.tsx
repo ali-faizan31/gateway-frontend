@@ -138,7 +138,7 @@ export const Success = () => {
                 Crucible Token Sustainable {farm?.includes("BNB") ? "Liquidity" : ""} Farming
               </FTypo>
               <FTypo size={16} className="f-mt-1">
-                Congrats! You have successfully staked {farm?.includes("BNB") ? "APE-LP" : ""} {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} {farm?.includes("BNB") ? "-BNB" : ""}{" "}
+                Congrats! You have successfully staked {farm?.includes("BNB") ? "CAKE-LP" : ""} {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} {farm?.includes("BNB") ? "-BNB" : ""}{" "}
                 tokens. You will now earn rewards for every cFRM transaction that generates a fee. The reward distribution is proportional to your share of the pool.
               </FTypo>
             </FItem>

@@ -93,7 +93,7 @@ export const UnstakeRemoveLiquidity = () => {
                     Step 1
                   </FTypo>
                   <FTypo size={18}>
-                    Congratulations! You have successfully unstaked your APE-LP {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} -BNB tokens! Please proceed to step 2.
+                    Congratulations! You have successfully unstaked your CAKE-LP {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} -BNB tokens! Please proceed to step 2.
                   </FTypo>
                 </span>
               </li>

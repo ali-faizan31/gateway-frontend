@@ -63,10 +63,10 @@ export class Web3Helper {
     // console.log("symbolsymbolsymbol",symbol,balance)
   }
 
-  async getTokenPriceFromRouter(currency = "0x5732a2a84ec469fc95ac32e12515fd337e143eed") {
+  async getTokenPriceFromRouter(currency = "0xaf329a957653675613D0D98f49fc93326AeB36Fc") {
     try {
       const ApeContract = new this.web3Client.eth.Contract(ApeRouterJson.abi as AbiItem[],
-        "0xcF0feBd3f17CEf5b47b0cD257aCf6025c5BFf3b7"
+        "0x10ED43C718714eb63d5aA57B78B54704E256024E"
       );
 
       const response = await ApeContract.methods.getAmountsOut(

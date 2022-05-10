@@ -41,7 +41,7 @@ export const UnStake = () => {
   const [isProcessed, setIsProcessed] = useState(false);
   const [amount, setAmount] = useState(0);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
-  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
+  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress.toLowerCase());
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const [transactionId, setTransactionId] = useState("");
@@ -108,7 +108,7 @@ export const UnStake = () => {
         response = await client.unstakeLPToken(dispatch, currency, userAddress, stakeAmount, stakingAddress, network);
       } else if (isSingleTokenFarm(farm)) {
         currency = crucible[farm!]?.currency;
-        stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
+        stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
         stakeAmount = amount.toString();
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;

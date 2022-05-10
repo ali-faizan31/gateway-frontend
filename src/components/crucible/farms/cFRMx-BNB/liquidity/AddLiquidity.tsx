@@ -48,7 +48,7 @@ export const AddLiquidity = () => {
             <span className="step-info">
               <FTypo className={"f-mb-1"}>Step 3</FTypo>
               <FTypo>
-                Congratulations! You have successfully added liquidity. You are now able to stake your APE-LP cFRMx-BNB tokens to start earning
+                Congratulations! You have successfully added liquidity. You are now able to stake your CAKE-LP cFRMx-BNB tokens to start earning
                 rewards!
               </FTypo>
               <br></br>
@@ -56,7 +56,7 @@ export const AddLiquidity = () => {
                 onClick={() => setStepThreeCheck(!stepThreeCheck)}
                 name="step3Check"
                 className="f-mb-1 f-mt-1"
-                label={"I have added liquidity of APE-LP cFRMx-BNB pair and have the LP Tokens. I’m ready to stake my APE-LP cFRMx-BNB tokens now."}
+                label={"I have added liquidity of CAKE-LP cFRMx-BNB pair and have the LP Tokens. I’m ready to stake my CAKE-LP cFRMx-BNB tokens now."}
               />
               {/* <FButton title="Add Liquidity" postfix={<IconArrow />} className="w-100" disabled={!stepThreeCheck} /> */}
             </span>

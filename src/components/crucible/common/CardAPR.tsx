@@ -71,7 +71,7 @@ export const CardAPR = () => {
   };
 
   const getYourRewards = (farm: any, lpAddress: any) => {
-    let userStake = (userCrucibleDetails[farm!]?.stakes || []).find((e: any) => e.address.toLowerCase() === lpAddress);
+    let userStake = (userCrucibleDetails[farm!]?.stakes || []).find((e: any) => e.address.toLowerCase() === lpAddress.toLowerCase());
     if (farm?.includes("BNB")) {
       return TruncateWithoutRounding(networkClient?.utils.fromWei(String(userLpStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0), "ether"), 3);
     } else {
@@ -79,13 +79,13 @@ export const CardAPR = () => {
     }
   };
 
-  
+
   const getRewardSymbol = (farm: any) => {
     return selectedCrucible[farm!]?.symbol;
   };
 
   const getDepositedSymbol = (farm: any) => {
-    return farm?.includes("BNB") ? `APE-LP ${selectedCrucible[farm!]?.symbol}-BNB` : selectedCrucible[farm!]?.symbol
+    return farm?.includes("BNB") ? `CAKE-LP ${selectedCrucible[farm!]?.symbol}-BNB` : selectedCrucible[farm!]?.symbol
   }
 
   const stepFlowsMock = [
@@ -94,8 +94,8 @@ export const CardAPR = () => {
       internalName: "cFRM-BNB",
       stepFlowName: "cFRM / BNB Crucible Farm - Farming Dashboard Flow",
       totalDeposited: getTotalDeposited("cFRM-BNB"),
-      yourDeposit: `${getYourDeposited("cFRM-BNB", "0xd87f304ca205fb104dc014696227742d20c8f10a")}`,
-      yourRewards: `${getYourRewards("cFRM-BNB", "0xd87f304ca205fb104dc014696227742d20c8f10a")}`,
+      yourDeposit: `${getYourDeposited("cFRM-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
+      yourRewards: `${getYourRewards("cFRM-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
       logo: (
         <>
           <img src={IconNetworkCFrmStr} height="22px" width="22px" />
@@ -105,16 +105,16 @@ export const CardAPR = () => {
       apr: aprInformation?.cfrmLp,
       network: "BSC",
       id: "6238314dd292da2db05524dd",
-      contract: "0x5732a2a84ec469fc95ac32e12515fd337e143eed", // crucible contract address
-      LpCurrency: "0x9528704e44feda5ea240363ee52731859683b1fb", // ape-lp token for crucible and bnb pair
-      LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a", // lp farm where lp currency will be staked
+      contract: "0xaf329a957653675613D0D98f49fc93326AeB36Fc", // crucible contract address
+      LpCurrency: "0x9aa0AB73409311984ED84f3Edef962201Bd11712", // CAKE-LP token for crucible and bnb pair
+      LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008", // lp farm where lp currency will be staked
     },
     {
       sustainableCrucibleFarms: "cFRM",
       stepFlowName: "cFRM Crucible Farm - Farming Dashboard Flow",
       totalDeposited: getTotalDeposited("cFRM"),
-      yourDeposit: `${getYourDeposited("cFRM", "0xd87f304ca205fb104dc014696227742d20c8f10a")}`,
-      yourRewards: `${getYourRewards("cFRM", "0xd87f304ca205fb104dc014696227742d20c8f10a")}`,
+      yourDeposit: `${getYourDeposited("cFRM", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
+      yourRewards: `${getYourRewards("cFRM", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
       apr: aprInformation?.cfrm,
       logo: (
         <>
@@ -122,9 +122,9 @@ export const CardAPR = () => {
         </>
       ),
       id: "6238386bd292da2db05524f9",
-      contract: "0x5732a2a84ec469fc95ac32e12515fd337e143eed",
-      LpCurrency: "0x5732a2a84ec469fc95ac32e12515fd337e143eed",
-      LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a",
+      contract: "0xaf329a957653675613D0D98f49fc93326AeB36Fc",
+      LpCurrency: "0xaf329a957653675613D0D98f49fc93326AeB36Fc",
+      LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
       network: "BSC",
       internalName: "cFRM",
     },
@@ -132,8 +132,8 @@ export const CardAPR = () => {
       sustainableCrucibleFarms: "cFRMx / BNB",
       stepFlowName: "cFRMx / BNB Crucible Farm - Farming Dashboard Flow",
       totalDeposited: getTotalDeposited("cFRMx-BNB"),
-      yourDeposit: getYourDeposited("cFRMx-BNB", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
-      yourRewards: getYourRewards("cFRMx-BNB", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
+      yourDeposit: getYourDeposited("cFRMx-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
+      yourRewards: getYourRewards("cFRMx-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
       apr: aprInformation?.cfrmXLp,
       network: "BSC",
       logo: (
@@ -143,17 +143,17 @@ export const CardAPR = () => {
         </>
       ),
       id: "62383841d292da2db05524f3",
-      contract: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
-      LpCurrency: "0x84f624617bad7e349e194da0877120ee190e4730",
-      LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a",
+      contract: "0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE",
+      LpCurrency: "0xb76b11410A506495418D20c58F9452c17CF285c1",
+      LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
       internalName: "cFRMx-BNB",
     },
     {
       sustainableCrucibleFarms: "cFRMx",
       stepFlowName: "cFRMx Crucible Farm - Farming Dashboard Flow",
       totalDeposited: getTotalDeposited("cFRMx"),
-      yourDeposit: getYourDeposited("cFRMx", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
-      yourRewards: getYourRewards("cFRMx", "0xd87f304ca205fb104dc014696227742d20c8f10a"),
+      yourDeposit: getYourDeposited("cFRMx", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
+      yourRewards: getYourRewards("cFRMx", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
       apr: aprInformation?.cfrmX,
       logo: (
         <>
@@ -161,9 +161,9 @@ export const CardAPR = () => {
         </>
       ),
       id: "62383865d292da2db05524f6",
-      contract: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
-      LpCurrency: "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d",
-      LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a",
+      contract: "0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE",
+      LpCurrency: "0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE",
+      LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
       network: "BSC",
       internalName: "cFRMx",
     },
@@ -180,7 +180,7 @@ export const CardAPR = () => {
       ),
       totalDeposited: <FTypo className={"col-amount"}>{stepFlow.totalDeposited}</FTypo>,
       yourDeposit: <FTypo className={"col-amount"}>{stepFlow.yourDeposit}</FTypo>,
-      yourRewards: <FTypo className={"col-amount"}>{stepFlow.yourRewards}</FTypo>,
+      yourRewards: <FTypo className={"col-amount"}>{stepFlow.yourRewards || '0'}</FTypo>,
       apr: (
         <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}>
           {" "}

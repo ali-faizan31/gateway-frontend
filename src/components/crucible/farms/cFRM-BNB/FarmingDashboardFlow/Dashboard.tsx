@@ -39,7 +39,7 @@ export const Manage = () => {
   const LPStakingDetails = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
-  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
+  let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress.toLowerCase());
 
   useEffect(() => {
     getStepCompletedAndRunCompletionFlow(false);
@@ -138,7 +138,7 @@ export const Manage = () => {
     if (farm?.includes("BNB")) {
       return TruncateWithoutRounding(networkClient?.utils.fromWei(String(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0), "ether"), 3);
     } else {
-      let userStake = ((userCrucibleData[farm!] && userCrucibleData[farm!].stakes) || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress);
+      let userStake = ((userCrucibleData[farm!] && userCrucibleData[farm!].stakes) || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress.toLowerCase());
       return TruncateWithoutRounding(userStake?.rewardOf || 0, 3);
     }
   };
@@ -201,7 +201,7 @@ export const Manage = () => {
                       {farm?.includes("BNB") ? Number(LPStakingDetails[farm!]?.stake || "0") : Number(userStake?.stakeOf || "0").toFixed(3)}
 
                       <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
-                        {farm?.includes("BNB") ? `APE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
+                        {farm?.includes("BNB") ? `CAKE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
                       </FTypo>
                     </FTypo>
                   </FGridItem>

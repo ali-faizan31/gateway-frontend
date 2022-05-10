@@ -24,12 +24,13 @@ export const FRM_FRMx_leaderboard_Details = { id: "61b6d48337f5125acbbfddeb", na
 export const cFRM_Competition_Details = { id: "6257c97e25c981612852df0b", name: "cFRM Competition" };
 export const cFRMx_Competition_Details = { id: "6257cbee25c981612852e05e", name: "cFRMx Competition" };
 
-export const cFRMxTokenContractAddress = "0x422a9c44e52a2ea96422f0caf4a00e30b3e26a0d";
-export const cFRMTokenContractAddress = "0x5732a2a84ec469fc95ac32e12515fd337e143eed";
-export const APELPCFRMBNBTokenContractAddress = "0x9528704e44feda5ea240363ee52731859683b1fb";
-export const APELPCFRMxBNBTokenContractAddress = "0x84f624617bad7e349e194da0877120ee190e4730";
+export const cFRMxTokenContractAddress = "0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE";
+export const cFRMTokenContractAddress = "0xaf329a957653675613D0D98f49fc93326AeB36Fc";
+export const APELPCFRMBNBTokenContractAddress = "0x9aa0AB73409311984ED84f3Edef962201Bd11712";
+export const APELPCFRMxBNBTokenContractAddress = "0xb76b11410A506495418D20c58F9452c17CF285c1";
 
 export const Crucible_Farm_Address_Details = {
+<<<<<<< HEAD
   cFRM: {
     DashboardStepFlowId: "6238386bd292da2db05524f9",
     network: "BSC",
@@ -63,6 +64,41 @@ export const Crucible_Farm_Address_Details = {
     LPstakingAddress: "0xd87f304ca205fb104dc014696227742d20c8f10a",
   },
 };
+=======
+    "cFRM": {
+        DashboardStepFlowId: "6238386bd292da2db05524f9",
+        network: "BSC",
+        internalName: "cFRM",
+        contract: "0xaf329a957653675613D0D98f49fc93326AeB36Fc",
+        LpCurrency: "0x9aa0AB73409311984ED84f3Edef962201Bd11712",
+        LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
+    },
+    "cFRMx": {
+        DashboardStepFlowId: "62383865d292da2db05524f6",
+        internalName: "cFRMx",
+        contract: "0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE",
+        network: "BSC",
+        LpCurrency: "0xb76b11410A506495418D20c58F9452c17CF285c1",
+        LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
+    },
+    "cFRM-BNB":{
+        DashboardStepFlowId: "6238314dd292da2db05524dd",
+        network: "BSC",
+        internalName: "cFRM-BNB",
+        contract: "0xaf329a957653675613D0D98f49fc93326AeB36Fc", // crucible contract address
+        LpCurrency: "0x9aa0AB73409311984ED84f3Edef962201Bd11712", // CAKE-LP token for crucible and bnb pair
+        LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"
+    },
+    "cFRMx-BNB": {
+        DashboardStepFlowId: "62383841d292da2db05524f3",
+        network: "BSC",
+        internalName: "cFRMx-BNB",
+        contract: "0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE",
+        LpCurrency: "0xb76b11410A506495418D20c58F9452c17CF285c1",
+        LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
+    }
+}
+>>>>>>> vmarker.io
 
 export const Pricing_Tokens = [
   {
