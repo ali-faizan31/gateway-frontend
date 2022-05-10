@@ -22,8 +22,7 @@ import { getAPRValueAgainstFarm, getLatestStepToRender, getObjectReadableFarmNam
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import toast from "react-hot-toast";
-import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
-import { T } from '../../../../../utils/translationHelper';
+import { getErrorMessage, TruncateWithoutRounding } from "../../../../../utils/global.utils";
 
 export const Manage = () => {
   const history = useHistory();
@@ -40,6 +39,7 @@ export const Manage = () => {
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
   let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress.toLowerCase());
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   useEffect(() => {
     getStepCompletedAndRunCompletionFlow(false);
@@ -77,16 +77,7 @@ export const Manage = () => {
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, true, true);
     } catch (e: any) {
       setIsLoading(false);
-      if (e.response) {
-        if (e?.response?.data?.status?.phraseKey !== '') {
-          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-          toast.error(fetchedMessage);
-        } else {
-          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
-        }
-      } else {
-        toast.error("Something went wrong. Try again later!");
-      }
+      getErrorMessage(e, activeTranslation)
     }
   };
 

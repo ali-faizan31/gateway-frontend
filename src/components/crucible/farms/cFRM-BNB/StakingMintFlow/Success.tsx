@@ -17,7 +17,7 @@ import { getLatestStepToRender, getObjectReadableFarmName } from "../../../commo
 import { STEP_FLOW_IDS } from "../../../common/utils";
 import { ClipLoader } from "react-spinners";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
-import { T } from '../../../../../utils/translationHelper';
+import { getErrorMessage } from "../../../../../utils/global.utils";
 
 export const Success = () => {
   const dispatch = useDispatch();
@@ -28,6 +28,7 @@ export const Success = () => {
   const history = useHistory();
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const { tokenV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   useEffect(() => {
     if (location.state === undefined) {
@@ -65,16 +66,7 @@ export const Success = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      if (e.response) {
-        if (e?.response?.data?.status?.phraseKey !== '') {
-          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-          toast.error(fetchedMessage);
-        } else {
-          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
-        }
-      } else {
-        toast.error("Something went wrong. Try again later!");
-      }
+      getErrorMessage(e, activeTranslation)
     }
   };
 

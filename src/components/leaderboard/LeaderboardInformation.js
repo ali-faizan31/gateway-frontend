@@ -8,10 +8,9 @@ import eitherConverter from "ether-converter";
 import { CSVLink } from "react-csv";
 import moment from "moment";
 import { getLeaderboardById, getLeaderboardByIdForPublicUser, getTokenHolderlistByCABNId } from "../../_apis/LeaderboardCrud";
-import { arraySortByKeyDescending, getFormattedWalletAddress } from "../../utils/global.utils";
+import { arraySortByKeyDescending, getErrorMessage, getFormattedWalletAddress } from "../../utils/global.utils";
 import { PUBLIC_TAG, TOKEN_TAG } from "../../utils/const.utils";
 import { filterList } from "./LeaderboardHelper";
-import { T } from "../../utils/translationHelper";
 
 const LeaderboardInformation = () => {
   const { id } = useParams();
@@ -25,6 +24,7 @@ const LeaderboardInformation = () => {
   const [leaderboardData, setLeaderboardData] = useState({});
   const [tokenHolderList, setTokenHolderList] = useState([]);
   const [filteredTokenHolderList, setFilteredTokenHolderList] = useState([]);
+  const { activeTranslation } = useSelector((state) => state.phrase);
 
   useEffect(() => {
     setIsLoading(true);
@@ -73,16 +73,7 @@ const LeaderboardInformation = () => {
       })
       .catch((e) => {
         setIsLoading(false);
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== "") {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 
@@ -113,16 +104,7 @@ const LeaderboardInformation = () => {
       })
       .catch((e) => {
         setIsLoading(false);
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== "") {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 
@@ -133,16 +115,7 @@ const LeaderboardInformation = () => {
         mapTokenHolderData(filteredList, leaderboard);
       })
       .catch((e) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== "") {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 

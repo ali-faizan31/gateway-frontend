@@ -13,7 +13,9 @@ import { ClipLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import { getAccessTokenForApplicationUser } from "../../../_apis/WalletAuthencation";
 import { ME_TAG, TOKEN_TAG } from "../../../utils/const.utils";
-import { T } from '../../../utils/translationHelper';
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/rootReducer";
+import { getErrorMessage } from "../../../utils/global.utils";
 
 const Index = () => {
   const [isVerified, setIsVerified] = useState(false);
@@ -21,6 +23,7 @@ const Index = () => {
   const user = localStorage.getItem(ME_TAG);
   const parsedUser = user && JSON.parse(user);
   const token = localStorage.getItem(TOKEN_TAG);
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   useEffect(() => {
     getAccessToken();
@@ -34,16 +37,7 @@ const Index = () => {
         }
       })
       .catch((e: any) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 

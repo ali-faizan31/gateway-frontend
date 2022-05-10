@@ -18,26 +18,22 @@ import {
 } from "../../../../routes/paths";
 import * as validations from "../../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader";
-// import { connectWeb3 } from "../../../../utils/connect-wallet/connetWalletHelper";
 import {
-  // walletAddressAuthenticateCheckOnSignin,
   getAccessTokenForApplicationUser,
 } from "../../../../_apis/WalletAuthencation";
 import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils";
 import { walletConnectorActions } from "../../../../container-components/wallet-connector";
 import * as walletAuthenticatorActions from "../../../common/wallet-authentication/redux/walletAuthenticationActions";
-import { useDispatch } from "react-redux";
-import { T } from '../../../../utils/translationHelper';
+import { useDispatch, useSelector } from "react-redux";
+import { getErrorMessage } from "../../../../utils/global.utils";
+import { RootState } from "../../../../redux/rootReducer";
 
 const LoginForm = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [viewPassword, setViewPassword] = useState(false);
-  // const [connected, setConnected] = useState(false);
-  // const [address, setAddress] = useState("");
-  // const [network, setNetwork] = useState("ETHEREUM");
-  // const [web3, setWeb3] = useState(null);
   const [applicationUserToken, setApplicationUserToken] = useState("");
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   useEffect(() => {
     getAccessToken();
@@ -64,16 +60,7 @@ const LoginForm = () => {
         }
       })
       .catch((e: any) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 
@@ -158,16 +145,7 @@ const LoginForm = () => {
         }
       })
       .catch((e: any) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 
