@@ -264,6 +264,58 @@ const CompetitionInformation = () => {
             </FTable>
           ) : isLoading ? (
             <FContainer type="fluid">
+              <FContainer>
+                <FGrid className={"f-mt-1 f-mb-1"}>
+                  <FGridItem size={[4, 4, 4]} alignX="start" alignY={"end"}>
+                    <h1>{competitionData?.name || "Competition"}</h1>
+                  </FGridItem>
+                  <FGridItem size={[2, 2, 2]} alignX="start" alignY="end">
+                    {!isPublicUser && (
+                      <FButton
+                        type="button"
+                        className="btn-create f-ml-1"
+                        disabled={isLoading || !competitionParticipants?.length}
+                        onClick={showAllWallets}
+                        title={`${showWallets ? "Hide" : "Show"} Wallets`}
+                      />
+                    )}
+                  </FGridItem>
+                  <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[4, 4, 4]}>
+                    <FInputText label="Search Wallet" placeholder="0x000...0000" value={query} type="search" onChange={onQueryChange} style={{ width: "100%" }} />
+                    {!isPublicUser && (
+                      <FButton
+                        type="button"
+                        className="btn-create f-ml-1"
+                        disabled={isLoading || !competitionParticipants?.length}
+                        onClick={onExportClick}
+                        title={" Export to CSV"}
+                      />
+                    )}
+                  </FGridItem>
+                </FGrid>
+                {competitionParticipants.length ? (
+                  <FTable>
+                    <Datatable
+                      tableHeaders={columns}
+                      tableBody={competitionParticipantsFiltered}
+                      rowsPerPage={10}
+                      tableClass="striped hover responsive"
+                      initialSort={{
+                        prop: "rank",
+                        isAscending: true,
+                      }}
+                    />
+                  </FTable>
+                ) : isLoading ? (
+                  <FContainer type="fluid">
+                    <FContainer>Loading...</FContainer>
+                  </FContainer>
+                ) : (
+                  <FContainer type="fluid">
+                    <FContainer>No Data found</FContainer>
+                  </FContainer>
+                )}
+              </FContainer>
               <FContainer>Loading...</FContainer>
             </FContainer>
           ) : (
