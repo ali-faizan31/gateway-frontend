@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { FContainer, FButton } from "ferrum-design-system";
-import {} from "./../../";
+import { FContainer } from "ferrum-design-system";
 import Web3 from "web3";
 import { useWeb3React } from "@web3-react/core";
-import { CrucibleClient } from "./../../container-components/web3Client/crucibleClient";
-import { Web3Helper } from "./../../container-components/web3Client/web3Helper";
-// import { AnyAction, Dispatch } from '@reduxjs/toolkit';
-import { useDispatch } from "react-redux";
 
 const Dashboard = () => {
   const [networkClient, setNetworkClient] = useState<Web3 | undefined>(
     undefined
   );
   const { active, library } = useWeb3React();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (library && !networkClient) {
@@ -22,33 +16,12 @@ const Dashboard = () => {
     }
   }, [active, library, networkClient]);
 
-  const mintCrucible = async (
-    currency: string,
-    crucibleAddress: string,
-    amount: string,
-    isPublic: boolean,
-    network: string,
-    userAddress: string
-  ) => {
-    if (networkClient) {
-      const web3Helper = new Web3Helper(networkClient as any);
-      const client = new CrucibleClient(web3Helper);
+  //not used file
 
-      //@ts-ignore
-      await client.mintCrucible(
-        dispatch,
-        currency,
-        crucibleAddress,
-        amount,
-        isPublic,
-        network,
-        userAddress
-      );
-    }
-  };
 
   return (
     <>
+
       <FContainer type="fluid">
         {/* <FButton
           type="button"

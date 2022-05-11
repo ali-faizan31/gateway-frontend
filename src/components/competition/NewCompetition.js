@@ -13,7 +13,6 @@ import { getAllLeaderboards } from "../../_apis/LeaderboardCrud";
 import { addCompetition } from "../../_apis/CompetitionCrud";
 import { chainIdList } from "../leaderboard/LeaderboardHelper";
 import { TOKEN_TAG } from "../../utils/const.utils";
-import { T } from "../../utils/translationHelper";
 import { getErrorMessage } from "../../utils/global.utils";
 
 export default function NewCompetition() {

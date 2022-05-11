@@ -3,7 +3,6 @@ import { FSider, FSiderItem, FSiderSubMenuItem } from "ferrum-design-system";
 import { getIcon } from "./SidebarConfig";
 import { useLocation } from "react-router-dom";
 import { getSideMenuForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
-import { CRUCIBLE_SITE_TAG } from "../../utils/const.utils";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
 
@@ -15,6 +14,7 @@ const DashboardSidebar = () => {
 
   useEffect(() => {
     getSideMenuInformation(tokenV2);
+    // eslint-disable-next-line
   }, [tokenV2]);
 
   const getSiteName = (url: string, indexA: string, indexB: string) => {
@@ -84,7 +84,6 @@ const DashboardSidebar = () => {
 
   const getSideMenuAgainstOrganization = (sideMenuItems: any) => {
     const { menu } = sideMenuItems;
-    console.log(menu)
     let sideMenuArray: any = [];
     menu && menu.length && menu.forEach((item: any) => {
       if (item.tags.includes("currencies")) {
@@ -114,7 +113,6 @@ const DashboardSidebar = () => {
       );
       let sideMenuItems = response && response.data && response.data.body;
       let productList = getSideMenuAgainstOrganization(sideMenuItems);
-      console.log(productList)
       setSideMenuItems(productList);
     } catch (e: any) {
       console.log(`Error occured: ${e?.response?.data?.status?.message}`);

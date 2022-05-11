@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FHeader, FButton, FItem, FCard } from "ferrum-design-system";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { FaUserCircle } from "react-icons/fa";
@@ -47,6 +47,7 @@ const DashboardHeader = ({ title }: any) => {
     if (networkClient) {
       loadTokenData(networkClient);
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ const DashboardHeader = ({ title }: any) => {
     if (networkClient && isProcessed === true && isProcessing === false) {
       loadTokenData(networkClient);
     }
+    // eslint-disable-next-line
   }, [networkClient, isProcessed, isProcessing]);
 
   const handleLogout = async () => {
@@ -129,12 +131,12 @@ const DashboardHeader = ({ title }: any) => {
                   <FCard variant={"primary"} className={"no-left-margin custom-padding-0 custom-border-radius-4 custom-min-width-270"}>
                     <FItem display={"flex"} alignY="center">
                       <FCard variant={"primary"} className={"d-flex custom-padding-10 overflow-visible"}>
-                        <img src={tokenData["FRMBSC"]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} />
+                        <img src={tokenData["FRMBSC"]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} alt="" />
                         {tokenData["FRMBSC"] && TruncateWithoutRounding(tokenData["FRMBSC"]?.balance, 3)}
                         <p className="primary-color f-pl--4"> {tokenData["FRMBSC"]?.symbol ? tokenData["FRMBSC"]?.symbol : tokenData["FRMBSC"]?.tokenSymbol}</p>
                       </FCard>
                       <FCard variant={"primary"} className={"d-flex custom-padding-10 overflow-visible"}>
-                        {tokenData["FRMxBSC"]?.logo && <img src={tokenData["FRMxBSC"]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} />}
+                        {tokenData["FRMxBSC"]?.logo && <img src={tokenData["FRMxBSC"]?.logo} height="22px" width="22px" alt="" style={{ marginRight: "3px" }} />}
                         {tokenData["FRMxBSC"] && TruncateWithoutRounding(tokenData["FRMxBSC"]?.balance, 3)}
                         <p className="primary-color f-pl--4"> {tokenData["FRMxBSC"]?.symbol ? tokenData["FRMxBSC"]?.symbol : tokenData["FRMxBSC"]?.tokenSymbol}</p>
                       </FCard>
@@ -148,6 +150,7 @@ const DashboardHeader = ({ title }: any) => {
                           height="22px"
                           width="22px"
                           style={{ marginRight: "3px" }}
+                          alt=""
                         />
                         {getFormattedWalletAddress(walletAddress)}
                       </FCard>

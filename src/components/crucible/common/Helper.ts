@@ -6,7 +6,6 @@ import { Web3Helper } from "../../../container-components/web3Client/web3Helper"
 import { CrucibleClient } from "../../../container-components/web3Client/crucibleClient";
 import { crucibleSlice } from "../redux/CrucibleSlice";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { T } from '../../../utils/translationHelper';
 import { GetPhraseString } from "../../../utils/global.utils";
 
 export const getHumanReadableFarmName = (farm: any) => {

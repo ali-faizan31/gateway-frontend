@@ -10,7 +10,6 @@ import { getCompetitionById, getCompetitionsParticipantsRanks } from "../../_api
 import { useSelector } from "react-redux";
 
 import { TOKEN_TAG } from "../../utils/const.utils";
-import { T } from "../../utils/translationHelper";
 import { getErrorMessage } from "../../utils/global.utils";
 
 const CompetitionInformation = () => {

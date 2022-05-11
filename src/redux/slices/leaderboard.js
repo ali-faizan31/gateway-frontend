@@ -1,7 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import eitherConverter from "ether-converter";
-import { getAllLeaderboards, getTokenPriceFrom1Inch } from "../../_apis/LeaderboardCrud";
-import { T } from "../../utils/translationHelper";
 
 const initialState = {
   isLoading: false,

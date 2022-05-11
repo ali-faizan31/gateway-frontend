@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import EmailSection from "./email-forms";
 import { getMe } from "../../_apis/ProfileCrud";

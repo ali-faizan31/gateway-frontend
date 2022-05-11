@@ -2,7 +2,6 @@ import eitherConverter from "ether-converter";
 import FerrumJson from "./FerrumToken.json";
 import { Big } from "big.js";
 import { getCABNInformationForPublicUser } from "../_apis/CABNCrud";
-import * as CrucibleActions from "../components/crucible/redux/CrucibleActions";
 import { T } from "./translationHelper";
 import toast from "react-hot-toast";
 
@@ -113,6 +112,7 @@ export const getTokenInformationFromWeb3 = async (networkClient, walletAddress, 
       ...info,
       tokenSymbol: symbol,
       balance: balance ? balance : "0",
+      name,
       decimals,
     });
   return {
@@ -200,22 +200,20 @@ export const getErrorMessage = (e, activeTranslation) => {
 };
 
 export function changeExponentToPoints(x) {
-  console.log("start", x);
   if (Math.abs(x) < 1.0) {
-    var e = parseInt(x.toString().split("e-")[1]);
+    let e = parseInt(x.toString().split("e-")[1]);
     if (e) {
       x *= Math.pow(10, e - 1);
       x = "0." + new Array(e).join("0") + x.toString().substring(2);
     }
   } else {
-    var e = parseInt(x.toString().split("+")[1]);
+    let e = parseInt(x.toString().split("+")[1]);
     if (e > 20) {
       e -= 20;
       x /= Math.pow(10, e);
       x += new Array(e + 1).join("0");
     }
   }
-  console.log("end", x);
   return x;
 }
 

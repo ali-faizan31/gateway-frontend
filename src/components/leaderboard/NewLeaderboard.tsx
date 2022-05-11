@@ -20,7 +20,6 @@ import { addLeaderboard } from "../../_apis/LeaderboardCrud";
 // import { getAllLeaderboardsDispatch } from '../../redux/slices/leaderboard';
 // import { chainIdList, dexUrlList } from './LeaderboardHelper';
 import { TOKEN_TAG } from "../../utils/const.utils";
-import { T } from '../../utils/translationHelper';
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
 import { getErrorMessage } from "../../utils/global.utils";

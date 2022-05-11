@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllCompetitions } from "../../_apis/CompetitionCrud";
-import { T } from "../../utils/translationHelper";
 
 const initialState = {
   isLoading: false,
