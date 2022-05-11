@@ -24,7 +24,7 @@ import {
 import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
-import { getErrorMessage, TruncateWithoutRounding } from "../../../../../utils/global.utils";
+import { changeExponentToPoints, getErrorMessage, TruncateWithoutRounding } from "../../../../../utils/global.utils";
 
 export const UnWrap = () => {
   const location: any = useLocation();
@@ -104,6 +104,7 @@ export const UnWrap = () => {
     }
   };
 
+
   return (
     <>
       {isLoading ? (
@@ -171,7 +172,7 @@ export const UnWrap = () => {
             type={"text"}
             placeholder="0"
             disabled={true}
-            value={Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100)}
+            value={changeExponentToPoints(Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100))}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
                 {crucible[farm!]?.symbol}
