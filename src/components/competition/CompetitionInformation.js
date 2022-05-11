@@ -8,9 +8,9 @@ import moment from "moment";
 import eitherConverter from "ether-converter";
 import { getCompetitionById, getCompetitionsParticipantsRanks } from "../../_apis/CompetitionCrud";
 import { useSelector } from "react-redux";
-
-import { TOKEN_TAG } from "../../utils/const.utils";
 import { getErrorMessage } from "../../utils/global.utils";
+
+import { cFRMTokenContractAddress, cFRMxTokenContractAddress, tokenFRMxBSCMainnet, tokenFRMBSCMainnet, TOKEN_TAG } from "../../utils/const.utils";
 
 const CompetitionInformation = () => {
   const { id } = useParams();
@@ -49,9 +49,21 @@ const CompetitionInformation = () => {
     }
   }, [query]);
 
+  const getInputCurrency = (tokenContractAddress) => {
+    if (tokenContractAddress.toLowerCase() === cFRMTokenContractAddress.toLowerCase()) {
+      return tokenFRMBSCMainnet;
+    } else if (tokenContractAddress.toLowerCase() === cFRMxTokenContractAddress.toLowerCase()) {
+      return tokenFRMxBSCMainnet;
+    } else {
+      return "BNB";
+    }
+  };
+
   const getCompetitionParticipants = () => {
+    console.log(leaderboardData);
     const leaderboardDexUrl = leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.networkDex?.dex?.url;
     const tokenContractAddress = leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress;
+    console.log(`${leaderboardDexUrl}swap?inputCurrency=${getInputCurrency(tokenContractAddress)}&outputCurrency=${tokenContractAddress}&exactField=output&exactAmount=`);
     getCompetitionsParticipantsRanks(id, false, 0, 10)
       .then((res) => {
         if (res?.data?.body?.participants) {
@@ -72,10 +84,9 @@ const CompetitionInformation = () => {
                 color,
               },
               tokenHolderQuantity: p?.tokenHolderQuantity ? TruncateWithoutRounding(eitherConverter(p?.tokenHolderQuantity, "wei").ether, 2)?.toLocaleString("en-US") : 0,
-              levelUpUrl: `${leaderboardDexUrl}swap?inputCurrency=BNB&outputCurrency=${tokenContractAddress}&exactField=output&exactAmount=${TruncateWithoutRounding(
-                p?.levelUpAmount,
-                2
-              )}`,
+              levelUpUrl: `${leaderboardDexUrl}swap?inputCurrency=${getInputCurrency(
+                tokenContractAddress
+              )}&outputCurrency=${tokenContractAddress}&exactField=output&exactAmount=${TruncateWithoutRounding(p?.levelUpAmount, 2)}`,
               formattedLevelUpAmount: p?.levelUpAmount ? TruncateWithoutRounding(p?.levelUpAmount, 2) : 0,
             };
           });
@@ -232,6 +243,7 @@ const CompetitionInformation = () => {
             </FGridItem>
             <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[4, 4, 4]}>
               <FInputText label="Search Wallet" placeholder="0x000...0000" value={query} type="search" onChange={onQueryChange} style={{ width: "100%" }} />
+
               {!isPublicUser && (
                 <FButton type="button" className="btn-create f-ml-1" disabled={isLoading || !competitionParticipants?.length} onClick={onExportClick} title={" Export to CSV"} />
               )}
