@@ -25,6 +25,7 @@ import {
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { ClipLoader } from "react-spinners";
+import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
 // import { PATH_DASHBOARD } from "../../../../../routes/paths";
 
 export const CrucibleDeposit = () => {
@@ -208,12 +209,12 @@ export const CrucibleDeposit = () => {
             onChange={(e: any) => setMintAmount(e.target.value)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1"}>
-                <span onClick={() => setMintAmount(Number(userCrucibleData[farm!]?.baseBalance || "0"))}>Max</span>
+                <span onClick={() => setMintAmount((userCrucibleData[farm!]?.baseBalance || "0"))}>Max</span>
               </FTypo>
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {Number(userCrucibleData[farm!]?.baseBalance || "0").toFixed(3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
+            You have {TruncateWithoutRounding(Number(userCrucibleData[farm!]?.baseBalance || "0"), 3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5 justify-content-space-between"}>
             Amount you will receive
@@ -228,8 +229,8 @@ export const CrucibleDeposit = () => {
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
                 {/* <span onClick={() => setMintAmount(userCrucibleData[farm!]?.baseBalance)}> */}
-                  {crucible[farm!]?.symbol}
-                  {/* </span> */}
+                {crucible[farm!]?.symbol}
+                {/* </span> */}
               </FTypo>
             }
           />
@@ -247,14 +248,14 @@ export const CrucibleDeposit = () => {
                         ownProps.isApprovalMode
                           ? () => ownProps.onApproveClick()
                           : () =>
-                              onMintClick(
-                                crucible[farm!]?.baseCurrency,
-                                crucible[farm!]?.currency || "",
-                                mintAmount.toString(),
-                                true,
-                                crucible[farm!]?.network,
-                                walletAddress as string
-                              )
+                            onMintClick(
+                              crucible[farm!]?.baseCurrency,
+                              crucible[farm!]?.currency || "",
+                              mintAmount.toString(),
+                              true,
+                              crucible[farm!]?.network,
+                              walletAddress as string
+                            )
                       }
                     ></FButton>
                   </div>
