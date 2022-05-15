@@ -32,7 +32,7 @@ import { T } from '../../utils/translationHelper';
 // import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 
 const DashboardSidebar = () => {
-  let showCrucibleMenu = false;
+  let showCrucibleMenu = true;
   const { id }: any = useParams();
   const { pathname } = useLocation();
   let token = localStorage.getItem(TOKEN_TAG);

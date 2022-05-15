@@ -175,17 +175,15 @@ export const Stake = () => {
   };
 
   const getAmount = () => {
-    console.log(crucible, crucible[farm!], userCrucibleData, userCrucibleData[farm!])
     if (farm?.includes("BNB")) {
-      return Number(TruncateWithoutRounding(crucible[farm!]?.LP_balance || 0, 3));
+      return crucible[farm!]?.LP_balance;
     } else {
-      return Number(TruncateWithoutRounding(userCrucibleData[farm!]?.balance || "0", 3));
+      return userCrucibleData[farm!]?.balance;
     }
   };
 
   const getAmountSymbol = () => {
     if (farm?.includes("BNB")) {
-      console.log(crucible);
       return `${crucible[farm!]?.LP_symbol} ${crucible[farm!]?.symbol}-BNB`;
     } else {
       return crucible[farm!]?.symbol;
@@ -248,7 +246,7 @@ export const Stake = () => {
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {getAmount()} available in Token {getAmountSymbol()} to Stake.
+            You have {TruncateWithoutRounding(getAmount(), 3)} available in Token {getAmountSymbol()} to Stake.
           </FTypo>
           {meV2._id && isConnected ? (
             <ApprovableButtonWrapper

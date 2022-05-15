@@ -146,7 +146,7 @@ export const UnStake = () => {
     if (farm?.includes("BNB")) {
       return LPStakingDetails[farm!]?.stake || 0;
     } else {
-      return Number(userStake?.stakeOf || "0");
+      return (userStake?.stakeOf || "0");
     }
   };
 
