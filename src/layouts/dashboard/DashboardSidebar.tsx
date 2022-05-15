@@ -31,7 +31,7 @@ import { ME_TAG, ORG_ROLE_TAG, TOKEN_TAG } from "../../utils/const.utils";
 // import { getSubscriptionInformationForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 
 const DashboardSidebar = () => {
-  let showCrucibleMenu = false;
+  let showCrucibleMenu = true;
   const { id }: any = useParams();
   const { pathname } = useLocation();
   let token = localStorage.getItem(TOKEN_TAG);
