@@ -209,14 +209,12 @@ export const CrucibleDeposit = () => {
             onChange={(e: any) => setMintAmount(e.target.value)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1"}>
-                {/* <span onClick={() => setMintAmount(Number(userCrucibleData[farm!]?.baseBalance || "0"))}>Max</span> */}
-                <span onClick={() => setMintAmount(Number(maxCap || "0"))}>Max</span>
+                <span onClick={() => setMintAmount((userCrucibleData[farm!]?.baseBalance || "0"))}>Max</span>
               </FTypo>
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {Number(userCrucibleData[farm!]?.baseBalance || "0").toFixed(3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
-            You can mint maximum {(maxCap)} {userCrucibleData[farm!]?.baseSymbol}.
+            You have {TruncateWithoutRounding(Number(userCrucibleData[farm!]?.baseBalance || "0"), 3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5 justify-content-space-between"}>
             Amount you will receive
