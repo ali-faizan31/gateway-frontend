@@ -4,7 +4,7 @@ import {
   // PATH_ADMIN,
   PATH_DASHBOARD,
 } from "../../routes/paths";
-import { cFRMx_Competition_Details, cFRM_Competition_Details, FRM_FRMx_leaderboard_Details } from "../../utils/const.utils";
+import { cFRM_Trading_Competition_Details, cFRMx_Trading_Competition_Details, cFRM_Volume_Competition_Details, cFRMx_Volume_Competition_Details, FRM_FRMx_leaderboard_Details } from "../../utils/const.utils";
 import IconNetworkCFrmStr from "../../assets/img/icon-network-cfrm.svg";
 import IconNetworkCFrmxStr from "../../assets/img/icon-network-cfrmx.svg";
 
@@ -62,8 +62,8 @@ export const GET_PATHS = (element: any, id: any, count: any = null) => {
       return count === 1
         ? `${PATH_PUBLIC_USER.leaderboard.root}/${id}`
         : count === 2
-        ? `${PATH_PUBLIC_USER.multiLeaderboard.root}/${id}`
-        : "";
+          ? `${PATH_PUBLIC_USER.multiLeaderboard.root}/${id}`
+          : "";
     case "Competition":
       return `${PATH_PUBLIC_USER.competition.root}/${id}`;
     case "Bridge":
@@ -136,17 +136,27 @@ export const orgLeaderboardAndCompetitionSidebarConfig = [
         path: PATH_DASHBOARD.general.competitionManagement,
       },
       {
-        title: `${cFRM_Competition_Details.name}`,
-        path: `${PATH_DASHBOARD.general.competition}/${cFRM_Competition_Details.id}`,
+        title: `${cFRM_Volume_Competition_Details.name}`,
+        path: `${PATH_DASHBOARD.general.competition}/${cFRM_Volume_Competition_Details.id}`,
         icon: getIcon(IconNetworkCFrmStr),
       },
       {
-        title: `${cFRMx_Competition_Details.name}`,
-        path: `${PATH_DASHBOARD.general.competition}/${cFRMx_Competition_Details.id}`,
+        title: `${cFRMx_Volume_Competition_Details.name}`,
+        path: `${PATH_DASHBOARD.general.competition}/${cFRMx_Volume_Competition_Details.id}`,
+        icon: getIcon(IconNetworkCFrmxStr),
+      },
+      {
+        title: `${cFRM_Trading_Competition_Details.name}`,
+        path: `${PATH_DASHBOARD.general.competition}/${cFRM_Trading_Competition_Details.id}`,
+        icon: getIcon(IconNetworkCFrmStr),
+      },
+      {
+        title: `${cFRMx_Trading_Competition_Details.name}`,
+        path: `${PATH_DASHBOARD.general.competition}/${cFRMx_Trading_Competition_Details.id}`,
         icon: getIcon(IconNetworkCFrmxStr),
       }
     ],
-  }, 
+  },
 ];
 
 export const publicLeaderboardAndCompetitionSidebarConfig = [
@@ -167,13 +177,23 @@ export const publicLeaderboardAndCompetitionSidebarConfig = [
     icon: ICONS.competition,
     children: [
       {
-        title: `${cFRM_Competition_Details.name}`,
-        path: `${PATH_PUBLIC_USER.competition.root}/${cFRM_Competition_Details.id}`,
+        title: `${cFRM_Volume_Competition_Details.name}`,
+        path: `${PATH_PUBLIC_USER.competition.root}/${cFRM_Volume_Competition_Details.id}`,
         icon: getIcon(IconNetworkCFrmStr),
       },
       {
-        title: `${cFRMx_Competition_Details.name}`,
-        path: `${PATH_PUBLIC_USER.competition.root}/${cFRMx_Competition_Details.id}`,
+        title: `${cFRMx_Volume_Competition_Details.name}`,
+        path: `${PATH_PUBLIC_USER.competition.root}/${cFRMx_Volume_Competition_Details.id}`,
+        icon: getIcon(IconNetworkCFrmxStr),
+      },
+      {
+        title: `${cFRM_Trading_Competition_Details.name}`,
+        path: `${PATH_PUBLIC_USER.competition.root}/${cFRM_Trading_Competition_Details.id}`,
+        icon: getIcon(IconNetworkCFrmStr),
+      },
+      {
+        title: `${cFRMx_Trading_Competition_Details.name}`,
+        path: `${PATH_PUBLIC_USER.competition.root}/${cFRMx_Trading_Competition_Details.id}`,
         icon: getIcon(IconNetworkCFrmxStr),
       }
     ],
@@ -208,7 +228,7 @@ export const homeSidebarConfig = [
   {
     title: "Home",
     icon: ICONS.home,
-    path: `${PATH_PUBLIC_USER.competition.root}/${cFRMx_Competition_Details.id}`,
+    path: `${PATH_PUBLIC_USER.multiLeaderboard.root}/${FRM_FRMx_leaderboard_Details.id}`,
   },
 ];
 

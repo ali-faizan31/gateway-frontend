@@ -21,8 +21,10 @@ export const PHRASE_TOKEN = "bf3fa63f66e88f4453c018f568445a03889f494343973cc33c9
 export const PHRASE_PROJECT = "dbc35f418d27873591479252f9883427";
 export const PUBLIC_TAG = "/pub";
 export const FRM_FRMx_leaderboard_Details = { id: "61b6d48337f5125acbbfddeb", name: "FRM & FRMx BSC Leaderboard" };
-export const cFRM_Competition_Details = { id: "627be21bece9d7534513a7f3", name: "cFRM Competition" };
-export const cFRMx_Competition_Details = { id: "627be3a2ece9d7534513a877", name: "cFRMx Competition" };
+export const cFRM_Volume_Competition_Details = { id: "627be21bece9d7534513a7f3", name: "cFRM Volume Competition" };
+export const cFRMx_Volume_Competition_Details = { id: "627be3a2ece9d7534513a877", name: "cFRMx Volume Competition" };
+export const cFRM_Trading_Competition_Details = { id: "62826f92248e400f93b7316e", name: "cFRM Trading Competition" };
+export const cFRMx_Trading_Competition_Details = { id: "628270b8248e400f93b731cd", name: "cFRMx Trading Competition" };
 
 export const cFRMxTokenContractAddress = "0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE";
 export const cFRMTokenContractAddress = "0xaf329a957653675613D0D98f49fc93326AeB36Fc";

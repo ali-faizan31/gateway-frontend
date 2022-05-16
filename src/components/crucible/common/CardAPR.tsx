@@ -66,7 +66,7 @@ export const CardAPR = () => {
   };
 
   const getYourDeposited = (farm: any, lpAddress: any) => {
-    let userStake = (userCrucibleDetails[farm!]?.stakes || []).find((e: any) => e.address.toLowerCase() === lpAddress);
+    let userStake = (userCrucibleDetails[farm!]?.stakes || []).find((e: any) => e.address.toLowerCase() === lpAddress.toLowerCase());
     return farm?.includes("BNB") ? Number(TruncateWithoutRounding(userLpStakingDetails[farm!]?.stake || "0", 3)) : Number(TruncateWithoutRounding(userStake?.stakeOf || "0", 3));
   };
 
@@ -89,26 +89,26 @@ export const CardAPR = () => {
   }
 
   const stepFlowsMock = [
-    {
-      sustainableCrucibleFarms: "cFRM / BNB",
-      internalName: "cFRM-BNB",
-      stepFlowName: "cFRM / BNB Crucible Farm - Farming Dashboard Flow",
-      totalDeposited: getTotalDeposited("cFRM-BNB"),
-      yourDeposit: `${getYourDeposited("cFRM-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
-      yourRewards: `${getYourRewards("cFRM-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
-      logo: (
-        <>
-          <img src={IconNetworkCFrmStr} height="22px" width="22px" />
-          <img src={IconNetworkBNB} height="22px" width="22px" />{" "}
-        </>
-      ),
-      apr: aprInformation?.cfrmLp,
-      network: "BSC",
-      id: "6238314dd292da2db05524dd",
-      contract: "0xaf329a957653675613D0D98f49fc93326AeB36Fc", // crucible contract address
-      LpCurrency: "0x9aa0AB73409311984ED84f3Edef962201Bd11712", // CAKE-LP token for crucible and bnb pair
-      LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008", // lp farm where lp currency will be staked
-    },
+    // {
+    //   sustainableCrucibleFarms: "cFRM / BNB",
+    //   internalName: "cFRM-BNB",
+    //   stepFlowName: "cFRM / BNB Crucible Farm - Farming Dashboard Flow",
+    //   totalDeposited: getTotalDeposited("cFRM-BNB"),
+    //   yourDeposit: `${getYourDeposited("cFRM-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
+    //   yourRewards: `${getYourRewards("cFRM-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
+    //   logo: (
+    //     <>
+    //       <img src={IconNetworkCFrmStr} height="22px" width="22px" />
+    //       <img src={IconNetworkBNB} height="22px" width="22px" />{" "}
+    //     </>
+    //   ),
+    //   apr: aprInformation?.cfrmLp,
+    //   network: "BSC",
+    //   id: "6238314dd292da2db05524dd",
+    //   contract: "0xaf329a957653675613D0D98f49fc93326AeB36Fc", // crucible contract address
+    //   LpCurrency: "0x9aa0AB73409311984ED84f3Edef962201Bd11712", // CAKE-LP token for crucible and bnb pair
+    //   LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008", // lp farm where lp currency will be staked
+    // },
     {
       sustainableCrucibleFarms: "cFRM",
       stepFlowName: "cFRM Crucible Farm - Farming Dashboard Flow",
@@ -128,26 +128,26 @@ export const CardAPR = () => {
       network: "BSC",
       internalName: "cFRM",
     },
-    {
-      sustainableCrucibleFarms: "cFRMx / BNB",
-      stepFlowName: "cFRMx / BNB Crucible Farm - Farming Dashboard Flow",
-      totalDeposited: getTotalDeposited("cFRMx-BNB"),
-      yourDeposit: getYourDeposited("cFRMx-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
-      yourRewards: getYourRewards("cFRMx-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
-      apr: aprInformation?.cfrmXLp,
-      network: "BSC",
-      logo: (
-        <>
-          <img src={IconNetworkCFrmxStr} height="22px" width="22px" />
-          <img src={IconNetworkBNB} height="22px" width="22px" />{" "}
-        </>
-      ),
-      id: "62383841d292da2db05524f3",
-      contract: "0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE",
-      LpCurrency: "0xb76b11410A506495418D20c58F9452c17CF285c1",
-      LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
-      internalName: "cFRMx-BNB",
-    },
+    // {
+    //   sustainableCrucibleFarms: "cFRMx / BNB",
+    //   stepFlowName: "cFRMx / BNB Crucible Farm - Farming Dashboard Flow",
+    //   totalDeposited: getTotalDeposited("cFRMx-BNB"),
+    //   yourDeposit: getYourDeposited("cFRMx-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
+    //   yourRewards: getYourRewards("cFRMx-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
+    //   apr: aprInformation?.cfrmXLp,
+    //   network: "BSC",
+    //   logo: (
+    //     <>
+    //       <img src={IconNetworkCFrmxStr} height="22px" width="22px" />
+    //       <img src={IconNetworkBNB} height="22px" width="22px" />{" "}
+    //     </>
+    //   ),
+    //   id: "62383841d292da2db05524f3",
+    //   contract: "0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE",
+    //   LpCurrency: "0xb76b11410A506495418D20c58F9452c17CF285c1",
+    //   LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
+    //   internalName: "cFRMx-BNB",
+    // },
     {
       sustainableCrucibleFarms: "cFRMx",
       stepFlowName: "cFRMx Crucible Farm - Farming Dashboard Flow",
