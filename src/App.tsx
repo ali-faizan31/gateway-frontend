@@ -10,8 +10,8 @@ import UnGuardedRoute from "./guards/UnGuardedRoute";
 import ClipLoader from "react-spinners/ClipLoader";
 import moment from "moment-timezone";
 import { WalletApplicationWrapper } from "./container-components";
-import { PATH_DASHBOARD } from "./routes/paths";
-import { TOKEN_TAG } from "./utils/const.utils";
+import { PATH_DASHBOARD, PATH_PUBLIC_USER } from "./routes/paths";
+import { cFRM_Trading_Competition_Details, TOKEN_TAG } from "./utils/const.utils";
 import { useDispatch } from "react-redux";
 import { getPhraseDataDispatch } from "./redux/slices/phrase";
 import { Deployer as CrucibleDeployer } from "./components/crucible/common/Deployer";
@@ -78,7 +78,7 @@ function App() {
         <Switch>
           <Route exact path="/">
             {" "}
-            <Redirect to="/pub/multi/leaderboard/61b6d48337f5125acbbfddeb" />{" "}
+            <Redirect to={`${PATH_PUBLIC_USER.competition.root}/${cFRM_Trading_Competition_Details.id}`} />{" "}
           </Route>
           {/* new routes ---------------------- */}
           {/* cfrm-bnb routes */}
