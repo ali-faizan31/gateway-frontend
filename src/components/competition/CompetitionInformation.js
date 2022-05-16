@@ -60,38 +60,38 @@ const CompetitionInformation = () => {
   };
 
   const getCompetitionParticipants = () => {
-    console.log(leaderboardData);
     const leaderboardDexUrl = leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.networkDex?.dex?.url;
     const tokenContractAddress = leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress;
-    console.log(`${leaderboardDexUrl}swap?inputCurrency=${getInputCurrency(tokenContractAddress)}&outputCurrency=${tokenContractAddress}&exactField=output&exactAmount=`);
-    getCompetitionsParticipantsRanks(id, false, 0, 10)
+    getCompetitionsParticipantsRanks(id, false, true, 0, 10)
       .then((res) => {
         if (res?.data?.body?.participants) {
           const formattedRes = res?.data?.body?.participants?.map((p) => {
-            let color = "";
-            if (p?.tokenHolderQuantity === "") {
-              color = "yellow";
+            if (p.rank) {
+              let color = "";
+              if (p?.tokenHolderQuantity === "") {
+                color = "yellow";
+              }
+              if (Number(p?.humanReadableGrowth) >= 0 && p?.tokenHolderQuantity !== "") {
+                color = "green";
+              } else if (Number(p?.humanReadableGrowth) < 0 && p?.tokenHolderQuantity !== "") {
+                color = "red";
+              }
+              return {
+                ...p,
+                humanReadableGrowth: {
+                  data: p?.humanReadableGrowth,
+                  color,
+                },
+                tokenHolderQuantity: p?.tokenHolderQuantity ? TruncateWithoutRounding(eitherConverter(p?.tokenHolderQuantity, "wei").ether, 2)?.toLocaleString("en-US") : 0,
+                levelUpUrl: `${leaderboardDexUrl}swap?inputCurrency=${getInputCurrency(
+                  tokenContractAddress
+                )}&outputCurrency=${tokenContractAddress}&exactField=output&exactAmount=${TruncateWithoutRounding(p?.levelUpAmount, 2)}`,
+                formattedLevelUpAmount: p?.levelUpAmount ? TruncateWithoutRounding(p?.levelUpAmount, 2) : 0,
+              };
             }
-            if (Number(p?.humanReadableGrowth) >= 0 && p?.tokenHolderQuantity !== "") {
-              color = "green";
-            } else if (Number(p?.humanReadableGrowth) < 0 && p?.tokenHolderQuantity !== "") {
-              color = "red";
-            }
-            return {
-              ...p,
-              humanReadableGrowth: {
-                data: p?.humanReadableGrowth,
-                color,
-              },
-              tokenHolderQuantity: p?.tokenHolderQuantity ? TruncateWithoutRounding(eitherConverter(p?.tokenHolderQuantity, "wei").ether, 2)?.toLocaleString("en-US") : 0,
-              levelUpUrl: `${leaderboardDexUrl}swap?inputCurrency=${getInputCurrency(
-                tokenContractAddress
-              )}&outputCurrency=${tokenContractAddress}&exactField=output&exactAmount=${TruncateWithoutRounding(p?.levelUpAmount, 2)}`,
-              formattedLevelUpAmount: p?.levelUpAmount ? TruncateWithoutRounding(p?.levelUpAmount, 2) : 0,
-            };
           });
-          setCompetitionParticipants(formattedRes);
-          setCompetitionParticipantsFiltered(formattedRes);
+          setCompetitionParticipants(formattedRes.filter((x) => x && x));
+          setCompetitionParticipantsFiltered(formattedRes.filter((x) => x && x));
           setIsLoading(false);
         } else {
           setIsLoading(false);
