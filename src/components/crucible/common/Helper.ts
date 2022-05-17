@@ -296,7 +296,7 @@ export const renderComponent = (
   }
 };
 
-const saveCurrentPreferncesInNewSequence = async (newSequence: any, oldHistory: any, token: any) => {
+const saveCurrentPreferncesInNewSequence = async (newSequence: any, oldHistory: any, id: any, token: any) => {
   for (let i = 0; i < oldHistory.length; i++) {
     if (oldHistory[i].status === "skip") {
       for (let j = 0; j < newSequence.length; j++) {
@@ -306,6 +306,11 @@ const saveCurrentPreferncesInNewSequence = async (newSequence: any, oldHistory: 
             { status: "skip" },
             token
           );
+          let latestResponse =
+            await SFSH_API.getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(id, token); // get updated history
+          newSequence = latestResponse.data &&
+            latestResponse.data.body &&
+            latestResponse.data.body.stepFlowStepsHistory;
         }
       }
     }
@@ -326,19 +331,20 @@ export const getLatestStepToRender = async (
   saveCurrentPrefernces: any = false
 ) => {
   try {
-    // let latestResponse =  
-    await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(
-      state.id,
-      token
-    );
-    let latestResponse = await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
-      state.id,
-      token
-    );
+    let latestResponse =
+      await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(
+        state.id,
+        token
+      );
+    // let latestResponse = await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
+    //   state.id,
+    //   token
+    // );
     latestResponse = latestResponse.data && latestResponse.data.body && latestResponse.data.body.stepFlowStepsHistory;
+    // console.log(latestResponse, saveCurrentPrefernces)
     if (saveCurrentPrefernces) {
       // console.log('save prefence flow')
-      saveCurrentPreferncesInNewSequence(latestResponse, stepFlowStepsHistory, token)
+      saveCurrentPreferncesInNewSequence(latestResponse, stepFlowStepsHistory, state.id, token)
     }
     setIsLoading(false);
     // sequenceResponse = sequenceResponse.data && sequenceResponse.data.body && sequenceResponse.data.body.stepFlowStepsHistory;

@@ -103,6 +103,10 @@ export const UnWrap = () => {
     }
   };
 
+  const getDisabledCheck = () => {
+    return Number(userCrucibleData[farm!]?.balance) === 0 || Number(amount) === 0 || Number(userCrucibleData[farm!]?.balance) < Number(amount);
+  };
+
 
   return (
     <>
@@ -185,7 +189,7 @@ export const UnWrap = () => {
                   <FButton
                     title={"Unwrap"}
                     className={"w-100"}
-                    disabled={Number(userCrucibleData[farm!]?.balance) === 0}
+                    disabled={getDisabledCheck()}
                     onClick={
                       ownProps.isApprovalMode
                         ? () => ownProps.onApproveClick()

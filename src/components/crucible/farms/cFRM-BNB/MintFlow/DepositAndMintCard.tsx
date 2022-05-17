@@ -153,7 +153,10 @@ export const CrucibleDeposit = () => {
     if (isApproveMode) {
       return false;
     } else {
-      return Number(userCrucibleData[farm!]?.baseBalance || "0") === 0 || Number(crucible[farm!]?.openCap) === 0;
+      return Number(userCrucibleData[farm!]?.baseBalance || "0") === 0
+        || Number(crucible[farm!]?.openCap) === 0
+        || Number(mintAmount) === 0
+        || Number(userCrucibleData[farm!]?.baseBalance || "0") < Number(mintAmount);
     }
   };
 

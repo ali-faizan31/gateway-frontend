@@ -144,6 +144,11 @@ export const UnStake = () => {
     }
   };
 
+
+  const getDisabledCheck = () => {
+    return Number(getAmount()) === 0 || Number(amount) === 0 || Number(getAmount()) < Number(amount);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -209,7 +214,7 @@ export const UnStake = () => {
                   <FButton
                     title={"Unstake Crucible"}
                     className={"w-100"}
-                    disabled={Number(getAmount()) === 0}
+                    disabled={getDisabledCheck()}
                     onClick={ownProps.isApprovalMode ? () => ownProps.onApproveClick() : () => onUnStakeClick()}
                   ></FButton>
                 )}
