@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CrucibleClient } from "../../../container-components/web3Client/crucibleClient";
 import { Web3Helper } from "../../../container-components/web3Client/web3Helper";
 import { RootState } from "../../../redux/rootReducer";
-import Loader from "../../../assets/gif/Loading.gif" 
+import Loader from "../../../assets/gif/Loading.gif"
 // import { RootState } from "../../../redux/rootReducer";
 import { CardAPR } from "../common/CardAPR";
 import { CrucibleMyBalance } from "../common/CardMyBalance";
@@ -26,21 +26,19 @@ import { crucibleSlice } from "../redux/CrucibleSlice";
 import { Crucible_Farm_Address_Details, Pricing_Tokens } from "../../../utils/const.utils";
 import { Crucible_Farm_Address_Detail } from "../common/utils";
 import { getAPRInformationForPublicUser } from "../../../_apis/APRCrud";
-import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { getCrucibleDetail } from "../common/Helper";
-import { T } from '../../../utils/translationHelper';
-import toast from 'react-hot-toast';
+import { getErrorMessage } from "../../../utils/global.utils";
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const { networkClient, walletAddress, isConnected } = useSelector((state: RootState) => state.walletConnector);
   const { tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
-  const { selectedCrucible, userCrucibleDetails, userLpStakingDetails } = useSelector((state: RootState) => state.crucible);
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
-  
+
 
   // useEffect(() => {
   //   if (userLpStakingDetails && userLpStakingDetails["cFRM-BNB"] && userLpStakingDetails["cFRM-BNB"].openCap) {
@@ -57,8 +55,8 @@ const CrucibleDashboardPage = () => {
     if (networkClient) {
       setIsLoading(true);
       dispatch(loadPricingInfo());
-      Object.keys(Crucible_Farm_Address_Details).forEach((farm: string) =>{  
-        getCrucibleDetail(Crucible_Farm_Address_Detail[farm], networkClient, walletAddress, dispatch, setIsLoading) 
+      Object.keys(Crucible_Farm_Address_Details).forEach((farm: string) => {
+        getCrucibleDetail(Crucible_Farm_Address_Detail[farm], networkClient, walletAddress, dispatch, setIsLoading)
       })
     }
   }, [networkClient]);
@@ -156,16 +154,7 @@ const CrucibleDashboardPage = () => {
       aprResponse = aprResponse.data && aprResponse.data.body && aprResponse.data.body.crucibleApr;
       dispatch(CrucibleActions.updateAPRData(aprResponse));
     } catch (e: any) {
-      if (e?.response) {
-        if (e?.response?.data?.status?.phraseKey !== '') {
-          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-          toast.error(fetchedMessage);
-        } else {
-          toast.error(e?.response?.data?.status?.message);
-        }
-      } else {
-        toast.error('Something went wrong. Try again later!');
-      }
+      getErrorMessage(e, activeTranslation)
     }
   };
 
@@ -174,7 +163,7 @@ const CrucibleDashboardPage = () => {
       {isLoading ? (
         <FCard>
           <FItem align={"center"}>
-            <img src={Loader}/> 
+            <img src={Loader} />
             {/* <ClipLoader color="#cba461" loading={true} size={150} /> */}
           </FItem>
         </FCard>

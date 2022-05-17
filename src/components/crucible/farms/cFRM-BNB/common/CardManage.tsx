@@ -46,10 +46,10 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
   const onMintcFRMClick = () => {
     setIsLoading(true);
     let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].mint;
-    console.log("next step id:", nextStepInfo);
+    // console.log("next step id:", nextStepInfo);
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
-    console.log(nextStepInfo, location.state);
+    // console.log(nextStepInfo, location.state);
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
     // history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint});
   };
@@ -57,7 +57,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
   const onWrapClick = () => {
     setIsLoading(true);
     let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unwrap;
-    console.log(nextStepInfo, location.state);
+    // console.log(nextStepInfo, location.state);
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
@@ -65,7 +65,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
 
   const [selectedToken, setSelectedToken] = useState<any>();
 
-  const handleSelectedToken = (option:any) => {
+  const handleSelectedToken = (option: any) => {
     window.open(option.url)
     setSelectedToken(option)
   }

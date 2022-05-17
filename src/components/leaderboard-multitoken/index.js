@@ -4,16 +4,10 @@ import toast, { Toaster } from "react-hot-toast";
 import { FContainer } from "ferrum-design-system";
 import { useParams, useLocation } from "react-router-dom";
 import MultiTokenLeaderboardInformation from "./MultiTokenLeaderboard";
-import {
-  getLeaderboardById,
-  getLeaderboardByIdForPublicUser,
-  getTokenPriceFrom1Inch,
-} from "../../_apis/LeaderboardCrud";
-import { 
-  tokenUSDCBSCMainnet,
-  TOKEN_TAG,
-} from "../../utils/const.utils";
-import { T } from '../../utils/translationHelper';
+import { getLeaderboardById, getLeaderboardByIdForPublicUser, getTokenPriceFrom1Inch } from "../../_apis/LeaderboardCrud";
+import { tokenUSDCBSCMainnet, TOKEN_TAG } from "../../utils/const.utils";
+import { getErrorMessage } from "../../utils/global.utils";
+import { useSelector } from "react-redux";
 
 export default function MultiTokenLeaderboardIndex() {
   const { id } = useParams();
@@ -23,6 +17,7 @@ export default function MultiTokenLeaderboardIndex() {
   const [leaderboardData, setLeaderboardData] = useState({});
   const [frmUsdcValue, setFrmUsdcValue] = useState(null);
   const [frmxUsdcValue, setFrmxUsdcValue] = useState(null);
+  const { activeTranslation } = useSelector((state) => state.phrase);
 
   useEffect(() => {
     if (id !== ":id" || token) {
@@ -35,14 +30,14 @@ export default function MultiTokenLeaderboardIndex() {
     // eslint-disable-next-line
   }, [id, token]);
 
-  const getFrmTokenUSDCValue = ( chainId, fromToken, toToken, leaderboardData ) => {
+  const getFrmTokenUSDCValue = (chainId, fromToken, toToken, leaderboardData) => {
     getTokenPriceFrom1Inch(chainId, fromToken, toToken)
       .then((res) => {
         if (res?.data) {
           const { toTokenAmount } = res.data;
           const convertedAmount = eitherConverter(toTokenAmount, "wei").ether;
           setFrmUsdcValue(convertedAmount);
-          getFrmxTokenUSDCValue( leaderboardData.frmxCabn.chainId, leaderboardData.frmxCabn.tokenContractAddress, tokenUSDCBSCMainnet );
+          getFrmxTokenUSDCValue(leaderboardData.frmxCabn.chainId, leaderboardData.frmxCabn.tokenContractAddress, tokenUSDCBSCMainnet);
         }
       })
       .catch((e) => {
@@ -72,61 +67,23 @@ export default function MultiTokenLeaderboardIndex() {
       });
   };
 
-  const getPublicLeaderboard = () => { 
+  const getPublicLeaderboard = () => {
     getLeaderboardByIdForPublicUser(id, token)
       .then((res) => {
         if (res?.data?.body?.leaderboard) {
           const { leaderboard } = res.data.body;
           const cabn1 = res?.data?.body?.leaderboard?.leaderboardCurrencyAddressesByNetwork[0];
           const cabn2 = res?.data?.body?.leaderboard?.leaderboardCurrencyAddressesByNetwork[1];
-          if (cabn1 && cabn1.currencyAddressesByNetwork && cabn1.currencyAddressesByNetwork.tokenContractAddress && cabn1.currencyAddressesByNetwork.networkDex.dex.url &&
-            cabn2 && cabn2.currencyAddressesByNetwork && cabn2.currencyAddressesByNetwork.tokenContractAddress && cabn2.currencyAddressesByNetwork.networkDex.dex.url){
-              const tempObj = {
-              name: leaderboard?.name,
-              exclusionWalletAddressList: leaderboard?.exclusionWalletAddressList,
-              frmCabn: {
-                tokenContractAddress: cabn1?.currencyAddressesByNetwork?.tokenContractAddress,
-                dexUrl: cabn1?.currencyAddressesByNetwork?.networkDex?.dex?.url,
-                chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
-                id: cabn1?.currencyAddressesByNetwork?._id
-              },
-              frmxCabn: {
-                tokenContractAddress: cabn2?.currencyAddressesByNetwork?.tokenContractAddress,
-                dexUrl: cabn2?.currencyAddressesByNetwork?.networkDex?.dex?.url,
-                chainId: cabn2?.currencyAddressesByNetwork?.network?.chainId,
-                id: cabn2?.currencyAddressesByNetwork?._id
-              },
-            }; 
-            getFrmTokenUSDCValue( tempObj.frmCabn.chainId, tempObj.frmCabn.tokenContractAddress, tokenUSDCBSCMainnet, tempObj );
-            setLeaderboardData(tempObj);
-          } else { 
-            toast.error(`Error occured: Leaderboard Information is not correct`)
-          }
-        }
-      })
-      .catch((e) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      });
-  };
-
-  const getLeaderboard = () => { 
-    getLeaderboardById(id, token)
-      .then((res) => {
-        if (res?.data?.body?.leaderboard) {
-          const { leaderboard } = res.data.body;
-          const cabn1 = res?.data?.body?.leaderboard?.leaderboardCurrencyAddressesByNetwork[0];
-          const cabn2 = res?.data?.body?.leaderboard?.leaderboardCurrencyAddressesByNetwork[1];
-          if (cabn1 && cabn1.currencyAddressesByNetwork && cabn1.currencyAddressesByNetwork.tokenContractAddress && cabn1.currencyAddressesByNetwork.networkDex.dex.url &&
-            cabn2 && cabn2.currencyAddressesByNetwork && cabn2.currencyAddressesByNetwork.tokenContractAddress && cabn2.currencyAddressesByNetwork.networkDex.dex.url){
+          if (
+            cabn1 &&
+            cabn1.currencyAddressesByNetwork &&
+            cabn1.currencyAddressesByNetwork.tokenContractAddress &&
+            cabn1.currencyAddressesByNetwork.networkDex.dex.url &&
+            cabn2 &&
+            cabn2.currencyAddressesByNetwork &&
+            cabn2.currencyAddressesByNetwork.tokenContractAddress &&
+            cabn2.currencyAddressesByNetwork.networkDex.dex.url
+          ) {
             const tempObj = {
               name: leaderboard?.name,
               exclusionWalletAddressList: leaderboard?.exclusionWalletAddressList,
@@ -134,48 +91,78 @@ export default function MultiTokenLeaderboardIndex() {
                 tokenContractAddress: cabn1?.currencyAddressesByNetwork?.tokenContractAddress,
                 dexUrl: cabn1?.currencyAddressesByNetwork?.networkDex?.dex?.url,
                 chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
-                id: cabn1?.currencyAddressesByNetwork?._id
+                id: cabn1?.currencyAddressesByNetwork?._id,
               },
               frmxCabn: {
                 tokenContractAddress: cabn2?.currencyAddressesByNetwork?.tokenContractAddress,
                 dexUrl: cabn2?.currencyAddressesByNetwork?.networkDex?.dex?.url,
                 chainId: cabn2?.currencyAddressesByNetwork?.network?.chainId,
-                id: cabn2?.currencyAddressesByNetwork?._id
+                id: cabn2?.currencyAddressesByNetwork?._id,
               },
             };
-            getFrmTokenUSDCValue( tempObj.frmCabn.chainId, tempObj.frmCabn.tokenContractAddress, tokenUSDCBSCMainnet, tempObj ); 
+            getFrmTokenUSDCValue(tempObj.frmCabn.chainId, tempObj.frmCabn.tokenContractAddress, tokenUSDCBSCMainnet, tempObj);
             setLeaderboardData(tempObj);
-          } else { 
-            toast.error(`Error occured: Leaderboard Information is not correct`)
+          } else {
+            toast.error(`Error occured: Leaderboard Information is not correct`);
           }
         }
       })
       .catch((e) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
+        getErrorMessage(e, activeTranslation);
+      });
+  };
+
+  const getLeaderboard = () => {
+    getLeaderboardById(id, token)
+      .then((res) => {
+        if (res?.data?.body?.leaderboard) {
+          const { leaderboard } = res.data.body;
+          const cabn1 = res?.data?.body?.leaderboard?.leaderboardCurrencyAddressesByNetwork[0];
+          const cabn2 = res?.data?.body?.leaderboard?.leaderboardCurrencyAddressesByNetwork[1];
+          if (
+            cabn1 &&
+            cabn1.currencyAddressesByNetwork &&
+            cabn1.currencyAddressesByNetwork.tokenContractAddress &&
+            cabn1.currencyAddressesByNetwork.networkDex.dex.url &&
+            cabn2 &&
+            cabn2.currencyAddressesByNetwork &&
+            cabn2.currencyAddressesByNetwork.tokenContractAddress &&
+            cabn2.currencyAddressesByNetwork.networkDex.dex.url
+          ) {
+            const tempObj = {
+              name: leaderboard?.name,
+              exclusionWalletAddressList: leaderboard?.exclusionWalletAddressList,
+              frmCabn: {
+                tokenContractAddress: cabn1?.currencyAddressesByNetwork?.tokenContractAddress,
+                dexUrl: cabn1?.currencyAddressesByNetwork?.networkDex?.dex?.url,
+                chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
+                id: cabn1?.currencyAddressesByNetwork?._id,
+              },
+              frmxCabn: {
+                tokenContractAddress: cabn2?.currencyAddressesByNetwork?.tokenContractAddress,
+                dexUrl: cabn2?.currencyAddressesByNetwork?.networkDex?.dex?.url,
+                chainId: cabn2?.currencyAddressesByNetwork?.network?.chainId,
+                id: cabn2?.currencyAddressesByNetwork?._id,
+              },
+            };
+            getFrmTokenUSDCValue(tempObj.frmCabn.chainId, tempObj.frmCabn.tokenContractAddress, tokenUSDCBSCMainnet, tempObj);
+            setLeaderboardData(tempObj);
           } else {
-            toast.error(e?.response?.data?.status?.message);
+            toast.error(`Error occured: Leaderboard Information is not correct`);
           }
-        } else {
-          toast.error("Something went wrong. Try again later!");
         }
+      })
+      .catch((e) => {
+        getErrorMessage(e, activeTranslation);
       });
   };
 
   return (
-    <> 
-        <Toaster /> 
+    <>
+      <Toaster />
       <FContainer type="fluid">
         <FContainer>
-          {frmUsdcValue && frmxUsdcValue && (
-            <MultiTokenLeaderboardInformation
-              leaderboardData={leaderboardData}
-              frmUsdcValue={frmUsdcValue}
-              frmxUsdcValue={frmxUsdcValue}
-            />
-          )}
+          {frmUsdcValue && frmxUsdcValue && <MultiTokenLeaderboardInformation leaderboardData={leaderboardData} frmUsdcValue={frmUsdcValue} frmxUsdcValue={frmxUsdcValue} />}
         </FContainer>
       </FContainer>
     </>

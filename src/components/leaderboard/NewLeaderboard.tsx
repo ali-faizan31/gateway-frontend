@@ -20,14 +20,15 @@ import { addLeaderboard } from "../../_apis/LeaderboardCrud";
 // import { getAllLeaderboardsDispatch } from '../../redux/slices/leaderboard';
 // import { chainIdList, dexUrlList } from './LeaderboardHelper';
 import { TOKEN_TAG } from "../../utils/const.utils";
-import { T } from '../../utils/translationHelper';
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/rootReducer";
+import { getErrorMessage } from "../../utils/global.utils";
 
 export default function NewLeaderboard() {
-  // const dispatch = useDispatch();
   const history = useHistory();
   let token = localStorage.getItem(TOKEN_TAG);
-  // const [isLeaderboardPresent, setIsLeaderboardPresent] = useState(false);
-  // const [leaderboardInfo, setLeaderboardInfo] = useState({});
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
+
 
   const newLeaderboardScehma = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -75,16 +76,7 @@ export default function NewLeaderboard() {
         history.push(PATH_DASHBOARD.general.leaderboardManagement);
       })
       .catch((e: any) => {
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 

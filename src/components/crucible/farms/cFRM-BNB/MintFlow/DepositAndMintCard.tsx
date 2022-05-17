@@ -11,66 +11,60 @@ import { Web3Helper } from "./../../../../../container-components/web3Client/web
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
 import { ApprovableButtonWrapper, approvalKey } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
 import { useHistory, useLocation, useParams } from "react-router";
-// import { useWeb3React } from "@web3-react/core";
 import { CRUCIBLE_CONTRACTS_V_0_1, getBaseTokenName, getCrucibleTokenName, STEP_FLOW_IDS } from "./../../../common/utils";
 import { RootState } from "../../../../../redux/rootReducer";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import {
   getLatestStepToRender,
-  getObjectReadableFarmName,
-  // getNextStepFlowStepId
+  getObjectReadableFarmName
 } from "../../../common/Helper";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { ClipLoader } from "react-spinners";
-import { T } from '../../../../../utils/translationHelper';
-import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
-// import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { getCrucibleMaxMintCap } from "../../../../../_apis/CrucibleCapCrud";
+import { getErrorMessage, TruncateWithoutRounding } from "../../../../../utils/global.utils";
 
 export const CrucibleDeposit = () => {
+  const dispatch = useDispatch();
+  const location: any = useLocation();
+  const history = useHistory();
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { farm } = useParams<{ farm?: string }>();
   const [transactionId, setTransactionId] = useState("");
-  const {
-    isConnected,
-    // isConnecting,
-    walletAddress,
-    // walletBalance,
-    networkClient,
-  } = useSelector((state: RootState) => state.walletConnector);
+  const [maxCap, setMaxCap] = useState(0);
+  const [mintAmount, setMintAmount] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessed, setIsProcessed] = useState(false);
+  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
+  const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
+  const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
+  const { isConnected, walletAddress, networkClient, } = useSelector((state: RootState) => state.walletConnector);
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
-  const {
-    // approveTransactionId,
-    approvals,
-  } = useSelector((state: RootState) => state.approval);
+  const { approvals, } = useSelector((state: RootState) => state.approval);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   useEffect(() => {
-    // if (approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1['BSC'].router, crucible?.baseCurrency)] === undefined) {
-    //   history.push({ pathname: PATH_DASHBOARD.crucible.index })
-    // }
-    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible?.baseCurrency)]) > 0) {
-      if (currentStep.step.name === "Approve") {
+    getMaxCapInformation();
+  }, [])
+
+  useEffect(() => {
+    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.baseCurrency)]) > 0) {
+      if (currentStep.step.name === "Approve" && currentStep.status !== "completed") {
         getStepCompleted(false);
       }
     }
     // eslint-disable-next-line
   }, [approvals]);
-  // const { active, activate, deactivate, library, account, chainId, error } =
-  //   useWeb3React();
-  const [mintAmount, setMintAmount] = useState(0);
-  const dispatch = useDispatch();
-  const location: any = useLocation();
-  const history = useHistory();
-  const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
-  const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
-  const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
-  console.log(tokenPrices, userCrucibleData, "tokenPricestokenPrices");
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [isProcessed, setIsProcessed] = useState(false);
+
+  const getMaxCapInformation = async () => {
+    let response = await getCrucibleMaxMintCap();
+    let maxCapResponse = response && response.data && response.data.body && response.data.body.crucibleMintCap;
+    farm?.includes('cFRMx') ? setMaxCap(maxCapResponse.cFRMxMaxCap) : setMaxCap(maxCapResponse.cFRMMaxCap);
+  }
 
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
@@ -96,36 +90,32 @@ export const CrucibleDeposit = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      if (e.response) {
-        if (e?.response?.data?.status?.phraseKey !== '') {
-          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-          toast.error(fetchedMessage);
-        } else {
-          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
-        }
-      } else {
-        toast.error("Something went wrong. Try again later!");
-      }
+      getErrorMessage(e, activeTranslation)
     }
   };
 
   const onMintClick = async (currency: string, crucibleAddress: string, amount: string, isPublic: boolean, network: string, userAddress: string) => {
     if (networkClient) {
-      setTransitionStatusDialog(true);
-      setIsProcessing(true);
-      const web3Helper = new Web3Helper(networkClient as any);
-      const client = new CrucibleClient(web3Helper);
+      if (Number(amount) <= Number(maxCap)) {
+        dispatch(CrucibleActions.transactionProcessing())
+        setTransitionStatusDialog(true);
+        setIsProcessing(true);
+        const web3Helper = new Web3Helper(networkClient as any);
+        const client = new CrucibleClient(web3Helper);
 
-      const response = await client.mintCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress);
-      if (response) {
-        console.log(response, "metmask");
-        let transactionId = response.split("|");
-        setTransactionId(transactionId[0]);
-        setIsProcessing(false);
-        setIsProcessed(true);
-        if (currentStep.step.name === "Mint") {
-          getStepCompleted(false);
+        const response = await client.mintCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress);
+        if (response) {
+          dispatch(CrucibleActions.transactionProcessed())
+          let transactionId = response.split("|");
+          setTransactionId(transactionId[0]);
+          setIsProcessing(false);
+          setIsProcessed(true);
+          if (currentStep.step.name === "Mint") {
+            getStepCompleted(false);
+          }
         }
+      } else {
+        toast.error(`You have entered an amount that exceeds your minting limit. Please enter a valid amount.`)
       }
     }
   };
@@ -153,7 +143,7 @@ export const CrucibleDeposit = () => {
 
   const getOpenCapInfo = () => {
     if (Number(crucible[farm!]?.openCap) > 0) {
-      return `Minting Is Open ( ${crucible[farm!]?.openCap} Open Cap )`;
+      return `Minting Is Open ( ${TruncateWithoutRounding(crucible[farm!]?.openCap || "0", 3)} Open Cap )`;
     } else {
       return `Minting Is Closed ( ${crucible[farm!]?.openCap} Open Cap )`;
     }
@@ -163,12 +153,16 @@ export const CrucibleDeposit = () => {
     if (isApproveMode) {
       return false;
     } else {
-      return Number(userCrucibleData[farm!]?.baseBalance || "0") === 0 || Number(crucible[farm!]?.openCap) === 0;
+      return Number(userCrucibleData[farm!]?.baseBalance || "0") === 0
+        || Number(crucible[farm!]?.openCap) === 0
+        || Number(mintAmount) === 0
+        || Number(userCrucibleData[farm!]?.baseBalance || "0") < Number(mintAmount);
     }
   };
 
   return (
     <>
+      <Toaster />
       {isLoading ? (
         <FCard>
           <FItem align={"center"}>
@@ -218,12 +212,13 @@ export const CrucibleDeposit = () => {
             onChange={(e: any) => setMintAmount(e.target.value)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1"}>
-                <span onClick={() => setMintAmount((userCrucibleData[farm!]?.baseBalance || "0"))}>Max</span>
+                <span onClick={() => setMintAmount((maxCap || 0))}>Max</span>
               </FTypo>
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
             You have {TruncateWithoutRounding((userCrucibleData[farm!]?.baseBalance || "0"), 3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
+            You can mint maximum {maxCap} {userCrucibleData[farm!]?.baseSymbol}.
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5 justify-content-space-between"}>
             Amount you will receive

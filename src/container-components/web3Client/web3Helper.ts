@@ -41,10 +41,10 @@ export class Web3Helper {
             })
             .catch(reject)
       );
-      console.log(txId);
+      // console.log(txId);
       txIds.push(txId.transactionHash);
     }
-    console.log(txIds, "txIdstxIds");
+    // console.log(txIds, "txIdstxIds");
     return txIds.join(",") + "|" + JSON.stringify(payload || "");
   }
 

@@ -28,7 +28,7 @@ export const DialogTransitionStatus = ({
   };
 
   return (
-    <FDialog size={"medium"} show={transitionStatusDialog} onHide={() => onclose()} className="transaction-status text-center" showClose={true}>
+    <FDialog size={"medium"} show={transitionStatusDialog} onHide={() => onclose()} className="transaction-status text-center" showClose={false}>
       {isProcessing ? (
         <React.Fragment>
           <FItem align="center">

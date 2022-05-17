@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  FInputText,
-  FGrid,
-  FContainer,
-  FGridItem,
-  FButton,
-  FItem,
-} from "ferrum-design-system";
+import { FInputText, FGrid, FContainer, FGridItem, FButton, FItem } from "ferrum-design-system";
 import { useHistory, Link } from "react-router-dom";
 import { RiEyeOffFill, RiEyeLine } from "react-icons/ri";
 import toast, { Toaster } from "react-hot-toast";
@@ -15,10 +8,10 @@ import { communityMemberLogin } from "../../../../_apis/OnboardingCrud";
 import { walletAddressAuthenticateCheckOnSignin, getAccessTokenForApplicationUser } from "../../../../_apis/WalletAuthencation";
 import { PATH_AUTH, PATH_PUBLIC_USER } from "../../../../routes/paths";
 import * as validations from "../../../../utils/validations";
-import ClipLoader from "react-spinners/ClipLoader"; 
+import ClipLoader from "react-spinners/ClipLoader";
 import { connectWeb3 } from "../../../../utils/connect-wallet/connetWalletHelper";
 import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils";
-import { T } from '../../../../utils/translationHelper';
+import { getErrorMessage } from "../../../../utils/global.utils";
 
 const LoginForm = () => {
   const history = useHistory();
@@ -32,6 +25,7 @@ const LoginForm = () => {
   // eslint-disable-next-line
   const [web3, setWeb3] = useState(null);
   const [applicationUserToken, setApplicationUserToken] = useState("");
+  const { activeTranslation } = useSelector((state) => state.phrase);
 
   useEffect(() => {
     getAccessToken();
@@ -52,20 +46,10 @@ const LoginForm = () => {
 
   const checkIsUserWalletAddressAuthenticated = async (userId, walletInformation) => {
     try {
-      const res = await walletAddressAuthenticateCheckOnSignin(userId,  walletInformation?.address, walletInformation?.network, applicationUserToken  );
+      const res = await walletAddressAuthenticateCheckOnSignin(userId, walletInformation?.address, walletInformation?.network, applicationUserToken);
       return res.data.body.isAuthenticated;
     } catch (e) {
-        if (e.response) {
-            if (e?.response?.data?.status?.phraseKey !== '') {
-                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-                throw (fetchedMessage);
-            } else {
-                console.log(e.response.data.status.message);
-                throw (e?.response?.data?.status?.message);
-            }
-        } else {
-            throw ("Something went wrong. Try again later!");
-        }
+      getErrorMessage(e, activeTranslation);
     }
   };
 
@@ -77,36 +61,28 @@ const LoginForm = () => {
         }
       })
       .catch((e) => {
-        if (e.response) {
-            if (e?.response?.data?.status?.phraseKey !== '') {
-                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-                toast.error(fetchedMessage);
-            } else {
-                toast.error(e?.response?.data?.status?.message);
-            }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 
-const checkWalletAddress = async (user , token, response, walletInformation) => { 
+  const checkWalletAddress = async (user, token, response, walletInformation) => {
     try {
-    let isAuthenticated = await checkIsUserWalletAddressAuthenticated(user._id, walletInformation );
-    if (isAuthenticated === true) {
+      let isAuthenticated = await checkIsUserWalletAddressAuthenticated(user._id, walletInformation);
+      if (isAuthenticated === true) {
         localStorage.setItem(TOKEN_TAG, token);
         toast.success(response.data.status.message);
         history.push(PATH_PUBLIC_USER.multiLeaderboard.detailLeaderBoardByProvidedId);
-    } else {
+      } else {
         toast.error("Please connect and authenticate your wallet first!");
         history.push(PATH_AUTH.walletAuthentication);
-    } }catch (e){
-        toast.error(`Error Occured ${e}`); 
+      }
+    } catch (e) {
+      toast.error(`Error Occured ${e}`);
     }
-}
+  };
 
-  const onSubmit = async (values) => { 
-    let walletInformation = await connectWeb3(setAddress, setConnected, setWeb3, setNetwork, toast); 
+  const onSubmit = async (values) => {
+    let walletInformation = await connectWeb3(setAddress, setConnected, setWeb3, setNetwork, toast);
     await communityMemberLogin(values)
       .then((response) => {
         const { user } = response.data.body;
@@ -114,7 +90,7 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
         localStorage.setItem(ME_TAG, JSON.stringify(user));
         if (token) {
           if (user.isEmailAuthenticated === true) {
-              checkWalletAddress(user, token, response, walletInformation);
+            checkWalletAddress(user, token, response, walletInformation);
           } else {
             toast.error("Please verify your email first!");
             history.push(PATH_AUTH.emailResendCode);
@@ -122,17 +98,8 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
         }
       })
       .catch((e) => {
-        if (e.response) {
-            if (e?.response?.data?.status?.phraseKey !== '') {
-                const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-                toast.error(fetchedMessage);
-            } else {
-                toast.error(e?.response?.data?.status?.message);
-            }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
-      }); 
+        getErrorMessage(e, activeTranslation);
+      });
   };
 
   return (
@@ -185,43 +152,30 @@ const checkWalletAddress = async (user , token, response, walletInformation) => 
                   required: {
                     value: true,
                     message: "Password is required",
-                  } 
+                  },
                   // pattern: {
                   //     value: validations.PASSWORD_REGEX,
                   //     message:
                   //         "Password must be at least six characters long, Contain letters and numbers",
                   // },
                 }}
-                error={
-                  errors["password"]?.message ? errors["password"]?.message : ""
-                }
+                error={errors["password"]?.message ? errors["password"]?.message : ""}
               />
             </FGridItem>
           </FGrid>
           {/* <FItem align={"center"} className={"f-mt-1 w-100"}>
             Don’t have an account? */}
-            <div className={"f-mt-1 w-100 justify-content-end"}>
-              <Link
-              className="primary-color text-decoration-none"
-              to={PATH_AUTH.forgotPassword}
-            >
-             Forgot Password?
+          <div className={"f-mt-1 w-100 justify-content-end"}>
+            <Link className="primary-color text-decoration-none" to={PATH_AUTH.forgotPassword}>
+              Forgot Password?
             </Link>
-            </div>
+          </div>
           {/* </FItem> */}
-        <FButton  
-                type="submit"
-                title={"Login"}
-                className={"w-100 f-mt-1"}
-                postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}
-              ></FButton>
-            
+          <FButton type="submit" title={"Login"} className={"w-100 f-mt-1"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
+
           <FItem align={"center"} className={"f-mt-1 w-100"}>
             Don’t have an account?
-            <Link
-              className="primary-color text-decoration-none "
-              to={PATH_AUTH.communityRegister}
-            >
+            <Link className="primary-color text-decoration-none " to={PATH_AUTH.communityRegister}>
               Get started
             </Link>
           </FItem>

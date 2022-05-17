@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { BigUtils } from "./../../../../../container-components/web3Client/types";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
-import toast from "react-hot-toast";
 import {
   getLatestStepToRender,
   //  getNextStepFlowStepId
@@ -24,7 +23,7 @@ import {
 import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
-import { T } from '../../../../../utils/translationHelper';
+import { changeExponentToPoints, getErrorMessage, TruncateWithoutRounding } from "../../../../../utils/global.utils";
 
 export const UnWrap = () => {
   const location: any = useLocation();
@@ -43,6 +42,7 @@ export const UnWrap = () => {
   const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
@@ -68,16 +68,7 @@ export const UnWrap = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      if (e.response) {
-        if (e?.response?.data?.status?.phraseKey !== '') {
-          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-          toast.error(fetchedMessage);
-        } else {
-          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
-        }
-      } else {
-        toast.error("Something went wrong. Try again later!");
-      }
+      getErrorMessage(e, activeTranslation)
     }
   };
 
@@ -108,10 +99,14 @@ export const UnWrap = () => {
       location.state.id = currentStep.stepFlow;
       let splitted = currentStep.stepFlowStep.name.split("-");
       location.state.name = splitted[0].trim() + " - " + splitted[1].trim();
-      console.log(currentStep, location);
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
     }
   };
+
+  const getDisabledCheck = () => {
+    return Number(userCrucibleData[farm!]?.balance) === 0 || Number(amount) === 0 || Number(userCrucibleData[farm!]?.balance) < Number(amount);
+  };
+
 
   return (
     <>
@@ -160,7 +155,7 @@ export const UnWrap = () => {
             inputSize="input-lg"
             type={"text"}
             placeholder="0"
-            value={amount}
+            value={amount === 0 ? "" : amount}
             onChange={(e: any) => setAmount(e.target.value)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1"}>
@@ -169,7 +164,7 @@ export const UnWrap = () => {
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {userCrucibleData[farm!]?.balance || "0"} available in Token {userCrucibleData[farm!]?.symbol}.
+            You have {TruncateWithoutRounding(userCrucibleData[farm!]?.balance || "0", 3)} available in Token {userCrucibleData[farm!]?.symbol}.
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5"}>
             Amount you will receive
@@ -180,10 +175,10 @@ export const UnWrap = () => {
             type={"text"}
             placeholder="0"
             disabled={true}
-            value={Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100)}
+            value={changeExponentToPoints(Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100))}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-               {crucible[farm!]?.symbol}
+                {crucible[farm!]?.symbol}
               </FTypo>
             }
           />
@@ -194,7 +189,7 @@ export const UnWrap = () => {
                   <FButton
                     title={"Unwrap"}
                     className={"w-100"}
-                    disabled={Number(userCrucibleData[farm!]?.balance) === 0}
+                    disabled={getDisabledCheck()}
                     onClick={
                       ownProps.isApprovalMode
                         ? () => ownProps.onApproveClick()
@@ -203,7 +198,7 @@ export const UnWrap = () => {
                   ></FButton>
                 </div>
               )}
-              currency={crucible[farm!].currency}
+              currency={crucible[farm!]?.currency}
               contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
               userAddress={walletAddress as string}
               amount={"0.0001"}

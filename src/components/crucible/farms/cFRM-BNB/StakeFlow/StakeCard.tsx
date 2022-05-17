@@ -31,8 +31,7 @@ import toast from "react-hot-toast";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { ClipLoader } from "react-spinners";
-import { getTokenInformationFromWeb3, TruncateWithoutRounding } from "../../../../../utils/global.utils";
-import { T } from '../../../../../utils/translationHelper';
+import { getErrorMessage, TruncateWithoutRounding } from "../../../../../utils/global.utils";
 
 export const Stake = () => {
   const dispatch = useDispatch();
@@ -52,8 +51,7 @@ export const Stake = () => {
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
   const LPStakingDetails = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
   const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
-
-  const { tokenData } = useSelector((state: RootState) => state.crucible);
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const { approvals } = useSelector((state: RootState) => state.approval);
@@ -73,7 +71,12 @@ export const Stake = () => {
 
 
   useEffect(() => {
-    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.baseCurrency)]) > 0) {
+    // console.log(Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
+    // console.log((approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
+    // console.log(approvals)
+    // console.log(crucible[farm!]?.currency)
+    // console.log(crucible[farm!])
+    if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]) > 0) {
       if (currentStep.step.name === "Approve" && currentStep.status !== "completed") {
         getStepCompleted(false);
       }
@@ -105,16 +108,7 @@ export const Stake = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      if (e.response) {
-        if (e?.response?.data?.status?.phraseKey !== '') {
-          const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-          toast.error(fetchedMessage);
-        } else {
-          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
-        }
-      } else {
-        toast.error("Something went wrong. Try again later!");
-      }
+      getErrorMessage(e, activeTranslation)
     }
   };
 
@@ -127,6 +121,7 @@ export const Stake = () => {
       let userAddress: string = "";
       let response: any;
 
+      dispatch(CrucibleActions.transactionProcessing())
       setTransitionStatusDialog(true);
       setIsProcessing(true);
       const web3Helper = new Web3Helper(networkClient as any);
@@ -141,12 +136,7 @@ export const Stake = () => {
 
         response = await client.stakeLPToken(dispatch, currency, userAddress, stakingAddress, network, amount);
       } else if (isSingleTokenFarm(farm)) {
-        // if (farm === "cFRMx") {
-        //   stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
-        // } else if (farm === "cFRM") {
-        //   stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
-        // }
-        stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
+        stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
         currency = crucible[farm!].currency;
         amount = amountToStake.toString();
         network = crucible[farm!]?.network;
@@ -155,6 +145,7 @@ export const Stake = () => {
         response = await client.StakeCrucible(dispatch, currency, amount, stakingAddress, userAddress, network);
       }
       if (response) {
+        dispatch(CrucibleActions.transactionProcessed())
         let transactionId = response.split("|");
         setTransactionId(transactionId[0]);
         setIsProcessing(false);
@@ -188,6 +179,10 @@ export const Stake = () => {
     } else {
       return crucible[farm!]?.symbol;
     }
+  };
+
+  const getDisabledCheck = () => {
+    return Number(getAmount()) === 0 || Number(amount) === 0 || Number(getAmount()) < Number(amount);
   };
 
   return (
@@ -255,7 +250,7 @@ export const Stake = () => {
                   <FButton
                     title={ownProps.isApprovalMode ? "Approve" : "Stake Crucible"}
                     className={"w-100"}
-                    // disabled={Number(getAmount()) === 0}
+                    disabled={getDisabledCheck()}
                     onClick={
                       ownProps.isApprovalMode ? () => ownProps.onApproveClick() : () => onStakeClick(amount)
                       // crucible+ddress as string

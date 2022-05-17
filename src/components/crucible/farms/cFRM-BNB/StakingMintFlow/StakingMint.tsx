@@ -97,7 +97,7 @@ export const StakingMintSteps = () => {
           </FItem>
         </FCard>
       ) : (
-        <FContainer width={900}>
+        <FContainer width={700}>
           <CrucibleMyBalance />
           <FCard variant={"secondary"} className="card-crucible-steps">
             <FTypo size={20} className={"card-title w-100"} display="flex">
@@ -144,13 +144,14 @@ export const StakingMintSteps = () => {
                     postfix={<IconArrow />}
                     className="w-100"
                     disabled={disableCheck()}
-                    style={{ marginRight: "3px" }}
+                    style={{marginLeft: "-4px"}}
                     onClick={() => onStakeClick()}
                   />
                 </FItem>
-                <FItem>
+                <FItem >
                   <FButton
                     title="What Else Can I Do?"
+                    style={{marginLeft: "4px"}}
                     postfix={<IconArrow />}
                     className="w-100"
                     disabled={disableCheck()}

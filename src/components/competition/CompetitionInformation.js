@@ -7,6 +7,8 @@ import { CSVLink } from "react-csv";
 import moment from "moment";
 import eitherConverter from "ether-converter";
 import { getCompetitionById, getCompetitionsParticipantsRanks } from "../../_apis/CompetitionCrud";
+import { useSelector } from "react-redux";
+import { getErrorMessage } from "../../utils/global.utils";
 
 import { cFRMTokenContractAddress, cFRMxTokenContractAddress, tokenFRMxBSCMainnet, tokenFRMBSCMainnet, TOKEN_TAG } from "../../utils/const.utils";
 
@@ -24,6 +26,7 @@ const CompetitionInformation = () => {
   const [competitionParticipants, setCompetitionParticipants] = useState([]);
   const [competitionParticipantsFiltered, setCompetitionParticipantsFiltered] = useState([]);
   const [showWallets, setShowWallets] = useState(false);
+  const { activeTranslation } = useSelector((state) => state.phrase);
 
   useEffect(() => {
     setIsLoading(true);
@@ -96,11 +99,7 @@ const CompetitionInformation = () => {
       })
       .catch((e) => {
         setIsLoading(false);
-        if (e.response) {
-          toast.error(e?.response?.data?.status?.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 
@@ -116,11 +115,7 @@ const CompetitionInformation = () => {
       })
       .catch((e) => {
         setIsLoading(false);
-        if (e.response) {
-          toast.error(e?.response?.data?.status?.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 
@@ -232,7 +227,7 @@ const CompetitionInformation = () => {
       <FContainer type="fluid">
         <FContainer>
           <FGrid className={"f-mt-1 f-mb-1"}>
-            <FGridItem size={[6, 6, 6]} alignX="start" alignY={"end"}>
+            <FGridItem size={[4, 4, 4]} alignX="start" alignY={"end"}>
               <h1>{competitionData?.name || "Competition"}</h1>
             </FGridItem>
             <FGridItem size={[2, 2, 2]} alignX="start" alignY="end">
@@ -269,84 +264,63 @@ const CompetitionInformation = () => {
             </FTable>
           ) : isLoading ? (
             <FContainer type="fluid">
-<<<<<<< HEAD
-                <FContainer>
-                    <FGrid className={'f-mt-1 f-mb-1'}>
-                        <FGridItem
-                            size={[4, 4, 4]}
-                            alignX="start"
-                            alignY={'end'}
-                        >
-                            <h1>{competitionData?.name || 'Competition'}</h1>
-                        </FGridItem>
-                        <FGridItem size={[2, 2, 2]} alignX="start" alignY="end">
-                            {(!isPublicUser) && (
-                                <FButton
-                                    type="button"
-                                    className="btn-create f-ml-1"
-                                    disabled={isLoading || !competitionParticipants?.length }
-                                    onClick={showAllWallets}
-                                    title={`${
-                                        showWallets ? 'Hide' : 'Show'
-                                    } Wallets`}
-                                />
-                            )}
-                        </FGridItem>
-                        <FGridItem
-                            alignX={'end'}
-                            alignY={'end'}
-                            dir={'row'}
-                            size={[4, 4, 4]}
-                        >
-                            <FInputText
-                                label="Search Wallet"
-                                placeholder="0x000...0000"
-                                value={query}
-                                type="search"
-                                onChange={onQueryChange}
-                                style={{width: '100%'}}
-                            />
-                            {!isPublicUser && (
-                                <FButton
-                                    type="button"
-                                    className="btn-create f-ml-1"
-                                    disabled={isLoading || !competitionParticipants?.length }
-                                    onClick={onExportClick}
-                                    title={' Export to CSV'}
-                                />
-                            )}
-                        </FGridItem>
-                    </FGrid>
-                    {competitionParticipants.length ? (
-                        <FTable>
-                            <Datatable
-                                tableHeaders={columns}
-                                tableBody={competitionParticipantsFiltered}
-                                rowsPerPage={10}
-                                tableClass="striped hover responsive"
-                                initialSort={{
-                                    prop: 'rank',
-                                    isAscending: true
-                                }}
-                            />
-                        </FTable>
-                    ) : isLoading ? (
-                        <FContainer type="fluid">
-                            <FContainer>Loading...</FContainer>
-                        </FContainer>
-                    ) : (
-                        <FContainer type="fluid">
-                            <FContainer>No Data found</FContainer>
-                        </FContainer>
+              <FContainer>
+                <FGrid className={"f-mt-1 f-mb-1"}>
+                  <FGridItem size={[4, 4, 4]} alignX="start" alignY={"end"}>
+                    <h1>{competitionData?.name || "Competition"}</h1>
+                  </FGridItem>
+                  <FGridItem size={[2, 2, 2]} alignX="start" alignY="end">
+                    {!isPublicUser && (
+                      <FButton
+                        type="button"
+                        className="btn-create f-ml-1"
+                        disabled={isLoading || !competitionParticipants?.length}
+                        onClick={showAllWallets}
+                        title={`${showWallets ? "Hide" : "Show"} Wallets`}
+                      />
                     )}
-                </FContainer>
-=======
+                  </FGridItem>
+                  <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[4, 4, 4]}>
+                    <FInputText label="Search Wallet" placeholder="0x000...0000" value={query} type="search" onChange={onQueryChange} style={{ width: "100%" }} />
+                    {!isPublicUser && (
+                      <FButton
+                        type="button"
+                        className="btn-create f-ml-1"
+                        disabled={isLoading || !competitionParticipants?.length}
+                        onClick={onExportClick}
+                        title={" Export to CSV"}
+                      />
+                    )}
+                  </FGridItem>
+                </FGrid>
+                {competitionParticipants.length ? (
+                  <FTable>
+                    <Datatable
+                      tableHeaders={columns}
+                      tableBody={competitionParticipantsFiltered}
+                      rowsPerPage={10}
+                      tableClass="striped hover responsive"
+                      initialSort={{
+                        prop: "rank",
+                        isAscending: true,
+                      }}
+                    />
+                  </FTable>
+                ) : isLoading ? (
+                  <FContainer type="fluid">
+                    <FContainer>Loading...</FContainer>
+                  </FContainer>
+                ) : (
+                  <FContainer type="fluid">
+                    <FContainer>No Data found</FContainer>
+                  </FContainer>
+                )}
+              </FContainer>
               <FContainer>Loading...</FContainer>
             </FContainer>
           ) : (
             <FContainer type="fluid">
               <FContainer>No Data found</FContainer>
->>>>>>> hotfix/updateCompetitionIds
             </FContainer>
           )}
         </FContainer>

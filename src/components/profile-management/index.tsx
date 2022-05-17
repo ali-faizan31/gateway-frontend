@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import EmailSection from "./email-forms";
 import { getMe } from "../../_apis/ProfileCrud";
@@ -20,8 +20,7 @@ import { generateNonceForCommunityMember } from "../../_apis/WalletAuthencation"
 
 // import { checkSession, localStorageHelper } from "../../utils/global.utils";
 import * as walletAuthenticatorActions from "../common/wallet-authentication/redux/walletAuthenticationActions";
-import { T } from '../../utils/translationHelper';
-// import { TOKEN_TAG } from "../../utils/const.utils";
+import { getErrorMessage } from "../../utils/global.utils";
 
 const ProfileSettings = () => {
   let isLoading = false;
@@ -29,7 +28,7 @@ const ProfileSettings = () => {
   const [profileToken, setprofileToken] = useState("");
   const [user, setUser] = useState({ email: "" });
   const [errorModal, setErrorModal] = useState({ show: false, message: "" });
-
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
   const { walletAddress, isConnected } = useSelector(
     (state: RootState) => state.walletConnector
   );
@@ -71,16 +70,7 @@ const ProfileSettings = () => {
           setUser(response.data.body.user);
         })
         .catch((e: any) => {
-          if (e.response) {
-            if (e?.response?.data?.status?.phraseKey !== '') {
-              const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-              toast.error(fetchedMessage);
-            } else {
-              toast.error(e?.response?.data?.status?.message);
-            }
-          } else {
-            toast.error("Something went wrong. Try again later!");
-          }
+          getErrorMessage(e, activeTranslation)
         })
         .finally(() => {
           isLoading = false;
@@ -108,16 +98,7 @@ const ProfileSettings = () => {
             getSignatureFromMetamask: false,
           })
         );
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(`Error Occurred: nonce ${e?.response?.data?.status?.message}`);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 

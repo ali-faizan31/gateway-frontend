@@ -5,7 +5,7 @@ import { RootState } from "../../../redux/rootReducer";
 import { TruncateWithoutRounding } from "../../../utils/global.utils";
 
 export const CrucibleMyBalance = () => {
-  const { tokenData } = useSelector((state: RootState) => state.crucible);
+  const { tokenData } = useSelector((state: RootState) => state.crucible); 
 
   return (
     <FCard className="card-my-balance styled-card align-v">
