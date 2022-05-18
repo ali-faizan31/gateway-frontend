@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import { getSideMenuForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
-import { Site_Name } from "../../utils/const.utils";
+import { CRUCIBLE_SITE_TAG, Site_Name } from "../../utils/const.utils";
 
 const DashboardSidebar = () => {
   const { pathname } = useLocation();
@@ -109,8 +109,7 @@ const DashboardSidebar = () => {
     try {
       let siteName = getSiteName(pathname, "/", "/");
       let response = await getSideMenuForAssociatedOrganizationBySiteName(Site_Name, token,
-        //  pathname.includes(CRUCIBLE_SITE_TAG) ? false : true
-        false
+        pathname.includes(CRUCIBLE_SITE_TAG) ? false : true
       );
       let sideMenuItems = response && response.data && response.data.body;
       let productList = getSideMenuAgainstOrganization(sideMenuItems);
