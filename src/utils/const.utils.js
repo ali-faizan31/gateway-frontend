@@ -20,6 +20,7 @@ export const COMMUNITY_ROLE_TAG = "communityMember";
 export const PHRASE_TOKEN = "bf3fa63f66e88f4453c018f568445a03889f494343973cc33c90401d9d525447";
 export const PHRASE_PROJECT = "dbc35f418d27873591479252f9883427";
 export const PUBLIC_TAG = "/pub";
+export const Site_Name = "testadmin.ferrumnetwork.io";
 export const FRM_FRMx_leaderboard_Details = { id: "61b6d48337f5125acbbfddeb", name: "FRM & FRMx BSC Leaderboard" };
 export const cFRM_Volume_Competition_Details = { id: "627be21bece9d7534513a7f3", name: "cFRM Volume Competition" };
 export const cFRMx_Volume_Competition_Details = { id: "627be3a2ece9d7534513a877", name: "cFRMx Volume Competition" };

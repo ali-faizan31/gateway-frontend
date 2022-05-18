@@ -71,11 +71,11 @@ export const Stake = () => {
 
 
   useEffect(() => {
-    // console.log(Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
-    // console.log((approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
-    // console.log(approvals)
-    // console.log(crucible[farm!]?.currency)
-    // console.log(crucible[farm!])
+    console.log(Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
+    console.log((approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
+    console.log(approvals)
+    console.log(crucible[farm!]?.currency)
+    console.log(crucible[farm!])
     if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]) > 0) {
       if (currentStep.step.name === "Approve" && currentStep.status !== "completed") {
         getStepCompleted(false);
@@ -136,7 +136,7 @@ export const Stake = () => {
 
         response = await client.stakeLPToken(dispatch, currency, userAddress, stakingAddress, network, amount);
       } else if (isSingleTokenFarm(farm)) {
-        stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
+        stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
         currency = crucible[farm!].currency;
         amount = amountToStake.toString();
         network = crucible[farm!]?.network;

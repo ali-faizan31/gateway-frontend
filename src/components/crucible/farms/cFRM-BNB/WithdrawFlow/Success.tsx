@@ -110,11 +110,18 @@ export const Success = () => {
         newFarm = "cFRM-BNB";
       }
     } else {
+      // if (farm === "cFRMx") {
+      //   nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].withdrawAddLiquidity;
+      //   newFarm = "cFRMx";
+      // } else if (farm === "cFRM") {
+      //   nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].withdrawAddLiquidity;
+      //   newFarm = "cFRM";
+      // }
       if (farm === "cFRMx") {
-        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].withdrawAddLiquidity;
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].dashboard;
         newFarm = "cFRMx";
       } else if (farm === "cFRM") {
-        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].withdrawAddLiquidity;
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].dashboard;
         newFarm = "cFRM";
       }
     }
@@ -177,11 +184,12 @@ export const Success = () => {
                           ) : (
                             <img src={IconNetworkCFrmStr} height="40px" width="40px" alt="" />
                           )}
-                          <img src={IconNetworkBNB} height="40px" width="40px" alt="" />
+                          {/* <img src={IconNetworkBNB} height="40px" width="40px" alt="" /> */}
                         </span>
                       </div>
                       <FTypo size={20} weight={400} align={"center"}>
-                        Add Liquidity & Compound Rewards
+                        {/* Add Liquidity & Compound Rewards */}
+                        Stake {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                       </FTypo>
                     </div>
                     <div className="card-whats-next-back">
