@@ -11,6 +11,7 @@ import { getLeaderboardById, getLeaderboardByIdForPublicUser, getTokenHolderlist
 import { arraySortByKeyDescending, getErrorMessage, getFormattedWalletAddress } from "../../utils/global.utils";
 import { PUBLIC_TAG, TOKEN_TAG } from "../../utils/const.utils";
 import { filterList } from "./LeaderboardHelper";
+import { useSelector } from "react-redux";
 
 const LeaderboardInformation = () => {
   const { id } = useParams();

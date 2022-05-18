@@ -15,6 +15,7 @@ export const BSC_api_key = "QFQI7J6GMJXYJW6T5GYNGNNFCWI41S21JI";
 export const apiKey = "ckey_173b82c807954a8697b251305c5:"; // to be removed
 export const TOKEN_TAG = "tokenV2";
 export const ME_TAG = "meV2";
+export const Site_Name = "testadmin.ferrumnetwork.io";
 export const ORG_ROLE_TAG = "organizationAdmin";
 export const COMMUNITY_ROLE_TAG = "communityMember";
 export const PHRASE_TOKEN = "bf3fa63f66e88f4453c018f568445a03889f494343973cc33c90401d9d525447";

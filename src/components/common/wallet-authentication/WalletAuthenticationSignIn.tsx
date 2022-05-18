@@ -12,7 +12,7 @@ import * as walletAuthenticatorActions from "./redux/walletAuthenticationActions
 import { walletConnectorActions } from "../../../container-components/wallet-connector";
 import toast from "react-hot-toast";
 import { getErrorMessage, GetPhraseString, localStorageHelper } from "../../../utils/global.utils";
-import { ME_TAG, TOKEN_TAG } from "../../../utils/const.utils";
+import { ME_TAG, ORG_ROLE_TAG, TOKEN_TAG } from "../../../utils/const.utils";
 import { FDialog, FItem, FList, FButton, FGridItem } from "ferrum-design-system";
 import { getNetworkInformationForPublicUser } from "../../../_apis/NetworkCrud";
 import { T } from '../../../utils/translationHelper';
@@ -34,7 +34,7 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
     }
 
     if (isConnected && currentWalletNetwork && applicationUserToken && isConnecting === false) {
-      if (tokenV2 && meV2.addresses[0].network.ferrumNetworkIdentifier.toString() !== currentWalletNetwork.toString()) {
+      if (tokenV2 && ((meV2.addresses[0]?.network?.ferrumNetworkIdentifier.toString() !== currentWalletNetwork.toString()) || meV2.role === ORG_ROLE_TAG)) {
         dispatch(walletAuthenticatorActions.saveSignature({ signature: "" }));
         dispatch(walletAuthenticatorActions.saveNonce({ nonce: "" }));
         checkAllowedIdentifier(currentWalletNetwork, applicationUserToken);

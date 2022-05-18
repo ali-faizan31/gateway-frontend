@@ -45,14 +45,11 @@ export function getCompetitionByIdForPublicUser(id, token) {
   return axios.get(`${defaultEndPointDetails.baseUrl}/api/v1/competitions/${id}`);
 }
 
-export function getCompetitionsParticipantsRanks(competitionId, excludedWalletAddress, isPagination, offset, limit) {
-  return axios.get(
-    `${defaultEndPointDetails.baseUrl}/api/v1/competitions/participants/growth/${competitionId}?isPagination=${isPagination}&excludedWalletAddress=${excludedWalletAddress}&offset=${offset}&limit=${limit}`,
-    {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "Application/json",
-      },
-    }
-  );
+export function getCompetitionsParticipantsRanks(competitionId, isPagination, offset, limit) {
+  return axios.get(`${defaultEndPointDetails.baseUrl}/api/v1/competitions/participants/growth/${competitionId}?isPagination=${isPagination}&offset=${offset}&limit=${limit}`, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "Application/json",
+    },
+  });
 }

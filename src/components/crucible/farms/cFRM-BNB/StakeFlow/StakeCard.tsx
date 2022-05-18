@@ -136,7 +136,7 @@ export const Stake = () => {
 
         response = await client.stakeLPToken(dispatch, currency, userAddress, stakingAddress, network, amount);
       } else if (isSingleTokenFarm(farm)) {
-        stakingAddress = (crucible[farm!]?.staking || [])[1]?.address || "";
+        stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
         currency = crucible[farm!].currency;
         amount = amountToStake.toString();
         network = crucible[farm!]?.network;
