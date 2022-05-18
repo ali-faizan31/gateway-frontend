@@ -108,8 +108,9 @@ const DashboardSidebar = () => {
   const getSideMenuInformation = async (token: any) => {
     try {
       let siteName = getSiteName(pathname, "/", "/");
+      console.log(pathname, window.origin.includes(CRUCIBLE_SITE_TAG) ? 'hiii' : 'bye')
       let response = await getSideMenuForAssociatedOrganizationBySiteName(Site_Name, token,
-        pathname.includes(CRUCIBLE_SITE_TAG) ? false : true
+        window.origin.includes(CRUCIBLE_SITE_TAG) ? false : true
       );
       let sideMenuItems = response && response.data && response.data.body;
       let productList = getSideMenuAgainstOrganization(sideMenuItems);

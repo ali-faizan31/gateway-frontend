@@ -1,6 +1,7 @@
 import { Environment } from "./Environment";
 
-export const CRUCIBLE_SITE_TAG = "crucible-alpha";
+export const CRUCIBLE_SITE_TAG = "crucible";
+export const Site_Name = "gateway.ferrumnetwork.io";
 export const defaultEndPointDetails = Environment.defaultEndPoint();
 
 export const tokenFRMBSCMainnet = "0xa719b8ab7ea7af0ddb4358719a34631bb79d15dc";
@@ -15,13 +16,11 @@ export const BSC_api_key = "QFQI7J6GMJXYJW6T5GYNGNNFCWI41S21JI";
 export const apiKey = "ckey_173b82c807954a8697b251305c5:"; // to be removed
 export const TOKEN_TAG = "tokenV2";
 export const ME_TAG = "meV2";
-export const Site_Name = "testadmin.ferrumnetwork.io";
 export const ORG_ROLE_TAG = "organizationAdmin";
 export const COMMUNITY_ROLE_TAG = "communityMember";
 export const PHRASE_TOKEN = "bf3fa63f66e88f4453c018f568445a03889f494343973cc33c90401d9d525447";
 export const PHRASE_PROJECT = "dbc35f418d27873591479252f9883427";
 export const PUBLIC_TAG = "/pub";
-export const Site_Name = "testadmin.ferrumnetwork.io";
 export const FRM_FRMx_leaderboard_Details = { id: "61b6d48337f5125acbbfddeb", name: "FRM & FRMx BSC Leaderboard" };
 export const cFRM_Volume_Competition_Details = { id: "627be21bece9d7534513a7f3", name: "cFRM Volume Competition" };
 export const cFRMx_Volume_Competition_Details = { id: "627be3a2ece9d7534513a877", name: "cFRMx Volume Competition" };
