@@ -135,6 +135,7 @@ export const approvableButtonSlice = createSlice({
 });
 async function updateEvent(dispatch: Dispatch<AnyAction>, e: ChainEventBase, networkClient: any): Promise<ChainEventBase> {
   try {
+    const web3TxId = await e.id; // await possible web3 tx id
     const t = await networkClient.eth.getTransaction(e.id);
     console.log("Checking the transloota ", t);
     if (t && t.blockNumber) {
@@ -149,7 +150,7 @@ async function updateEvent(dispatch: Dispatch<AnyAction>, e: ChainEventBase, net
     console.log("Noting inderezding ", e);
     return { ...e, status: "pending" };
   } catch (ex) {
-    console.error("ApprovableButton.updateEvent", ex, e);
+    console.log("ApprovableButton.updateEvent");
     dispatch(
       approvableButtonSlice.actions.transactionFailed({
         message: (ex as any).message,
