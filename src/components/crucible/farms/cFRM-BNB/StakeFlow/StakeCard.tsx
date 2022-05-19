@@ -71,11 +71,11 @@ export const Stake = () => {
 
 
   useEffect(() => {
-    // console.log(Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
-    // console.log((approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
-    // console.log(approvals)
-    // console.log(crucible[farm!]?.currency)
-    // console.log(crucible[farm!])
+    console.log(Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
+    console.log((approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
+    console.log(approvals)
+    console.log(crucible[farm!]?.currency)
+    console.log(crucible[farm!])
     if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]) > 0) {
       if (currentStep.step.name === "Approve" && currentStep.status !== "completed") {
         getStepCompleted(false);

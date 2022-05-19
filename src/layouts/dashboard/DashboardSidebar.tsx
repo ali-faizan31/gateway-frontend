@@ -109,7 +109,7 @@ const DashboardSidebar = () => {
     try {
       let siteName = getSiteName(pathname, "/", "/");
       let response = await getSideMenuForAssociatedOrganizationBySiteName(Site_Name, token,
-        pathname.includes(CRUCIBLE_SITE_TAG) ? false : true
+        window.origin.includes(CRUCIBLE_SITE_TAG) ? false : true
       );
       let sideMenuItems = response && response.data && response.data.body;
       let productList = getSideMenuAgainstOrganization(sideMenuItems);
@@ -118,6 +118,11 @@ const DashboardSidebar = () => {
       console.log(`Error occured: ${e?.response?.data?.status?.message}`);
     }
   };
+
+
+  useEffect(() => {
+  }, [sideMenuItems])
+
 
   const renderContent = (items: any) => {
     return items.map((item: any) => {
@@ -129,7 +134,7 @@ const DashboardSidebar = () => {
                 to={subItem.path}
                 title={subItem.title}
                 prefix={subItem.icon ? subItem.icon : <img src="/ferrum/bullet.png" className="side-menu-img" alt="side menu item" />}
-                key={subItem.id}
+                key={subItem.title}
                 target={subItem.target && subItem.target}
               ></FSiderItem>
             })}

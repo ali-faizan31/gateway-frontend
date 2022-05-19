@@ -241,3 +241,9 @@ export const Crucible_Farm_Address_Detail: any = {
     LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
   }
 }
+
+export const Crucible_Balance_Tokens = ["cFRM",
+  // "APELPCFRMBNB",
+  "cFRMx",
+  // "APELPCFRMxBNB"
+]

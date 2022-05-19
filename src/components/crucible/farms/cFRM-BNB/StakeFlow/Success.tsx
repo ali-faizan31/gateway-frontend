@@ -99,12 +99,19 @@ export const Success = () => {
         newFarm = "cFRMx-BNB";
       }
     } else {
+      // if (farm === "cFRMx") {
+      //   nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].dashboard;
+      //   newFarm = "cFRMx-BNB";
+      // } else if (farm === "cFRM") {
+      //   nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].dashboard;
+      //   newFarm = "cFRM-BNB";
+      // }
       if (farm === "cFRMx") {
-        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].dashboard;
-        newFarm = "cFRMx-BNB";
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].dashboard;
+        newFarm = "cFRM";
       } else if (farm === "cFRM") {
-        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].dashboard;
-        newFarm = "cFRM-BNB";
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].dashboard;
+        newFarm = "cFRMx";
       }
     }
 
@@ -176,7 +183,8 @@ export const Success = () => {
               <FTypo size={16} className="f-mt-1">
                 Congrats! You have successfully staked your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} {farm?.includes("BNB") ? "/ BNB LP" : ""} tokens. You will now earn rewards
                 for every cFRM transaction that generates a fee.{" "}
-                {farm?.includes("BNB") ? "" : "To amplify your rewards by ~4x, consider Adding Liquidity for cFRM / BNB and staking the LP tokens."} The reward distribution is
+                {/* {farm?.includes("BNB") ? "" : "To amplify your rewards by ~4x, consider Adding Liquidity for cFRM / BNB and staking the LP tokens."} */}
+                The reward distribution is
                 proportional to your share of the pool.
               </FTypo>
             </FItem>
@@ -190,7 +198,7 @@ export const Success = () => {
                     <div className="card-whats-next-front">
                       <div className="network-icon-wrapper text-center f-mb-1">
                         <span className="icon-wrap">
-                          <img src={IconNetworkBNB} height="40px" width="40px" alt="" />
+                          {/* <img src={IconNetworkBNB} height="40px" width="40px" alt="" /> */}
                           {farm?.includes("cFRMx") ? (
                             <img src={IconNetworkCFrmStr} height="40px" width="40px" alt="" />
                           ) : (
@@ -199,7 +207,8 @@ export const Success = () => {
                         </span>
                       </div>
                       <FTypo size={20} weight={400} align={"center"}>
-                        {farm?.includes("BNB") ? getFistCardData("front") : `Try ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} / BNB Sustainable Farming`}
+                        {/* {farm?.includes("BNB") ? getFistCardData("front") : `Try ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} / BNB Sustainable Farming`} */}
+                        {farm?.includes("BNB") ? getFistCardData("front") : `Stake ${farm?.includes("cFRMx") ? "cFRM" : "cFRMx"}`}
                       </FTypo>
                     </div>
                     <div className="card-whats-next-back">

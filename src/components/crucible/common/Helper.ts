@@ -297,10 +297,12 @@ export const renderComponent = (
 };
 
 const saveCurrentPreferncesInNewSequence = async (newSequence: any, oldHistory: any, id: any, token: any) => {
+  // console.log(newSequence, oldHistory)
   for (let i = 0; i < oldHistory.length; i++) {
     if (oldHistory[i].status === "skip") {
       for (let j = 0; j < newSequence.length; j++) {
         if (newSequence[j].step._id === oldHistory[i].step._id && newSequence[j].status !== "skip") {
+          // console.log(newSequence[j])
           await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
             newSequence[j]._id,
             { status: "skip" },
@@ -359,12 +361,6 @@ export const getLatestStepToRender = async (
     // console.log("renderNeeded : ", renderNeeded);
     // console.log("farm : ", farm);
     let errorResponse = e && e.response && e.response.data.status;
-    // if (errorResponse?.phraseKey !== '') {
-    //   const fetchedMessage = T(errorResponse?.phraseKey);
-    //   toast.error(fetchedMessage);
-    // } else {
-    //   toast.error(errorResponse?.message);
-    // }
 
     if (errorResponse?.code === 400) {
       try {
