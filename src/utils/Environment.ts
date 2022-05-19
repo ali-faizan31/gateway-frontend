@@ -20,7 +20,7 @@ export class Environment {
 		staging: {
 			baseUrl: "https://api-gateway-v1.stage.svcs.ferrumnetwork.io",
 			apiKeyForApplicationUser: "66fadbfe-b625-48d1-9255-2c6317adf0bf",
-			crucibleBaseUrl: "https://xxda22hwpy.us-east-2.awsapprunner.com/"
+			crucibleBaseUrl: "https://22phwrgczz.us-east-2.awsapprunner.com/"
 		},
 		prod: {
 			baseUrl: "https://api-gateway-v1.svcs.ferrumnetwork.io",
