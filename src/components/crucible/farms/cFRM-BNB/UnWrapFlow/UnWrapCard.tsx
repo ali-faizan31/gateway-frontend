@@ -175,7 +175,8 @@ export const UnWrap = () => {
             type={"text"}
             placeholder="0"
             disabled={true}
-            value={changeExponentToPoints(Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100))}
+            // value={changeExponentToPoints(Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100))}
+            value={Big(amount).minus(Big(amount).times(crucible[farm!]?.feeOnWithdrawRate || "0")).toString()}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
                 {crucible[farm!]?.symbol}
