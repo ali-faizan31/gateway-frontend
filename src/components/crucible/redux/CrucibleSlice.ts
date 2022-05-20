@@ -39,6 +39,14 @@ export const crucibleSlice = createSlice({
             state.isApproved = false;
             state.isApproving = false;
         },
+        transactionProcessed: (state ) => {
+            state.isProcessed = true;
+            state.isProcessing = false;
+        },
+        transactionProcessing: (state ) => {
+            state.isProcessed = false;
+            state.isProcessing = true;
+        },
         updateStepFlowStepHistory: (state, action) => {
             state.stepFlowStepHistory = action.payload.crucible.stepFlowStepHistory;
         },
@@ -47,6 +55,8 @@ export const crucibleSlice = createSlice({
             state.currentStepIndex = action.payload.crucible.currentStepIndex;
         },
         resetCrucible: (state) => {
+            state.isProcessed = false;
+            state.isProcessing = false;
             state.currentStep = {};
             state.stepFlowStepHistory = [];
             state.currentStepIndex = null;

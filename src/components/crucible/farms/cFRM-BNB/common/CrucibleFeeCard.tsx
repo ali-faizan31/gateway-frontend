@@ -32,8 +32,7 @@ const CrucibleFeeCard = () => {
     setIsLoading(false);
   };
 
-  const getRewardAmount = () => {
-    console.log(LPStakingDetails[farm!]);
+  const getRewardAmount = () => { 
     if (farm?.includes("BNB")) {
       return TruncateWithoutRounding(networkClient?.utils.fromWei(String(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0), "ether"), 3);
     } else {
@@ -42,8 +41,7 @@ const CrucibleFeeCard = () => {
     }
   };
 
-  const getRewardSymbol = () => {
-    console.log(crucible);
+  const getRewardSymbol = () => { 
     return crucible[farm!]?.symbol;
   };
 

@@ -16,6 +16,7 @@ import {
 import { arraySortByKeyDescending } from "../../utils/global.utils";
 import { stakingContractAddressListFOMO, TOKEN_TAG } from "../../utils/const.utils";
 import { filterList } from "../leaderboard/LeaderboardHelper";
+import { T } from '../../utils/translationHelper';
 
 const LeaderboardInformation = () => {
   const { id } = useParams();
@@ -77,7 +78,12 @@ const LeaderboardInformation = () => {
       .catch((e) => {
         setIsLoading(false);
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
@@ -106,7 +112,12 @@ const LeaderboardInformation = () => {
       .catch((e) => {
         setIsLoading(false);
         if (e.response) {
-          toast.error(e.response?.data?.status?.message);
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message);
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }

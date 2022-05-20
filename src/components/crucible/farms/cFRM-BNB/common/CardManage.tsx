@@ -46,10 +46,10 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
   const onMintcFRMClick = () => {
     setIsLoading(true);
     let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].mint;
-    console.log("next step id:", nextStepInfo);
+    // console.log("next step id:", nextStepInfo);
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
-    console.log(nextStepInfo, location.state);
+    // console.log(nextStepInfo, location.state);
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
     // history.push({pathname:PATH_DASHBOARD.crucible.cFRM_BNB.mint.mint});
   };
@@ -57,7 +57,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
   const onWrapClick = () => {
     setIsLoading(true);
     let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unwrap;
-    console.log(nextStepInfo, location.state);
+    // console.log(nextStepInfo, location.state);
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
@@ -65,7 +65,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
 
   const [selectedToken, setSelectedToken] = useState<any>();
 
-  const handleSelectedToken = (option:any) => {
+  const handleSelectedToken = (option: any) => {
     window.open(option.url)
     setSelectedToken(option)
   }
@@ -105,7 +105,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <span>cFRM</span>
         </FItem>
       ),
-      url: 'https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE&exactField=output&exactAmount=0'
+      url: 'https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xaf329a957653675613D0D98f49fc93326AeB36Fc&exactField=output&exactAmount=0'
     },
     {
       value: "cfrmx",
@@ -117,7 +117,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <span>cFRMx</span>
         </FItem>
       ),
-      url: 'https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xaf329a957653675613D0D98f49fc93326AeB36Fc&exactField=output&exactAmount=0'
+      url: 'https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE&exactField=output&exactAmount=0'
     }
   ];
 

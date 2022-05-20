@@ -8,9 +8,13 @@ import { useForm } from "react-hook-form";
 import { ResendEmailVerifyCode } from "../../../_apis/OnboardingCrud";
 import { PATH_AUTH } from "../../../routes/paths";
 import { ClipLoader } from "react-spinners";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/rootReducer";
+import { getErrorMessage } from "../../../utils/global.utils";
 
 const ResendEmailVerificationForm = () => {
   const history = useHistory();
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   const onSubmit = async (values: any) => {
     await ResendEmailVerifyCode(values)
@@ -19,11 +23,7 @@ const ResendEmailVerificationForm = () => {
         history.push(PATH_AUTH.emailVerify);
       })
       .catch((e) => {
-        if (e.response) {
-          toast.error(e.response?.data?.status?.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 

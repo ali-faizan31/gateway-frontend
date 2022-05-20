@@ -15,12 +15,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { sendForgotPasswordLink } from "../../../_apis/OnboardingCrud";
-// import { PATH_AUTH } from "../../../routes/paths";
-// import * as validations from "../../../utils/validations";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/rootReducer";
+import { getErrorMessage } from "../../../utils/global.utils";
 
 const ForgotPasswordForm = () => {
   //   const history = useHistory();
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   const onSubmit = async (values: any) => {
     values.role = "communityMember";
@@ -31,12 +33,8 @@ const ForgotPasswordForm = () => {
         toast.success(response?.data?.status?.message);
         reset();
       })
-      .catch((e) => {
-        if (e.response) {
-          toast.error(e.response?.data?.status?.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+      .catch((e: any) => {
+        getErrorMessage(e, activeTranslation)
       });
   };
 

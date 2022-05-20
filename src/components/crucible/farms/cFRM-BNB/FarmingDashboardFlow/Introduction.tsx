@@ -18,8 +18,8 @@ import { useWeb3React } from "@web3-react/core";
 // import {CrucibleClient} from './../../../../../container-components/web3Client/crucibleClient';
 // import {Web3Helper} from './../../../../../container-components/web3Client/web3Helper';
 import toast, { Toaster } from "react-hot-toast";
-import * as CrucibleActions from "../../../redux/CrucibleActions";
 import { ClipLoader } from "react-spinners";
+import { getErrorMessage } from "../../../../../utils/global.utils";
 
 export const Introduction = () => {
   const history = useHistory();
@@ -35,6 +35,7 @@ export const Introduction = () => {
 
   const [networkClient, setNetworkClient] = useState<Web3 | undefined>(undefined);
   const { active, library } = useWeb3React();
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   useEffect(() => {
     if (location.state === undefined) {
@@ -63,17 +64,16 @@ export const Introduction = () => {
         updHistory = stepFlowStepHistory.map((obj, index) => (index === currentStepIndex ? { ...obj, status: "skip" } : obj));
         data = { status: "skip" };
       } else {
-        updatedCurrentStep = { ...currentStep, status: "started" };
-        updHistory = stepFlowStepHistory.map((obj, index) => (index === currentStepIndex ? { ...obj, status: "started" } : obj));
-        data = { status: "started" };
+        updatedCurrentStep = { ...currentStep, status: "completed" };
+        updHistory = stepFlowStepHistory.map((obj, index) => (index === currentStepIndex ? { ...obj, status: "completed" } : obj));
+        data = { status: "completed" };
       }
 
       updateResponse = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      getErrorMessage(e, activeTranslation)
     }
   };
 

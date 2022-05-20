@@ -18,11 +18,15 @@ import {
 } from "../../../_apis/OnboardingCrud";
 // import { PATH_AUTH } from "../../../routes/paths";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/rootReducer";
+import { getErrorMessage } from "../../../utils/global.utils";
 
 const ResetPasswordForm = (props: any) => {
   const { token }: any = useParams();
   const [viewPassword, setViewPassword] = useState(false);
   const [viewConfirmPassword, setViewConfirmPassword] = useState(false);
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   const initialValues = {
     newPassword: "",
@@ -67,9 +71,7 @@ const ResetPasswordForm = (props: any) => {
         props.setIsPasswordChanged(true);
       }
     } catch (e: any) {
-      console.log(e);
-      console.log(e.response.data.status.message);
-      toast.error(`Error occured: ${e?.response?.data?.status?.message}! `);
+      getErrorMessage(e, activeTranslation)
     }
   };
 

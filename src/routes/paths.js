@@ -48,10 +48,7 @@ export const PATH_PUBLIC_USER = {
   multiLeaderboard: {
     root: path(ROOTS_PUBLIC_USER, "/multi/leaderboard"),
     detailLeaderBoardById: path(ROOTS_PUBLIC_USER, "/multi/leaderboard/:id"),
-    detailLeaderBoardByProvidedId: path(
-      ROOTS_PUBLIC_USER,
-      "/multi/leaderboard/61b6d48337f5125acbbfddeb"
-    ),
+    detailLeaderBoardByProvidedId: path(ROOTS_PUBLIC_USER, "/multi/leaderboard/61b6d48337f5125acbbfddeb"),
   },
   competition: {
     root: path(ROOTS_PUBLIC_USER, "/competition"),
@@ -73,20 +70,15 @@ export const PATH_DASHBOARD = {
     specificCompetition: path(ROOTS_DASHBOARD, "/competition/6229cf127b13cb22f75ae6eb"),
     competitionManagement: path(ROOTS_DASHBOARD, "/competition/management"),
     detailCompetitionById: path(ROOTS_DASHBOARD, "/competition:id"),
-    multiLeaderBoardByProvidedId: path(
-      ROOTS_DASHBOARD,
-      "/multi/leaderboard/61b6d48337f5125acbbfddeb"
-    ),
+    multiLeaderBoardByProvidedId: path(ROOTS_DASHBOARD, "/multi/leaderboard/61b6d48337f5125acbbfddeb"),
     profile: path(ROOTS_DASHBOARD, "/profile"),
   },
   token: {
-    buyFRM:
-      "https://app.apeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xa719b8ab7ea7af0ddb4358719a34631bb79d15dc&exactField=output&exactAmount=0",
-    buyFRMx:
-      "https://app.apeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x8523518001ad5d24b2a04e8729743c0643a316c0&exactField=output&exactAmount=0",
+    buyFRM: "https://app.apeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xa719b8ab7ea7af0ddb4358719a34631bb79d15dc&exactField=output&exactAmount=0",
+    buyFRMx: "https://app.apeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x8523518001ad5d24b2a04e8729743c0643a316c0&exactField=output&exactAmount=0",
   },
   bridge: "https://bridge.ferrum.network/",
-  home: "/home",
+  // home: "/home",
   crucible: {
     index: path(ROOTS_DASHBOARD, "/crucible"),
     getStarted: path(ROOTS_DASHBOARD, "/crucible/get-started"),
@@ -106,7 +98,7 @@ export const PATH_DASHBOARD = {
         success: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/:contract/stake/success"),
       },
       stakingMint: {
-        steps: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/:contract/staking-mint/introduction"), 
+        steps: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/:contract/staking-mint/introduction"),
         success: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/:contract/staking-mint/success"),
       },
       stake: {
@@ -116,19 +108,19 @@ export const PATH_DASHBOARD = {
       unstake: {
         success: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unstake/success"),
         unstake: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unstake/deposit"),
-        addLiquidity: path( ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unstake/add-liquidity" ),
-        removeLiquidity: path( ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unstake/remove-liquidity" ),
+        addLiquidity: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unstake/add-liquidity"),
+        removeLiquidity: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unstake/remove-liquidity"),
       },
       withdraw: {
         success: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/withdraw/success"),
         withdraw: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/withdraw/deposit"),
-        steps: path( ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/withdraw/add-liquidity" ),
+        steps: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/withdraw/add-liquidity"),
       },
       unwrap: {
         success: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unwrap/success"),
-        unwrap: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unwrap/deposit"), 
+        unwrap: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/unwrap/deposit"),
       },
-      liquidity : path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/add-liquidity"), 
-    }
+      liquidity: path(ROOTS_DASHBOARD, "/crucible/:farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)/add-liquidity"),
+    },
   },
 };

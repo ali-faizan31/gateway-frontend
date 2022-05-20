@@ -6,6 +6,7 @@ import { Web3Helper } from "../../../container-components/web3Client/web3Helper"
 import { CrucibleClient } from "../../../container-components/web3Client/crucibleClient";
 import { crucibleSlice } from "../redux/CrucibleSlice";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { GetPhraseString } from "../../../utils/global.utils";
 
 export const getHumanReadableFarmName = (farm: any) => {
   switch (farm) {
@@ -47,20 +48,20 @@ export const getObjectReadableFarmName = (farm: any) => {
 };
 
 export const isLPFarm = (farm: any) => {
-  if (farm === "cFRM-BNB" || farm === "cFRMx-BNB"){
+  if (farm === "cFRM-BNB" || farm === "cFRMx-BNB") {
     return true;
   }
   return false;
 }
 
 export const isSingleTokenFarm = (farm: any) => {
-  if (farm === "cFRM" || farm === "cFRMx"){
+  if (farm === "cFRM" || farm === "cFRMx") {
     return true;
   }
   return false;
 }
 
-export const getActualRoute = (farm: any, route: any) => { 
+export const getActualRoute = (farm: any, route: any) => {
   return route.replace(":farm(cFRM-BNB|cFRMx-BNB|cFRM|cFRMx)", farm);
 };
 
@@ -71,7 +72,7 @@ export const renderComponent = (
   farm: any
 ) => {
   // console.log(state, stepFlowStepName, "render");
-  console.log(stepFlowStepName, farm, state);
+  // console.log(stepFlowStepName, farm, state);
   switch (state.stepFlowName) {
     case `${getHumanReadableFarmName(
       farm
@@ -188,29 +189,29 @@ export const renderComponent = (
         default:
           return history.push(PATH_DASHBOARD.crucible.index);
       }
-      case `${getHumanReadableFarmName(
-        farm
-      )} Crucible Farm - Staking Mint Flow`:
-        switch (stepFlowStepName) {
-          case "Introduction":
-            return history.push({
-              pathname: getActualRoute(
-                farm,
-                `/dashboard/crucible/${farm}/${state.contract}/staking-mint/introduction` 
-              ),
-              state: state,
-            });
-            case "Success":
-            return history.push({
-              pathname: getActualRoute(
-                farm,
-                `/dashboard/crucible/${farm}/${state.contract}/staking-mint/success` 
-              ),
-              state: state,
-            });
-          default:
-            return history.push(PATH_DASHBOARD.crucible.index);
-        }
+    case `${getHumanReadableFarmName(
+      farm
+    )} Crucible Farm - Staking Mint Flow`:
+      switch (stepFlowStepName) {
+        case "Introduction":
+          return history.push({
+            pathname: getActualRoute(
+              farm,
+              `/dashboard/crucible/${farm}/${state.contract}/staking-mint/introduction`
+            ),
+            state: state,
+          });
+        case "Success":
+          return history.push({
+            pathname: getActualRoute(
+              farm,
+              `/dashboard/crucible/${farm}/${state.contract}/staking-mint/success`
+            ),
+            state: state,
+          });
+        default:
+          return history.push(PATH_DASHBOARD.crucible.index);
+      }
     case `${getHumanReadableFarmName(farm)} Crucible Farm - Withdraw Flow`:
       switch (stepFlowStepName) {
         case "Withdraw":
@@ -246,37 +247,37 @@ export const renderComponent = (
           });
         default:
           return history.push(PATH_DASHBOARD.crucible.index);
-      } 
-      case `${getHumanReadableFarmName(
-        farm
-      )} Crucible Farm - Add Liquidity - Unstake Flow`:
-        switch (stepFlowStepName) {
-          case "Introduction":
-            return history.push({
-              pathname: getActualRoute(
-                farm,
-                PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.addLiquidity
-              ),
-              state: state,
-            });
-          default:
-            return history.push(PATH_DASHBOARD.crucible.index);
-        }  
-        case `${getHumanReadableFarmName(
-          farm
-        )} Crucible Farm - Remove Liquidity - Unstake Flow`:
-          switch (stepFlowStepName) {
-            case "Introduction":
-              return history.push({
-                pathname: getActualRoute(
-                  farm,
-                  PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.removeLiquidity
-                ),
-                state: state,
-              });
-            default:
-              return history.push(PATH_DASHBOARD.crucible.index);
-          }  
+      }
+    case `${getHumanReadableFarmName(
+      farm
+    )} Crucible Farm - Add Liquidity - Unstake Flow`:
+      switch (stepFlowStepName) {
+        case "Introduction":
+          return history.push({
+            pathname: getActualRoute(
+              farm,
+              PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.addLiquidity
+            ),
+            state: state,
+          });
+        default:
+          return history.push(PATH_DASHBOARD.crucible.index);
+      }
+    case `${getHumanReadableFarmName(
+      farm
+    )} Crucible Farm - Remove Liquidity - Unstake Flow`:
+      switch (stepFlowStepName) {
+        case "Introduction":
+          return history.push({
+            pathname: getActualRoute(
+              farm,
+              PATH_DASHBOARD.crucible.crucibleActionRoutes.unstake.removeLiquidity
+            ),
+            state: state,
+          });
+        default:
+          return history.push(PATH_DASHBOARD.crucible.index);
+      }
     case `${getHumanReadableFarmName(
       farm
     )} Crucible Farm - Add Liquidity - Withdraw Flow`:
@@ -295,16 +296,23 @@ export const renderComponent = (
   }
 };
 
-const saveCurrentPreferncesInNewSequence = async (newSequence: any, oldHistory: any, token: any) => {
-  for ( let i = 0; i < oldHistory.length; i++ ){
-    if (oldHistory[i].status === "skip"){
-      for ( let j = 0; j < newSequence.length; j++ ){
-        if (newSequence[j].step._id === oldHistory[i].step._id && newSequence[j].status !== "skip"){ 
+const saveCurrentPreferncesInNewSequence = async (newSequence: any, oldHistory: any, id: any, token: any) => {
+  // console.log(newSequence, oldHistory)
+  for (let i = 0; i < oldHistory.length; i++) {
+    if (oldHistory[i].status === "skip") {
+      for (let j = 0; j < newSequence.length; j++) {
+        if (newSequence[j].step._id === oldHistory[i].step._id && newSequence[j].status !== "skip") {
+          // console.log(newSequence[j])
           await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
             newSequence[j]._id,
             { status: "skip" },
             token
           );
+          let latestResponse =
+            await SFSH_API.getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(id, token); // get updated history
+          newSequence = latestResponse.data &&
+            latestResponse.data.body &&
+            latestResponse.data.body.stepFlowStepsHistory;
         }
       }
     }
@@ -324,20 +332,18 @@ export const getLatestStepToRender = async (
   renderNeeded: any = true,
   saveCurrentPrefernces: any = false
 ) => {
-  try { 
-    // let latestResponse =  
+  try {
     await SFSH_API.startNewStepFlowStepHistorySequenceByAssociatedUserIdByStepFlowId(
       state.id,
       token
     );
-    let latestResponse = await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
-      state.id,
-      token
-    );
+
+    let latestResponse = await SFSH_API.getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(state.id, token);
     latestResponse = latestResponse.data && latestResponse.data.body && latestResponse.data.body.stepFlowStepsHistory;
-    if ( saveCurrentPrefernces ){
-      console.log('save prefence flow')
-      saveCurrentPreferncesInNewSequence(latestResponse, stepFlowStepsHistory, token)
+    // console.log(latestResponse, saveCurrentPrefernces)
+    if (saveCurrentPrefernces) {
+      // console.log('save prefence flow')
+      saveCurrentPreferncesInNewSequence(latestResponse, stepFlowStepsHistory, state.id, token)
     }
     setIsLoading(false);
     // sequenceResponse = sequenceResponse.data && sequenceResponse.data.body && sequenceResponse.data.body.stepFlowStepsHistory;
@@ -346,22 +352,23 @@ export const getLatestStepToRender = async (
     // dispatch(CrucibleActions.updateStepFlowStepHistory({ stepFlowStepHistory: sequenceResponse }));
     // renderNeeded && renderComponent(pendingStepInfo?.pendingStep.step.name, state, history);
   } catch (e: any) {
-    console.log("restart failed");
-    console.log("state : ", state);
-    console.log("token : ", token);
-    console.log("currentStep : ", currentStep);
-    console.log("currentStepIndex : ", currentStepIndex);
-    console.log("stepFlowStepsHistory : ", stepFlowStepsHistory);
-    console.log("renderNeeded : ", renderNeeded);
-    console.log("farm : ", farm);
+    // console.log("restart failed");
+    // console.log("state : ", state);
+    // console.log("token : ", token);
+    // console.log("currentStep : ", currentStep);
+    // console.log("currentStepIndex : ", currentStepIndex);
+    // console.log("stepFlowStepsHistory : ", stepFlowStepsHistory);
+    // console.log("renderNeeded : ", renderNeeded);
+    // console.log("farm : ", farm);
     let errorResponse = e && e.response && e.response.data.status;
+
     if (errorResponse?.code === 400) {
       try {
         let latestResponse =
-        await SFSH_API.getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
-          state.id,
-          token
-        );
+          await SFSH_API.getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
+            state.id,
+            token
+          );
         // let latestResponse =
         //   await SFSH_API.getLatestStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(
         //     state.id,
@@ -371,13 +378,13 @@ export const getLatestStepToRender = async (
           latestResponse.data &&
           latestResponse.data.body &&
           latestResponse.data.body.stepFlowStepsHistory;
-          console.log('latest response:' ,latestResponse )
+        // console.log('latest response:' ,latestResponse )
         let pendingStepInfo = getLatestStepWithPendingStatus(currentStepIndex, latestResponse);
 
-        console.log(pendingStepInfo, "pendingstep");
-        if ( currentStepIndex && currentStepIndex + 1 === stepFlowStepsHistory.length) {
+        // console.log(pendingStepInfo, "pendingstep");
+        if (currentStepIndex && currentStepIndex + 1 === stepFlowStepsHistory.length) {
           //last step, move onto next step flow
-          console.log("last step condition");
+          // console.log("last step condition");
           dispatch(
             CrucibleActions.updateCurrentStep({
               currentStep: pendingStepInfo?.pendingStep,
@@ -397,26 +404,25 @@ export const getLatestStepToRender = async (
               history,
               farm,
             );
-        } 
+        }
         else if (
           pendingStepInfo?.pendingStep.step.name === currentStep?.step?.name
         ) {
           //same step rendered
-          console.log("same step condition");
+          // console.log("same step condition");
           dispatch(
             CrucibleActions.updateCurrentStep({
               currentStep: pendingStepInfo?.pendingStep,
               currentStepIndex: pendingStepInfo?.index,
             })
           );
-          dispatch(
-            CrucibleActions.updateStepFlowStepHistory({
-              stepFlowStepHistory: latestResponse,
-            })
+          dispatch(CrucibleActions.updateStepFlowStepHistory({
+            stepFlowStepHistory: latestResponse,
+          })
           );
-        } 
+        }
         else {
-          console.log("next step condition", pendingStepInfo);
+          // console.log("next step condition", pendingStepInfo);
           dispatch(
             CrucibleActions.updateStepFlowStepHistory({
               stepFlowStepHistory: latestResponse,
@@ -438,14 +444,16 @@ export const getLatestStepToRender = async (
             );
         }
       } catch (e: any) {
-        let errorResponse =
-          e &&
-          e.response &&
-          e.response.data.status &&
-          e.response.data.status.message;
-        errorResponse
-          ? toast.error(`Error Occured: ${errorResponse}`)
-          : toast.error(`Error Occured: ${e}`);
+        if (e.response) {
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = GetPhraseString(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
+          }
+        } else {
+          toast.error("Something went wrong. Try again later!");
+        }
       }
       // let errorResponse =
       //   e &&
@@ -456,23 +464,25 @@ export const getLatestStepToRender = async (
       // ? toast.error(`Error Occured: ${errorResponse}`)
       // : toast.error(`Error Occured: ${e}`);
     } else {
-      let errorResponse =
-        e &&
-        e.response &&
-        e.response.data.status &&
-        e.response.data.status.message;
-      errorResponse
-        ? toast.error(`Error Occured: ${errorResponse}`)
-        : toast.error(`Error Occured: ${e}`);
+      if (e.response) {
+        if (e?.response?.data?.status?.phraseKey !== '') {
+          const fetchedMessage = GetPhraseString(e?.response?.data?.status?.phraseKey);
+          toast.error(fetchedMessage);
+        } else {
+          toast.error(e?.response?.data?.status?.message || `Error Occurred: ${e}`);
+        }
+      } else {
+        toast.error("Something went wrong. Try again later!");
+      }
       history.push({ pathname: PATH_DASHBOARD.crucible.index });
     }
   }
 };
 
-export const getLatestStepWithPendingStatus = (currentStepIndex:any, stepResponse: any) => {
+export const getLatestStepWithPendingStatus = (currentStepIndex: any, stepResponse: any) => {
   let previous: any = {};
   let current: any = {};
-  console.log('in pending step')
+  // console.log('in pending step')
   for (let i = 0; i < stepResponse.length; i++) {
     if (i === 0) {
       previous = stepResponse[i];
@@ -483,37 +493,37 @@ export const getLatestStepWithPendingStatus = (currentStepIndex:any, stepRespons
       //   return { pendingStep: previous, index: i };
       // }
       if (previous.status === "pending") {
-        console.log('returning pending:', previous)
+        // console.log('returning pending:', previous)
         return { pendingStep: previous, index: i };
       }
     } else {
       previous = stepResponse[i - 1];
-      current = stepResponse[i]; 
+      current = stepResponse[i];
       if (
-        (previous.status === "skip" || previous.status === "started" || previous.status === "completed") && 
-        ( current.status === "pending")
+        (previous.status === "skip" || previous.status === "started" || previous.status === "completed") &&
+        (current.status === "pending")
       ) {
-        console.log('returning pending:', current)
+        // console.log('returning pending:', current)
         return { pendingStep: current, index: i };
       }
     }
   }
 };
- 
 
-export const getAPRValueAgainstFarm = (aprInformation:any, farm: any) => {
-  if ( farm === "cFRM-BNB"){
+
+export const getAPRValueAgainstFarm = (aprInformation: any, farm: any) => {
+  if (farm === "cFRM-BNB") {
     return aprInformation.cfrmLp;
-  } else if ( farm === "cFRMx-BNB"){
+  } else if (farm === "cFRMx-BNB") {
     return aprInformation.cfrmXLp;
-  } else if ( farm === "cFRMx"){
+  } else if (farm === "cFRMx") {
     return aprInformation.cfrmX;
-  } else if ( farm === "cFRM"){
+  } else if (farm === "cFRM") {
     return aprInformation.cfrm;
-  } 
+  }
 }
 
-export const getCrucibleDetail = async (farm: any, networkClient: any, walletAddress: any,  dispatch: any,  setIsLoading: any) => {
+export const getCrucibleDetail = async (farm: any, networkClient: any, walletAddress: any, dispatch: any, setIsLoading: any) => {
   const web3Helper = new Web3Helper(networkClient as any);
   const client = new CrucibleClient(web3Helper);
   const actions = crucibleSlice.actions;
@@ -537,16 +547,18 @@ export const getCrucibleDetail = async (farm: any, networkClient: any, walletAdd
 
   if (farm?.internalName.includes("BNB")) {
     if (crucibleData.data) {
-      dispatch(loadLPStakingInfo({ farm, networkClient,
+      dispatch(loadLPStakingInfo({
+        farm, networkClient,
         walletAddress,
-        dispatch }));
+        dispatch
+      }));
       setIsLoading(false);
     }
   }
   setIsLoading(false);
 };
 
-export const loadCrucibleUserInfo = createAsyncThunk("crucible/loadUserInfo", async (payload: { crucibleCurrency: string; farm: any, networkClient: any, walletAddress: any,  dispatch: any }, ctx) => {
+export const loadCrucibleUserInfo = createAsyncThunk("crucible/loadUserInfo", async (payload: { crucibleCurrency: string; farm: any, networkClient: any, walletAddress: any, dispatch: any }, ctx) => {
   const actions = crucibleSlice.actions;
   const web3Helper = new Web3Helper(payload.networkClient as any);
   const client = new CrucibleClient(web3Helper);
@@ -560,7 +572,7 @@ export const loadCrucibleUserInfo = createAsyncThunk("crucible/loadUserInfo", as
   }
 });
 
-export const loadLPStakingInfo = createAsyncThunk("crucible/loadUserInfo", async (payload: { farm: any, networkClient: any, walletAddress: any,  dispatch: any }, ctx) => {
+export const loadLPStakingInfo = createAsyncThunk("crucible/loadUserInfo", async (payload: { farm: any, networkClient: any, walletAddress: any, dispatch: any }, ctx) => {
   const actions = crucibleSlice.actions;
   const web3Helper = new Web3Helper(payload.networkClient as any);
   const client = new CrucibleClient(web3Helper);

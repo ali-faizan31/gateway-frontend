@@ -24,7 +24,6 @@ export const updateCurrentStep = (crucible: any) => (dispatch: any) => {
 };
 
 export const resetCrucible = () => (dispatch: any) => {
-  console.log('rset -------------')
   dispatch(actions.resetCrucible());
 };
 
@@ -36,3 +35,10 @@ export const updateTokenData = (crucible: any) => (dispatch: any) => {
   dispatch(actions.tokenDataLoaded({ crucible }));
 };
 
+export const transactionProcessed = () => (dispatch: any) => {
+  dispatch(actions.transactionProcessed());
+};
+
+export const transactionProcessing = () => (dispatch: any) => {
+  dispatch(actions.transactionProcessing());
+};

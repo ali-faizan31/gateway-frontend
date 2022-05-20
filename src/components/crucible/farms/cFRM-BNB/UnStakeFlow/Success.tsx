@@ -16,6 +16,8 @@ import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import { STEP_FLOW_IDS } from "../../../common/utils";
 import { ClipLoader } from "react-spinners";
+import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { getErrorMessage } from "../../../../../utils/global.utils";
 
 export const Success = () => {
   const dispatch = useDispatch();
@@ -26,11 +28,19 @@ export const Success = () => {
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const { tokenV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   useEffect(() => {
-    getStepCompleted(false);
-    // eslint-disable-next-line
+    if (location.state === undefined) {
+      history.push({ pathname: PATH_DASHBOARD.crucible.index });
+    }
   }, []);
+
+  useEffect(() => {
+    if (currentStep && currentStep._id && currentStep.status === "pending") {
+      getStepCompleted(false);
+    }
+  }, [currentStep]);
 
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
@@ -56,22 +66,29 @@ export const Success = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      getErrorMessage(e, activeTranslation)
     }
   };
 
   const onLiquityClick = () => {
     setIsLoading(true);
     let nextStepInfo: any;
-    if (farm === "cFRM" || farm === "cFRMx") {
-      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unstakeAddLiquidity;
-    } else if (farm === "cFRMx-BNB" || farm === "cFRM-BNB") {
-      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unstakeRemoveLiquidity;
+    // if (farm === "cFRM" || farm === "cFRMx") {
+    //   nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unstakeAddLiquidity;
+    // } else if (farm === "cFRMx-BNB" || farm === "cFRM-BNB") {
+    //   nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].unstakeRemoveLiquidity;
+    // } 
+    let newFarm: any;
+    if (farm?.includes("cFRMx")) {
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].dashboard;
+      newFarm = "cFRM";
+    } else {
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].dashboard;
+      newFarm = "cFRMx";
     }
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, newFarm, setIsLoading);
   };
 
   const onMintOrUnwrapClick = () => {
@@ -107,7 +124,7 @@ export const Success = () => {
           </FItem>
         </FCard>
       ) : (
-        <FContainer className="f-mr-0">
+        <FContainer width={700}>
           <CrucibleMyBalance />
           <FCard variant={"secondary"} className="card-congrats">
             <FItem align="center">
@@ -140,15 +157,19 @@ export const Success = () => {
                           ) : (
                             <img src={IconNetworkCFrmStr} height="40px" width="40px" alt="" />
                           )}
-                          {farm?.includes("BNB") ? "" : <img src={IconNetworkBNB} height="40px" width="40px" alt="" />}
+                          {/* {farm?.includes("BNB") ? "" : <img src={IconNetworkBNB} height="40px" width="40px" alt="" />} */}
                         </span>
                       </div>
                       <FTypo size={20} weight={400} align={"center"}>
-                        {farm?.includes("BNB") ? "Remove Liquidity and Unwrap" : "Add Liquidity & Compound Rewards"}
+                        {/* {farm?.includes("BNB") ? "Remove Liquidity and Unwrap" : "Add Liquidity & Compound Rewards"} */}
+                        Mint {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"}
                       </FTypo>
                     </div>
                     <div className="card-whats-next-back">
-                      <FTypo>Use cFRM and BNB to add Liquidity and compound rewards with Farming</FTypo>
+                      <FTypo>
+                        Use cFRM and BNB to add Liquidity and compound rewards with Farming.
+                        You can always mint more {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} to increase your pool share.
+                      </FTypo>
                     </div>
                   </div>
                 </FItem>

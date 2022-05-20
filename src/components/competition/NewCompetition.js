@@ -3,38 +3,23 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 // import { format, parseISO } from "date-fns";
 import { useForm } from "react-hook-form";
-import {
-  FInputText,
-  FGrid,
-  FGridItem,
-  FButton,
-  FContainer,
-  FSelect,
-  FDatepicker,
-  FInputCheckbox,
-} from "ferrum-design-system";
+import { FInputText, FGrid, FGridItem, FButton, FContainer, FSelect, FDatepicker, FInputCheckbox } from "ferrum-design-system";
 import { useHistory } from "react-router-dom";
-// import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
-// import * as validations from "../../utils/validations";
-import { 
-  // PATH_ADMIN,
-   PATH_DASHBOARD } from "../../routes/paths";
-// import { DatePicker } from "antd";
-// import moment from "moment";
+import { PATH_DASHBOARD } from "../../routes/paths";
 import { getAllLeaderboards } from "../../_apis/LeaderboardCrud";
 import { addCompetition } from "../../_apis/CompetitionCrud";
-// import { getAllCompetitionsDispatch } from "../../redux/slices/competition";
-// import "./Competition.scss";
 import { chainIdList } from "../leaderboard/LeaderboardHelper";
 import { TOKEN_TAG } from "../../utils/const.utils";
+import { getErrorMessage } from "../../utils/global.utils";
 
 export default function NewCompetition() {
-  // const dispatch = useDispatch();
   const history = useHistory();
   let token = localStorage.getItem(TOKEN_TAG);
   const [leaderboardList, setLeaderboardList] = useState([]);
+  const { activeTranslation } = useSelector((state) => state.phrase);
 
   useEffect(() => {
     getLeaderboardListing();
@@ -77,9 +62,7 @@ export default function NewCompetition() {
       values.leaderboard = values.leaderboard._id;
       values.startDate = new Date(`${values.startDate} UTC`).toISOString();
       values.endDate = new Date(`${values.endDate} UTC`).toISOString();
-      values.status === true
-        ? (values.status = "published")
-        : (values.status = "pending");
+      values.status === true ? (values.status = "published") : (values.status = "pending");
     } catch (e) {
       toast.error(`Error: ${e}`);
     }
@@ -98,11 +81,7 @@ export default function NewCompetition() {
         history.push(PATH_DASHBOARD.general.competitionManagement);
       })
       .catch((e) => {
-        if (e.response) {
-          toast.error(e.response.data.status.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 
@@ -134,11 +113,7 @@ export default function NewCompetition() {
         }
       })
       .catch((e) => {
-        if (e.response) {
-          toast.error(e.response.data.status.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 
@@ -166,11 +141,7 @@ export default function NewCompetition() {
                   //   console.log(e);
                   //   setSelectedLeaderboard(e.target._id);
                   // }}
-                  error={
-                    errors["leaderboard"]?.message
-                      ? errors["leaderboard"]?.message
-                      : ""
-                  }
+                  error={errors["leaderboard"]?.message ? errors["leaderboard"]?.message : ""}
                 />
               </FGridItem>
             </FGrid>
@@ -207,11 +178,7 @@ export default function NewCompetition() {
                   showTimeSelect={true}
                   register={register}
                   control={control}
-                  error={
-                    errors["startDate"]?.message
-                      ? errors["startDate"]?.message
-                      : ""
-                  }
+                  error={errors["startDate"]?.message ? errors["startDate"]?.message : ""}
                 />
               </FGridItem>
               <FGridItem alignX="center" size={[6, 12, 12]}>
@@ -223,9 +190,7 @@ export default function NewCompetition() {
                   placeholder={"MM/DD/YYYY hh:mm"}
                   register={register}
                   control={control}
-                  error={
-                    errors["endDate"]?.message ? errors["endDate"]?.message : ""
-                  }
+                  error={errors["endDate"]?.message ? errors["endDate"]?.message : ""}
                 />
                 {/* <FInputText
                   label="End Date/Time in UTC"
@@ -242,39 +207,17 @@ export default function NewCompetition() {
               </FGridItem>
             </FGrid>
             <FGrid>
-              <FGridItem
-                alignX="center"
-                className={"f-mt-1"}
-                size={[6, 12, 12]}
-              >
+              <FGridItem alignX="center" className={"f-mt-1"} size={[6, 12, 12]}>
                 <FInputText
                   label="Start Block"
                   name="startBlock"
                   placeholder="Start Block"
                   register={register}
-                  error={
-                    errors["startBlock"]?.message
-                      ? errors["startBlock"]?.message
-                      : ""
-                  }
+                  error={errors["startBlock"]?.message ? errors["startBlock"]?.message : ""}
                 />
               </FGridItem>
-              <FGridItem
-                alignX="center"
-                className={"f-mt-1"}
-                size={[6, 12, 12]}
-              >
-                <FInputText
-                  label="End Block"
-                  name="endBlock"
-                  placeholder="End Block"
-                  register={register}
-                  error={
-                    errors["endBlock"]?.message
-                      ? errors["endBlock"]?.message
-                      : ""
-                  }
-                />
+              <FGridItem alignX="center" className={"f-mt-1"} size={[6, 12, 12]}>
+                <FInputText label="End Block" name="endBlock" placeholder="End Block" register={register} error={errors["endBlock"]?.message ? errors["endBlock"]?.message : ""} />
               </FGridItem>
             </FGrid>
             <FInputCheckbox
@@ -287,19 +230,8 @@ export default function NewCompetition() {
             />
             <FGrid>
               <FGridItem alignX="end" dir={"row"} className={"f-mt-1"}>
-                <FButton
-                  type="submit"
-                  title={"Create Competition"}
-                  postfix={
-                    isSubmitting && <ClipLoader color="#fff" size={20} />
-                  }
-                ></FButton>
-                <FButton
-                  type="button"
-                  onClick={onCancel}
-                  className={"f-ml-1"}
-                  title={"Cancel"}
-                ></FButton>
+                <FButton type="submit" title={"Create Competition"} postfix={isSubmitting && <ClipLoader color="#fff" size={20} />}></FButton>
+                <FButton type="button" onClick={onCancel} className={"f-ml-1"} title={"Cancel"}></FButton>
               </FGridItem>
             </FGrid>
           </form>

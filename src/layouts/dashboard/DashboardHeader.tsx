@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FHeader, FButton, FItem, FCard } from "ferrum-design-system";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { FaUserCircle } from "react-icons/fa";
@@ -23,17 +23,16 @@ import {
 } from "../../utils/const.utils";
 import { getFormattedBalance, getFormattedWalletAddress } from "../../utils/global.utils";
 import * as CrucibleActions from "../../components/crucible/redux/CrucibleActions";
+import * as walletAuthenticatorActions from "../../components/common/wallet-authentication/redux/walletAuthenticationActions";
 
 const DashboardHeader = ({ title }: any) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  // const dispatch = useDispatch();
   const history = useHistory();
   const isPublic = pathname.includes("pub");
-  const { isConnected, isConnecting, walletAddress, walletBalance, networkClient, currentWalletNetwork } = useSelector((state: RootState) => state.walletConnector);
-  const { meV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
-
-  const { tokenData } = useSelector((state: RootState) => state.crucible);
+  const { isConnected, isConnecting, walletAddress, walletBalance, networkClient } = useSelector((state: RootState) => state.walletConnector);
+  const { meV2, currentNetworkInformation, applicationUserToken } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { tokenData, isProcessed, isProcessing } = useSelector((state: RootState) => state.crucible);
 
   useEffect(() => {
     if (meV2 && meV2.role === COMMUNITY_ROLE_TAG) {
@@ -43,6 +42,21 @@ const DashboardHeader = ({ title }: any) => {
     }
     // eslint-disable-next-line
   }, [isConnected, isConnecting]);
+
+  useEffect(() => {
+    if (networkClient) {
+      loadTokenData(networkClient);
+    }
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    loadTokenData(networkClient);
+    if (networkClient && isProcessed === true && isProcessing === false) {
+      loadTokenData(networkClient);
+    }
+    // eslint-disable-next-line
+  }, [networkClient, isProcessed, isProcessing]);
 
   const handleLogout = async () => {
     // let data = {};
@@ -54,13 +68,9 @@ const DashboardHeader = ({ title }: any) => {
       }
       localStorageHelper.removeItem(ME_TAG);
       localStorageHelper.removeItem(TOKEN_TAG);
-    } catch (e) {}
+      dispatch(walletAuthenticatorActions.removeSession({ userToken: applicationUserToken }))
+    } catch (e) { }
   };
-  useEffect(() => {
-    if (networkClient) {
-      loadTokenData(networkClient);
-    }
-  }, [networkClient]);
 
   const loadTokenData = async (networkClient: any) => {
     const tokens = [
@@ -121,12 +131,12 @@ const DashboardHeader = ({ title }: any) => {
                   <FCard variant={"primary"} className={"no-left-margin custom-padding-0 custom-border-radius-4 custom-min-width-270"}>
                     <FItem display={"flex"} alignY="center">
                       <FCard variant={"primary"} className={"d-flex custom-padding-10 overflow-visible"}>
-                        <img src={tokenData["FRMBSC"]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} />
+                        <img src={tokenData["FRMBSC"]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} alt="" />
                         {tokenData["FRMBSC"] && TruncateWithoutRounding(tokenData["FRMBSC"]?.balance, 3)}
                         <p className="primary-color f-pl--4"> {tokenData["FRMBSC"]?.symbol ? tokenData["FRMBSC"]?.symbol : tokenData["FRMBSC"]?.tokenSymbol}</p>
                       </FCard>
                       <FCard variant={"primary"} className={"d-flex custom-padding-10 overflow-visible"}>
-                        {tokenData["FRMxBSC"]?.logo && <img src={tokenData["FRMxBSC"]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} />}
+                        {tokenData["FRMxBSC"]?.logo && <img src={tokenData["FRMxBSC"]?.logo} height="22px" width="22px" alt="" style={{ marginRight: "3px" }} />}
                         {tokenData["FRMxBSC"] && TruncateWithoutRounding(tokenData["FRMxBSC"]?.balance, 3)}
                         <p className="primary-color f-pl--4"> {tokenData["FRMxBSC"]?.symbol ? tokenData["FRMxBSC"]?.symbol : tokenData["FRMxBSC"]?.tokenSymbol}</p>
                       </FCard>
@@ -140,6 +150,7 @@ const DashboardHeader = ({ title }: any) => {
                           height="22px"
                           width="22px"
                           style={{ marginRight: "3px" }}
+                          alt=""
                         />
                         {getFormattedWalletAddress(walletAddress)}
                       </FCard>
@@ -152,7 +163,7 @@ const DashboardHeader = ({ title }: any) => {
               )}
               <MetaMaskConnector.WalletConnector
                 WalletConnectView={FButton}
-                WalletConnectModal={ConnectWalletDialog} 
+                WalletConnectModal={ConnectWalletDialog}
                 WalletConnectViewProps={{
                   className: isConnected ? "no-left-margin connect-button-left-borders" : "no-left-margin",
                 }}

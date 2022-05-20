@@ -11,10 +11,11 @@ import {
 import * as walletAuthenticatorActions from "./redux/walletAuthenticationActions";
 import { walletConnectorActions } from "../../../container-components/wallet-connector";
 import toast from "react-hot-toast";
-import { localStorageHelper } from "../../../utils/global.utils";
-import { ME_TAG, TOKEN_TAG } from "../../../utils/const.utils";
+import { getErrorMessage, GetPhraseString, localStorageHelper } from "../../../utils/global.utils";
+import { ME_TAG, ORG_ROLE_TAG, TOKEN_TAG } from "../../../utils/const.utils";
 import { FDialog, FItem, FList, FButton, FGridItem } from "ferrum-design-system";
 import { getNetworkInformationForPublicUser } from "../../../_apis/NetworkCrud";
+import { T } from '../../../utils/translationHelper';
 
 export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthenticationNeeded }: any) => {
   const dispatch = useDispatch();
@@ -24,15 +25,8 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
   );
   const [allowedNetworkModal, setAllowedNetworkModal] = useState<boolean>(false);
   const [getSignatureForSignin, setGetSignatureForSignin] = useState<boolean>(false);
-  // const [isValidated, setIsValidated] = useState<boolean | undefined>(
-  //   undefined
-  // );
   const [isForSigninFlow, setIsForSigninFlow] = useState<boolean | undefined>(undefined);
-  // const [isValidationCompleted, setIsValidationCompleted] = useState<
-  //   boolean | undefined
-  // >(undefined);
-  // const [connectedAndVerifiedWallet, setConnectedAndVerifiedWallet] =
-  //   useState("");
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   useEffect(() => {
     if (isConnected && !applicationUserToken && isConnecting === false) {
@@ -40,7 +34,7 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
     }
 
     if (isConnected && currentWalletNetwork && applicationUserToken && isConnecting === false) {
-      if (tokenV2 && meV2.addresses[0].network.ferrumNetworkIdentifier.toString() !== currentWalletNetwork.toString()) {
+      if (tokenV2 && ((meV2.addresses[0]?.network?.ferrumNetworkIdentifier.toString() !== currentWalletNetwork.toString()) || meV2.role === ORG_ROLE_TAG)) {
         dispatch(walletAuthenticatorActions.saveSignature({ signature: "" }));
         dispatch(walletAuthenticatorActions.saveNonce({ nonce: "" }));
         checkAllowedIdentifier(currentWalletNetwork, applicationUserToken);
@@ -159,12 +153,8 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
           );
         }
       })
-      .catch((e) => {
-        if (e.response) {
-          toast.error(` Error Occured: user token ${e?.response?.data?.status?.message}`);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+      .catch((e: any) => {
+        getErrorMessage(e, activeTranslation)
       });
   };
 
@@ -187,11 +177,7 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
         }
       })
       .catch((e) => {
-        if (e.response) {
-          toast.error(` Error Occured: allowed on gateway ${e?.response?.data?.status?.message}`);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 
@@ -210,11 +196,7 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
       })
       .catch((e) => {
         refreshAuthenticationVariables();
-        if (e.response) {
-          toast.error(` Error Occured: nonce ${e?.response?.data?.status?.message}`);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 
@@ -249,11 +231,7 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
       .catch((e) => {
         refreshAuthenticationVariables();
         setGetSignatureForSignin(false);
-        if (e.response) {
-          toast.error(` Error Occured: nonce ${e?.response?.data?.status?.message}`);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation)
       });
   };
 
@@ -280,17 +258,22 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
           })
         );
         if (e.response) {
-          toast.error(
-            `You attempted authentication with  
+          if (e?.response?.data?.status?.phraseKey !== '') {
+            const fetchedMessage = GetPhraseString(e?.response?.data?.status?.phraseKey);
+            toast.error(fetchedMessage);
+          } else {
+            toast.error(
+              `You attempted authentication with  
       account: ${account} on network: ${currentWalletNetwork} which doesn't match the address you are signed in with. Please retry authentication with the correct address and network to continue.
       \n Wallet Authentication is required to edit profile!`,
-            {
-              style: {
-                maxWidth: "650px ",
-              },
-              duration: 4000,
-            }
-          );
+              {
+                style: {
+                  maxWidth: "650px ",
+                },
+                duration: 4000,
+              }
+            );
+          }
         } else {
           toast.error("Something went wrong. Try again later!");
         }
@@ -363,125 +346,4 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
       </FDialog>
     </>
   );
-};
-
-// const getUserAccessToken = (dispatch: any) => {
-//   console.log(dispatch);
-//   // getAccessTokenForApplicationUser()
-//   //   .then((res: any) => {
-//   //     if (res && res.data && res.data.body && res.data.body.token) {
-//   //       dispatch( walletAuthenticatorActions.saveApplicationUserToken({ userToken: res.data.body.token }) );
-//   //     }
-//   //   })
-//   //   .catch((e) => {
-//   //     if (e.response) {
-//   //       toast.error(` Error Occured: user token ${e?.response?.data?.status?.message}`);
-//   //     } else {
-//   //       toast.error("Something went wrong. Try again later!");
-//   //     }
-//   //   });
-// };
-
-// const checkAllowedIdentifier = async (
-//   identifier: any,
-//   applicationUserToken: any,
-//   dispatch: any
-// ) => {
-//   isFerrumNetworkIdentifierAllowedonGateway(identifier, applicationUserToken)
-//     .then((res: any) => {
-//       if (res && res.data && res.data.body) {
-//         dispatch(
-//           walletAuthenticatorActions.isAllowedOnGateway({
-//             isAllowedOnGateway: res.data.body.status,
-//           })
-//         );
-//         dispatch(
-//           walletAuthenticatorActions.allowedNetworksonGateway({
-//             allowedNetworksonGateway: res.data.body.networks,
-//           })
-//         );
-//       }
-//     })
-//     .catch((e) => {
-//       if (e.response) {
-//         toast.error(
-//           ` Error Occured: allowed on gateway ${e?.response?.data?.status?.message}`
-//         );
-//       } else {
-//         toast.error("Something went wrong. Try again later!");
-//       }
-//     });
-// };
-
-// const getNonce = async (
-//   currentWalletNetwork: any,
-//   walletAddress: any,
-//   applicationUserToken: any,
-//   dispatch: any
-// ) => {
-//   let data = {
-//     address: walletAddress,
-//     ferrumNetworkIdentifier: currentWalletNetwork,
-//   };
-//   generateNonceByABN(data, applicationUserToken)
-//     .then((res: any) => {
-//       if (res && res.data && res.data.body && res.data.body.nonce) {
-//         dispatch(
-//           walletAuthenticatorActions.saveNonce({ nonce: res.data.body.nonce })
-//         );
-//       }
-//     })
-//     .catch((e) => {
-//       if (e.response) {
-//         toast.error(
-//           ` Error Occured: nonce ${e?.response?.data?.status?.message}`
-//         );
-//       } else {
-//         toast.error("Something went wrong. Try again later!");
-//       }
-//     });
-// };
-
-// const verifySignatureToSignin = (
-//   currentWalletNetwork: any,
-//   walletAddress: any,
-//   signature: any,
-//   applicationUserToken: any,
-//   dispatch: any
-// ) => {
-//   let data = {
-//     address: walletAddress,
-//     ferrumNetworkIdentifier: currentWalletNetwork,
-//     signature: signature,
-//     role: "communityMember",
-//   };
-//   verifySignatureAndSignin(data, applicationUserToken)
-//     .then((res: any) => {
-//       if (res && res.data && res.data.body && res.data.body) {
-//         console.log(res.data.body);
-//         // dispatch( walletAuthenticatorActions.saveNonce({ nonce: res.data.body.nonce }) );
-//       }
-//     })
-//     .catch((e) => {
-//       if (e.response) {
-//         toast.error(
-//           ` Error Occured: nonce ${e?.response?.data?.status?.message}`
-//         );
-//       } else {
-//         toast.error("Something went wrong. Try again later!");
-//       }
-//     });
-// };
-
-// useEffect(() => {
-//   getUserAccessToken();
-//   if (currentWalletNetwork &&  walletAddress && applicationUserToken){
-//     getNonce(currentWalletNetwork, walletAddress, applicationUserToken);
-//   }
-// }, [currentWalletNetwork, walletAddress, applicationUserToken ]);
-
-// useEffect(() => {
-//   if (currentWalletNetwork &&  walletAddress && applicationUserToken && signature){
-//     verifySignatureToSignin(currentWalletNetwork, walletAddress, signature, applicationUserToken);
-//   }
-// }, [currentWalletNetwork, walletAddress, signature, applicationUserToken])
+}; 

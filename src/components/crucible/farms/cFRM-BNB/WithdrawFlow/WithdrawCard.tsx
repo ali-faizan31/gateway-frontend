@@ -31,7 +31,7 @@ import { useHistory, useLocation, useParams } from "react-router";
 import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
-// import eitherConverter from "ether-converter";
+import { getErrorMessage } from "../../../../../utils/global.utils";
 
 export const Withdraw = () => {
   const dispatch = useDispatch();
@@ -51,6 +51,7 @@ export const Withdraw = () => {
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const [transactionId, setTransactionId] = useState("");
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
@@ -76,8 +77,7 @@ export const Withdraw = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      getErrorMessage(e, activeTranslation)
     }
   };
 

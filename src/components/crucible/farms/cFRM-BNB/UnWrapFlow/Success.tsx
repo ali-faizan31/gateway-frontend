@@ -16,6 +16,8 @@ import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import { STEP_FLOW_IDS } from "../../../common/utils";
 import { ClipLoader } from "react-spinners";
+import { PATH_DASHBOARD } from "../../../../../routes/paths";
+import { getErrorMessage } from "../../../../../utils/global.utils";
 
 export const Success = () => {
   const dispatch = useDispatch();
@@ -25,13 +27,20 @@ export const Success = () => {
   const history = useHistory();
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const crucible = useSelector((state: RootState) => state.crucible.selectedCrucible);
-
   const { tokenV2, currentNetworkInformation } = useSelector((state: RootState) => state.walletAuthenticator);
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   useEffect(() => {
-    getStepCompleted(false);
-    // eslint-disable-next-line
+    if (location.state === undefined) {
+      history.push({ pathname: PATH_DASHBOARD.crucible.index });
+    }
   }, []);
+
+  useEffect(() => {
+    if (currentStep && currentStep._id && currentStep.status === "pending") {
+      getStepCompleted(false);
+    }
+  }, [currentStep]);
 
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
@@ -57,8 +66,7 @@ export const Success = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      getErrorMessage(e, activeTranslation)
     }
   };
 
@@ -66,12 +74,19 @@ export const Success = () => {
     setIsLoading(true);
     let nextStepInfo: any;
     let newFarm: any;
+    // if (farm?.includes("cFRMx")) {
+    //   nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].dashboard;
+    //   newFarm = "cFRM-BNB";
+    // } else if (farm?.includes("cFRM")) {
+    //   nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].dashboard;
+    //   newFarm = "cFRMx-BNB";
+    // }
     if (farm?.includes("cFRMx")) {
-      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].dashboard;
-      newFarm = "cFRM-BNB";
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].dashboard;
+      newFarm = "cFRM";
     } else if (farm?.includes("cFRM")) {
-      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].dashboard;
-      newFarm = "cFRMx-BNB";
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].dashboard;
+      newFarm = "cFRMx";
     }
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
@@ -125,7 +140,7 @@ export const Success = () => {
           </FItem>
         </FCard>
       ) : (
-        <FContainer className="f-mr-0" width={800}>
+        <FContainer width={800}>
           <CrucibleMyBalance />
           <FCard variant={"secondary"} className="card-congrats">
             <FItem align="center">
@@ -154,7 +169,7 @@ export const Success = () => {
                     <div className="card-whats-next-front">
                       <div className="network-icon-wrapper text-center f-mb-1">
                         <span className="icon-wrap">
-                          <img src={IconNetworkBNB} height="40px" width="40px" alt="" />
+                          {/* <img src={IconNetworkBNB} height="40px" width="40px" alt="" /> */}
                           {farm?.includes("cFRMx") ? (
                             <img src={IconNetworkCFrmStr} height="40px" width="40px" alt="" />
                           ) : (
@@ -163,11 +178,13 @@ export const Success = () => {
                         </span>
                       </div>
                       <FTypo size={20} weight={400} align={"center"}>
-                        {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} / BNB Mint and Stake
+                        {/* {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} / BNB Mint and Stake */}
+                        Stake {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"}
                       </FTypo>
                     </div>
                     <div className="card-whats-next-back">
-                      <FTypo>Now you can proceed to Mint and Stake {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} LP tokens</FTypo>
+                      {/* <FTypo>Now you can proceed to Mint and Stake {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} LP tokens</FTypo> */}
+                      <FTypo>Now you can proceed to Stake {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"}</FTypo>
                     </div>
                   </div>
                 </FItem>

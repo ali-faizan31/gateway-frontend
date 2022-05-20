@@ -26,7 +26,7 @@ export class CrucibleClient {
 		const requests = await Api.crucibleApi({
 			command: 'approveAllocationGetTransaction',
 			data: {currency, amount: amount || '1', userAddress, contractAddress}, params: [] });
-		console.log('About to submit request', {requests});
+		// console.log('About to submit request', {requests});
 
         if(requests.data){
             const requestId = await this.web3Client.sendTransactionAsync(dispatch,requests.data,{currency, amount, userAddress, contractAddress})            
@@ -56,16 +56,16 @@ export class CrucibleClient {
             })
 
             if(request.data.data){
-                console.log(request.data,'datataatat')
+                // console.log(request.data,'datataatat')
                 const web3Helper = await this.web3Client.sendTransactionAsync(dispatch,[request.data]) 
-                console.log(web3Helper,'web3helepep')
+                // console.log(web3Helper,'web3helepep')
                 return web3Helper 
                 //showmodal          
             }
            
 			return
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close
@@ -92,16 +92,16 @@ export class CrucibleClient {
             })
 
             if(request.data.data){
-                console.log(request.data,'datataatat')
+                // console.log(request.data,'datataatat')
                 const web3Helper = await this.web3Client.sendTransactionAsync(dispatch,[request.data]) 
-                console.log(web3Helper,'web3helepep')
+                // console.log(web3Helper,'web3helepep')
                 return web3Helper 
                 //showmodal          
             }
            
 			return
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close
@@ -125,7 +125,7 @@ export class CrucibleClient {
 			return response
 
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close
@@ -152,7 +152,7 @@ export class CrucibleClient {
 			}
 			return 
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close
@@ -183,12 +183,12 @@ export class CrucibleClient {
 				params: [],
 			} );
 			if (!!userCrucibleInfo) {
-                // console.log(userCrucibleInfo, "user crucible info")
+                // // console.log(userCrucibleInfo, "user crucible info")
                 return userCrucibleInfo;
 			}
 			return 
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close
@@ -221,14 +221,14 @@ export class CrucibleClient {
 				params: [],
 			} );
             if(request.data.data){
-                console.log(request.data)
+                // console.log(request.data)
                 const web3Helper = this.web3Client.sendTransactionAsync(dispatch,[request.data])    
                 return web3Helper        
             }
 
 			return 
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close
@@ -267,7 +267,7 @@ export class CrucibleClient {
 			return 
 			// return 
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close
@@ -303,7 +303,7 @@ export class CrucibleClient {
             }
 			return 
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close
@@ -321,12 +321,12 @@ export class CrucibleClient {
 				params: [],
 			});
 			if(!!cruciblePairPrice){
-				console.log(cruciblePairPrice)
+				// console.log(cruciblePairPrice)
 				return cruciblePairPrice.data
 			}
             return cruciblePairPrice
 		} catch (e) {
-			console.log(e)
+			// console.log(e)
 		}
 	}
 
@@ -351,7 +351,7 @@ export class CrucibleClient {
 			return crucibles || [];
 
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close
@@ -367,7 +367,7 @@ export class CrucibleClient {
 	// 	try {
             
     //         const cs = await this.getAllCruciblesFromDb(dispatch, network,userAddress) as any;
-	// 		console.log(cs,"crucible")
+	// 		// console.log(cs,"crucible")
     //         if(cs?.length){
 	// 			for(const c of cs) {
 	// 				this.updateCrucible(dispatch, network, c.contractAddress,userAddress);
@@ -376,7 +376,7 @@ export class CrucibleClient {
 	// 		return
 
 	// 	} catch (e) {
-    //         console.log(e)
+    //         // console.log(e)
     //         // UI handle Errors
 	// 	}finally{
     //         // Handle Modal Close
@@ -421,7 +421,7 @@ export class CrucibleClient {
            
 			return
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close
@@ -458,7 +458,7 @@ export class CrucibleClient {
            
 			return
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close
@@ -495,7 +495,7 @@ export class CrucibleClient {
            
 			return
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close
@@ -531,7 +531,7 @@ export class CrucibleClient {
            
 			return
 		} catch (e) {
-            console.log(e)
+            // console.log(e)
             // UI handle Errors
 		}finally{
             // Handle Modal Close

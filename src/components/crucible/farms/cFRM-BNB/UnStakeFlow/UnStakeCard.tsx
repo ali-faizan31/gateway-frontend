@@ -24,6 +24,7 @@ import {
 import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
+import { getErrorMessage } from "../../../../../utils/global.utils";
 
 export const UnStake = () => {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ export const UnStake = () => {
   const { stepFlowStepHistory, currentStep, currentStepIndex } = useSelector((state: RootState) => state.crucible);
   const { meV2, tokenV2 } = useSelector((state: RootState) => state.walletAuthenticator);
   const [transactionId, setTransactionId] = useState("");
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
@@ -69,8 +71,7 @@ export const UnStake = () => {
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
-      let errorResponse = e && e.response && e.response.data.status && e.response.data.status.message;
-      errorResponse ? toast.error(`Error Occured: ${errorResponse}`) : toast.error(`Error Occured: ${e}`);
+      getErrorMessage(e, activeTranslation)
     }
   };
 
@@ -83,6 +84,7 @@ export const UnStake = () => {
       let userAddress: string = "";
       let response: any;
 
+      dispatch(CrucibleActions.transactionProcessing())
       setTransitionStatusDialog(true);
       setIsProcessing(true);
       const web3Helper = new Web3Helper(networkClient as any);
@@ -106,6 +108,7 @@ export const UnStake = () => {
         response = await client.UnStakeCrucible(dispatch, currency, stakeAmount, stakingAddress, userAddress, network);
       }
       if (response) {
+        dispatch(CrucibleActions.transactionProcessed())
         let transactionId = response.split("|");
         setTransactionId(transactionId[0]);
         setIsProcessing(false);
@@ -139,6 +142,11 @@ export const UnStake = () => {
     } else {
       return (userStake?.stakeOf || "0");
     }
+  };
+
+
+  const getDisabledCheck = () => {
+    return Number(getAmount()) === 0 || Number(amount) === 0 || Number(getAmount()) < Number(amount);
   };
 
   return (
@@ -206,7 +214,7 @@ export const UnStake = () => {
                   <FButton
                     title={"Unstake Crucible"}
                     className={"w-100"}
-                    disabled={Number(getAmount()) === 0}
+                    disabled={getDisabledCheck()}
                     onClick={ownProps.isApprovalMode ? () => ownProps.onApproveClick() : () => onUnStakeClick()}
                   ></FButton>
                 )}

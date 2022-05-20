@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import EmailForm from "./EmailForm";
 import { useSelector } from "react-redux";
 import OtpFrom from "./OtpForm";
@@ -8,6 +8,8 @@ import { sendOTP, updateEmail } from "../../../_apis/ProfileCrud";
 // import { AiOutlineMail } from "react-icons/ai";
 // import { TOKEN_TAG } from "../../../utils/const.utils";
 import { RootState } from "../../../redux/rootReducer";
+import { getErrorMessage } from "../../../utils/global.utils";
+
 
 interface EmailSectionProps {
   profileToken: string;
@@ -28,6 +30,7 @@ const EmailSection = ({
   const walletAuthenticator = useSelector(
     (state: RootState) => state.walletAuthenticator
   );
+  const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   const resendCode = () => {
     setOtpSent(false);
@@ -40,12 +43,8 @@ const EmailSection = ({
         setEmailedTo(values.email);
         setOtpSent(true);
       })
-      .catch((e) => {
-        if (e.response) {
-          toast.error(e.response?.data?.status?.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+      .catch((e: any) => {
+        getErrorMessage(e, activeTranslation)
       });
   };
 
@@ -56,12 +55,8 @@ const EmailSection = ({
         setProfileToken("");
         getUserInfo();
       })
-      .catch((e) => {
-        if (e.response) {
-          toast.error(e.response?.data?.status?.message);
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+      .catch((e: any) => {
+        getErrorMessage(e, activeTranslation)
       });
   };
 
