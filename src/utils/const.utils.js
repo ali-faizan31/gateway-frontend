@@ -1,6 +1,6 @@
 import { Environment } from "./Environment";
 
-export const CRUCIBLE_SITE_TAG = "crucible";
+export const CRUCIBLE_SITE_TAG = "v4";
 export const Site_Name = "gateway.ferrumnetwork.io";
 export const defaultEndPointDetails = Environment.defaultEndPoint();
 
