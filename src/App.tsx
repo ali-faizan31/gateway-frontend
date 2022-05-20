@@ -196,7 +196,7 @@ function App() {
           />
           {/* <UnGuardedRoute path={PATH_DASHBOARD.crucible.public} component={CruciblePublic} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" /> */}
 
-          <UnGuardedRoute path="/home" component={Dashboard} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" />
+          {/* <UnGuardedRoute path="/home" component={Dashboard} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" /> */}
           <UnGuardedRoute path="/auth/forgot-password" component={ForgotPassword} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />
           <UnGuardedRoute path="/auth/verify" component={EmailVerification} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />
           <UnGuardedRoute path="/auth/resend-code" component={ResendEmailVerification} auth={isAuthenticated} layout={AuthLayout} headerTitle="" />

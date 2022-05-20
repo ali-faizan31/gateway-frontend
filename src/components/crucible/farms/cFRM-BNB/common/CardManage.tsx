@@ -105,7 +105,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <span>cFRM</span>
         </FItem>
       ),
-      url: 'https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE&exactField=output&exactAmount=0'
+      url: 'https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xaf329a957653675613D0D98f49fc93326AeB36Fc&exactField=output&exactAmount=0'
     },
     {
       value: "cfrmx",
@@ -117,7 +117,7 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           <span>cFRMx</span>
         </FItem>
       ),
-      url: 'https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xaf329a957653675613D0D98f49fc93326AeB36Fc&exactField=output&exactAmount=0'
+      url: 'https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE&exactField=output&exactAmount=0'
     }
   ];
 
