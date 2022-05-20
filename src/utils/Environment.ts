@@ -25,7 +25,7 @@ export class Environment {
 		prod: {
 			baseUrl: "https://api-gateway-v1.svcs.ferrumnetwork.io",
 			apiKeyForApplicationUser: "66fadbfe-b625-48d1-9255-2c6317adf0bf",
-			crucibleBaseUrl: "https://imqx88xczt.us-east-2.awsapprunner.com/"
+			crucibleBaseUrl: "https://22phwrgczz.us-east-2.awsapprunner.com/"
 		},
 	};
 
