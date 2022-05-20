@@ -1,6 +1,7 @@
 import { Environment } from "./Environment";
 
-export const CRUCIBLE_SITE_TAG = "crucible-alpha";
+export const CRUCIBLE_SITE_TAG = "crucible";
+export const Site_Name = "gateway.ferrumnetwork.io";
 export const defaultEndPointDetails = Environment.defaultEndPoint();
 
 export const tokenFRMBSCMainnet = "0xa719b8ab7ea7af0ddb4358719a34631bb79d15dc";

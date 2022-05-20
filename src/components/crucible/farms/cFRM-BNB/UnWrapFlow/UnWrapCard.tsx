@@ -24,6 +24,7 @@ import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { changeExponentToPoints, getErrorMessage, TruncateWithoutRounding } from "../../../../../utils/global.utils";
+import Big from "big.js";
 
 export const UnWrap = () => {
   const location: any = useLocation();
@@ -107,7 +108,6 @@ export const UnWrap = () => {
     return Number(userCrucibleData[farm!]?.balance) === 0 || Number(amount) === 0 || Number(userCrucibleData[farm!]?.balance) < Number(amount);
   };
 
-
   return (
     <>
       {isLoading ? (
@@ -175,7 +175,8 @@ export const UnWrap = () => {
             type={"text"}
             placeholder="0"
             disabled={true}
-            value={changeExponentToPoints(Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100))}
+            // value={changeExponentToPoints(Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100))}
+            value={changeExponentToPoints(Big(amount || "0").minus(Big(amount || "0").times(crucible[farm!]?.feeOnWithdrawRate || "0")).toString())}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
                 {crucible[farm!]?.symbol}

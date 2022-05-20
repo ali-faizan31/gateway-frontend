@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { getSideMenuForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
+import { CRUCIBLE_SITE_TAG, Site_Name } from "../../utils/const.utils";
 
 const DashboardSidebar = () => {
   const { pathname } = useLocation();
@@ -107,9 +108,8 @@ const DashboardSidebar = () => {
   const getSideMenuInformation = async (token: any) => {
     try {
       let siteName = getSiteName(pathname, "/", "/");
-      let response = await getSideMenuForAssociatedOrganizationBySiteName("fixadmin.ferrumnetwork.io", token,
-        //  pathname.includes(CRUCIBLE_SITE_TAG) ? false : true
-        false
+      let response = await getSideMenuForAssociatedOrganizationBySiteName(Site_Name, token,
+        window.origin.includes(CRUCIBLE_SITE_TAG) ? false : true
       );
       let sideMenuItems = response && response.data && response.data.body;
       let productList = getSideMenuAgainstOrganization(sideMenuItems);
@@ -118,6 +118,11 @@ const DashboardSidebar = () => {
       console.log(`Error occured: ${e?.response?.data?.status?.message}`);
     }
   };
+
+
+  useEffect(() => {
+  }, [sideMenuItems])
+
 
   const renderContent = (items: any) => {
     return items.map((item: any) => {
@@ -129,7 +134,7 @@ const DashboardSidebar = () => {
                 to={subItem.path}
                 title={subItem.title}
                 prefix={subItem.icon ? subItem.icon : <img src="/ferrum/bullet.png" className="side-menu-img" alt="side menu item" />}
-                key={subItem.id}
+                key={subItem.title}
                 target={subItem.target && subItem.target}
               ></FSiderItem>
             })}

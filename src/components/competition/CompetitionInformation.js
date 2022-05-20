@@ -62,7 +62,7 @@ const CompetitionInformation = () => {
   const getCompetitionParticipants = () => {
     const leaderboardDexUrl = leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.networkDex?.dex?.url;
     const tokenContractAddress = leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress;
-    getCompetitionsParticipantsRanks(id, false, true, 0, 10)
+    getCompetitionsParticipantsRanks(id, false, 0, 10)
       .then((res) => {
         if (res?.data?.body?.participants) {
           const formattedRes = res?.data?.body?.participants?.map((p) => {

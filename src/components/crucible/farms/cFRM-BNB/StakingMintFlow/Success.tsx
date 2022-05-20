@@ -80,16 +80,19 @@ export const Success = () => {
 
   const onAddLiquidityClick = () => {
     setIsLoading(true);
-    let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].generalAddLiquidity;
-    // let nextStepInfo: any;
-    // if (farm?.includes("cFRMx")){
-    //   nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx-BNB")}`].stake;
-    // } else if (farm === "cFRM" || farm === "cFRM-BNB"){
-    //   nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM-BNB")}`].stake;
-    // }
+    // let nextStepInfo: any = STEP_FLOW_IDS[`${getObjectReadableFarmName(farm)}`].generalAddLiquidity;
+    let nextStepInfo: any;
+    let newFarm: any;
+    if (farm?.includes("cFRMx")) {
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].dashboard;
+      newFarm = "cFRM";
+    } else {
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].dashboard;
+      newFarm = "cFRMx";
+    }
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
-    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading);
+    getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, newFarm, setIsLoading);
   };
 
   const onTradeClick = () => {
@@ -141,7 +144,7 @@ export const Success = () => {
                     <div className="card-whats-next-front">
                       <div className="network-icon-wrapper text-center f-mb-1">
                         <span className="icon-wrap">
-                          <img src={IconNetworkBNB} height="40px" width="40px" alt="" />
+                          {/* <img src={IconNetworkBNB} height="40px" width="40px" alt="" /> */}
                           {farm?.includes("cFRMx") ? (
                             <img src={IconNetworkCFrmxStr} height="40px" width="40px" alt="" />
                           ) : (
@@ -150,11 +153,15 @@ export const Success = () => {
                         </span>
                       </div>
                       <FTypo size={20} weight={400} align={"center"}>
-                        Add Liquidity & Compound Rewards
+                        {/* Add Liquidity & Compound Rewards */}
+                        Mint {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"}
                       </FTypo>
                     </div>
                     <div className="card-whats-next-back">
-                      <FTypo>Use {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB to add Liquidity and compound rewards with Farming</FTypo>
+                      <FTypo>
+                        {/* Use {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB to add Liquidity and compound rewards with Farming. */}
+                        You can always mint more {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} to increase your pool share.
+                      </FTypo>
                     </div>
                   </div>
                 </FItem>
