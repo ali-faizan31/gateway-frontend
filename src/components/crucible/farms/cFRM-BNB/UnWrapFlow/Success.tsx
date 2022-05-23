@@ -14,7 +14,7 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
-import { STEP_FLOW_IDS } from "../../../common/utils";
+import { Crucible_Farm_Address_Details, STEP_FLOW_IDS } from "../../../common/utils";
 import { ClipLoader } from "react-spinners";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { getErrorMessage } from "../../../../../utils/global.utils";
@@ -37,7 +37,7 @@ export const Success = () => {
   }, []);
 
   useEffect(() => {
-    if (currentStep && currentStep._id && currentStep.status === "pending") {
+    if (currentStep && currentStep._id && currentStep.status === "pending" && currentStep.step.name === "Success") {
       getStepCompleted(false);
     }
   }, [currentStep]);
@@ -63,6 +63,7 @@ export const Success = () => {
 
       // let updateResponse: any =
       await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'unwrap success 65')
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
@@ -82,14 +83,15 @@ export const Success = () => {
     //   newFarm = "cFRMx-BNB";
     // }
     if (farm?.includes("cFRMx")) {
-      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].dashboard;
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].stake;
       newFarm = "cFRM";
     } else if (farm?.includes("cFRM")) {
-      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].dashboard;
+      nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].stake;
       newFarm = "cFRMx";
     }
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
+    location.state = { ...location.state, ...Crucible_Farm_Address_Details[newFarm] };
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, newFarm, setIsLoading);
   };
 
@@ -107,16 +109,17 @@ export const Success = () => {
       }
     } else {
       if (farm === "cFRMx") {
-        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].dashboard;
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].mint;
         newFarm = "cFRM";
       } else if (farm === "cFRM") {
-        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].dashboard;
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].mint;
         newFarm = "cFRMx";
       }
     }
 
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
+    location.state = { ...location.state, ...Crucible_Farm_Address_Details[newFarm] };
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, newFarm, setIsLoading);
   };
 

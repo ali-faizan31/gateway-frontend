@@ -26,6 +26,7 @@ export const StakingMintSteps = () => {
   const onStakeClick = async () => {
     setIsLoading(true);
     for (let i = 0; i < stepFlowStepHistory.length; i++) {
+      console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'staking mint 29')
       await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
         stepFlowStepHistory[i]._id,
         { status: "completed" },
@@ -63,6 +64,7 @@ export const StakingMintSteps = () => {
       data = { status: "completed" };
 
       updateResponse = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'staking mint 66')
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       if (updateResponse) {
         dispatch(
@@ -121,19 +123,16 @@ export const StakingMintSteps = () => {
                     onClick={() => setStepTwoCheck(!stepTwoCheck)}
                     name="step2Check"
                     className="f-mb-1 f-mt-1"
-                    label={`I understand that I have to stake my ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens to earn ${
-                      farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
-                    } rewards.`}
+                    label={`I understand that I have to stake my ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens to earn ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
+                      } rewards.`}
                   />
                   <FInputCheckbox
                     onClick={() => setStepThreeCheck(!stepThreeCheck)}
                     name="step3Check"
                     className="f-mb-1 f-mt-1"
-                    label={`I understand that rewards are generated from ${
-                      farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
-                    } trading volume. To participate in generating rewards for my staked tokens, it is recommended that some of the ${
-                      farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
-                    } tokens should be staked, while others should be used to create trading volume which generates rewards.`}
+                    label={`I understand that rewards are generated from ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
+                      } trading volume. To participate in generating rewards for my staked tokens, it is recommended that some of the ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
+                      } tokens should be staked, while others should be used to create trading volume which generates rewards.`}
                   />
                 </span>
               </li>
@@ -144,14 +143,14 @@ export const StakingMintSteps = () => {
                     postfix={<IconArrow />}
                     className="w-100"
                     disabled={disableCheck()}
-                    style={{marginLeft: "-4px"}}
+                    style={{ marginLeft: "-4px" }}
                     onClick={() => onStakeClick()}
                   />
                 </FItem>
                 <FItem >
                   <FButton
                     title="What Else Can I Do?"
-                    style={{marginLeft: "4px"}}
+                    style={{ marginLeft: "4px" }}
                     postfix={<IconArrow />}
                     className="w-100"
                     disabled={disableCheck()}
