@@ -153,7 +153,7 @@ export const Success = () => {
 
   const onTradeClick = () => {
     let dexUrl = currentNetworkInformation?.networkCurrencyAddressByNetwork?.networkDex?.dex?.url;
-    const tradeURL = `${dexUrl}swap?inputCurrency=BNB&outputCurrency=${crucible.contractAddress}&exactField=output&exactAmount=`;
+    const tradeURL = `${dexUrl}swap?inputCurrency=BNB&outputCurrency=${crucible[farm!].contractAddress}&exactField=output&exactAmount=`;
     window.open(tradeURL, "_blank");
   };
 
@@ -219,7 +219,9 @@ export const Success = () => {
                       <FTypo>
                         {farm?.includes("BNB")
                           ? getFistCardData("back")
-                          : `Use ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB to add Liquidity and compound rewards with Farming`}
+                          : <FTypo>Now you can proceed to Stake {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"}</FTypo>
+                          // `Use ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB to add Liquidity and compound rewards with Farming`
+                        }
                       </FTypo>
                     </div>
                   </div>
@@ -284,11 +286,9 @@ export const Success = () => {
                         Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                       </FTypo>
                     </div>
-                    {/* <div className="card-whats-next-back">
-                  <FTypo>
-                    You can always mint more cFRM to increase your pool share.
-                  </FTypo>
-                </div> */}
+                    <div className="card-whats-next-back">
+                      Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
+                    </div>
                   </div>
                 </FItem>
               </FGridItem>

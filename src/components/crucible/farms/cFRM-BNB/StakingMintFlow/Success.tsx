@@ -100,7 +100,7 @@ export const Success = () => {
 
   const onTradeClick = () => {
     let dexUrl = currentNetworkInformation?.networkCurrencyAddressByNetwork?.networkDex?.dex?.url;
-    const tradeURL = `${dexUrl}swap?inputCurrency=BNB&outputCurrency=${crucible.contractAddress}&exactField=output&exactAmount=`;
+    const tradeURL = `${dexUrl}swap?inputCurrency=BNB&outputCurrency=${crucible[farm!].contractAddress}&exactField=output&exactAmount=`;
     window.open(tradeURL, "_blank");
   };
 
@@ -239,6 +239,9 @@ export const Success = () => {
                       <FTypo size={20} weight={400} align={"center"}>
                         Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                       </FTypo>
+                    </div>
+                    <div className="card-whats-next-back">
+                      Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                     </div>
                   </div>
                 </FItem>

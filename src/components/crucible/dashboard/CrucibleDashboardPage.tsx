@@ -29,7 +29,7 @@ import { getAPRInformationForPublicUser } from "../../../_apis/APRCrud";
 import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { getCrucibleDetail } from "../common/Helper";
-import { getErrorMessage } from "../../../utils/global.utils";
+import { getErrorMessage, TruncateWithoutRounding } from "../../../utils/global.utils";
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const CrucibleDashboardPage = () => {
           actions.priceDataLoaded({
             data: {
               token: item.token,
-              price: Number(priceDetails).toFixed(3),
+              price: TruncateWithoutRounding(Number(priceDetails), 3),
             },
           })
         );
@@ -84,8 +84,12 @@ const CrucibleDashboardPage = () => {
   const getAPRInformation = async () => {
     try {
       let aprResponse: any = await getAPRInformationForPublicUser();
-      aprResponse = aprResponse.data && aprResponse.data.body && aprResponse.data.body.crucibleApr;
-      dispatch(CrucibleActions.updateAPRData(aprResponse));
+      aprResponse = aprResponse.data && aprResponse.data.body && aprResponse.data.body.priceDetails;
+      let updatedResponse: any = {};
+      aprResponse.forEach((element: any) => {
+        updatedResponse[element.tokenSymbol] = element
+      });
+      dispatch(CrucibleActions.updateAPRData(updatedResponse));
     } catch (e: any) {
       getErrorMessage(e, activeTranslation)
     }

@@ -84,6 +84,8 @@ export const Stake = () => {
     // eslint-disable-next-line
   }, [approvals]);
 
+  const isWalletApproved = () => Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]) > 0;
+
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
     try {
@@ -184,7 +186,7 @@ export const Stake = () => {
   };
 
   const getDisabledCheck = () => {
-    return Number(getAmount()) === 0 || Number(amount) === 0 || Number(getAmount()) < Number(amount);
+    return isWalletApproved() && (Number(getAmount()) === 0 || Number(amount) === 0 || Number(getAmount()) < Number(amount));
   };
 
   return (

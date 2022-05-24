@@ -136,7 +136,7 @@ export const Success = () => {
 
   const onTradeClick = () => {
     let dexUrl = currentNetworkInformation?.networkCurrencyAddressByNetwork?.networkDex?.dex?.url;
-    const tradeURL = `${dexUrl}swap?inputCurrency=BNB&outputCurrency=${crucible.contractAddress}&exactField=output&exactAmount=`;
+    const tradeURL = `${dexUrl}swap?inputCurrency=BNB&outputCurrency=${crucible[farm!].contractAddress}&exactField=output&exactAmount=`;
     window.open(tradeURL, "_blank");
   };
 
@@ -196,7 +196,10 @@ export const Success = () => {
                       </FTypo>
                     </div>
                     <div className="card-whats-next-back">
-                      <FTypo>Use {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB to add Liquidity and compound rewards with Farming</FTypo>
+                      <FTypo>
+                        {/* Use {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB to add Liquidity and compound rewards with Farming. */}
+                        You can always stake more {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} to increase rewards.
+                      </FTypo>
                     </div>
                   </div>
                 </FItem>
@@ -259,6 +262,9 @@ export const Success = () => {
                       <FTypo size={20} weight={400} align={"center"}>
                         Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                       </FTypo>
+                    </div>
+                    <div className="card-whats-next-back">
+                      Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                     </div>
                   </div>
                 </FItem>

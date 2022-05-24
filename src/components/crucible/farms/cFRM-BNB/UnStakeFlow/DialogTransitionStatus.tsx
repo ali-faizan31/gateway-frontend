@@ -55,7 +55,7 @@ export const DialogTransitionStatus = ({
             <FTypo color="#DAB46E" size={22} weight={600} className="f-mt-1">
               Transaction Processed
             </FTypo>
-            <FTypo size={20} weight={600} className="f-mt-1">
+            <FTypo size={20} weight={600} className="f-mt-1 cursor-pointer">
               <span onClick={() => window.open(linkForTransaction(crucible.network, transactionId), "_blank")}>View on Explorer</span>
             </FTypo>
             <FItem>
@@ -88,7 +88,7 @@ export const DialogTransitionStatus = ({
               Approved
             </FTypo>
             <FTypo size={20} className="f-mt-1 f-pb-3">
-              <span onClick={() => {}}>Continue.</span>
+              <span onClick={() => { }}>Continue.</span>
             </FTypo>
           </FItem>
         </React.Fragment>

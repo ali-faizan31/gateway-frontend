@@ -6,7 +6,7 @@ import { Web3Helper } from "../../../container-components/web3Client/web3Helper"
 import { CrucibleClient } from "../../../container-components/web3Client/crucibleClient";
 import { crucibleSlice } from "../redux/CrucibleSlice";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { GetPhraseString } from "../../../utils/global.utils";
+import { GetPhraseString, TruncateWithoutRounding } from "../../../utils/global.utils";
 
 export const getHumanReadableFarmName = (farm: any) => {
   switch (farm) {
@@ -489,15 +489,7 @@ export const getLatestStepWithPendingStatus = (stepResponse: any) => {
 
 
 export const getAPRValueAgainstFarm = (aprInformation: any, farm: any) => {
-  if (farm === "cFRM-BNB") {
-    return aprInformation.cfrmLp;
-  } else if (farm === "cFRMx-BNB") {
-    return aprInformation.cfrmXLp;
-  } else if (farm === "cFRMx") {
-    return aprInformation.cfrmX;
-  } else if (farm === "cFRM") {
-    return aprInformation.cfrm;
-  }
+  return `${TruncateWithoutRounding(aprInformation[farm].APR, 2)}%`
 }
 
 export const getCrucibleDetail = async (farm: any, networkClient: any, walletAddress: any, dispatch: any, setIsLoading: any) => {

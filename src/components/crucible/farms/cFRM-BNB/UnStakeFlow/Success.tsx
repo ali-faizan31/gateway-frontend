@@ -110,7 +110,7 @@ export const Success = () => {
 
   const onTradeClick = () => {
     let dexUrl = currentNetworkInformation?.networkCurrencyAddressByNetwork?.networkDex?.dex?.url;
-    const tradeURL = `${dexUrl}swap?inputCurrency=BNB&outputCurrency=${crucible.contractAddress}&exactField=output&exactAmount=`;
+    const tradeURL = `${dexUrl}swap?inputCurrency=BNB&outputCurrency=${crucible[farm!].contractAddress}&exactField=output&exactAmount=`;
     window.open(tradeURL, "_blank");
   };
 
@@ -142,7 +142,7 @@ export const Success = () => {
                 Crucible Token Sustainable {farm?.includes("BNB") ? "Liquidity" : ""} Farming
               </FTypo>
               <FTypo size={16} className="f-mt-1">
-                Congrats! You have successfully staked {farm?.includes("BNB") ? "CAKE-LP" : ""} {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} {farm?.includes("BNB") ? "-BNB" : ""}{" "}
+                Congrats! You have successfully unstaked {farm?.includes("BNB") ? "CAKE-LP" : ""} {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} {farm?.includes("BNB") ? "-BNB" : ""}{" "}
                 tokens. You will now earn rewards for every cFRM transaction that generates a fee. The reward distribution is proportional to your share of the pool.
               </FTypo>
             </FItem>
@@ -171,7 +171,7 @@ export const Success = () => {
                     </div>
                     <div className="card-whats-next-back">
                       <FTypo>
-                        Use cFRM and BNB to add Liquidity and compound rewards with Farming.
+                        {/* Use cFRM and BNB to add Liquidity and compound rewards with Farming. */}
                         You can always mint more {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} to increase your pool share.
                       </FTypo>
                     </div>
@@ -240,6 +240,9 @@ export const Success = () => {
                       <FTypo size={20} weight={400} align={"center"}>
                         Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                       </FTypo>
+                    </div>
+                    <div className="card-whats-next-back">
+                      Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                     </div>
                   </div>
                 </FItem>
