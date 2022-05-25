@@ -26,7 +26,7 @@ export const StakingMintSteps = () => {
   const onStakeClick = async () => {
     setIsLoading(true);
     for (let i = 0; i < stepFlowStepHistory.length; i++) {
-      console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'staking mint 29')
+      // console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'staking mint 29')
       await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
         stepFlowStepHistory[i]._id,
         { status: "completed" },
@@ -64,7 +64,7 @@ export const StakingMintSteps = () => {
       data = { status: "completed" };
 
       updateResponse = await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
-      console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'staking mint 66')
+      // console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'staking mint 66')
       updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       if (updateResponse) {
         dispatch(

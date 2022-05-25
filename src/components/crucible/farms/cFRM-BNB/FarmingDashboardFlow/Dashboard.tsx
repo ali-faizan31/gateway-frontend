@@ -74,7 +74,7 @@ export const Manage = () => {
 
       // let updateResponse: any =
       await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
-      console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'dashboard.tsx 75')
+      // console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'dashboard.tsx 75')
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       runCompletionFlow(stepFlowStepHistory);
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded, true);
@@ -87,7 +87,7 @@ export const Manage = () => {
   const runCompletionFlow = async (stepFlowStepHistory: any) => {
     for (let i = 0; i < stepFlowStepHistory.length; i++) {
       if (stepFlowStepHistory[i].status === "started") {
-        console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'dashboard 88')
+        // console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'dashboard 88')
         await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(stepFlowStepHistory[i]._id, { status: "completed" }, tokenV2);
       }
     }

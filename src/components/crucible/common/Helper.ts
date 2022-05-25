@@ -297,13 +297,13 @@ export const renderComponent = (
 };
 
 const saveCurrentPreferncesInNewSequence = async (newSequence: any, oldHistory: any, id: any, token: any) => {
-  console.log(newSequence, oldHistory)
+  // console.log(newSequence, oldHistory)
   for (let i = 0; i < oldHistory.length; i++) {
     if (oldHistory[i].status === "skip") {
       for (let j = 0; j < newSequence.length; j++) {
         if (newSequence[j].step._id === oldHistory[i].step._id && newSequence[j].status !== "skip") {
-          console.log(newSequence[j], 'to be skipped')
-          console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'helper')
+          // console.log(newSequence[j], 'to be skipped')
+          // console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'helper')
           await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(
             newSequence[j]._id,
             { status: "skip" },
@@ -343,7 +343,7 @@ export const getLatestStepToRender = async (
     latestResponse = latestResponse.data && latestResponse.data.body && latestResponse.data.body.stepFlowStepsHistory;
     // console.log(latestResponse, saveCurrentPrefernces)
     if (saveCurrentPrefernces) {
-      console.log('save prefence flow')
+      // console.log('save prefence flow')
       saveCurrentPreferncesInNewSequence(latestResponse, stepFlowStepsHistory, state.id, token)
     }
     setIsLoading(false);
@@ -375,7 +375,7 @@ export const getLatestStepToRender = async (
         // console.log(pendingStepInfo, "pendingstep");
         if (currentStepIndex && currentStepIndex + 1 === stepFlowStepsHistory.length) {
           // last step, move onto next step flow
-          console.log("last step condition");
+          // console.log("last step condition");
           dispatch(
             CrucibleActions.updateCurrentStep({
               currentStep: pendingStepInfo?.pendingStep,
@@ -400,7 +400,7 @@ export const getLatestStepToRender = async (
           pendingStepInfo?.pendingStep.step.name === currentStep?.step?.name
         ) {
           //same step rendered
-          console.log("same step condition");
+          // console.log("same step condition");
           dispatch(
             CrucibleActions.updateCurrentStep({
               currentStep: pendingStepInfo?.pendingStep,
@@ -413,7 +413,7 @@ export const getLatestStepToRender = async (
           );
         }
         else {
-          console.log("next step condition", pendingStepInfo);
+          // console.log("next step condition", pendingStepInfo);
           dispatch(
             CrucibleActions.updateStepFlowStepHistory({
               stepFlowStepHistory: latestResponse,
@@ -572,7 +572,7 @@ export const updateSFSHForNewFarm = async (id: any, token: any, dispatch: any) =
     await SFSH_API.getStepFlowStepHistoryByAssociatedUserIdByStepFlowStepId(id, token);
   latestResponse = latestResponse.data && latestResponse.data.body && latestResponse.data.body.stepFlowStepsHistory;
   let pendingStepInfo = getLatestStepWithPendingStatus(latestResponse);
-  console.log(latestResponse, pendingStepInfo, 'update func')
+  // console.log(latestResponse, pendingStepInfo, 'update func')
   await dispatch(
     CrucibleActions.updateCurrentStep({
       currentStep: pendingStepInfo?.pendingStep,
