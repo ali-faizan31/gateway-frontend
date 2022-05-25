@@ -6,11 +6,7 @@ import IconNetworkCFrmStr from "../../../assets/img/icon-network-cfrm.svg";
 import IconNetworkCFrmxStr from "../../../assets/img/icon-network-cfrmx.svg";
 import IconNetworkBNB from "../../../assets/img/icon-network-bnb.svg";
 import { useDispatch, useSelector } from "react-redux";
-// import { RootState } from "../../../redux/rootReducer";
-// import { PATH_DASHBOARD } from "../../../routes/paths";
-import * as SFSH_API from "../../../_apis/StepFlowStepHistory";
-import * as CrucibleActions from "../redux/CrucibleActions";
-import { getLatestStepToRender, renderComponent } from "./Helper";
+import { getAPRValueAgainstFarm, getLatestStepToRender } from "./Helper";
 import { ClipLoader } from "react-spinners";
 import { RootState } from "../../../redux/rootReducer";
 import { MetaMaskConnector } from "../../../container-components";
@@ -102,7 +98,7 @@ export const CardAPR = () => {
     //       <img src={IconNetworkBNB} height="22px" width="22px" />{" "}
     //     </>
     //   ),
-    //   apr: aprInformation?.cfrmLp,
+    //   apr: Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, 'cFRM-BNB'),
     //   network: "BSC",
     //   id: "6238314dd292da2db05524dd",
     //   contract: "0xaf329a957653675613D0D98f49fc93326AeB36Fc", // crucible contract address
@@ -115,7 +111,7 @@ export const CardAPR = () => {
       totalDeposited: getTotalDeposited("cFRM"),
       yourDeposit: `${getYourDeposited("cFRM", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
       yourRewards: `${getYourRewards("cFRM", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
-      apr: aprInformation?.cfrm,
+      apr: Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, 'cFRM'),
       logo: (
         <>
           <img src={IconNetworkCFrmStr} height="22px" width="22px" />
@@ -134,7 +130,7 @@ export const CardAPR = () => {
     //   totalDeposited: getTotalDeposited("cFRMx-BNB"),
     //   yourDeposit: getYourDeposited("cFRMx-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
     //   yourRewards: getYourRewards("cFRMx-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
-    //   apr: aprInformation?.cfrmXLp,
+    //   apr: Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, 'cFRMx-BNB'),
     //   network: "BSC",
     //   logo: (
     //     <>
@@ -154,7 +150,7 @@ export const CardAPR = () => {
       totalDeposited: getTotalDeposited("cFRMx"),
       yourDeposit: getYourDeposited("cFRMx", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
       yourRewards: getYourRewards("cFRMx", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
-      apr: aprInformation?.cfrmX,
+      apr: Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, 'cFRMx'),
       logo: (
         <>
           <img src={IconNetworkCFrmxStr} height="22px" width="22px" />{" "}

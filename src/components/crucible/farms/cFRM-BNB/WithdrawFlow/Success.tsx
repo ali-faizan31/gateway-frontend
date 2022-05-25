@@ -14,7 +14,7 @@ import { getLatestStepToRender, getObjectReadableFarmName } from "../../../commo
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import { useHistory, useLocation, useParams } from "react-router";
-import { STEP_FLOW_IDS } from "../../../common/utils";
+import { Crucible_Farm_Address_Details, STEP_FLOW_IDS } from "../../../common/utils";
 import { ClipLoader } from "react-spinners";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { getErrorMessage } from "../../../../../utils/global.utils";
@@ -37,7 +37,7 @@ export const Success = () => {
   }, []);
 
   useEffect(() => {
-    if (currentStep && currentStep._id && currentStep.status === "pending") {
+    if (currentStep && currentStep._id && currentStep.status === "pending" && currentStep.step.name === "Success") {
       getStepCompleted(false);
     }
   }, [currentStep]);
@@ -63,6 +63,7 @@ export const Success = () => {
 
       // let updateResponse: any =
       await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      // console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'withdraw success 65')
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
@@ -94,6 +95,7 @@ export const Success = () => {
 
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
+    location.state = { ...location.state, ...Crucible_Farm_Address_Details[newFarm] };
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, newFarm, setIsLoading);
   };
 
@@ -118,22 +120,23 @@ export const Success = () => {
       //   newFarm = "cFRM";
       // }
       if (farm === "cFRMx") {
-        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].dashboard;
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRMx")}`].stake;
         newFarm = "cFRMx";
       } else if (farm === "cFRM") {
-        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].dashboard;
+        nextStepInfo = STEP_FLOW_IDS[`${getObjectReadableFarmName("cFRM")}`].stake;
         newFarm = "cFRM";
       }
     }
 
     location.state.id = nextStepInfo.id;
     location.state.stepFlowName = nextStepInfo.name;
+    location.state = { ...location.state, ...Crucible_Farm_Address_Details[newFarm] };
     getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, newFarm, setIsLoading);
   };
 
   const onTradeClick = () => {
     let dexUrl = currentNetworkInformation?.networkCurrencyAddressByNetwork?.networkDex?.dex?.url;
-    const tradeURL = `${dexUrl}swap?inputCurrency=BNB&outputCurrency=${crucible.contractAddress}&exactField=output&exactAmount=`;
+    const tradeURL = `${dexUrl}swap?inputCurrency=BNB&outputCurrency=${crucible[farm!].contractAddress}&exactField=output&exactAmount=`;
     window.open(tradeURL, "_blank");
   };
 
@@ -193,7 +196,10 @@ export const Success = () => {
                       </FTypo>
                     </div>
                     <div className="card-whats-next-back">
-                      <FTypo>Use {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB to add Liquidity and compound rewards with Farming</FTypo>
+                      <FTypo>
+                        {/* Use {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} and BNB to add Liquidity and compound rewards with Farming. */}
+                        You can always stake more {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} to increase rewards.
+                      </FTypo>
                     </div>
                   </div>
                 </FItem>
@@ -256,6 +262,9 @@ export const Success = () => {
                       <FTypo size={20} weight={400} align={"center"}>
                         Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                       </FTypo>
+                    </div>
+                    <div className="card-whats-next-back">
+                      Trade {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}
                     </div>
                   </div>
                 </FItem>
