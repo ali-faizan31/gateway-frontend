@@ -53,7 +53,6 @@ export const getPhraseDataDispatch = () => (dispatch) => {
         });
         translations.push({ langageCode: langage, values });
       });
-      console.log(translations);
       dispatch(slice.actions.translationsRecived(translations));
     })
     .catch((e) => {

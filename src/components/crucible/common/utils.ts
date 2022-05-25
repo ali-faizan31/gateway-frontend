@@ -26,8 +26,6 @@ export const CRUCIBLE_CONTRACTS_V_0_1: any = {
   },
 };
 
-
-
 export const STEP_FLOW_IDS: any = {
   cFRM_BNB: {
     dashboard: {
@@ -207,13 +205,13 @@ export const getCrucibleTokenName = (farm: any) => {
   }
 }
 
-export const Crucible_Farm_Address_Detail: any = {
+export const Crucible_Farm_Address_Details: any = {
   "cFRM": {
     DashboardStepFlowId: "6238386bd292da2db05524f9",
     network: "BSC",
     internalName: "cFRM",
     contract: "0xaf329a957653675613D0D98f49fc93326AeB36Fc",
-    LpCurrency: "0xaf329a957653675613D0D98f49fc93326AeB36Fc",
+    LpCurrency: "0x9aa0AB73409311984ED84f3Edef962201Bd11712",
     LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
   },
   "cFRMx": {
@@ -221,7 +219,7 @@ export const Crucible_Farm_Address_Detail: any = {
     internalName: "cFRMx",
     contract: "0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE",
     network: "BSC",
-    LpCurrency: "0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE",
+    LpCurrency: "0xb76b11410A506495418D20c58F9452c17CF285c1",
     LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
   },
   "cFRM-BNB": {
@@ -230,7 +228,7 @@ export const Crucible_Farm_Address_Detail: any = {
     internalName: "cFRM-BNB",
     contract: "0xaf329a957653675613D0D98f49fc93326AeB36Fc", // crucible contract address
     LpCurrency: "0x9aa0AB73409311984ED84f3Edef962201Bd11712", // CAKE-LP token for crucible and bnb pair
-    LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"
+    LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
   },
   "cFRMx-BNB": {
     DashboardStepFlowId: "62383841d292da2db05524f3",
@@ -239,8 +237,8 @@ export const Crucible_Farm_Address_Detail: any = {
     contract: "0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE",
     LpCurrency: "0xb76b11410A506495418D20c58F9452c17CF285c1",
     LPstakingAddress: "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008",
-  }
-}
+  },
+};
 
 export const Crucible_Balance_Tokens = ["cFRM",
   // "APELPCFRMBNB",
