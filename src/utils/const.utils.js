@@ -1,6 +1,7 @@
 import { Environment } from "./Environment";
 
-export const CRUCIBLE_SITE_TAG = "v4";
+export const CRUCIBLE_ALPHA_V4 = "v4";
+export const CRUCIBLE_BETA = "beta";
 export const Site_Name = "gateway.ferrumnetwork.io";
 export const defaultEndPointDetails = Environment.defaultEndPoint();
 
@@ -58,3 +59,10 @@ export const Pricing_Tokens = [
     currency: cFRMxTokenContractAddress,
   },
 ];
+
+export function isGateWaySite() {
+  if(window.origin.includes(CRUCIBLE_ALPHA_V4) || window.origin.includes(CRUCIBLE_BETA)){
+    return false
+  }
+  return true
+}
