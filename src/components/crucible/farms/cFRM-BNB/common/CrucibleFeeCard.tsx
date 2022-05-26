@@ -58,7 +58,7 @@ const CrucibleFeeCard = () => {
                     .times(100)
                     .toString()}%`}
                 </FTypo>
-                <FTypo size={20}>Transfer Fee</FTypo>
+                <FTypo size={20}>Stake/Unstake Fee</FTypo>
               </FItem>
             </FGridItem>
             <FGridItem size={[4, 4, 4]}>
