@@ -11,11 +11,12 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
 import { ApprovableButtonWrapper } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
-import { CRUCIBLE_CONTRACTS_V_0_1, getBaseTokenName, getCrucibleTokenName } from "./../../../common/utils";
+import { CRUCIBLE_CONTRACTS_V_0_1, Crucible_Farm_Address_Details, getBaseTokenName, getCrucibleTokenName } from "./../../../common/utils";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
 import {
+  getCrucibleDetail,
   getLatestStepToRender,
   isLPFarm,
   isSingleTokenFarm,
@@ -24,7 +25,7 @@ import {
 import { ClipLoader } from "react-spinners";
 import { MetaMaskConnector } from "../../../../../container-components";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
-import { getErrorMessage } from "../../../../../utils/global.utils";
+import { getErrorMessage, TruncateWithoutRounding } from "../../../../../utils/global.utils";
 
 export const UnStake = () => {
   const dispatch = useDispatch();
@@ -68,6 +69,7 @@ export const UnStake = () => {
 
       // let updateResponse: any =
       await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      // console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'unstake card 71')
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
@@ -114,6 +116,7 @@ export const UnStake = () => {
         setIsProcessing(false);
         setIsProcessed(true);
         getStepCompleted(false);
+        getCrucibleDetail(Crucible_Farm_Address_Details[farm!], networkClient, walletAddress, dispatch, setIsLoading)
       }
     }
   };
@@ -205,7 +208,7 @@ export const UnStake = () => {
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {getAmount()} {getAmountSymbol()} available to unstake.
+            You have {TruncateWithoutRounding(getAmount(), 3)} {getAmountSymbol()} available to unstake.
           </FTypo>
           {meV2._id && isConnected ? (
             <div className="btn-wrap f-mt-2">

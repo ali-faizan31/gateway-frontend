@@ -32,7 +32,7 @@ const CrucibleFeeCard = () => {
     setIsLoading(false);
   };
 
-  const getRewardAmount = () => { 
+  const getRewardAmount = () => {
     if (farm?.includes("BNB")) {
       return TruncateWithoutRounding(networkClient?.utils.fromWei(String(LPStakingDetails[farm!]?.rewards[0]?.rewardAmount || 0), "ether"), 3);
     } else {
@@ -41,7 +41,7 @@ const CrucibleFeeCard = () => {
     }
   };
 
-  const getRewardSymbol = () => { 
+  const getRewardSymbol = () => {
     return crucible[farm!]?.symbol;
   };
 
@@ -85,7 +85,7 @@ const CrucibleFeeCard = () => {
               <FGridItem size={[6, 6, 6]} dir="column">
                 <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB") ? "LP" : ""} Farm Stake</FTypo>
                 <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
-                  {farm?.includes("BNB") ? Number(LPStakingDetails[farm!]?.stake || "0") : Number(userStake?.stakeOf || "0").toFixed(3)}
+                  {farm?.includes("BNB") ? TruncateWithoutRounding(Number(LPStakingDetails[farm!]?.stake || "0"), 3) : TruncateWithoutRounding(Number(userStake?.stakeOf || "0"), 3)}
                   <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
                     {farm?.includes("BNB") ? `CAKE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
                   </FTypo>
@@ -97,7 +97,7 @@ const CrucibleFeeCard = () => {
                     <FTypo size={16} weight={500} className={"f-pr--7 f-pb--3"} align="right">
                       APR
                     </FTypo>
-                    {getAPRValueAgainstFarm(aprInformation, farm)}
+                    {Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, farm)}
                   </FTypo>
                 </FItem>
               </FGridItem>

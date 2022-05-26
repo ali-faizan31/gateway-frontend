@@ -29,7 +29,7 @@ export const Manage = () => {
   const { farm } = useParams<{ farm?: string }>();
   const location: any = useLocation();
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dashboardAction, setDashboardAction] = useState(false);
   const { networkClient } = useSelector((state: RootState) => state.walletConnector);
   const { stepFlowStepHistory, currentStep, currentStepIndex, aprInformation } = useSelector((state: RootState) => state.crucible);
@@ -42,7 +42,9 @@ export const Manage = () => {
   const { activeTranslation } = useSelector((state: RootState) => state.phrase);
 
   useEffect(() => {
-    getStepCompletedAndRunCompletionFlow(false);
+    if (currentStep && currentStep._id && currentStep.status === "pending") {
+      getStepCompletedAndRunCompletionFlow(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export const Manage = () => {
   }, [location]);
 
   const getStepCompletedAndRunCompletionFlow = async (renderNeeded: any) => {
-    setIsLoading(true);
+    // setIsLoading(true);
     try {
       let updatedCurrentStep = { ...currentStep, status: "completed" };
       let updHistory = stepFlowStepHistory.map((obj, index) => (index === currentStepIndex ? { ...obj, status: "completed" } : obj));
@@ -72,9 +74,10 @@ export const Manage = () => {
 
       // let updateResponse: any =
       await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      // console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'dashboard.tsx 75')
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       runCompletionFlow(stepFlowStepHistory);
-      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, true, true);
+      getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded, true);
     } catch (e: any) {
       setIsLoading(false);
       getErrorMessage(e, activeTranslation)
@@ -84,6 +87,7 @@ export const Manage = () => {
   const runCompletionFlow = async (stepFlowStepHistory: any) => {
     for (let i = 0; i < stepFlowStepHistory.length; i++) {
       if (stepFlowStepHistory[i].status === "started") {
+        // console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'dashboard 88')
         await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(stepFlowStepHistory[i]._id, { status: "completed" }, tokenV2);
       }
     }
@@ -189,7 +193,7 @@ export const Manage = () => {
                   <FGridItem size={[6, 6, 6]} dir="column">
                     <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB") ? "LP" : ""} Farm Stake </FTypo>
                     <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"} color="#DAB46E">
-                      {farm?.includes("BNB") ? Number(LPStakingDetails[farm!]?.stake || "0") : Number(userStake?.stakeOf || "0").toFixed(3)}
+                      {farm?.includes("BNB") ? TruncateWithoutRounding(Number(LPStakingDetails[farm!]?.stake || "0"), 3) : TruncateWithoutRounding(Number(userStake?.stakeOf || "0"), 3)}
 
                       <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
                         {farm?.includes("BNB") ? `CAKE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
@@ -202,7 +206,7 @@ export const Manage = () => {
                         <FTypo size={16} weight={500} className={"f-pr--7 f-pb--3"} align="right">
                           APR
                         </FTypo>
-                        {getAPRValueAgainstFarm(aprInformation, farm)}
+                        {Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, farm)}
                       </FTypo>
                     </FItem>
                   </FGridItem>

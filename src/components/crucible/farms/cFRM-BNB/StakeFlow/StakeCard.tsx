@@ -10,7 +10,7 @@ import { useHistory, useLocation, useParams } from "react-router";
 import {
   // CFRM_BNB_STEP_FLOW_IDS,
   CRUCIBLE_CONTRACTS_V_0_1,
-  Crucible_Farm_Address_Detail,
+  Crucible_Farm_Address_Details,
   getBaseTokenName,
   getCrucibleTokenName,
 } from "./../../../common/utils";
@@ -60,22 +60,22 @@ export const Stake = () => {
 
   useEffect(() => {
     if (networkClient && farm) {
-      getCrucibleDetail(Crucible_Farm_Address_Detail[farm!], networkClient, walletAddress, dispatch, setIsLoading)
+      getCrucibleDetail(Crucible_Farm_Address_Details[farm!], networkClient, walletAddress, dispatch, setIsLoading)
     }
   }, [networkClient, farm])
 
   useEffect(() => {
-    console.log("stake payload", LPStakingDetails, userCrucibleData);
+    // console.log("stake payload", LPStakingDetails, userCrucibleData);
   }, [userCrucibleData, LPStakingDetails])
 
 
 
   useEffect(() => {
-    console.log(Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
-    console.log((approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
-    console.log(approvals)
-    console.log(crucible[farm!]?.currency)
-    console.log(crucible[farm!])
+    // console.log(Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
+    // console.log((approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]))
+    // console.log(approvals)
+    // console.log(crucible[farm!]?.currency)
+    // console.log(crucible[farm!])
     if (Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]) > 0) {
       if (currentStep.step.name === "Approve" && currentStep.status !== "completed") {
         getStepCompleted(false);
@@ -83,6 +83,8 @@ export const Stake = () => {
     }
     // eslint-disable-next-line
   }, [approvals]);
+
+  const isWalletApproved = () => Number(approvals[approvalKey(walletAddress as string, CRUCIBLE_CONTRACTS_V_0_1["BSC"].router, crucible[farm!]?.currency)]) > 0;
 
   const getStepCompleted = async (renderNeeded: any) => {
     setIsLoading(true);
@@ -105,6 +107,7 @@ export const Stake = () => {
 
       // let updateResponse: any =
       await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      // console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'stake card 107')
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
@@ -151,6 +154,7 @@ export const Stake = () => {
         setIsProcessing(false);
         setIsProcessed(true);
         getStepCompleted(false);
+        getCrucibleDetail(Crucible_Farm_Address_Details[farm!], networkClient, walletAddress, dispatch, setIsLoading);
       }
     }
   };
@@ -182,7 +186,7 @@ export const Stake = () => {
   };
 
   const getDisabledCheck = () => {
-    return Number(getAmount()) === 0 || Number(amount) === 0 || Number(getAmount()) < Number(amount);
+    return isWalletApproved() && (Number(getAmount()) === 0 || Number(amount) === 0 || Number(getAmount()) < Number(amount));
   };
 
   return (

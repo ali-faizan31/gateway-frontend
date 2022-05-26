@@ -21,6 +21,7 @@ import { useLocation } from "react-router";
 import { CRUCIBLE_CONTRACTS_V_0_1 } from "./../../../common/utils";
 import { RootState } from "../../../../../redux/rootReducer";
 import { useDispatch, useSelector } from "react-redux";
+import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
 
 export const CrucibleDeposit = () => {
   const [transitionStatusDialog, setTransitionStatusDialog] = useState(false);
@@ -154,7 +155,7 @@ export const CrucibleDeposit = () => {
         }
       />
       <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-        You have {Number(userCrucibleData?.baseBalance || "0").toFixed(3)}{" "}
+        You have {TruncateWithoutRounding(Number(userCrucibleData?.baseBalance || "0"), 3)}{" "}
         available in Base Token FRM.
       </FTypo>
       <FTypo size={15} className={"f-mt-2 f-pl--5"}>
@@ -184,14 +185,14 @@ export const CrucibleDeposit = () => {
                   ownProps.isApprovalMode
                     ? () => ownProps.onApproveClick()
                     : () =>
-                        onMintClick(
-                          crucible!.baseCurrency,
-                          crucible?.currency || "",
-                          mintAmount.toString(),
-                          true,
-                          crucible?.network,
-                          walletAddress as string
-                        )
+                      onMintClick(
+                        crucible!.baseCurrency,
+                        crucible?.currency || "",
+                        mintAmount.toString(),
+                        true,
+                        crucible?.network,
+                        walletAddress as string
+                      )
                 }
               ></FButton>
             </div>

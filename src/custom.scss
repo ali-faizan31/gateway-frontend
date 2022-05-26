@@ -102,6 +102,10 @@ body>div {
     border-radius: 2.5px;
 }
 
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
 .grey-secondary {
     color: #919eab;
 }
@@ -267,16 +271,16 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
     border-radius: 10px 10px 0px 0px;
     font-size: 14px;
     font-weight: 700;
-    color: #FFFFFF;
-    margin: 0px 10px 0px 0px !important
+    color: #ffffff;
+    margin: 0px 10px 0px 0px !important;
 }
 
 .green-cap {
-    background: #28B885 !important;
+    background: #28b885 !important;
 }
 
 .red-cap {
-    background: #D51A52 !important;
+    background: #d51a52 !important;
 }
 
 .side-menu-img {

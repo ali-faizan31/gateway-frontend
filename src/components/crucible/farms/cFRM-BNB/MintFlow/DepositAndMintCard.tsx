@@ -11,12 +11,13 @@ import { Web3Helper } from "./../../../../../container-components/web3Client/web
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
 import { ApprovableButtonWrapper, approvalKey } from "./../../../../../container-components/web3Client/approvalButtonWrapper";
 import { useHistory, useLocation, useParams } from "react-router";
-import { CRUCIBLE_CONTRACTS_V_0_1, getBaseTokenName, getCrucibleTokenName, STEP_FLOW_IDS } from "./../../../common/utils";
+import { CRUCIBLE_CONTRACTS_V_0_1, Crucible_Farm_Address_Details, getBaseTokenName, getCrucibleTokenName, STEP_FLOW_IDS } from "./../../../common/utils";
 import { RootState } from "../../../../../redux/rootReducer";
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast, { Toaster } from "react-hot-toast";
 import {
+  getCrucibleDetail,
   getLatestStepToRender,
   getObjectReadableFarmName
 } from "../../../common/Helper";
@@ -87,6 +88,7 @@ export const CrucibleDeposit = () => {
 
       // let updateResponse: any =
       await SFSH_API.updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId(currentStep._id, data, tokenV2);
+      // console.log('updateStepsFlowStepsHistoryStatusByAssociatedUserIdByStepsFlowStepsHistoryId', 'depoand mint 90')
       // updateResponse = updateResponse?.data?.body?.stepsFlowStepHistory;
       getLatestStepToRender(location.state, tokenV2, currentStep, currentStepIndex, stepFlowStepHistory, dispatch, history, farm, setIsLoading, renderNeeded);
     } catch (e: any) {
@@ -113,6 +115,7 @@ export const CrucibleDeposit = () => {
           if (currentStep.step.name === "Mint") {
             getStepCompleted(false);
           }
+          getCrucibleDetail(Crucible_Farm_Address_Details[farm!], networkClient, walletAddress, dispatch, setIsLoading)
         }
       } else {
         toast.error(`You have entered an amount that exceeds your minting limit. Please enter a valid amount.`)
