@@ -3,6 +3,7 @@ import FerrumJson from "../../utils/FerrumToken.json";
 import ApeRouterJson from '../../utils/ApeRouterAbi.json'
 import { Big } from "big.js";
 import { AbiItem } from "web3-utils";
+import { cFRMxTokenContractAddress } from "../../utils/const.utils";
 
 export class Web3Helper {
   web3Client: Web3;
@@ -69,13 +70,14 @@ export class Web3Helper {
         "0x10ED43C718714eb63d5aA57B78B54704E256024E"
       );
 
+      let pricingRoute = [currency, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56", "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"];
+      if (currency.toLowerCase() === cFRMxTokenContractAddress.toLowerCase()) {
+        pricingRoute = [currency, "0x8523518001ad5d24b2a04e8729743c0643a316c0", "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"]
+      }
       const response = await ApeContract.methods.getAmountsOut(
-        "1000000000000000000",
-        // [currency,"0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c","0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"]
-        [currency, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56", "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"]
-
-      ).call() 
-      if (response.length > 0) { 
+        "1000000000000000000", pricingRoute
+      ).call()
+      if (response.length > 0) {
         return await this.amountToHuman(response[2], 18)
       }
       return 0
