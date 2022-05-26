@@ -73,7 +73,6 @@ export const CrucibleDeposit = () => {
     } else {
       setMaxCap(null)
     }
-    console.log(maxCapResponse)
   }
 
   const getStepCompleted = async (renderNeeded: any) => {
@@ -106,8 +105,18 @@ export const CrucibleDeposit = () => {
   };
 
   const onMintClick = async (currency: string, crucibleAddress: string, amount: string, isPublic: boolean, network: string, userAddress: string) => {
+    let maxCapCheck = false;
+    if (maxCap) {
+      if (amount > maxCap) {
+        maxCapCheck = false;
+      } else {
+        maxCapCheck = true;
+      }
+    } else {
+      maxCapCheck = true;
+    }
     if (networkClient) {
-      if (Number(amount) <= Number(maxCap)) {
+      if (maxCapCheck) {
         dispatch(CrucibleActions.transactionProcessing())
         setTransitionStatusDialog(true);
         setIsProcessing(true);
@@ -173,7 +182,7 @@ export const CrucibleDeposit = () => {
   };
 
   const setMaxAmount = () => {
-    if (maxCap >= '0') {
+    if (maxCap) {
       setMintAmount(maxCap)
     } else {
       setMintAmount((userCrucibleData[farm!]?.baseBalance || "0"))
@@ -238,7 +247,7 @@ export const CrucibleDeposit = () => {
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
             You have {TruncateWithoutRounding((userCrucibleData[farm!]?.baseBalance || "0"), 3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
-            {maxCap && `You can mint maximum ${maxCap} ${userCrucibleData[farm!]?.baseSymbol}`}.
+            {maxCap && `You can mint maximum ${maxCap} ${userCrucibleData[farm!]?.baseSymbol}.`}
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5 justify-content-space-between"}>
             Amount you will receive
