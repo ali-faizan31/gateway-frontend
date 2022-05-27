@@ -2,11 +2,11 @@
 
 # *** Change this to the desired name of the Cloudformation stack of
 # your Pipeline (*not* the stack name of your app)
-GITHUB_OWNER="sheraz-ferrum"
+GITHUB_OWNER="maryam-ferrum"
 GITHUB_REPO="gateway-frontend"
 GITHUB_BRANCH="develop"
 GITHUB_OAUTH_TOKEN=$1
-DEV_PREFIX="sherz"
+DEV_PREFIX="maryam"
 APP_NAME="frontend"
 ENVIRONMENT="dev"
 CODEPIPELINE_STACK_NAME="${DEV_PREFIX}${APP_NAME}-${ENVIRONMENT}-pipeline"
