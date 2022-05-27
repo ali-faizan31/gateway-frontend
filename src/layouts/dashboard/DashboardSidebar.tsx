@@ -4,8 +4,8 @@ import { getIcon } from "./SidebarConfig";
 import { useLocation } from "react-router-dom";
 import { getSideMenuForAssociatedOrganizationBySiteName } from "../../_apis/OrganizationCrud";
 import { useSelector } from "react-redux";
+import { Site_Name, isGateWaySite } from "../../utils/const.utils";
 import { RootState } from "../../redux/rootReducer";
-import {Site_Name, isGateWaySite } from "../../utils/const.utils";
 
 const DashboardSidebar = () => {
   const { pathname } = useLocation();
@@ -87,19 +87,21 @@ const DashboardSidebar = () => {
     const { menu } = sideMenuItems;
     let sideMenuArray: any = [];
     menu && menu.length && menu.forEach((item: any) => {
-      if (item.tags.includes("currencies")) {
-        let currencies = getCurrenciesAgainstOrganization(item.menuItems);
-        if (currencies.length && currencies.length > 1) {
-          sideMenuArray.push({ title: "Get Token", path: "", icon: item.icon && getIcon(item.icon), id: item._id, children: currencies });
+      if (!item.tags.includes("#competitions")) {
+        if (item.tags.includes("currencies")) {
+          let currencies = getCurrenciesAgainstOrganization(item.menuItems);
+          if (currencies.length && currencies.length > 1) {
+            sideMenuArray.push({ title: "Get Token", path: "", icon: item.icon && getIcon(item.icon), id: item._id, children: currencies });
+          } else {
+            sideMenuArray.push(...currencies);
+          }
+        } else if (item.menuItems.length > 0) {
+          let subMenuItemMenu = getSubMenuItemMenu(item);
+          sideMenuArray.push(...subMenuItemMenu);
         } else {
-          sideMenuArray.push(...currencies);
+          let menuItem = getMenuItemInfoFromMetaData(item);
+          sideMenuArray.push(...menuItem)
         }
-      } else if (item.menuItems.length > 0) {
-        let subMenuItemMenu = getSubMenuItemMenu(item);
-        sideMenuArray.push(...subMenuItemMenu);
-      } else {
-        let menuItem = getMenuItemInfoFromMetaData(item);
-        sideMenuArray.push(...menuItem)
       }
     });
     return sideMenuArray;
