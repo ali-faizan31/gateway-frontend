@@ -88,7 +88,8 @@ export const CrucibleDeposit = () => {
         amount,
         isPublic,
         network,
-        userAddress
+        userAddress,
+        setTransitionStatusDialog
       );
       if (response) {
         //step updated

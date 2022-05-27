@@ -105,7 +105,7 @@ export const CrucibleDeposit = () => {
         const web3Helper = new Web3Helper(networkClient as any);
         const client = new CrucibleClient(web3Helper);
 
-        const response = await client.mintCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress);
+        const response = await client.mintCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress, setTransitionStatusDialog);
         if (response) {
           dispatch(CrucibleActions.transactionProcessed())
           let transactionId = response.split("|");
