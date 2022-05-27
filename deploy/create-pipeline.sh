@@ -2,7 +2,7 @@
 
 # *** Change this to the desired name of the Cloudformation stack of
 # your Pipeline (*not* the stack name of your app)
-GITHUB_OWNER="maryam-ferrum"
+GITHUB_OWNER="MaryamAr1f"
 GITHUB_REPO="gateway-frontend"
 GITHUB_BRANCH="develop"
 GITHUB_OAUTH_TOKEN=$1
