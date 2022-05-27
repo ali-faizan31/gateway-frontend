@@ -86,12 +86,12 @@ Parameters:
     Default: ''
 
 
-  IncludeLambdaEdge:
-    Type: String
-    AllowedValues: ['true', 'false']
-    Default: "false"
-Conditions:
-  IncludeLambdaEdge: !Equals [!Ref IncludeLambdaEdge,'true']
+#   IncludeLambdaEdge:
+#     Type: String
+#     AllowedValues: ['true', 'false']
+#     Default: "false"
+# Conditions:
+#   IncludeLambdaEdge: !Equals [!Ref IncludeLambdaEdge,'true']
 
 
 
@@ -320,7 +320,8 @@ Resources:
             Action: 's3:GetObject'
             Resource: !Sub arn:aws:s3:::${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}/*
 
-  publicDistribution:
+# deploy when cloudfront auth enabled
+  LambdaDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
@@ -343,6 +344,10 @@ Resources:
             Cookies:
               Forward: none
           ViewerProtocolPolicy: redirect-to-https
+          LambdaFunctionAssociations:
+            - EventType: viewer-request
+#              LambdaFunctionARN: !Sub ${LambdaEdgArn}:${LambdaEdgVersion}
+              LambdaFunctionARN: "arn:aws:lambda:us-east-1:806611346442:function:sheraz-stackfrontend-dev-pipe-CloudfrontEdgeLambda-vm7LWitQh7re:1"
         ViewerCertificate:
             AcmCertificateArn: "arn:aws:acm:us-east-1:806611346442:certificate/12e8c18b-5d17-4b03-b98c-6f5db474e272"
             SslSupportMethod: "sni-only"
@@ -350,47 +355,11 @@ Resources:
         Aliases: 
           - !Sub ${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}.${Domain}
 
-# # deploy when cloudfront auth enabled
-#   LambdaDistribution:
-#     Type: AWS::CloudFront::Distribution
-#     Condition: IncludeLambdaEdge
-#     Properties:
-#       DistributionConfig:
-#         DefaultRootObject: index.html
-#         Origins:
-#           - DomainName: !Sub ${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}.s3.us-east-2.amazonaws.com
-#             Id: S3-private-bucket
-#             S3OriginConfig:
-#               OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginIdentity}'
-#         Enabled: 'true'
-#         HttpVersion: http2
-#         Comment: !Sub "${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}.${Domain}"
-#         DefaultCacheBehavior:
-#           AllowedMethods:
-#             - GET
-#             - HEAD
-#           TargetOriginId: S3-private-bucket
-#           ForwardedValues:
-#             QueryString: 'false'
-#             Cookies:
-#               Forward: none
-#           ViewerProtocolPolicy: redirect-to-https
-#           LambdaFunctionAssociations:
-#             - EventType: viewer-request
-# #              LambdaFunctionARN: !Sub ${LambdaEdgArn}:${LambdaEdgVersion}
-#               LambdaFunctionARN: "arn:aws:lambda:us-east-1:806611346442:function:sheraz-stackfrontend-dev-pipe-CloudfrontEdgeLambda-vm7LWitQh7re:1"
-#         ViewerCertificate:
-#             AcmCertificateArn: "arn:aws:acm:us-east-1:806611346442:certificate/12e8c18b-5d17-4b03-b98c-6f5db474e272"
-#             SslSupportMethod: "sni-only"
-#             MinimumProtocolVersion: TLSv1.2_2018
-#         Aliases: 
-#           - !Sub ${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}.${Domain}
-
   DNSRecord:
     Type: AWS::Route53::RecordSet
     Properties:
       AliasTarget:
-        DNSName: !GetAtt publicDistribution.DomainName
+        DNSName: !GetAtt LambdaDistribution.DomainName
         EvaluateTargetHealth: False
         HostedZoneId: "Z2FDTNDATAQYW2"  # default id for cloudfront
       HostedZoneName: !Ref HostedZoneName

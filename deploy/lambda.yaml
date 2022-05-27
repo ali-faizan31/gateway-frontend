@@ -132,3 +132,8 @@ Outputs:
   CloudfrontEdgeLambdaArn:
     Description: The role arn to be passed on to the next template
     Value: !GetAtt  CloudfrontEdgeLambda.Arn
+
+
+  WebsitePassword:
+    Description: Password for your website
+    Value: !Ref PASSWORD

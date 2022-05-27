@@ -4,9 +4,9 @@
 # your Pipeline (*not* the stack name of your app)
 GITHUB_OWNER="sheraz-ferrum"
 GITHUB_REPO="gateway-frontend"
-GITHUB_BRANCH="cicd"
+GITHUB_BRANCH="develop"
 GITHUB_OAUTH_TOKEN=$1
-DEV_PREFIX="ziki"
+DEV_PREFIX="sheraz-stacks"
 APP_NAME="frontend"
 ENVIRONMENT="dev"
 CODEPIPELINE_STACK_NAME="${DEV_PREFIX}${APP_NAME}-${ENVIRONMENT}-pipeline"
@@ -53,9 +53,11 @@ aws cloudformation create-stack \
 							 ParameterKey=Environment,ParameterValue=${ENVIRONMENT} \
 							 ParameterKey=LambdaEdgArn,ParameterValue=${LAMBDAEDGEARN} \
 							 ParameterKey=LambdaEdgVersion,ParameterValue=${LAMBDAEDGEVERSION} \
-	--template-body file://pipeline.yaml
+	--template-body file://pipeline-lambda.yaml
 
-echo Your password is step1 $PASSWORD
+echo Your password is $PASSWORD
+
+echo you can get this password from North virginia stack too
 
 else
 
