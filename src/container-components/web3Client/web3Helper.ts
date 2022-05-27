@@ -78,7 +78,7 @@ export class Web3Helper {
         "1000000000000000000", pricingRoute
       ).call()
       if (response.length > 0) {
-        return await this.amountToHuman(response[2], 18)
+        return await this.amountToHuman(response[response.length - 1], 18)
       }
       return 0
     } catch (e) {
