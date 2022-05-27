@@ -1,0 +1,617 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  DevPrefix:
+    Type: String
+    Default: ""
+
+  SubnetA:
+    Type: String
+    Default: ""
+  SubnetB:
+    Type: String
+    Default: ""
+  SubnetC:
+    Type: String
+    Default: ""
+
+  AppName:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+
+  GitHubOAuthToken:
+    Type: String
+    NoEcho: true
+    MinLength: 40
+    MaxLength: 40
+    #AllowedPattern: '[a-z0-9]*'
+
+  GitHubOwner:
+    Type: String
+    Default: ferrumnet
+    AllowedPattern: "[A-Za-z0-9-]+"
+
+  GitHubRepo:
+    Type: String
+    Default: hello-world
+    AllowedPattern: "[A-Za-z0-9-]+"
+
+  GitHubBranch:
+    Type: String
+    Default: master
+    AllowedPattern: "[A-Za-z0-9-_-]+"
+
+  HostedZoneId:
+    Type: String
+    Default: "Z023933617DZKHOV0K81T"
+    # AllowedPattern: "[A-Za-z0-9-]+"
+
+  HostedZoneName:
+    Type: String
+    Default: "dev.svcs.ferrumnetwork.io."
+
+  Domain:
+    Type: String
+    Default: "dev.svcs.ferrumnetwork.io"
+
+  VPC:
+    Type: String
+    Default: "VPC"
+    # AllowedPattern: "[A-Za-z0-9-]+"
+
+  PipelineArtifactsBucket:
+    Type: String
+    Default: ferrum-pipeline-artifacts
+    AllowedPattern: "[A-Za-z0-9-]+"
+
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - qa
+      - stage
+      - prod
+
+  CodebuildImage:
+    Type: String
+    Default: 'aws/codebuild/standard:5.0'
+
+  LambdaEdgVersion:
+    Type: String
+    Default: ''
+
+  LambdaEdgArn:
+    Type: String
+    Default: ''
+
+
+  IncludeLambdaEdge:
+    Type: String
+    AllowedValues: ['true', 'false']
+    Default: "false"
+Conditions:
+  IncludeLambdaEdge:
+    !Equals ['true', !Ref IncludeLambdaEdge]
+
+
+
+
+Resources:
+  CodePipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      ArtifactStore:
+        Type: S3
+        Location: !Ref PipelineArtifactsBucket
+      RestartExecutionOnUpdate: true
+      RoleArn: !GetAtt CodePipelineRole.Arn
+      Stages:
+      - Name: Source
+        Actions:
+        - Name: Source
+          InputArtifacts: []
+          ActionTypeId:
+            Category: Source
+            Owner: ThirdParty
+            Version: 1
+            Provider: GitHub
+          OutputArtifacts:
+          - Name: SourceCode
+          Configuration:
+            Owner: !Ref GitHubOwner
+            Repo: !Ref GitHubRepo
+            Branch: !Ref GitHubBranch
+            PollForSourceChanges: false
+            OAuthToken: !Ref GitHubOAuthToken
+          RunOrder: 1
+      - Name: Build
+        Actions:
+        - Name: Build
+          ActionTypeId:
+            Category: Build
+            Owner: AWS
+            Provider: CodeBuild
+            Version: '1'
+          Configuration:
+            ProjectName: !Ref CodeBuildProject
+          InputArtifacts:
+            - Name: SourceCode
+          OutputArtifacts:
+            - Name: BuildArtifacts
+          RunOrder: '2'
+      - Name: Release
+        Actions:
+          - Name: S3Deploy
+            InputArtifacts:
+              - Name: BuildArtifacts
+            Name: Deploy
+            ActionTypeId:
+              Category: Deploy
+              Owner: AWS
+              Version: '1'
+              Provider: S3
+            OutputArtifacts: []
+            Configuration:
+              BucketName: !Sub ${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}
+              Extract: 'true'
+            RunOrder: 5
+
+  WebappApplication: 
+    Type: AWS::CodeDeploy::Application 
+    Properties:
+      ComputePlatform: Server
+  WebappDeploymentGroup:
+    Type: "AWS::CodeDeploy::DeploymentGroup"
+    Properties:
+      ApplicationName: !Ref WebappApplication
+      ServiceRoleArn: !GetAtt CodeDeployRole.Arn
+      DeploymentConfigName: CodeDeployDefault.AllAtOnce
+      Ec2TagFilters:
+        - Key: "Name"
+          Value: !Sub "${DevPrefix}${AppName}-${Environment}"
+          Type: KEY_AND_VALUE
+
+  CodeDeployRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "codedeploy.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        -
+          PolicyName: allow-autoscaling
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - ec2:*
+                  - autoscaling:*
+                  - s3:*
+                Resource: "*"
+
+
+  CodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub "${DevPrefix}${AppName}-${Environment}"
+      ServiceRole: !Ref CodeBuildRole
+      Artifacts:
+        Type: CODEPIPELINE
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: deploy/codebuild/pre-deploy-buildspec.yaml
+      Environment:
+        ComputeType: BUILD_GENERAL1_MEDIUM
+        Image: !Ref CodebuildImage
+        Type: LINUX_CONTAINER
+        PrivilegedMode: true
+        # EnvironmentVariables:
+        # - Name: DevPrefix
+        #   Value: !Ref DevPrefix
+        # - Name: AppName
+        #   Value: !Ref AppName
+        # - Name: Environment
+        #   Value: !Ref Environment
+        # - Name: PipelineArtifactsBucket
+        #   Value: !Ref PipelineArtifactsBucket
+        # - Name: Region
+        #   Value: !Ref AWS::Region
+        # - Name: AccountId
+        #   Value: !Ref AWS::AccountId
+        # - Name: Branch
+        #   Value: !Ref GitHubBranch
+
+      TimeoutInMinutes: 10
+
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: Allow
+          Principal:
+            Service: codebuild.amazonaws.com
+          Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+
+  # 'GithubWebhook' satisfies two requirements:
+  # -- Means that updates are pushed from GitHub, rather than AWS having to poll
+  # -- Means we can filter for required changes
+  GithubWebhook:
+    Type: 'AWS::CodePipeline::Webhook'
+    Properties:
+      Authentication: GITHUB_HMAC
+      AuthenticationConfiguration:
+        SecretToken: !Ref GitHubOAuthToken
+      RegisterWithThirdParty: 'true'
+      Filters:
+      - JsonPath: "$.ref"
+        MatchEquals: refs/heads/{Branch}
+      TargetPipeline: !Ref CodePipeline
+      TargetAction: Source
+      TargetPipelineVersion: !GetAtt CodePipeline.Version
+
+  CodePipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: Allow
+          Principal:
+            Service: codepipeline.amazonaws.com
+          Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess #TODO: Reduce permissions
+
+  CloudformationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: Allow
+          Principal:
+            Service: cloudformation.amazonaws.com
+          Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess #TODO: Reduce permissions
+
+
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+
+    Properties:
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+      BucketName: !Sub ${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}
+#      BucketName: !Sub "${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}"
+    
+  CloudFrontOriginIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: 'origin identity'
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Sub ${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginIdentity}'
+              # AWS: "*"
+            Action: 's3:GetObject'
+            Resource: !Sub arn:aws:s3:::${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}/*
+
+  publicDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        DefaultRootObject: index.html
+        Origins:
+          - DomainName: !Sub ${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}.s3.us-east-2.amazonaws.com
+            Id: S3-private-bucket
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginIdentity}'
+        Enabled: 'true'
+        HttpVersion: http2
+        Comment: !Sub "${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}.${Domain}"
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          TargetOriginId: S3-private-bucket
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: redirect-to-https
+        ViewerCertificate:
+            AcmCertificateArn: "arn:aws:acm:us-east-1:806611346442:certificate/12e8c18b-5d17-4b03-b98c-6f5db474e272"
+            SslSupportMethod: "sni-only"
+            MinimumProtocolVersion: TLSv1.2_2018
+        Aliases: 
+          - !Sub ${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}.${Domain}
+
+# deploy when cloudfront auth enabled
+  LambdaDistribution:
+    Type: AWS::CloudFront::Distribution
+    Condition: IncludeLambdaEdge
+    Properties:
+      DistributionConfig:
+        DefaultRootObject: index.html
+        Origins:
+          - DomainName: !Sub ${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}.s3.us-east-2.amazonaws.com
+            Id: S3-private-bucket
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginIdentity}'
+        Enabled: 'true'
+        HttpVersion: http2
+        Comment: !Sub "${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}.${Domain}"
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          TargetOriginId: S3-private-bucket
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: redirect-to-https
+          LambdaFunctionAssociations:
+            - EventType: viewer-request
+              LambdaFunctionARN: !Sub ${LambdaEdgArn}:${LambdaEdgVersion}
+        ViewerCertificate:
+            AcmCertificateArn: "arn:aws:acm:us-east-1:806611346442:certificate/12e8c18b-5d17-4b03-b98c-6f5db474e272"
+            SslSupportMethod: "sni-only"
+            MinimumProtocolVersion: TLSv1.2_2018
+        Aliases: 
+          - !Sub ${DevPrefix}-${AppName}-${Environment}-${GitHubBranch}.${Domain}
+
+  DNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName: !GetAtt publicDistribution.DomainName
+        EvaluateTargetHealth: False
+        HostedZoneId: "Z2FDTNDATAQYW2"  # default id for cloudfront
+      HostedZoneName: !Ref HostedZoneName
+      Name:  !Sub ${ DevPrefix }-${ AppName }-${ Environment }-${GitHubBranch}.${Domain}
+      Type: A
+
+
+# lambda for password protect website
+
+
+  # cloudfrontlambda:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     Handler: index.handler
+  #     Runtime: provided
+  #     Layers:
+  #       - arn:aws:lambda:us-east-1:800406105498:layer:nsolid-node-10:5
+  #     Events:
+  #       AnyRequest:
+  #         Type: Api
+  #         Properties:
+  #           Path: /graphql
+  #           Method: ANY
+
+  
+  # StackSet:
+  #   Type: AWS::CloudFormation::StackSet
+  #   Properties:
+  #     Description: Create Lambda in Virginia Region
+  #     PermissionModel: SELF_MANAGED
+  #     ExecutionRoleName: AWSCloudFormationStackSetExecutionRole
+  #     # Parameters:
+  #     #   - ParameterKey: env
+  #     #     ParameterValue: !Ref env
+ 
+  #     StackInstancesGroup:
+  #       - DeploymentTargets:
+  #           Accounts:
+  #             - 806611346442
+  #         Regions: 
+  #           -  us-east-1
+ 
+  #     StackSetName: "cloudformation-lambda-stack"
+  #     TemplateBody: |
+  #       Resources:
+  #         CloudformationRole:
+  #           Type: AWS::IAM::Role
+  #           Properties:
+  #             AssumeRolePolicyDocument:
+  #               Version: "2012-10-17"
+  #               Statement:
+  #                 Effect: Allow
+  #                 Principal:
+  #                   Service: cloudformation.amazonaws.com
+  #                 Action: sts:AssumeRole
+  #             ManagedPolicyArns:
+  #               - arn:aws:iam::aws:policy/AdministratorAccess #TODO: Reduce permissions
+  #         PoliciesEdgeLambda:
+  #           Type: 'AWS::Lambda::Function'
+  #           Properties:
+  #             Handler: 'index.handler'
+  #             Role:
+  #               Fn::GetAtt:
+  #                 - 'PoliciesEdgeLambdaRole'
+  #                 - 'Arn'
+  #             Code:
+  #               ZipFile: |
+  #                 'use strict';
+  #                 exports.handler = (event, context, callback) => {
+        
+  #                 // Get request and request headers
+  #                 const request = event.Records[0].cf.request;
+  #                 const headers = request.headers;
+        
+  #                 // Configure authentication
+  #                 const authUser = 'user';
+  #                 const authPass = 'pass';
+        
+  #                 // Construct the Basic Auth string
+  #                 const authString = 'Basic ' + new Buffer(authUser + ':' + authPass).toString('base64');
+        
+  #                 // Require Basic authentication
+  #                 if (typeof headers.authorization == 'undefined' || headers.authorization[0].value != authString) {
+  #                 const body = 'Unauthorized';
+  #                 const response = {
+  #                   status: '401',
+  #                   statusDescription: 'Unauthorized',
+  #                   body: body,
+  #                   headers: {
+  #                       'www-authenticate': [{key: 'WWW-Authenticate', value:'Basic'}]
+  #                   },
+  #                   };
+  #                 callback(null, response);
+  #                  }
+        
+  #                 // Continue request processing if authentication passed
+  #                 callback(null, request);
+  #                 };
+  #             Runtime: 'nodejs14.x'
+  #             # Layers:
+  #             #   - arn:aws:lambda:us-east-1:800406105498:layer:nsolid-node-10:5
+  #             Timeout: '5'
+        
+  #         PoliciesEdgeLambdaRole:
+  #           Type: 'AWS::IAM::Role'
+  #           Properties:
+  #             AssumeRolePolicyDocument:
+  #               Version: '2012-10-17'
+  #               Statement:
+  #                 - Action: 'sts:AssumeRole'
+  #                   Principal:
+  #                     Service:
+  #                       - lambda.amazonaws.com
+  #                       - edgelambda.amazonaws.com
+  #                       - replicator.lambda.amazonaws.com
+  #                   Effect: Allow
+  #             Policies:
+  #               - PolicyName: EdgePoliciesLambdaPolicy
+  #                 PolicyDocument:
+  #                   Version: '2012-10-17'
+  #                   Statement:
+  #                     - Action:
+  #                         - 'lambda:GetFunction'
+  #                         - 'lambda:EnableReplication*'
+  #                         - 'lambda:InvokeFunction'
+  #                         - 'logs:CreateLogGroup'
+  #                         - 'logs:CreateLogStream'
+  #                         - 'logs:PutLogEvents'
+  #                       Effect: Allow
+  #                       Resource: '*'
+        
+  #         PoliciesEdgeLambdaVersion:
+  #           Type: 'AWS::Lambda::Version'
+  #           Properties:
+  #             FunctionName:
+  #               Ref: 'PoliciesEdgeLambda'
+
+  # PoliciesEdgeLambda:
+  #   Type: 'AWS::Lambda::Function'
+  #   Condition: IncludeLambdaEdge
+  #   Properties:
+  #     Handler: 'index.handler'
+  #     Role:
+  #       Fn::GetAtt:
+  #         - 'PoliciesEdgeLambdaRole'
+  #         - 'Arn'
+  #     Code:
+  #       ZipFile: |
+  #         'use strict';
+  #         exports.handler = (event, context, callback) => {
+
+  #         // Get request and request headers
+  #         const request = event.Records[0].cf.request;
+  #         const headers = request.headers;
+
+  #         // Configure authentication
+  #         const authUser = 'user';
+  #         const authPass = 'pass';
+
+  #         // Construct the Basic Auth string
+  #         const authString = 'Basic ' + new Buffer(authUser + ':' + authPass).toString('base64');
+
+  #         // Require Basic authentication
+  #         if (typeof headers.authorization == 'undefined' || headers.authorization[0].value != authString) {
+  #         const body = 'Unauthorized';
+  #         const response = {
+  #           status: '401',
+  #           statusDescription: 'Unauthorized',
+  #           body: body,
+  #           headers: {
+  #               'www-authenticate': [{key: 'WWW-Authenticate', value:'Basic'}]
+  #           },
+  #           };
+  #         callback(null, response);
+  #          }
+
+  #         // Continue request processing if authentication passed
+  #         callback(null, request);
+  #         };
+  #     Runtime: 'nodejs14.x'
+  #     # Layers:
+  #     #   - arn:aws:lambda:us-east-1:800406105498:layer:nsolid-node-10:5
+  #     Timeout: '25'
+  #     TracingConfig:
+  #       Mode: 'Active'
+
+  # PoliciesEdgeLambdaRole:
+  #   Type: 'AWS::IAM::Role'
+  #   Condition: IncludeLambdaEdge
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: '2012-10-17'
+  #       Statement:
+  #         - Action: 'sts:AssumeRole'
+  #           Principal:
+  #             Service:
+  #               - lambda.amazonaws.com
+  #               - edgelambda.amazonaws.com
+  #               - replicator.lambda.amazonaws.com
+  #           Effect: Allow
+  #     Policies:
+  #       - PolicyName: EdgePoliciesLambdaPolicy
+  #         PolicyDocument:
+  #           Version: '2012-10-17'
+  #           Statement:
+  #             - Action:
+  #                 - 'xray:PutTraceSegments'
+  #                 - 'xray:PutTelemetryRecords'
+  #                 - 'lambda:GetFunction'
+  #                 - 'lambda:EnableReplication*'
+  #                 - 'lambda:InvokeFunction'
+  #                 - 'logs:CreateLogGroup'
+  #                 - 'logs:CreateLogStream'
+  #                 - 'logs:PutLogEvents'
+  #               Effect: Allow
+  #               Resource: '*'
+
+  # PoliciesEdgeLambdaVersion:
+  #   Type: 'AWS::Lambda::Version'
+  #   Condition: IncludeLambdaEdge
+  #   Properties:
+  #     FunctionName:
+  #       Ref: 'PoliciesEdgeLambda'
+

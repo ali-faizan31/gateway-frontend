@@ -1,0 +1,134 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  DevPrefix:
+    Type: String
+    Default: ""
+
+  AppName:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+
+  GitHubBranch:
+    Type: String
+    Default: master
+    AllowedPattern: "[A-Za-z0-9-_-]+"
+
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - qa
+      - stage
+      - prod
+
+  PASSWORD:
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    MaxLength: 40
+    #AllowedPattern: '[a-z0-9]*'
+#   IncludeLambdaEdge:
+#     Type: String
+#     AllowedValues: ['true', 'false']
+#     Default: "false"
+# Conditions:
+#   IncludeLambdaEdge:
+#     !Equals ['true', !Ref IncludeLambdaEdge]
+
+Resources:
+  CloudfrontEdgeLambda:
+    Type: 'AWS::Lambda::Function'
+    # Condition: IncludeLambdaEdge
+    Properties:
+      # Environment:
+      # Variables:
+      #   PASSWORD: !Sub ${PASSWORD}
+      Handler: 'index.handler'
+      Role:
+        Fn::GetAtt:
+          - 'CloudfrontEdgeLambdaRole'
+          - 'Arn'
+      Code:
+        ZipFile: !Sub |
+          'use strict';
+          exports.handler = (event, context, callback) => {
+
+          // Get request and request headers
+          const request = event.Records[0].cf.request;
+          const headers = request.headers;
+
+          // Configure authentication
+          const authUser = 'ferrum';
+          const authPass = '${PASSWORD}';
+
+          // Construct the Basic Auth string
+          const authString = 'Basic ' + new Buffer(authUser + ':' + authPass).toString('base64');
+
+          // Require Basic authentication
+          if (typeof headers.authorization == 'undefined' || headers.authorization[0].value != authString) {
+          const body = 'Unauthorized';
+          const response = {
+            status: '401',
+            statusDescription: 'Unauthorized',
+            body: body,
+            headers: {
+                'www-authenticate': [{key: 'WWW-Authenticate', value:'Basic'}]
+            },
+            };
+          callback(null, response);
+           }
+
+          // Continue request processing if authentication passed
+          callback(null, request);
+          };
+      Runtime: 'nodejs14.x'
+      Timeout: '5'
+
+  CloudfrontEdgeLambdaRole:
+    Type: 'AWS::IAM::Role'
+    # Condition: IncludeLambdaEdge
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action: 'sts:AssumeRole'
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+                - edgelambda.amazonaws.com
+                - replicator.lambda.amazonaws.com
+            Effect: Allow
+      Policies:
+        - PolicyName: EdgeLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - 'xray:PutTraceSegments'
+                  - 'xray:PutTelemetryRecords'
+                  - 'lambda:GetFunction'
+                  - 'lambda:EnableReplication*'
+                  - 'lambda:InvokeFunction'
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Effect: Allow
+                Resource: '*'
+
+  CloudfrontEdgeLambdaVersion:
+    Type: 'AWS::Lambda::Version'
+    # Condition: IncludeLambdaEdge
+    Properties:
+      FunctionName:
+        Ref: 'CloudfrontEdgeLambda'
+
+Outputs:
+  CloudfrontEdgeLambdaVersion:
+    Description: The role arn to be passed on to the next template
+    Value: !GetAtt  CloudfrontEdgeLambdaVersion.Version
+
+  CloudfrontEdgeLambdaArn:
+    Description: The role arn to be passed on to the next template
+    Value: !GetAtt  CloudfrontEdgeLambda.Arn
