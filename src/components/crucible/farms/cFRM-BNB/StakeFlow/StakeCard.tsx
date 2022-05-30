@@ -155,6 +155,7 @@ export const Stake = () => {
         setIsProcessed(true);
         getStepCompleted(false);
         getCrucibleDetail(Crucible_Farm_Address_Details[farm!], networkClient, walletAddress, dispatch, setIsLoading);
+        console.log(userCrucibleData[farm!], 'after stake')
       }
     }
   };

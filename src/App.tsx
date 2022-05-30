@@ -11,7 +11,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import moment from "moment-timezone";
 import { WalletApplicationWrapper } from "./container-components";
 import { PATH_DASHBOARD, PATH_PUBLIC_USER } from "./routes/paths";
-import { cFRM_Trading_Competition_Details, TOKEN_TAG } from "./utils/const.utils";
+import { cFRM_Trading_Competition_Details, FRM_FRMx_leaderboard_Details, TOKEN_TAG } from "./utils/const.utils";
 import { useDispatch } from "react-redux";
 import { getPhraseDataDispatch } from "./redux/slices/phrase";
 import { Deployer as CrucibleDeployer } from "./components/crucible/common/Deployer";
@@ -73,7 +73,7 @@ function App() {
         <Switch>
           <Route exact path="/">
             {" "}
-            <Redirect to={`${PATH_PUBLIC_USER.competition.root}/${cFRM_Trading_Competition_Details.id}`} />{" "}
+            <Redirect to={`${PATH_PUBLIC_USER.multiLeaderboard.root}/${FRM_FRMx_leaderboard_Details.id}`} />{" "}
           </Route>
           <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.manage}

@@ -35,7 +35,7 @@ export const CrucibleDeposit = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { farm } = useParams<{ farm?: string }>();
   const [transactionId, setTransactionId] = useState("");
-  const [maxCap, setMaxCap] = useState(0);
+  const [maxCap, setMaxCap] = useState<any>();
   const [mintAmount, setMintAmount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isProcessed, setIsProcessed] = useState(false);
@@ -64,7 +64,15 @@ export const CrucibleDeposit = () => {
   const getMaxCapInformation = async () => {
     let response = await getCrucibleMaxMintCap();
     let maxCapResponse = response && response.data && response.data.body && response.data.body.crucibleMintCap;
-    farm?.includes('cFRMx') ? setMaxCap(maxCapResponse.cFRMxMaxCap) : setMaxCap(maxCapResponse.cFRMMaxCap);
+    if (maxCapResponse) {
+      if (farm?.includes('cFRMx')) {
+        maxCapResponse.cFRMxMaxCap ? setMaxCap(maxCapResponse.cFRMxMaxCap) : setMaxCap(null)
+      } else {
+        maxCapResponse.cFRMMaxCap ? setMaxCap(maxCapResponse.cFRMMaxCap) : setMaxCap(null)
+      }
+    } else {
+      setMaxCap(null)
+    }
   }
 
   const getStepCompleted = async (renderNeeded: any) => {
@@ -97,8 +105,18 @@ export const CrucibleDeposit = () => {
   };
 
   const onMintClick = async (currency: string, crucibleAddress: string, amount: string, isPublic: boolean, network: string, userAddress: string) => {
+    let maxCapCheck = false;
+    if (maxCap) {
+      if (amount > maxCap) {
+        maxCapCheck = false;
+      } else {
+        maxCapCheck = true;
+      }
+    } else {
+      maxCapCheck = true;
+    }
     if (networkClient) {
-      if (Number(amount) <= Number(maxCap)) {
+      if (maxCapCheck) {
         dispatch(CrucibleActions.transactionProcessing())
         setTransitionStatusDialog(true);
         setIsProcessing(true);
@@ -163,6 +181,14 @@ export const CrucibleDeposit = () => {
     }
   };
 
+  const setMaxAmount = () => {
+    if (maxCap) {
+      setMintAmount(maxCap)
+    } else {
+      setMintAmount((userCrucibleData[farm!]?.baseBalance || "0"))
+    }
+  }
+
   return (
     <>
       <Toaster />
@@ -215,13 +241,13 @@ export const CrucibleDeposit = () => {
             onChange={(e: any) => setMintAmount(e.target.value)}
             postfix={
               <FTypo color="#DAB46E" className={"f-pr-1"}>
-                <span onClick={() => setMintAmount((maxCap || 0))}>Max</span>
+                <span onClick={() => setMaxAmount()}>Max</span>
               </FTypo>
             }
           />
           <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
             You have {TruncateWithoutRounding((userCrucibleData[farm!]?.baseBalance || "0"), 3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
-            You can mint maximum {maxCap} {userCrucibleData[farm!]?.baseSymbol}.
+            {maxCap && `You can mint maximum ${maxCap} ${userCrucibleData[farm!]?.baseSymbol}.`}
           </FTypo>
           <FTypo size={15} className={"f-mt-2 f-pl--5 justify-content-space-between"}>
             Amount you will receive

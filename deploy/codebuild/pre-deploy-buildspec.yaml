@@ -1,0 +1,19 @@
+version: 0.2
+environment_variables:
+  plaintext:
+    ARTIFACT_FILE_NAME: ""
+    ECR_URL: ""
+phases:
+  # pre_build:
+  #   commands:
+  #     - ECR_URL="${AccountId}.dkr.ecr.${Region}.amazonaws.com/${DevPrefix}-${AppName}-${Environment}-${Branch}"
+  #     - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin "${ECR_URL}"
+  build:
+    commands:
+      - yarn install
+      - yarn build
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'build'
