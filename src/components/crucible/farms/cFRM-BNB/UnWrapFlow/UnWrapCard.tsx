@@ -82,7 +82,7 @@ export const UnWrap = () => {
       const web3Helper = new Web3Helper(networkClient as any);
       const client = new CrucibleClient(web3Helper);
 
-      const response = await client.unwrapCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress);
+      const response = await client.unwrapCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress,setTransitionStatusDialog);
       if (response) {
         let transactionId = response.split("|");
         setTransactionId(transactionId[0]);

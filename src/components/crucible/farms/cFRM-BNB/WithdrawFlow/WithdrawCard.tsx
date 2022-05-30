@@ -128,7 +128,7 @@ export const Withdraw = () => {
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
-        response = await client.withdrawRewardsLPToken(dispatch, currency, userAddress, stakingAddress, network);
+        response = await client.withdrawRewardsLPToken(dispatch, currency, userAddress, stakingAddress, network, setTransitionStatusDialog);
       } else if (isSingleTokenFarm(farm)) {
         currency = crucible[farm!]?.currency;
         stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
@@ -136,7 +136,7 @@ export const Withdraw = () => {
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
-        response = await client.withdrawRewards(dispatch, network, amount, currency, stakingAddress, userAddress);
+        response = await client.withdrawRewards(dispatch, network, amount, currency, stakingAddress, userAddress, setTransitionStatusDialog);
       }
       if (response) {
         let transactionId = response.split("|");

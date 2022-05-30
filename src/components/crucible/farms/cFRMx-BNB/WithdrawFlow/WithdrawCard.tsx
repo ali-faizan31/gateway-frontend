@@ -71,7 +71,8 @@ export const Withdraw = () => {
         currency,
         userAddress,
         stakingAddress,
-        network
+        network,
+        setTransitionStatusDialog
       );
       if (response) {
         setIsProcessing(false);

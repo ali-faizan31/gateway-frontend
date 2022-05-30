@@ -137,7 +137,7 @@ export const Stake = () => {
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
-        response = await client.stakeLPToken(dispatch, currency, userAddress, stakingAddress, network, amount);
+        response = await client.stakeLPToken(dispatch, currency, userAddress, stakingAddress, network, amount,setTransitionStatusDialog);
       } else if (isSingleTokenFarm(farm)) {
         stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
         currency = crucible[farm!].currency;
@@ -145,7 +145,7 @@ export const Stake = () => {
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
-        response = await client.StakeCrucible(dispatch, currency, amount, stakingAddress, userAddress, network);
+        response = await client.StakeCrucible(dispatch, currency, amount, stakingAddress, userAddress, network,setTransitionStatusDialog);
       }
       if (response) {
         dispatch(CrucibleActions.transactionProcessed())

@@ -44,7 +44,8 @@ export class CrucibleClient {
 		amount: string,
 		isPublic: boolean,
         network: string,
-        userAddress:string
+        userAddress:string,
+        dialogTrigger: (value: React.SetStateAction<boolean>) => void
     ) {
 		try {
             
@@ -65,6 +66,7 @@ export class CrucibleClient {
            
 			return
 		} catch (e) {
+            dialogTrigger(false)
             // console.log(e)
             // UI handle Errors
 		}finally{
@@ -80,7 +82,8 @@ export class CrucibleClient {
 		amount: string,
 		isPublic: boolean,
         network: string,
-        userAddress:string
+        userAddress:string,
+        dialogTrigger: (value: React.SetStateAction<boolean>) => void
     ) {
 		try {
             
@@ -101,6 +104,7 @@ export class CrucibleClient {
            
 			return
 		} catch (e) {
+            dialogTrigger(false)
             // console.log(e)
             // UI handle Errors
 		}finally{
@@ -202,7 +206,8 @@ export class CrucibleClient {
         userAddress:string,
         stakingAddress: string,
         network:string,
-        amount:string
+        amount:string,
+        dialogTrigger: (value: React.SetStateAction<boolean>) => void
     ) {
 		try {
             
@@ -228,6 +233,7 @@ export class CrucibleClient {
 
 			return 
 		} catch (e) {
+            dialogTrigger(false)
             // console.log(e)
             // UI handle Errors
 		}finally{
@@ -242,7 +248,8 @@ export class CrucibleClient {
         userAddress:string,
         amount:string,
         stakingAddress: string,
-        network:string
+        network:string,
+        dialogTrigger: (value: React.SetStateAction<boolean>) => void
     ) {
 		try {
             
@@ -267,6 +274,7 @@ export class CrucibleClient {
 			return 
 			// return 
 		} catch (e) {
+            dialogTrigger(false)
             // console.log(e)
             // UI handle Errors
 		}finally{
@@ -280,7 +288,8 @@ export class CrucibleClient {
         LpAddress: string,
         userAddress:string,
         stakingAddress: string,
-        network:string
+        network:string,
+        dialogTrigger: (value: React.SetStateAction<boolean>) => void
     ) {
 		try {
             
@@ -303,6 +312,7 @@ export class CrucibleClient {
             }
 			return 
 		} catch (e) {
+            dialogTrigger(false)
             // console.log(e)
             // UI handle Errors
 		}finally{
@@ -404,7 +414,8 @@ export class CrucibleClient {
 		amount: string,
 		stakeAddress: boolean,
         network: string,
-        userAddress:string
+        userAddress:string,
+        dialogTrigger: (value: React.SetStateAction<boolean>) => void
     ) {
 		try {
             
@@ -421,6 +432,7 @@ export class CrucibleClient {
            
 			return
 		} catch (e) {
+            dialogTrigger(false)
             // console.log(e)
             // UI handle Errors
 		}finally{
@@ -435,7 +447,8 @@ export class CrucibleClient {
 		amount: string,
 		stakingAddress: string,
         userAddress:string,
-        network:string
+        network:string,
+        dialogTrigger: (value: React.SetStateAction<boolean>) => void
     ) {
 		try {
             
@@ -458,6 +471,7 @@ export class CrucibleClient {
            
 			return
 		} catch (e) {
+            dialogTrigger(false)
             // console.log(e)
             // UI handle Errors
 		}finally{
@@ -472,7 +486,8 @@ export class CrucibleClient {
 		amount: string,
 		stakingAddress: string,
         userAddress:string,
-        network:string
+        network:string,
+        dialogTrigger: (value: React.SetStateAction<boolean>) => void
     ) {
 		try {
             
@@ -495,6 +510,7 @@ export class CrucibleClient {
            
 			return
 		} catch (e) {
+            dialogTrigger(false)
             // console.log(e)
             // UI handle Errors
 		}finally{
@@ -510,6 +526,7 @@ export class CrucibleClient {
 		LPorCruciblecurrency: string,
         stakingAddress:string,
         userAddress:string,
+        dialogTrigger: (value: React.SetStateAction<boolean>) => void
     ) {
 		try {
             
@@ -531,6 +548,7 @@ export class CrucibleClient {
            
 			return
 		} catch (e) {
+            dialogTrigger(false)
             // console.log(e)
             // UI handle Errors
 		}finally{

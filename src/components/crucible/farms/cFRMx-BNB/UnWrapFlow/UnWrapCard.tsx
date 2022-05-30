@@ -80,7 +80,8 @@ export const UnWrap = () => {
         amount,
         isPublic,
         network,
-        userAddress
+        userAddress,
+        setTransitionStatusDialog
       );
       if (response) {
         setIsProcessing(false);
