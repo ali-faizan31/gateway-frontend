@@ -85,7 +85,7 @@ const CrucibleFeeCard = () => {
               <FGridItem size={[6, 6, 6]} dir="column">
                 <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB") ? "LP" : ""} Farm Stake</FTypo>
                 <FTypo size={24} weight={600} align={"end"} display="flex" alignY={"end"}>
-                  {farm?.includes("BNB") ? TruncateWithoutRounding(Number(LPStakingDetails[farm!]?.stake || "0"), 3) : TruncateWithoutRounding(Number(userStake?.stakeOf || "0"), 3)}
+                  {farm?.includes("BNB") ? TruncateWithoutRounding((LPStakingDetails[farm!]?.stake || "0"), 3) : TruncateWithoutRounding((userStake?.stakeOf || "0"), 3)}
                   <FTypo size={12} weight={300} className={"f-pl--7 f-pb--1"}>
                     {farm?.includes("BNB") ? `CAKE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
                   </FTypo>
