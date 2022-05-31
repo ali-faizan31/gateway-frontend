@@ -84,7 +84,7 @@ const CrucibleDashboardPage = () => {
   const getAPRInformation = async () => {
     try {
       let aprResponse: any = await getAPRInformationForPublicUser();
-      aprResponse = aprResponse.data && aprResponse.data.body && aprResponse.data.body.priceDetails;
+      aprResponse = aprResponse.data && aprResponse.data.body && aprResponse.data.body.crucibleAprs;
       let updatedResponse: any = {};
       aprResponse.forEach((element: any) => {
         updatedResponse[element.tokenSymbol] = element
