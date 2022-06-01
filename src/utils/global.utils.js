@@ -181,9 +181,9 @@ export const GetPhraseString = (response, activateTranslation) => {
   const { values } = activateTranslation;
   let translation;
   if (values) {
-    translation = values[`${response.phraseKey}`];
+    translation = values[`${response?.phraseKey}`];
   }
-  return translation ? translation : response.message;
+  return translation ? translation : response?.message;
 };
 
 export const getErrorMessage = (e, activeTranslation) => {
