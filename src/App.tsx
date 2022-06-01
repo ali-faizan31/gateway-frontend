@@ -73,7 +73,7 @@ function App() {
         <Switch>
           <Route exact path="/">
             {" "}
-            <Redirect to={`${PATH_PUBLIC_USER.multiLeaderboard.root}/${FRM_FRMx_leaderboard_Details.id}`} />{" "}
+            <Redirect to={`${PATH_PUBLIC_USER.competition.root}/62976783ad472b70c4f756d6`} />{" "}
           </Route>
           <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.manage}

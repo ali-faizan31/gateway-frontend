@@ -33,6 +33,9 @@ export const cFRMTokenContractAddress = "0xaf329a957653675613D0D98f49fc93326AeB3
 export const APELPCFRMBNBTokenContractAddress = "0x9aa0AB73409311984ED84f3Edef962201Bd11712";
 export const APELPCFRMxBNBTokenContractAddress = "0xb76b11410A506495418D20c58F9452c17CF285c1";
 
+export const Start_Competition_Buy_Button_Link =
+  "https://pancakeswap.finance/swap?inputCurrency=0xa719b8ab7ea7af0ddb4358719a34631bb79d15dc&outputCurrency=0xaf329a957653675613d0d98f49fc93326aeb36fc&exactField=output&exactAmount=1";
+
 export const Pricing_Tokens = [
   {
     token: "FRM",
@@ -61,8 +64,8 @@ export const Pricing_Tokens = [
 ];
 
 export function isGateWaySite() {
-  if(window.origin.includes(CRUCIBLE_ALPHA_V4) || window.origin.includes(CRUCIBLE_BETA)){
-    return false
+  if (window.origin.includes(CRUCIBLE_ALPHA_V4) || window.origin.includes(CRUCIBLE_BETA)) {
+    return false;
   }
-  return true
+  return true;
 }

@@ -107,7 +107,7 @@ export const CrucibleDeposit = () => {
   const onMintClick = async (currency: string, crucibleAddress: string, amount: string, isPublic: boolean, network: string, userAddress: string) => {
     let maxCapCheck = false;
     if (maxCap) {
-      if (amount > maxCap) {
+      if (Number(amount) > Number(maxCap)) {
         maxCapCheck = false;
       } else {
         maxCapCheck = true;
