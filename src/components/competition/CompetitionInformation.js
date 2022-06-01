@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem } from "ferrum-design-system";
+import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FItem, FTypo } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
 import { useParams, useLocation } from "react-router-dom";
 import { CSVLink } from "react-csv";
@@ -10,7 +10,14 @@ import { getCompetitionById, getCompetitionsParticipantsRanks } from "../../_api
 import { useSelector } from "react-redux";
 import { getErrorMessage } from "../../utils/global.utils";
 
-import { cFRMTokenContractAddress, cFRMxTokenContractAddress, tokenFRMxBSCMainnet, tokenFRMBSCMainnet, TOKEN_TAG } from "../../utils/const.utils";
+import {
+  cFRMTokenContractAddress,
+  cFRMxTokenContractAddress,
+  tokenFRMxBSCMainnet,
+  tokenFRMBSCMainnet,
+  TOKEN_TAG,
+  Start_Competition_Buy_Button_Link,
+} from "../../utils/const.utils";
 
 const CompetitionInformation = () => {
   const { id } = useParams();
@@ -264,63 +271,19 @@ const CompetitionInformation = () => {
             </FTable>
           ) : isLoading ? (
             <FContainer type="fluid">
-              <FContainer>
-                <FGrid className={"f-mt-1 f-mb-1"}>
-                  <FGridItem size={[4, 4, 4]} alignX="start" alignY={"end"}>
-                    <h1>{competitionData?.name || "Competition"}</h1>
-                  </FGridItem>
-                  <FGridItem size={[2, 2, 2]} alignX="start" alignY="end">
-                    {!isPublicUser && (
-                      <FButton
-                        type="button"
-                        className="btn-create f-ml-1"
-                        disabled={isLoading || !competitionParticipants?.length}
-                        onClick={showAllWallets}
-                        title={`${showWallets ? "Hide" : "Show"} Wallets`}
-                      />
-                    )}
-                  </FGridItem>
-                  <FGridItem alignX={"end"} alignY={"end"} dir={"row"} size={[4, 4, 4]}>
-                    <FInputText label="Search Wallet" placeholder="0x000...0000" value={query} type="search" onChange={onQueryChange} style={{ width: "100%" }} />
-                    {!isPublicUser && (
-                      <FButton
-                        type="button"
-                        className="btn-create f-ml-1"
-                        disabled={isLoading || !competitionParticipants?.length}
-                        onClick={onExportClick}
-                        title={" Export to CSV"}
-                      />
-                    )}
-                  </FGridItem>
-                </FGrid>
-                {competitionParticipants.length ? (
-                  <FTable>
-                    <Datatable
-                      tableHeaders={columns}
-                      tableBody={competitionParticipantsFiltered}
-                      rowsPerPage={10}
-                      tableClass="striped hover responsive"
-                      initialSort={{
-                        prop: "rank",
-                        isAscending: true,
-                      }}
-                    />
-                  </FTable>
-                ) : isLoading ? (
-                  <FContainer type="fluid">
-                    <FContainer>Loading...</FContainer>
-                  </FContainer>
-                ) : (
-                  <FContainer type="fluid">
-                    <FContainer>No Data found</FContainer>
-                  </FContainer>
-                )}
-              </FContainer>
               <FContainer>Loading...</FContainer>
             </FContainer>
           ) : (
             <FContainer type="fluid">
-              <FContainer>No Data found</FContainer>
+              {/* <FContainer>No Data found</FContainer> */}
+              <FItem className={"f-mt-3 f-mb-1"} align="center">
+                <FTypo size={20} className="f-mb-1">
+                  Be the first person to start this competition by clicking on Buy Now Button
+                </FTypo>
+                <a href={Start_Competition_Buy_Button_Link} target="_blank" rel="noreferrer" className="f-btn f-btn-primary text-decoration-none">
+                  Buy Now
+                </a>
+              </FItem>
             </FContainer>
           )}
         </FContainer>
