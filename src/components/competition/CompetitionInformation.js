@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FItem, FTypo } from "ferrum-design-system";
+import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FItem, FTypo, FTooltip } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
 import { useParams, useLocation } from "react-router-dom";
 import { CSVLink } from "react-csv";
@@ -169,10 +169,16 @@ const CompetitionInformation = () => {
     },
     {
       prop: "humanReadableGrowth",
-      title: "Growth / Reduction",
+      title: (
+        <span
+          title={`We are calculating this value by adding up the amount added by you "Level Up" transactions and subtracting any transfer outs from your wallet and then your ranks are calculated based on your "Growth/Reduction"`}
+        >
+          Growth / Reduction
+        </span>
+      ),
       cell: (params) => (
-        <div data-label="Growth / Reduction" style={{ color: params?.humanReadableGrowth?.color }}>
-          {params?.humanReadableGrowth?.data ? TruncateWithoutRounding(params?.humanReadableGrowth?.data, 2).toLocaleString("en-US") : 0}
+        <div data-label="Growth / Reduction" className="growth-column-hover" style={{ color: params?.humanReadableGrowth?.color }}>
+          <span data-tip="tetsttt">{params?.humanReadableGrowth?.data ? TruncateWithoutRounding(params?.humanReadableGrowth?.data, 2).toLocaleString("en-US") : 0}</span>
         </div>
       ),
     },
