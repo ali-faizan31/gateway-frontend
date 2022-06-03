@@ -148,7 +148,7 @@ export const Manage = () => {
           actions.priceDataLoaded({
             data: {
               token: item.token,
-              price: Number(priceDetails.basePrice.usdtPrice).toFixed(3),
+              price: (priceDetails.basePrice.usdtPrice),
             },
           })
         );
