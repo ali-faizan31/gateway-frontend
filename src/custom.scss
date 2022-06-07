@@ -309,7 +309,45 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
     height: 4px !important;
     width: 4px !important;
 }
-
+.apr-small-card {
+  width: 110px;
+  background-color: rgba(28, 34, 41, 0.5);
+  height: 40px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 10px;
+}
+.apr-small-card img {
+  height: 9px;
+  width: 8px;
+  cursor: pointer;
+}
+.subtitle-text {
+  font-size: 10px !important;
+  font-weight: 400;
+}
+.medium-text-700 {
+  font-size: 14px !important;
+  font-weight: 700;
+}
+.medium-text-400 {
+  font-size: 14px !important;
+  font-weight: 400;
+}
+.text-35 {
+  font-size: 35px !important;
+  font-weight: 700;
+}
+.default-text-color {
+  color: #dab46e;
+}
+.flex-center-aligned-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .tooltip {
     position: relative;
     display: inline-block;
