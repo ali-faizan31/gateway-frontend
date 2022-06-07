@@ -12,6 +12,7 @@ import { RootState } from "../../../redux/rootReducer";
 import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { TruncateWithoutRounding } from "../../../utils/global.utils";
+import { MultipleAPR } from "./multipleAPR";
 
 export const CardAPR = () => {
   const history = useHistory();
@@ -24,7 +25,6 @@ export const CardAPR = () => {
   );
 
   const { isConnected, networkClient } = useSelector((state: RootState) => state.walletConnector);
-
   // console.log(selectedCrucible, userLpStakingDetails)
 
   useEffect(() => {
@@ -164,7 +164,6 @@ export const CardAPR = () => {
       internalName: "cFRMx",
     },
   ];
-
   const body = stepFlowsMock.map((stepFlow, index) => {
     return {
       key: index,
@@ -178,10 +177,7 @@ export const CardAPR = () => {
       yourDeposit: <FTypo className={"col-amount"}>{stepFlow.yourDeposit}</FTypo>,
       yourRewards: <FTypo className={"col-amount"}>{stepFlow.yourRewards || '0'}</FTypo>,
       apr: (
-        <FTypo className={"col-amount"} size={24} color="#DAB46E" weight={500}>
-          {" "}
-          {stepFlow.apr}{" "}
-        </FTypo>
+        <MultipleAPR apr={stepFlow.apr} />
       ),
       action: (
         <div className="col-action">
