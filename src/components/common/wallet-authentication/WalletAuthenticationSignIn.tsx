@@ -13,9 +13,12 @@ import { walletConnectorActions } from "../../../container-components/wallet-con
 import toast from "react-hot-toast";
 import { getErrorMessage, GetPhraseString, localStorageHelper } from "../../../utils/global.utils";
 import { ME_TAG, ORG_ROLE_TAG, TOKEN_TAG } from "../../../utils/const.utils";
-import { FDialog, FItem, FList, FButton, FGridItem } from "ferrum-design-system";
+import { FDialog, FItem, FList, FButton, FGridItem, FTypo } from "ferrum-design-system";
 import { getNetworkInformationForPublicUser } from "../../../_apis/NetworkCrud";
 import { T } from '../../../utils/translationHelper';
+// import { ReactComponent as IconSubmitted } from "../../../../../assets/img/icon-transaction-submitted.svg";
+import { ReactComponent as SwitchNetworkIcon } from "../../../assets/img/switch-network.svg"
+import IconNetworkBNB from "../../../assets/img/icon-network-bnb.svg";
 
 export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthenticationNeeded }: any) => {
   const dispatch = useDispatch();
@@ -327,21 +330,31 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
     setAllowedNetworkModal(false);
   };
 
+  let itemarray = [{ name: '1' }, { name: "2" }]
+
   return (
     <>
-      <FDialog show={allowedNetworkModal} size={"medium"} onHide={onSwitchNetworkClose} title={"Allowed Networks on Gateway"} className="connect-wallet-dialog ">
-        <FItem className={"f-mt-2"}>Change your network into one of the following:</FItem>
+      <FDialog show={allowedNetworkModal} size={"medium"} onHide={onSwitchNetworkClose} className="connect-wallet-dialog ">
         <FList variant="info" className="w-100">
-          {allowedNetworksonGateway &&
-            allowedNetworksonGateway.length &&
-            allowedNetworksonGateway.map((item: any, index) => {
-              return (
-                <FGridItem className={"f-mt-2"} key={index}>
-                  <FItem className={"f-mt-1 f-mr-3 w-100"}>{item.name}</FItem>
-                  <FButton title={"Switch Network"} className="w-100" onClick={() => performSwitchNetwork(item)} />
-                </FGridItem>
-              );
-            })}
+          <FItem align={"center"}  >
+            {/* <SwitchNetworkIcon /> */}
+            <img src={"/ferrum/switch-network.svg"} alt="" height={"100px"} width={"100px"} />
+            <FItem className={"f-mt-2"}>
+              <FTypo className={"primary-color"} size={30} weight={600}>Allowed Networks on Gateway </FTypo>
+              <p className={"f-mt--7"}> Change your network into one of the following:</p>
+            </FItem>
+            {allowedNetworksonGateway &&
+              allowedNetworksonGateway.length ?
+              allowedNetworksonGateway.map((item: any, index) => {
+                return (
+                  <FGridItem className={"f-mt-1"} key={index} alignX={"center"}>
+                    <FItem className={"f-mt-1 f-mb-1"}>
+                      <img src={IconNetworkBNB} height="18px" width="18px" alt="" className="allowed-network-icon" />{item.name}</FItem>
+                    <FButton title={"Switch Network"} className={"custom-width-20"} onClick={() => performSwitchNetwork(item)} />
+                  </FGridItem>
+                );
+              }) : null}
+          </FItem>
         </FList>
       </FDialog>
     </>

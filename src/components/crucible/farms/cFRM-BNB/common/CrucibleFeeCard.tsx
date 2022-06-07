@@ -7,7 +7,12 @@ import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
 import { getActualRoute, getAPRValueAgainstFarm, getLatestStepToRender, getObjectReadableFarmName } from "../../../common/Helper";
+import { MultipleAPR } from "../../../common/multipleAPR";
 import { STEP_FLOW_IDS } from "../../../common/utils";
+import IconActiveRight from "../../../../../assets/img/active-right-yellow.svg";
+import IconActiveLeft from "../../../../../assets/img/active-left-yellow.svg";
+import IconInactiveLeft from "../../../../../assets/img/inactive-left-yellow.svg";
+import IconInactiveRight from "../../../../../assets/img/inactive-right-yellow.svg";
 
 const CrucibleFeeCard = () => {
   const history = useHistory();
@@ -20,6 +25,8 @@ const CrucibleFeeCard = () => {
   const { currentStep, currentStepIndex, stepFlowStepHistory, aprInformation } = useSelector((state: RootState) => state.crucible);
   const userCrucibleData = useSelector((state: RootState) => state.crucible.userCrucibleDetails);
   const LPStakingDetails = useSelector((state: RootState) => state.crucible.userLpStakingDetails);
+  const [activeAPRIndex, setActiveAPRIndex] = useState(0);
+  const aprData = Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, farm);
   let userStake = userCrucibleData[farm!] && (userCrucibleData[farm!].stakes || []).find((e: any) => e.address.toLowerCase() === location.state.LPstakingAddress.toLowerCase());
   const { networkClient } = useSelector((state: RootState) => state.walletConnector);
 
@@ -92,13 +99,24 @@ const CrucibleFeeCard = () => {
                 </FTypo>
               </FGridItem>
               <FGridItem size={[6, 6, 6]}>
-                <FItem align="right">
-                  <FTypo color="#DAB46E" size={40} weight={600} align={"end"} display="flex" alignY={"end"}>
-                    <FTypo size={16} weight={500} className={"f-pr--7 f-pb--3"} align="right">
-                      APR
-                    </FTypo>
-                    {Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, farm)}
-                  </FTypo>
+                <FItem align="right" className="justify-content-end">
+                  <div className="flex-center-aligned-center">
+                    <img
+                      className="cursor-pointer"
+                      src={activeAPRIndex === 0 ? IconInactiveLeft : IconActiveLeft}
+                      onClick={() => { activeAPRIndex !== 0 && setActiveAPRIndex(activeAPRIndex - 1) }}
+                      style={{ height: 9, width: 10, marginRight: 22 }}
+                    />
+                    <div>
+                      <p className="medium-text-400 text-center">{aprData[activeAPRIndex]?.label}</p>
+                      <p className="text-35 text-center default-text-color">{aprData[activeAPRIndex]?.value}</p>
+                    </div>
+                    <img
+                      className="cursor-pointer"
+                      src={activeAPRIndex < aprData.length - 1 ? IconActiveRight : IconInactiveRight}
+                      onClick={() => { activeAPRIndex < aprData.length - 1 && setActiveAPRIndex(activeAPRIndex + 1) }}
+                      style={{ height: 9, width: 10, marginLeft: 22 }} />
+                  </div>
                 </FItem>
               </FGridItem>
             </FGrid>
