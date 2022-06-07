@@ -28,29 +28,29 @@ export const CruciblePrice = () => {
       <div className={"card-price-wrapper"}>
         {DATA_PRICE.length
           ? DATA_PRICE.map((item, index) => {
-              return (
-                <FCard variant={"secondary"} className="card-price styled-card align-h" key={index}>
-                  <FItem display={"flex"} alignX="between" alignY={"center"}>
-                    <FItem display={"flex"} alignY={"center"} className="w-100">
-                      <span className="icon-network f-pr--5">
-                        <img src={tokenData[item.name]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} alt="" />
-                      </span>
-                      <FTypo>{item.network}</FTypo>
-                    </FItem>
-                    <FTypo color="#28B885" size={14} align={"right"}>
-                      {/* <IconArrowGreen width={15} /> */}
-                      {/* {item.price_percentage}% */}
-                    </FTypo>
+            return (
+              <FCard variant={"secondary"} className="card-price styled-card align-h" key={index}>
+                <FItem display={"flex"} alignX="between" alignY={"center"}>
+                  <FItem display={"flex"} alignY={"center"} className="w-100">
+                    <span className="icon-network f-pr--5">
+                      <img src={tokenData[item.name]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} alt="" />
+                    </span>
+                    <FTypo>{item.network}</FTypo>
                   </FItem>
-                  <FTypo size={25} weight={600} align={"end"} display="flex" alignY={"end"} className="f-mt--5">
-                    {item.price}
-                    <FTypo size={12} weight={600} color="#DAB46E" className={"f-pl--7 f-pb--1"}>
-                      USD
-                    </FTypo>
+                  <FTypo color="#28B885" size={14} align={"right"}>
+                    {/* <IconArrowGreen width={15} /> */}
+                    {/* {item.price_percentage}% */}
                   </FTypo>
-                </FCard>
-              );
-            })
+                </FItem>
+                <FTypo size={25} weight={600} align={"end"} display="flex" alignY={"end"} className="f-mt--5">
+                  {item.price}
+                  <FTypo size={12} weight={600} color="#DAB46E" className={"f-pl--7 f-pb--1"}>
+                    USD
+                  </FTypo>
+                </FTypo>
+              </FCard>
+            );
+          })
           : null}
       </div>
     </FCard>

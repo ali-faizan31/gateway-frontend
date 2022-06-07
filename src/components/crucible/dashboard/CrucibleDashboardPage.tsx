@@ -23,13 +23,14 @@ import { CruciblePrice } from "../common/CardPrice";
 // import { useHistory, useLocation } from "react-router";
 import * as CrucibleActions from "../redux/CrucibleActions";
 import { crucibleSlice } from "../redux/CrucibleSlice";
-import { Pricing_Tokens } from "../../../utils/const.utils";
+import { cFRMTokenContractAddress, Pricing_Tokens, tokenFRMBSCMainnet } from "../../../utils/const.utils";
 import { Crucible_Farm_Address_Details } from "../common/utils";
 import { getAPRInformationForPublicUser } from "../../../_apis/APRCrud";
 import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { getCrucibleDetail } from "../common/Helper";
 import { getErrorMessage, TruncateWithoutRounding } from "../../../utils/global.utils";
+import { isTypeNode } from "typescript";
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
@@ -68,12 +69,16 @@ const CrucibleDashboardPage = () => {
 
     for (let item of Pricing_Tokens) {
       const priceDetails = await web3Helper.getTokenPriceFromRouter(item.currency);
+      let truncuateDecimal = 3;
+      if (item.currency === tokenFRMBSCMainnet || item.currency === cFRMTokenContractAddress) {
+        truncuateDecimal = 5;
+      }
       if (!!priceDetails) {
         dispatch(
           actions.priceDataLoaded({
             data: {
               token: item.token,
-              price: TruncateWithoutRounding(Number(priceDetails), 3),
+              price: TruncateWithoutRounding((priceDetails), truncuateDecimal),
             },
           })
         );

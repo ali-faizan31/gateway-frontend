@@ -229,6 +229,12 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   }
 }
 
+@for $i from 0 through 1000 {
+  .custom-font-weight-#{$i} {
+    font-weight: #{$i} !important;
+  }
+}
+
 @for $i from 0 through 50 {
   .custom-padding-#{$i} {
     padding: #{$i}px !important;
@@ -238,6 +244,12 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 @for $i from 0 through 50 {
   .custom-border-radius-#{$i} {
     border-radius: #{$i}px !important;
+  }
+}
+
+@for $i from 0 through 1000 {
+  .custom-width-#{$i} {
+    width: #{$i}px !important;
   }
 }
 
@@ -277,6 +289,10 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 
 .green-cap {
   background: #28b885 !important;
+}
+
+.word-break {
+  word-break: break-word;
 }
 
 .red-cap {
@@ -325,4 +341,42 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 360px;
+  background-color: #cba461;
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  top: -14px;
+  // left: 24px;
+  // top: -60px;
+  // left: -35px;
+  z-index: 100;
+  word-break: break-word;
+  font-weight: 400;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 10%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 8px solid #cba461;
+  }
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }

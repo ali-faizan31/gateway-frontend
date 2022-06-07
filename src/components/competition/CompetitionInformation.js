@@ -147,6 +147,36 @@ const CompetitionInformation = () => {
     </div>
   );
 
+  const getTitle = () => (
+    <>
+      Growth / Reduction
+      <FTooltip
+        className={"f-ml-1"}
+        effect={"solid"}
+        place={"top"}
+        id="TooltipTop"
+        textColor={"black"}
+        backgroundColor={"#dab46e"}
+        text={<img src={"/ferrum/question.svg"} alt="" />}
+      >
+        <p className="custom-width-360 custom-font-weight-400 word-break">
+          We are calculating this value by adding up the amount added by you <b>"Level Up"</b> transactions and subtracting any transfer outs from your wallet and then your ranks
+          are calculated based on your <b>"Growth/Reduction"</b>
+        </p>
+      </FTooltip>
+    </>
+    // <div className="d-flex">
+    //   Growth / Reduction
+    //   <div className="f-ml-1 f-mt--1 tooltip">
+    //     <img src={"/ferrum/question.svg"} alt="" />
+    //     <span class="tooltiptext custom-font-size-10">
+    //       We are calculating this value by adding up the amount added by you <b>"Level Up"</b> transactions and subtracting any transfer outs from your wallet and then your ranks
+    //       are calculated based on your <b>"Growth/Reduction"</b>
+    //     </span>
+    //   </div>
+    // </div>
+  );
+
   const columns = [
     {
       prop: "rank",
@@ -169,13 +199,7 @@ const CompetitionInformation = () => {
     },
     {
       prop: "humanReadableGrowth",
-      title: (
-        <span
-          title={`We are calculating this value by adding up the amount added by you "Level Up" transactions and subtracting any transfer outs from your wallet and then your ranks are calculated based on your "Growth/Reduction"`}
-        >
-          Growth / Reduction
-        </span>
-      ),
+      title: getTitle(),
       cell: (params) => (
         <div data-label="Growth / Reduction" className="growth-column-hover" style={{ color: params?.humanReadableGrowth?.color }}>
           <span data-tip="tetsttt">{params?.humanReadableGrowth?.data ? TruncateWithoutRounding(params?.humanReadableGrowth?.data, 2).toLocaleString("en-US") : 0}</span>

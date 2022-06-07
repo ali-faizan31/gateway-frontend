@@ -40,7 +40,7 @@ export const CardAPR = () => {
       prop: "sustainableCrucibleFarms",
       title: "Sustainable Crucible Farms",
     },
-    { prop: "totalDeposited", title: "Remaining Cap" },
+    { width: 200, prop: "totalStaked", title: "Total Staked" },
     { prop: "yourDeposit", title: "Your Deposit" },
     { prop: "yourRewards", title: "Your Rewards" },
     {
@@ -54,11 +54,8 @@ export const CardAPR = () => {
     { prop: "action", title: <></> },
   ];
 
-  const getTotalDeposited = (farm: any) => {
-    return Number(TruncateWithoutRounding(selectedCrucible[farm!]?.leftFromCap || "0", 3))
-    // return TruncateWithoutRounding(Number(selectedCrucible[farm!]?.leftFromCap), 3);
-    // let leftCap = Number(selectedCrucible[farm!]?.openCap) - Number(selectedCrucible[farm!]?.leftFromCap);
-    // return `${leftCap} / 100`;
+  const getTotalStaked = (farm: any) => {
+    return Number(TruncateWithoutRounding(selectedCrucible[farm!]?.staking[0].totalStake || "0", 3)).toLocaleString('en-US')
   };
 
   const getYourDeposited = (farm: any, lpAddress: any) => {
@@ -84,12 +81,12 @@ export const CardAPR = () => {
     return farm?.includes("BNB") ? `CAKE-LP ${selectedCrucible[farm!]?.symbol}-BNB` : selectedCrucible[farm!]?.symbol
   }
 
-  const stepFlowsMock = [
+  const stepFlows = [
     // {
     //   sustainableCrucibleFarms: "cFRM / BNB",
     //   internalName: "cFRM-BNB",
     //   stepFlowName: "cFRM / BNB Crucible Farm - Farming Dashboard Flow",
-    //   totalDeposited: getTotalDeposited("cFRM-BNB"),
+    //   totalStaked: getTotalStaked("cFRM-BNB"),
     //   yourDeposit: `${getYourDeposited("cFRM-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
     //   yourRewards: `${getYourRewards("cFRM-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
     //   logo: (
@@ -108,7 +105,7 @@ export const CardAPR = () => {
     {
       sustainableCrucibleFarms: "cFRM",
       stepFlowName: "cFRM Crucible Farm - Farming Dashboard Flow",
-      totalDeposited: getTotalDeposited("cFRM"),
+      totalStaked: getTotalStaked("cFRM"),
       yourDeposit: `${getYourDeposited("cFRM", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
       yourRewards: `${getYourRewards("cFRM", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008")}`,
       apr: Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, 'cFRM'),
@@ -127,7 +124,7 @@ export const CardAPR = () => {
     // {
     //   sustainableCrucibleFarms: "cFRMx / BNB",
     //   stepFlowName: "cFRMx / BNB Crucible Farm - Farming Dashboard Flow",
-    //   totalDeposited: getTotalDeposited("cFRMx-BNB"),
+    //   totalStaked: getTotalStaked("cFRMx-BNB"),
     //   yourDeposit: getYourDeposited("cFRMx-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
     //   yourRewards: getYourRewards("cFRMx-BNB", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
     //   apr: Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, 'cFRMx-BNB'),
@@ -147,7 +144,7 @@ export const CardAPR = () => {
     {
       sustainableCrucibleFarms: "cFRMx",
       stepFlowName: "cFRMx Crucible Farm - Farming Dashboard Flow",
-      totalDeposited: getTotalDeposited("cFRMx"),
+      totalStaked: getTotalStaked("cFRMx"),
       yourDeposit: getYourDeposited("cFRMx", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
       yourRewards: getYourRewards("cFRMx", "0x35E15ff9eBB37D8C7A413fD85BaD515396DC8008"),
       apr: Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, 'cFRMx'),
@@ -164,7 +161,8 @@ export const CardAPR = () => {
       internalName: "cFRMx",
     },
   ];
-  const body = stepFlowsMock.map((stepFlow, index) => {
+
+  const body = stepFlows.map((stepFlow, index) => {
     return {
       key: index,
       sustainableCrucibleFarms: (
@@ -173,7 +171,7 @@ export const CardAPR = () => {
           {stepFlow.sustainableCrucibleFarms}
         </FItem>
       ),
-      totalDeposited: <FTypo className={"col-amount"}>{stepFlow.totalDeposited}</FTypo>,
+      totalStaked: <FTypo className={"col-amount"}>{stepFlow.totalStaked}</FTypo>,
       yourDeposit: <FTypo className={"col-amount"}>{stepFlow.yourDeposit}</FTypo>,
       yourRewards: <FTypo className={"col-amount"}>{stepFlow.yourRewards || '0'}</FTypo>,
       apr: (

@@ -7,16 +7,11 @@ import { useParams, useLocation } from "react-router-dom";
 import eitherConverter from "ether-converter";
 import { CSVLink } from "react-csv";
 import moment from "moment";
-import {
-  getLeaderboardById,
-  getLeaderboardByIdForPublicUser,
-  getStakingBalancesByCABNBSC,
-  getTokenHolderlistByContractAddressBSC,
-} from "../../_apis/LeaderboardCrud";
-import { arraySortByKeyDescending } from "../../utils/global.utils";
-import { stakingContractAddressListFOMO, TOKEN_TAG } from "../../utils/const.utils";
+import { getLeaderboardById, getLeaderboardByIdForPublicUser, getStakingBalancesByCABNBSC, getTokenHolderlistByContractAddressBSC } from "../../_apis/LeaderboardCrud";
+import { arraySortByKeyDescending, getErrorMessage } from "../../utils/global.utils";
+import { stakingContractAddressListFerrum, stakingContractAddressListFOMO, TOKEN_TAG } from "../../utils/const.utils";
 import { filterList } from "../leaderboard/LeaderboardHelper";
-import { T } from '../../utils/translationHelper';
+import { useSelector } from "react-redux";
 
 const LeaderboardInformation = () => {
   const { id } = useParams();
@@ -33,6 +28,7 @@ const LeaderboardInformation = () => {
   const [LeaderboardTokenHolderList, setLeaderboardTokenHolderList] = useState([]);
   const [stakingTokenHolderList, setStakingTokenHolderList] = useState([]);
   const [stakingCount, setStakingCount] = useState(0);
+  const { activeTranslation } = useSelector((state) => state.phrase);
 
   let finalstakingList = [];
   let finalWithdrawlList = [];
@@ -77,16 +73,7 @@ const LeaderboardInformation = () => {
       })
       .catch((e) => {
         setIsLoading(false);
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 
@@ -111,16 +98,7 @@ const LeaderboardInformation = () => {
       })
       .catch((e) => {
         setIsLoading(false);
-        if (e.response) {
-          if (e?.response?.data?.status?.phraseKey !== '') {
-            const fetchedMessage = T(e?.response?.data?.status?.phraseKey);
-            toast.error(fetchedMessage);
-          } else {
-            toast.error(e?.response?.data?.status?.message);
-          }
-        } else {
-          toast.error("Something went wrong. Try again later!");
-        }
+        getErrorMessage(e, activeTranslation);
       });
   };
 
@@ -138,7 +116,7 @@ const LeaderboardInformation = () => {
   };
 
   const getDynamicStakingBalances = async (leaderboard, leaderboardHoldersList, count) => {
-    if (count < stakingContractAddressListFOMO.length) {
+    if (count < stakingContractAddressListFerrum.length) {
       getStakingBalances(leaderboard, stakingContractAddressListFOMO[count], count, leaderboardHoldersList);
     } else {
       mapTokenHolderData(leaderboardHoldersList, leaderboard);
@@ -239,9 +217,7 @@ const LeaderboardInformation = () => {
         list[i].formattedLevelUpAmount = "You are the leader";
         list[i].levelUpUrl = levelUpSwapUrl;
       } else {
-        list[i].formattedLevelUpAmount = TruncateWithoutRounding(calculateLevelUpAmount(list[i - 1].balance, list[i].balance), 2).toLocaleString(
-          "en-US"
-        );
+        list[i].formattedLevelUpAmount = TruncateWithoutRounding(calculateLevelUpAmount(list[i - 1].balance, list[i].balance), 2).toLocaleString("en-US");
         list[i].levelUpUrl = levelUpSwapUrl + list[i].formattedLevelUpAmount;
       }
     }
@@ -399,15 +375,7 @@ const LeaderboardInformation = () => {
                 onChange={onQueryChange}
                 style={{ width: "100%" }}
               />
-              {!isPublicUser && (
-                <FButton
-                  type="button"
-                  className="btn-create f-ml-1" 
-                  disabled={isLoading}
-                  onClick={onExportClick}
-                  title={" Export to CSV"}
-                ></FButton>
-              )}
+              {!isPublicUser && <FButton type="button" className="btn-create f-ml-1" disabled={isLoading} onClick={onExportClick} title={" Export to CSV"}></FButton>}
             </FGridItem>
           </FGrid>
           {filteredTokenHolderList.length ? (

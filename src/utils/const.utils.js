@@ -8,6 +8,7 @@ export const defaultEndPointDetails = Environment.defaultEndPoint();
 export const tokenFRMBSCMainnet = "0xa719b8ab7ea7af0ddb4358719a34631bb79d15dc";
 export const tokenFRMxBSCMainnet = "0x8523518001ad5d24b2a04e8729743c0643a316c0";
 export const tokenUSDCBSCMainnet = "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d";
+export const stakingContractAddressListFerrum = ["0x35e15ff9ebb37d8c7a413fd85bad515396dc8008"];
 export const stakingContractAddressListFOMO = [
   "0x90Bdee77ed081777C12b216f968db706f071b589",
   "0x3e6b25a764d43ac75dd1d108ffa10eea9f42acbf",
