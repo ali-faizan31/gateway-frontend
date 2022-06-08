@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem } from "ferrum-design-system";
+import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FDialog, FItem } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
 import { useParams, useLocation } from "react-router-dom";
 import eitherConverter from "ether-converter";
@@ -12,6 +12,7 @@ import { arraySortByKeyDescending, getErrorMessage } from "../../utils/global.ut
 import { stakingContractAddressListFerrum, stakingContractAddressListFOMO, TOKEN_TAG } from "../../utils/const.utils";
 import { filterList } from "../leaderboard/LeaderboardHelper";
 import { useSelector } from "react-redux";
+import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 
 const LeaderboardInformation = () => {
   const { id } = useParams();
@@ -29,6 +30,7 @@ const LeaderboardInformation = () => {
   const [stakingTokenHolderList, setStakingTokenHolderList] = useState([]);
   const [stakingCount, setStakingCount] = useState(0);
   const { activeTranslation } = useSelector((state) => state.phrase);
+  const [showExportModal, setShowExportModal] = useState(false);
 
   let finalstakingList = [];
   let finalWithdrawlList = [];
@@ -300,6 +302,7 @@ const LeaderboardInformation = () => {
   const csvHeaders = [
     { label: "Rank", key: "rank" },
     { label: "Wallet Address", key: "address" },
+    { label: "Email", key: "email" },
     { label: "Balance", key: "formattedBalance" },
     { label: "Level Up Amount", key: "formattedLevelUpAmount" },
     { label: "Get Token", key: "levelUpUrl" },
@@ -314,10 +317,29 @@ const LeaderboardInformation = () => {
     }
   };
 
+  const getUsersAndMapData = async () => {
+    try {
+      let res = await getAllRoleBasedUsers("communityMember", true, 0, 10, false, token);
+      let userList = res.data.body.users;
+      filteredTokenHolderList.forEach((holder) => {
+        userList.forEach((user) => {
+          if (user.addresses.find((x) => x.address === holder.address)) {
+            holder.email = user.email;
+          }
+        });
+      });
+      setShowExportModal(false);
+      setTimeout(() => {
+        exportRef?.current?.link?.click();
+      }, 3000);
+    } catch (e) {
+      getErrorMessage(e, activeTranslation);
+    }
+  };
+
   const onExportClick = () => {
-    setTimeout(() => {
-      exportRef?.current?.link?.click();
-    }, 3000);
+    setShowExportModal(true);
+    getUsersAndMapData();
   };
 
   const columns = [
@@ -399,6 +421,10 @@ const LeaderboardInformation = () => {
           )}
         </FContainer>
       </FContainer>
+      <FDialog show={showExportModal} size={"medium"} onHide={() => setShowExportModal(false)} title={"Export"} className="connect-wallet-dialog ">
+        <FItem className={"f-mt-2 f-mb-2"}>Loading Export Data</FItem>
+        Please wait ...
+      </FDialog>
     </>
   );
 };

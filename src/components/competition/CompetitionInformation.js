@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FItem, FTypo, FTooltip } from "ferrum-design-system";
+import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FDialog, FItem, FTypo, FTooltip } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
 import { useParams, useLocation } from "react-router-dom";
 import { CSVLink } from "react-csv";
@@ -18,6 +18,7 @@ import {
   TOKEN_TAG,
   Start_Competition_Buy_Button_Link,
 } from "../../utils/const.utils";
+import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 
 const CompetitionInformation = () => {
   const { id } = useParams();
@@ -34,6 +35,7 @@ const CompetitionInformation = () => {
   const [competitionParticipantsFiltered, setCompetitionParticipantsFiltered] = useState([]);
   const [showWallets, setShowWallets] = useState(false);
   const { activeTranslation } = useSelector((state) => state.phrase);
+  const [showExportModal, setShowExportModal] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -89,6 +91,7 @@ const CompetitionInformation = () => {
                   data: p?.humanReadableGrowth,
                   color,
                 },
+                address: p.tokenHolderAddress,
                 tokenHolderQuantity: p?.tokenHolderQuantity ? TruncateWithoutRounding(eitherConverter(p?.tokenHolderQuantity, "wei").ether, 2)?.toLocaleString("en-US") : 0,
                 levelUpUrl: `${leaderboardDexUrl}swap?inputCurrency=${getInputCurrency(
                   tokenContractAddress
@@ -231,6 +234,7 @@ const CompetitionInformation = () => {
   const csvHeaders = [
     { label: "Rank", key: "rank" },
     { label: "Wallet Address", key: "tokenHolderAddress" },
+    { label: "Email", key: "email" },
     { label: "Balance", key: "tokenHolderQuantity" },
     { label: "Growth / Reduction", key: "humanReadableGrowth.data" },
     { label: "Level Up Amount", key: "formattedLevelUpAmount" },
@@ -245,17 +249,36 @@ const CompetitionInformation = () => {
     }
   };
 
+  const getUsersAndMapData = async () => {
+    try {
+      let res = await getAllRoleBasedUsers("communityMember", true, 0, 10, false, token);
+      let userList = res.data.body.users;
+      competitionParticipantsFiltered.forEach((holder) => {
+        userList.forEach((user) => {
+          if (user.addresses.find((x) => x.address === holder.address)) {
+            holder.email = user.email;
+          }
+        });
+      });
+      setShowExportModal(false);
+      setTimeout(() => {
+        exportRef?.current?.link?.click();
+      }, 3000);
+    } catch (e) {
+      getErrorMessage(e, activeTranslation);
+    }
+  };
+
   const onExportClick = () => {
-    setTimeout(() => {
-      exportRef?.current?.link?.click();
-    }, 3000);
+    setShowExportModal(true);
+    getUsersAndMapData();
   };
 
   return (
     <>
       <Toaster />
       <CSVLink
-        data={competitionParticipants}
+        data={competitionParticipantsFiltered}
         headers={csvHeaders}
         filename={`${competitionData?.name}-${moment(new Date()).format("DD-MMM-YYYY")}.csv`}
         ref={exportRef}
@@ -318,6 +341,10 @@ const CompetitionInformation = () => {
           )}
         </FContainer>
       </FContainer>
+      <FDialog show={showExportModal} size={"medium"} onHide={() => setShowExportModal(false)} title={"Export"} className="connect-wallet-dialog ">
+        <FItem className={"f-mt-2 f-mb-2"}>Loading Export Data</FItem>
+        Please wait ...
+      </FDialog>
     </>
   );
 };
