@@ -57,10 +57,15 @@ const LeaderboardManagement = () => {
   };
 
   const onDetailClick = (row) => {
-    if (row && row.leaderboardCurrencyAddressesByNetwork && row.leaderboardCurrencyAddressesByNetwork.length > 1) {
-      history.push(`${PATH_DASHBOARD.general.multiLeaderboardForDashboard}/${row._id}`);
+    console.log(row);
+    if (row && row.type === "stake") {
+      history.push(`${PATH_DASHBOARD.general.stakingLeaderboardForDashboard}/${row._id}`);
     } else {
-      history.push(`${PATH_DASHBOARD.general.singleLeaderboardForDashboard}/${row._id}`);
+      if (row && row.leaderboardCurrencyAddressesByNetwork && row.leaderboardCurrencyAddressesByNetwork.length > 1) {
+        history.push(`${PATH_DASHBOARD.general.multiLeaderboardForDashboard}/${row._id}`);
+      } else {
+        history.push(`${PATH_DASHBOARD.general.singleLeaderboardForDashboard}/${row._id}`);
+      }
     }
   };
 
@@ -148,10 +153,14 @@ const LeaderboardManagement = () => {
 
   const copyPublicUrl = (row) => {
     let publicUrl = "";
-    if (row && row.leaderboardCurrencyAddressesByNetwork && row.leaderboardCurrencyAddressesByNetwork.length > 1) {
-      publicUrl = `${window.location.origin}/pub/multi/leaderboard/${row._id}`;
+    if (row && row.type === "stake") {
+      publicUrl = `${window.location.origin}/pub/staking/leaderboard/${row._id}`;
     } else {
-      publicUrl = `${window.location.origin}/pub/leaderboard/${row._id}`;
+      if (row && row.leaderboardCurrencyAddressesByNetwork && row.leaderboardCurrencyAddressesByNetwork.length > 1) {
+        publicUrl = `${window.location.origin}/pub/multi/leaderboard/${row._id}`;
+      } else {
+        publicUrl = `${window.location.origin}/pub/leaderboard/${row._id}`;
+      }
     }
     const { clipboard } = navigator;
 
@@ -169,10 +178,14 @@ const LeaderboardManagement = () => {
 
   const openPublicUrl = (row) => {
     let publicUrl = "";
-    if (row && row.leaderboardCurrencyAddressesByNetwork && row.leaderboardCurrencyAddressesByNetwork.length > 1) {
-      publicUrl = `${window.location.origin}/pub/multi/leaderboard/${row._id}`;
+    if (row && row.type === "stake") {
+      publicUrl = `${window.location.origin}/pub/staking/leaderboard/${row._id}`;
     } else {
-      publicUrl = `${window.location.origin}/pub/leaderboard/${row._id}`;
+      if (row && row.leaderboardCurrencyAddressesByNetwork && row.leaderboardCurrencyAddressesByNetwork.length > 1) {
+        publicUrl = `${window.location.origin}/pub/multi/leaderboard/${row._id}`;
+      } else {
+        publicUrl = `${window.location.origin}/pub/leaderboard/${row._id}`;
+      }
     }
     window.open(publicUrl, "_blank");
   };
