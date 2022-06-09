@@ -35,12 +35,13 @@ const LeaderboardInformation = () => {
 
   useEffect(() => {
     setIsLoading(true);
+    setFilteredTokenHolderList([]);
     if (isPublicUser) {
       getPublicLeaderboard();
       return;
     }
     getLeaderboard();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (isQueryChange) {
@@ -66,6 +67,7 @@ const LeaderboardInformation = () => {
               dexUrl: cabn1?.currencyAddressesByNetwork?.networkDex?.dex?.url,
               chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
             },
+            stakingContractAddresses: leaderboard?.stakingContractAddresses,
           };
           getTokenHolderlist(tempObj);
           setLeaderboardData(tempObj);
@@ -91,6 +93,7 @@ const LeaderboardInformation = () => {
               dexUrl: cabn1?.currencyAddressesByNetwork?.networkDex?.dex?.url,
               chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
             },
+            stakingContractAddresses: leaderboard?.stakingContractAddresses,
           };
           getTokenHolderlist(tempObj);
           setLeaderboardData(tempObj);
@@ -105,7 +108,7 @@ const LeaderboardInformation = () => {
   const getTokenHolderlist = (leaderboard) => {
     getTokenHolderlistByContractAddressBSC(leaderboard.cabn.tokenContractAddress)
       .then((res) => {
-        const filteredList = filterList(res.data.result, leaderboard?.exclusionWalletAddressList);
+        const filteredList = filterList(res?.data?.result, leaderboard?.exclusionWalletAddressList);
         setLeaderboardTokenHolderList(filteredList);
         let count = 0;
         getDynamicStakingBalances(leaderboard, filteredList, count);
@@ -116,8 +119,8 @@ const LeaderboardInformation = () => {
   };
 
   const getDynamicStakingBalances = async (leaderboard, leaderboardHoldersList, count) => {
-    if (count < stakingContractAddressListFerrum.length) {
-      getStakingBalances(leaderboard, stakingContractAddressListFOMO[count], count, leaderboardHoldersList);
+    if (count < leaderboard?.stakingContractAddresses.length) {
+      getStakingBalances(leaderboard, leaderboard?.stakingContractAddresses[count], count, leaderboardHoldersList);
     } else {
       mapTokenHolderData(leaderboardHoldersList, leaderboard);
     }
