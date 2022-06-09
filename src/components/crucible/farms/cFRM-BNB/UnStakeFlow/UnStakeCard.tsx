@@ -99,7 +99,7 @@ export const UnStake = () => {
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
-        response = await client.unstakeLPToken(dispatch, currency, userAddress, stakeAmount, stakingAddress, network);
+        response = await client.unstakeLPToken(dispatch, currency, userAddress, stakeAmount, stakingAddress, network,setTransitionStatusDialog);
       } else if (isSingleTokenFarm(farm)) {
         currency = crucible[farm!]?.currency;
         stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
@@ -107,7 +107,7 @@ export const UnStake = () => {
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
-        response = await client.UnStakeCrucible(dispatch, currency, stakeAmount, stakingAddress, userAddress, network);
+        response = await client.UnStakeCrucible(dispatch, currency, stakeAmount, stakingAddress, userAddress, network,setTransitionStatusDialog);
       }
       if (response) {
         dispatch(CrucibleActions.transactionProcessed())

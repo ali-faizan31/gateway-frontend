@@ -73,7 +73,7 @@ function App() {
         <Switch>
           <Route exact path="/">
             {" "}
-            <Redirect to={`${PATH_PUBLIC_USER.competition.root}/62976783ad472b70c4f756d6`} />{" "}
+            <Redirect to={`${PATH_PUBLIC_USER.competition.root}/62a213274cc654248b68a8da`} />{" "}
           </Route>
           <GuardedRoute
             path={PATH_DASHBOARD.crucible.crucibleActionRoutes.manage}
@@ -210,6 +210,7 @@ function App() {
           <UnGuardedRoute path="/pub/multi/leaderboard/:id" component={MultiTokenLeaderboardById} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" />
           <UnGuardedRoute path="/pub/competition/:id" component={CompetitionById} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" />
           <UnGuardedRoute path="/pub/staking/leaderboard/:id" component={StakingLeaderboard} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" />
+          <GuardedRoute path="/dashboard/staking/leaderboard/:id" component={StakingLeaderboard} auth={isAuthenticated} layout={DashboardLayout} headerTitle="" />
           <GuardedRoute path="/dashboard/leaderboard/management" component={LeaderboardManagement} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/leaderboard/create" component={CreateLeaderboard} auth={isAuthenticated} layout={DashboardLayout} />
           <GuardedRoute path="/dashboard/competition/create" component={CreateCompetition} auth={isAuthenticated} layout={DashboardLayout} />

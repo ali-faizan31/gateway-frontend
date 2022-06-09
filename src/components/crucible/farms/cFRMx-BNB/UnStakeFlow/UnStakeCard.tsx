@@ -75,7 +75,8 @@ export const UnStake = () => {
         userAddress,
         amount,
         stakingAddress,
-        network
+        network,
+        setTransitionStatusDialog
       );
       if (response) {
         setIsProcessing(false);
