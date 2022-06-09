@@ -11,7 +11,6 @@ import { ReactComponent as IconArrowGreen } from "../../../assets/img/icon-price
 // import { ReactComponent as IconArrowRed } from "../../../assets/img/icon-price-arrow-indicator-red.svg";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/rootReducer";
-import Switch from "react-switch";
 import { FToggle } from "../../global/switch";
 
 export const CruciblePrice = () => {
