@@ -490,10 +490,10 @@ export const getLatestStepWithPendingStatus = (stepResponse: any) => {
 
 export const getAPRValueAgainstFarm = (aprInformation: any, farm: any) => {
   let aprData: any = [
-    { label : 'Daily APR' , value: `${TruncateWithoutRounding(aprInformation[farm].dailyAPR && aprInformation[farm].dailyAPR.APR, 2)}%` },
-    { label : 'Weekly APR' , value: `${TruncateWithoutRounding(aprInformation[farm].weeklyAPR && aprInformation[farm].weeklyAPR.APR, 2)}%`},
-    { label : 'Monthly APR' , value: `${TruncateWithoutRounding(aprInformation[farm].monthlyAPR && aprInformation[farm].monthlyAPR.APR, 2)}%`},
-    { label : 'Lifetime APR' , value: `${TruncateWithoutRounding(aprInformation[farm].lifeTimeAPR && aprInformation[farm].lifeTimeAPR.APR, 2)}%`},
+    { label: 'Weekly APR', value: `${TruncateWithoutRounding(aprInformation[farm].weeklyAPR && aprInformation[farm].weeklyAPR.APR, 2)}%` },
+    { label: 'Daily APR', value: `${TruncateWithoutRounding(aprInformation[farm].dailyAPR && aprInformation[farm].dailyAPR.APR, 2)}%` },
+    { label: 'Monthly APR', value: `${TruncateWithoutRounding(aprInformation[farm].monthlyAPR && aprInformation[farm].monthlyAPR.APR, 2)}%` },
+    { label: 'Lifetime APR', value: `${TruncateWithoutRounding(aprInformation[farm].lifeTimeAPR && aprInformation[farm].lifeTimeAPR.APR, 2)}%` },
   ];
   return aprData;
 }
