@@ -257,6 +257,12 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 }
 
 @for $i from 0 through 1000 {
+  .custom-height-#{$i} {
+    height: #{$i}px !important;
+  }
+}
+
+@for $i from 0 through 1000 {
   .custom-min-width-#{$i} {
     min-width: #{$i}px !important;
   }
@@ -434,4 +440,9 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 .zoom-in-out {
   -webkit-transform: scale(1.2);
   transform: scale(1.2);
+}
+
+.allowed-network-icon {
+  transform: translateY(18%);
+  margin-right: 12px;
 }
