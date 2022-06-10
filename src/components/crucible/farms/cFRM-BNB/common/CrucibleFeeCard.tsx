@@ -107,9 +107,9 @@ const CrucibleFeeCard = () => {
                       onClick={() => { activeAPRIndex !== 0 && setActiveAPRIndex(activeAPRIndex - 1) }}
                       style={{ height: 9, width: 10, marginRight: 22 }}
                     />
-                    <div>
-                      <p className="medium-text-400 text-center">{aprData[activeAPRIndex]?.label}</p>
-                      <p className="text-35 text-center default-text-color">{aprData[activeAPRIndex]?.value}</p>
+                    <div className="custom-width-117">
+                      <p className="medium-text-400 text-center">{aprData[activeAPRIndex].label}</p>
+                      <p className="text-35 text-center default-text-color">{aprData[activeAPRIndex].value}</p>
                     </div>
                     <img
                       className="cursor-pointer"
