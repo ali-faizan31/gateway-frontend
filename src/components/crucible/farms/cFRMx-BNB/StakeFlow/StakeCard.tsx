@@ -77,7 +77,8 @@ export const Stake = () => {
         userAddress,
         stakingAddress,
         network,
-        amount
+        amount,
+        setTransitionStatusDialog
       );
       if (response) {
         setIsProcessing(false);
