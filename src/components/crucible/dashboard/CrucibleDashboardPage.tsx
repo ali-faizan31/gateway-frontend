@@ -23,7 +23,7 @@ import { CruciblePrice } from "../common/CardPrice";
 // import { useHistory, useLocation } from "react-router";
 import * as CrucibleActions from "../redux/CrucibleActions";
 import { crucibleSlice } from "../redux/CrucibleSlice";
-import { cFRMTokenContractAddress, Pricing_Tokens, tokenFRMBSCMainnet } from "../../../utils/const.utils";
+import { cFRMTokenContractAddress, Pricing_Tokens, tokenFRMBSCMainnet, tokenFRMxBSCMainnet, cFRMxTokenContractAddress } from "../../../utils/const.utils";
 import { Crucible_Farm_Address_Details } from "../common/utils";
 import { getAPRInformationForPublicUser } from "../../../_apis/APRCrud";
 import { MetaMaskConnector } from "../../../container-components";
@@ -68,6 +68,16 @@ const CrucibleDashboardPage = () => {
     const client = new CrucibleClient(web3Helper);
 
     for (let item of Pricing_Tokens) {
+      let tokenConversion: any = {};
+      if (item.token === 'FRM') {
+        tokenConversion = await web3Helper.getExchangeTokenFromRouter(tokenFRMBSCMainnet, cFRMTokenContractAddress);
+      } else if (item.token === 'cFRM') {
+        tokenConversion = await web3Helper.getExchangeTokenFromRouter(cFRMTokenContractAddress, tokenFRMBSCMainnet);
+      } else if (item.token === 'FRMx') {
+        tokenConversion = await web3Helper.getExchangeTokenFromRouter(tokenFRMxBSCMainnet, cFRMxTokenContractAddress);
+      } else if (item.token === 'cFRMx') {
+        tokenConversion = await web3Helper.getExchangeTokenFromRouter(cFRMxTokenContractAddress, tokenFRMxBSCMainnet);
+      }
       const priceDetails = await web3Helper.getTokenPriceFromRouter(item.currency);
       let truncuateDecimal = 3;
       if (item.currency === tokenFRMBSCMainnet || item.currency === cFRMTokenContractAddress) {
@@ -79,6 +89,16 @@ const CrucibleDashboardPage = () => {
             data: {
               token: item.token,
               price: TruncateWithoutRounding((priceDetails), truncuateDecimal),
+            },
+          })
+        );
+      }
+      if (!!tokenConversion) {
+        dispatch(
+          actions.tokenConversionLoaded({
+            data: {
+              token: item.token,
+              exhangePrice: TruncateWithoutRounding((tokenConversion), truncuateDecimal),
             },
           })
         );
