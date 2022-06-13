@@ -15,14 +15,16 @@ import { FToggle } from "../../global/switch";
 
 export const CruciblePrice = () => {
   const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
+  const tokenExchangePrices = useSelector((state: RootState) => state.crucible.tokenExchange);
   const { tokenData } = useSelector((state: RootState) => state.crucible);
   const [isCrucibleValue, setIsCrucibleValue] = useState(false);
   const [isClassChanged, setIsClassChanged] = useState(false);
+  const { networkClient } = useSelector((state: RootState) => state.walletConnector);
   const DATA_PRICE = [
-    { name: "FRMBSC", network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0, cruciblePrice: tokenPrices["cFRM"] || 0, cNetwork: 'cFRM' },
-    { name: "cFRM", network: "cFRM", price_percentage: "4.8", price: tokenPrices["cFRM"] || 0, cruciblePrice: tokenPrices["FRM"] || 0, cNetwork: 'FRM' },
-    { name: "FRMxBSC", network: "FRMx", price_percentage: "4.8", price: tokenPrices["FRMx"] || 0, cruciblePrice: tokenPrices["cFRMx"] || 0, cNetwork: 'cFRMx' },
-    { name: "cFRMx", network: "cFRMx", price_percentage: "4.8", price: tokenPrices["cFRMx"] || 0, cruciblePrice: tokenPrices["FRMx"] || 0, cNetwork: 'FRMx' },
+    { name: "FRMBSC", network: "FRM", price_percentage: "4.8", price: tokenPrices["FRM"] || 0, cruciblePrice: tokenExchangePrices["FRM"] || 0, cNetwork: 'cFRM' },
+    { name: "cFRM", network: "cFRM", price_percentage: "4.8", price: tokenPrices["cFRM"] || 0, cruciblePrice: tokenExchangePrices["cFRM"] || 0, cNetwork: 'FRM' },
+    { name: "FRMxBSC", network: "FRMx", price_percentage: "4.8", price: tokenPrices["FRMx"] || 0, cruciblePrice: tokenExchangePrices["FRMx"] || 0, cNetwork: 'cFRMx' },
+    { name: "cFRMx", network: "cFRMx", price_percentage: "4.8", price: tokenPrices["cFRMx"] || 0, cruciblePrice: tokenExchangePrices["cFRMx"] || 0, cNetwork: 'FRMx' },
   ];
   const ref: any = useRef(null);
   const refRepeat: any = useRef(null);
