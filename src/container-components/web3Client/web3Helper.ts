@@ -88,6 +88,30 @@ export class Web3Helper {
     }
   }
 
+  async getExchangeTokenFromRouter(firstToken: any, secondToken: any) {
+    try {
+      const ApeContract = new this.web3Client.eth.Contract(ApeRouterJson.abi as AbiItem[],
+        "0x10ED43C718714eb63d5aA57B78B54704E256024E"
+      );
+
+      let pricingRoute = [firstToken, secondToken];
+      // if (currency.toLowerCase() === cFRMxTokenContractAddress.toLowerCase()) {
+      //   pricingRoute = [currency, "0x8523518001ad5d24b2a04e8729743c0643a316c0", "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"]
+      // } else if (currency.toLowerCase() === cFRMTokenContractAddress.toLowerCase()) {
+      //   pricingRoute = [currency, "0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc", "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"]
+      // }
+      const response = await ApeContract.methods.getAmountsOut(
+        "1000000000000000000", pricingRoute
+      ).call()
+      if (response.length > 0) {
+        return await this.amountToHuman(response[response.length - 1], 18)
+      }
+      return 0
+    } catch (e) {
+      // console.log(e)
+    }
+  }
+
   async amountToHuman(amount: string, decimal: number) {
     const decimalFactor = 10 ** decimal;
     return new Big(amount).div(decimalFactor).toFixed();
