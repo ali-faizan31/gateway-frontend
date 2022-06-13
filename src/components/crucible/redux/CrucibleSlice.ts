@@ -15,10 +15,14 @@ export const crucibleSlice = createSlice({
         priceDataLoaded: (state, action) => {
             state.tokenPrices[action.payload.data.token] = action.payload.data.price
         },
-        tokenDataLoaded: (state, action) => { 
+        tokenSupplyDataLoaded: (state, action) => {
+            console.log(action, 'slice')
+            state.tokenSupplyData[action.payload.data.token] = action.payload.data
+        },
+        tokenDataLoaded: (state, action) => {
             state.tokenData[action.payload.crucible.token] = action.payload.crucible
         },
-        aprDataLoaded: (state, action) => {  
+        aprDataLoaded: (state, action) => {
             state.aprInformation = action.payload.crucible
         },
         selectedCrucible: (state, action) => {
@@ -27,23 +31,23 @@ export const crucibleSlice = createSlice({
         userLpStakingDetailsLoaded: (state, action) => {
             state.userLpStakingDetails[action.payload.token] = action.payload.data
         },
-        approved: (state ) => {
+        approved: (state) => {
             state.isApproved = true;
             state.isApproving = false;
         },
-        approving: (state ) => {
+        approving: (state) => {
             state.isApproved = false;
             state.isApproving = true;
         },
-        disApprove: (state ) => {
+        disApprove: (state) => {
             state.isApproved = false;
             state.isApproving = false;
         },
-        transactionProcessed: (state ) => {
+        transactionProcessed: (state) => {
             state.isProcessed = true;
             state.isProcessing = false;
         },
-        transactionProcessing: (state ) => {
+        transactionProcessing: (state) => {
             state.isProcessed = false;
             state.isProcessing = true;
         },

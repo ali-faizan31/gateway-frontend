@@ -12,6 +12,7 @@ export interface CRUCIBLE_STATE {
     userLpStakingDetails: any;
     tokenData: any;
     aprInformation: any;
+    tokenSupplyData: any;
 }
 
 export const defaultCrucibleState: CRUCIBLE_STATE = {
@@ -27,5 +28,6 @@ export const defaultCrucibleState: CRUCIBLE_STATE = {
     tokenPrices: {},
     userLpStakingDetails: {},
     tokenData: {},
-    aprInformation: {}
+    aprInformation: {},
+    tokenSupplyData: {}
 }

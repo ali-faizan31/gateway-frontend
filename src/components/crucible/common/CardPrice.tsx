@@ -4,6 +4,7 @@ import {
   //  FGrid,
   //  FGridItem,
   FItem,
+  FLabel,
   FTypo,
 } from "ferrum-design-system";
 import { ReactComponent as IconFerrum } from "../../../assets/img/icon-ferrum.svg";
@@ -12,6 +13,7 @@ import { ReactComponent as IconArrowGreen } from "../../../assets/img/icon-price
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/rootReducer";
 import { FToggle } from "../../global/switch";
+import TokenSupply from "./TokenSupply";
 
 export const CruciblePrice = () => {
   const tokenPrices = useSelector((state: RootState) => state.crucible.tokenPrices);
@@ -33,57 +35,60 @@ export const CruciblePrice = () => {
     }, 100)
   }, [isCrucibleValue])
   return (
-    <FCard className="card-prices">
-      <FItem display={"flex"} alignX="between" alignY={"center"}>
-        <FItem display={"flex"} alignY={"center"} className="w-100">
-          <FTypo className="card-title f-pl-1" size={16} weight={700}>Price</FTypo>
+    <>
+      <TokenSupply />
+      <FCard className="card-prices">
+        <FItem display={"flex"} alignX="between" alignY={"center"}>
+          <FItem display={"flex"} alignY={"center"} className="w-100">
+            <FTypo className="card-title f-pl-1" size={16} weight={700}>Price</FTypo>
+          </FItem>
+          <FItem display={"flex"} alignY={"center"} className="w-100 justify-content-end">
+            <div className="justify-content-space-between align-item-center f-mb--8">
+              <FTypo className="justify-content-end f-pr--7" alignX={'center'} size={12} weight={700}>
+                {isCrucibleValue ? 'Crucible' : 'USD'}</FTypo>
+              <FToggle isChecked={isCrucibleValue} setIsChecked={setIsCrucibleValue} />
+            </div>
+          </FItem>
         </FItem>
-        <FItem display={"flex"} alignY={"center"} className="w-100 justify-content-end">
-          <div className="justify-content-space-between align-item-center f-mb--8">
-            <FTypo className="justify-content-end f-pr--7" alignX={'center'} size={12} weight={700}>
-              {isCrucibleValue ? 'Crucible' : 'USD'}</FTypo>
-            <FToggle isChecked={isCrucibleValue} setIsChecked={setIsCrucibleValue} />
-          </div>
-        </FItem>
-      </FItem>
-      <div className={"card-price-wrapper"}>
-        {DATA_PRICE.length
-          ? DATA_PRICE.map((item, index) => {
-            return (
-              <FCard variant={"secondary"} className="card-price styled-card align-h" key={index}>
-                <FItem display={"flex"} alignX="between" alignY={"center"}>
-                  <FItem display={"flex"} alignY={"center"} className="w-100">
-                    <span className="icon-network f-pr--5">
-                      <img src={tokenData[item.name]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} alt="" />
-                    </span>
-                    <FTypo>{item.network}</FTypo>
+        <div className={"card-price-wrapper"}>
+          {DATA_PRICE.length
+            ? DATA_PRICE.map((item, index) => {
+              return (
+                <FCard variant={"secondary"} className="card-price styled-card align-h" key={index}>
+                  <FItem display={"flex"} alignX="between" alignY={"center"}>
+                    <FItem display={"flex"} alignY={"center"} className="w-100">
+                      <span className="icon-network f-pr--5">
+                        <img src={tokenData[item.name]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} alt="" />
+                      </span>
+                      <FTypo>{item.network}</FTypo>
+                    </FItem>
+                    <FTypo color="#28B885" size={14} align={"right"}>
+                      {/* <IconArrowGreen width={15} /> */}
+                      {/* {item.price_percentage}% */}
+                    </FTypo>
                   </FItem>
-                  <FTypo color="#28B885" size={14} align={"right"}>
-                    {/* <IconArrowGreen width={15} /> */}
-                    {/* {item.price_percentage}% */}
-                  </FTypo>
-                </FItem>
-                <div ref={ref} className={`zoom-out ${isClassChanged && 'zoom-out-in'}`}>
-                  <FTypo size={25} weight={600} align={"end"} display="flex" alignY={"end"} className={`f-mt--5`}>
-                    {isCrucibleValue ? item.cruciblePrice : item.price}
-                    <FTypo size={12} weight={600} color="#DAB46E" className={"f-pl--2 f-pb--1"}>
-                      {isCrucibleValue ? item.cNetwork : 'USD'}
+                  <div ref={ref} className={`zoom-out ${isClassChanged && 'zoom-out-in'}`}>
+                    <FTypo size={25} weight={600} align={"end"} display="flex" alignY={"end"} className={`f-mt--5`}>
+                      {isCrucibleValue ? item.cruciblePrice : item.price}
+                      <FTypo size={12} weight={600} color="#DAB46E" className={"f-pl--2 f-pb--1"}>
+                        {isCrucibleValue ? item.cNetwork : 'USD'}
+                      </FTypo>
                     </FTypo>
-                  </FTypo>
-                </div>
-                <div ref={refRepeat} className={`zoom-in ${isClassChanged && 'zoom-out-in'}`}>
-                  <FTypo size={15} weight={400} align={"end"} display="flex" alignY={"end"} className={`f-mt--5`}>
-                    {isCrucibleValue ? item.price : item.cruciblePrice}
-                    <FTypo size={8} weight={700} color="#DAB46E" className={"f-pl--2 f-pb--1"}>
-                      {isCrucibleValue ? 'USD' : item.cNetwork}
+                  </div>
+                  <div ref={refRepeat} className={`zoom-in ${isClassChanged && 'zoom-out-in'}`}>
+                    <FTypo size={15} weight={400} align={"end"} display="flex" alignY={"end"} className={`f-mt--5`}>
+                      {isCrucibleValue ? item.price : item.cruciblePrice}
+                      <FTypo size={8} weight={700} color="#DAB46E" className={"f-pl--2 f-pb--1"}>
+                        {isCrucibleValue ? 'USD' : item.cNetwork}
+                      </FTypo>
                     </FTypo>
-                  </FTypo>
-                </div>
-              </FCard>
-            );
-          })
-          : null}
-      </div>
-    </FCard>
+                  </div>
+                </FCard>
+              );
+            })
+            : null}
+        </div>
+      </FCard>
+    </>
   );
 };

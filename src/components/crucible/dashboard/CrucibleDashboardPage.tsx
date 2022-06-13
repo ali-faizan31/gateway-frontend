@@ -23,14 +23,14 @@ import { CruciblePrice } from "../common/CardPrice";
 // import { useHistory, useLocation } from "react-router";
 import * as CrucibleActions from "../redux/CrucibleActions";
 import { crucibleSlice } from "../redux/CrucibleSlice";
-import { cFRMTokenContractAddress, Pricing_Tokens, tokenFRMBSCMainnet } from "../../../utils/const.utils";
+import { cFRMTokenContractAddress, Ferrum_Tokens, tokenFRMBSCMainnet } from "../../../utils/const.utils";
 import { Crucible_Farm_Address_Details } from "../common/utils";
 import { getAPRInformationForPublicUser } from "../../../_apis/APRCrud";
 import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { getCrucibleDetail } from "../common/Helper";
 import { getErrorMessage, TruncateWithoutRounding } from "../../../utils/global.utils";
-import { isTypeNode } from "typescript";
+import { getTokenSupplyByContractAddressBSC } from "../../../_apis/TokenCrud";
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
@@ -62,13 +62,34 @@ const CrucibleDashboardPage = () => {
     }
   }, [networkClient]);
 
+  const getTokenSupply = async (item: any, actions: any) => {
+    let supplyDetails: any = await getTokenSupplyByContractAddressBSC(item.currency);
+    supplyDetails = supplyDetails && supplyDetails.data && supplyDetails.data.result;
+
+    if (!!supplyDetails) {
+      dispatch(
+        actions.tokenSupplyDataLoaded({
+          data: {
+            token: item.token,
+            supply: TruncateWithoutRounding(networkClient?.utils.fromWei(supplyDetails), 3),
+          },
+        })
+      );
+    }
+  }
+
   const loadPricingInfo = createAsyncThunk("crucible/loadUserInfo", async () => {
     const actions = crucibleSlice.actions;
     const web3Helper = new Web3Helper(networkClient as any);
     const client = new CrucibleClient(web3Helper);
 
-    for (let item of Pricing_Tokens) {
+    for (let item of Ferrum_Tokens) {
       const priceDetails = await web3Helper.getTokenPriceFromRouter(item.currency);
+
+      if (item.token === 'cFRM' || item.token === 'cFRMx') {
+        getTokenSupply(item, actions)
+      }
+
       let truncuateDecimal = 3;
       if (item.currency === tokenFRMBSCMainnet || item.currency === cFRMTokenContractAddress) {
         truncuateDecimal = 5;
