@@ -15,6 +15,9 @@ export const crucibleSlice = createSlice({
         priceDataLoaded: (state, action) => {
             state.tokenPrices[action.payload.data.token] = action.payload.data.price
         },
+        tokenSupplyDataLoaded: (state, action) => {
+            state.tokenSupplyData[action.payload.data.token] = action.payload.data
+        },
         tokenConversionLoaded: (state, action) => {
             state.tokenExchange[action.payload.data.token] = action.payload.data.exhangePrice
         },

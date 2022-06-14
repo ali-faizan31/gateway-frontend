@@ -9,7 +9,7 @@ import { CSVLink } from "react-csv";
 import moment from "moment";
 import { getLeaderboardById, getLeaderboardByIdForPublicUser, getStakingBalancesByCABNBSC, getTokenHolderlistByContractAddressBSC } from "../../_apis/LeaderboardCrud";
 import { arraySortByKeyDescending, getErrorMessage } from "../../utils/global.utils";
-import { stakingContractAddressListFerrum, stakingContractAddressListFOMO, TOKEN_TAG } from "../../utils/const.utils";
+import { cFRMTokenContractAddress, cFRMxTokenContractAddress, tokenFRMxBSCMainnet, tokenFRMBSCMainnet, TOKEN_TAG } from "../../utils/const.utils";
 import { filterList } from "../leaderboard/LeaderboardHelper";
 import { useSelector } from "react-redux";
 import { getAllRoleBasedUsers } from "../../_apis/UserCrud";

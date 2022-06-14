@@ -10,7 +10,7 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import { getLeaderboardById, getLeaderboardByIdForPublicUser, getTokenHolderlistByCABNId } from "../../_apis/LeaderboardCrud";
 import { arraySortByKeyDescending, getErrorMessage, getFormattedWalletAddress } from "../../utils/global.utils";
-import { PUBLIC_TAG, TOKEN_TAG } from "../../utils/const.utils";
+import { PUBLIC_TAG, TOKEN_TAG, cFRMTokenContractAddress, cFRMxTokenContractAddress, tokenFRMxBSCMainnet, tokenFRMBSCMainnet } from "../../utils/const.utils";
 import { filterList } from "./LeaderboardHelper";
 import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 
