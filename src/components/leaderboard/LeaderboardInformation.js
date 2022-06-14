@@ -10,7 +10,7 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import { getLeaderboardById, getLeaderboardByIdForPublicUser, getTokenHolderlistByCABNId } from "../../_apis/LeaderboardCrud";
 import { arraySortByKeyDescending, getErrorMessage, getFormattedWalletAddress } from "../../utils/global.utils";
-import { PUBLIC_TAG, TOKEN_TAG } from "../../utils/const.utils";
+import { PUBLIC_TAG, TOKEN_TAG, cFRMTokenContractAddress, cFRMxTokenContractAddress, tokenFRMxBSCMainnet, tokenFRMBSCMainnet } from "../../utils/const.utils";
 import { filterList } from "./LeaderboardHelper";
 import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 
@@ -122,12 +122,23 @@ const LeaderboardInformation = () => {
       });
   };
 
+  const getInputCurrency = (tokenContractAddress) => {
+    if (tokenContractAddress.toLowerCase() === cFRMTokenContractAddress.toLowerCase()) {
+      return tokenFRMBSCMainnet;
+    } else if (tokenContractAddress.toLowerCase() === cFRMxTokenContractAddress.toLowerCase()) {
+      return tokenFRMxBSCMainnet;
+    } else {
+      return "BNB";
+    }
+  };
+
   const mapTokenHolderData = (leaderboardHoldersList, leaderboard) => {
     let mergedList = getFormattedBalanceHoldersList(leaderboardHoldersList);
 
     const list = arraySortByKeyDescending(mergedList, "balance");
 
-    const levelUpSwapUrl = `${leaderboard?.cabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`;
+    let inputCurrencyToken = getInputCurrency(leaderboard?.cabn?.tokenContractAddress);
+    const levelUpSwapUrl = `${leaderboard?.cabn?.dexUrl}swap?inputCurrency=${inputCurrencyToken}&outputCurrency=${leaderboard?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`;
     for (let i = 0; i < list.length; i += 1) {
       if (list[i].tokenHolderAddress) {
         list[i].rank = i + 1;

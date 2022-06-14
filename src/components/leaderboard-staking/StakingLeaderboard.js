@@ -9,7 +9,7 @@ import { CSVLink } from "react-csv";
 import moment from "moment";
 import { getLeaderboardById, getLeaderboardByIdForPublicUser, getStakingBalancesByCABNBSC, getTokenHolderlistByContractAddressBSC } from "../../_apis/LeaderboardCrud";
 import { arraySortByKeyDescending, getErrorMessage } from "../../utils/global.utils";
-import { stakingContractAddressListFerrum, stakingContractAddressListFOMO, TOKEN_TAG } from "../../utils/const.utils";
+import { cFRMTokenContractAddress, cFRMxTokenContractAddress, tokenFRMxBSCMainnet, tokenFRMBSCMainnet, TOKEN_TAG } from "../../utils/const.utils";
 import { filterList } from "../leaderboard/LeaderboardHelper";
 import { useSelector } from "react-redux";
 import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
@@ -206,12 +206,22 @@ const LeaderboardInformation = () => {
     return updatedList;
   };
 
+  const getInputCurrency = (tokenContractAddress) => {
+    if (tokenContractAddress.toLowerCase() === cFRMTokenContractAddress.toLowerCase()) {
+      return tokenFRMBSCMainnet;
+    } else if (tokenContractAddress.toLowerCase() === cFRMxTokenContractAddress.toLowerCase()) {
+      return tokenFRMxBSCMainnet;
+    } else {
+      return "BNB";
+    }
+  };
+
   const mapTokenHolderData = (leaderboardHoldersList, leaderboard) => {
     const finalList = mapHoldersBalances(leaderboardHoldersList, finalstakingList);
     const filteredList = filterList(finalList, leaderboard.exclusionWalletAddressList);
     const list = arraySortByKeyDescending(filteredList, "balance");
-
-    const levelUpSwapUrl = `${leaderboard?.cabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`;
+    let inputCurrencyToken = getInputCurrency(leaderboard?.cabn?.tokenContractAddress);
+    const levelUpSwapUrl = `${leaderboard?.cabn?.dexUrl}swap?inputCurrency=${inputCurrencyToken}&outputCurrency=${leaderboard?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`;
     for (let i = 0; i < list.length; i += 1) {
       list[i].rank = i + 1;
       list[i].formattedAddress = `${list[i].address.substr(0, 6)}...${list[i].address.substr(list[i].address.length - 4)}`;

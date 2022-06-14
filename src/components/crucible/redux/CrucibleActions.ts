@@ -27,12 +27,17 @@ export const resetCrucible = () => (dispatch: any) => {
   dispatch(actions.resetCrucible());
 };
 
-export const updateAPRData = (crucible: any) => (dispatch: any) => { 
+export const updateAPRData = (crucible: any) => (dispatch: any) => {
   dispatch(actions.aprDataLoaded({ crucible }));
 };
 
-export const updateTokenData = (crucible: any) => (dispatch: any) => { 
+export const updateTokenData = (crucible: any) => (dispatch: any) => {
   dispatch(actions.tokenDataLoaded({ crucible }));
+};
+
+export const updateTokenSupplyData = (crucible: any) => (dispatch: any) => {
+  console.log(crucible, 'actions')
+  dispatch(actions.tokenSupplyDataLoaded({ crucible }));
 };
 
 export const transactionProcessed = () => (dispatch: any) => {

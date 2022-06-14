@@ -88,6 +88,25 @@ export class Web3Helper {
     }
   }
 
+  async getExchangeTokenFromRouter(firstToken: any, secondToken: any) {
+    try {
+      const ApeContract = new this.web3Client.eth.Contract(ApeRouterJson.abi as AbiItem[],
+        "0x10ED43C718714eb63d5aA57B78B54704E256024E"
+      );
+
+      let pricingRoute = [firstToken, secondToken];
+      const response = await ApeContract.methods.getAmountsOut(
+        "1000000000000000000", pricingRoute
+      ).call()
+      if (response.length > 0) {
+        return await this.amountToHuman(response[response.length - 1], 18)
+      }
+      return 0
+    } catch (e) {
+      // console.log(e)
+    }
+  }
+
   async amountToHuman(amount: string, decimal: number) {
     const decimalFactor = 10 ** decimal;
     return new Big(amount).div(decimalFactor).toFixed();
