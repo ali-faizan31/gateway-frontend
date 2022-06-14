@@ -179,7 +179,7 @@ const CompetitionInformation = () => {
   const levelUpAmount = (params) => {
     return (
       <div data-label="Level Up Amount">
-        {params?.levelUpAmount ? TruncateWithoutRounding(params?.levelUpAmount, 2).toLocaleString("en-US") : 0}
+        {params?.levelUpAmount ? TruncateWithoutRounding(params?.levelUpAmount, 2).toLocaleString("en-US") : 0}{" "}
         {leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.currency?.symbol}
       </div>
     );

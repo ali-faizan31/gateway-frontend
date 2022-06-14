@@ -26,7 +26,7 @@ const TokenSupply = () => {
                 <FGridItem size={[5, 5, 5]}>
                     <FItem align={"center"}>
                         <FTypo size={12} weight={400} align={"end"} display="flex" alignY={"end"} className="tooltip f-mt--5 cursor-default">
-                            {tokenSupplyData["cFRM"].supply}
+                            {tokenSupplyData["cFRM"]?.supply}
                             <FTypo size={10} display="flex" weight={400} color="#DAB46E" className={"f-pl--4"}>
                                 {tokens.first}
                             </FTypo>
@@ -39,7 +39,7 @@ const TokenSupply = () => {
                 <FGridItem size={[4, 4, 4]}>
                     <FItem align={"center"}>
                         <FTypo size={12} weight={400} align={"end"} display="flex" alignY={"end"} className="tooltip f-mt--5 cursor-default">
-                            {tokenSupplyData["cFRMx"].supply}
+                            {tokenSupplyData["cFRMx"]?.supply}
                             <FTypo size={10} display="flex" weight={400} color="#DAB46E" className={"f-pl--4"}>
                                 {tokens.second}
                             </FTypo>
