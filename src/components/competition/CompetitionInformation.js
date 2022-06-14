@@ -6,7 +6,7 @@ import { useParams, useLocation } from "react-router-dom";
 import { CSVLink } from "react-csv";
 import moment from "moment";
 import eitherConverter from "ether-converter";
-import { getCompetitionById, getCompetitionsParticipantsRanks } from "../../_apis/CompetitionCrud";
+import { getCompetitionById, getCompetitionByIdForPublicUser, getCompetitionsParticipantsRanks } from "../../_apis/CompetitionCrud";
 import { useSelector } from "react-redux";
 import { getErrorMessage } from "../../utils/global.utils";
 
@@ -17,6 +17,7 @@ import {
   tokenFRMBSCMainnet,
   TOKEN_TAG,
   Start_Competition_Buy_Button_Link,
+  PUBLIC_TAG,
 } from "../../utils/const.utils";
 import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 
@@ -25,7 +26,7 @@ const CompetitionInformation = () => {
   const exportRef = useRef();
   let token = localStorage.getItem(TOKEN_TAG);
   const { pathname } = useLocation();
-  const isPublicUser = pathname.includes("/pub");
+  const isPublicUser = pathname.includes(PUBLIC_TAG);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isQueryChange, setIsQueryChange] = useState(false);
@@ -39,12 +40,19 @@ const CompetitionInformation = () => {
 
   useEffect(() => {
     setIsLoading(true);
+
+    if (isPublicUser) {
+      getPublicCompetition();
+      return;
+    }
     getCompetition();
   }, [id]);
 
   useEffect(() => {
-    if (Object.keys(leaderboardData).length) {
+    if (leaderboardData && Object.keys(leaderboardData).length) {
       getCompetitionParticipants();
+    } else {
+      setIsLoading(false);
     }
   }, [leaderboardData]);
 
@@ -118,6 +126,22 @@ const CompetitionInformation = () => {
       .then((res) => {
         if (res) {
           setCompetitionData(res?.data?.body?.competition);
+          setLeaderboardData(res?.data?.body?.competition?.leaderboard);
+        } else {
+          setIsLoading(false);
+        }
+      })
+      .catch((e) => {
+        setIsLoading(false);
+        getErrorMessage(e, activeTranslation);
+      });
+  };
+
+  const getPublicCompetition = () => {
+    getCompetitionByIdForPublicUser(id)
+      .then((res) => {
+        if (res) {
+          setCompetitionData(res?.data?.body?.competition);
           setLeaderboardData(res?.data?.body?.leaderboard);
         } else {
           setIsLoading(false);
@@ -142,13 +166,24 @@ const CompetitionInformation = () => {
     }
   };
 
-  const levelUpFormatter = (params) => (
-    <div data-label="Get Token">
-      <a href={params.levelUpUrl} target="_blank" rel="noreferrer" className="f-btn f-btn-primary text-decoration-none">
-        LEVEL UP
-      </a>
-    </div>
-  );
+  const levelUpFormatter = (params) => {
+    return (
+      <div data-label="Get Token">
+        <a href={params.levelUpUrl} target="_blank" rel="noreferrer" className="f-btn f-btn-primary text-decoration-none">
+          LEVEL UP
+        </a>
+      </div>
+    );
+  };
+
+  const levelUpAmount = (params) => {
+    return (
+      <div data-label="Level Up Amount">
+        {params?.levelUpAmount ? TruncateWithoutRounding(params?.levelUpAmount, 2).toLocaleString("en-US") : 0}{" "}
+        {leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.currency?.symbol}
+      </div>
+    );
+  };
 
   const getTitle = () => (
     <>
@@ -212,7 +247,7 @@ const CompetitionInformation = () => {
     {
       prop: "levelUpAmount",
       title: "Level Up Amount",
-      cell: (params) => <div data-label="Level Up Amount">{params?.levelUpAmount ? TruncateWithoutRounding(params?.levelUpAmount, 2).toLocaleString("en-US") : 0} FRM</div>,
+      cell: levelUpAmount,
     },
     {
       prop: "levelUpUrl",

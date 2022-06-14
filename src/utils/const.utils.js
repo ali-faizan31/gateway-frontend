@@ -37,7 +37,7 @@ export const APELPCFRMxBNBTokenContractAddress = "0xb76b11410A506495418D20c58F94
 export const Start_Competition_Buy_Button_Link =
   "https://pancakeswap.finance/swap?inputCurrency=0x8523518001ad5d24b2a04e8729743c0643a316c0&outputCurrency=0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE&exactField=output&exactAmount=1";
 
-export const Pricing_Tokens = [
+export const Ferrum_Tokens = [
   {
     token: "FRM",
     currency: tokenFRMBSCMainnet,
