@@ -95,11 +95,6 @@ export class Web3Helper {
       );
 
       let pricingRoute = [firstToken, secondToken];
-      // if (currency.toLowerCase() === cFRMxTokenContractAddress.toLowerCase()) {
-      //   pricingRoute = [currency, "0x8523518001ad5d24b2a04e8729743c0643a316c0", "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"]
-      // } else if (currency.toLowerCase() === cFRMTokenContractAddress.toLowerCase()) {
-      //   pricingRoute = [currency, "0xA719b8aB7EA7AF0DDb4358719a34631bb79d15Dc", "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"]
-      // }
       const response = await ApeContract.methods.getAmountsOut(
         "1000000000000000000", pricingRoute
       ).call()

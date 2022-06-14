@@ -26,8 +26,6 @@ export const CruciblePrice = () => {
     { name: "FRMxBSC", network: "FRMx", price_percentage: "4.8", price: tokenPrices["FRMx"] || 0, cruciblePrice: tokenExchangePrices["FRMx"] || 0, cNetwork: 'cFRMx' },
     { name: "cFRMx", network: "cFRMx", price_percentage: "4.8", price: tokenPrices["cFRMx"] || 0, cruciblePrice: tokenExchangePrices["cFRMx"] || 0, cNetwork: 'FRMx' },
   ];
-  const ref: any = useRef(null);
-  const refRepeat: any = useRef(null);
   useEffect(() => {
     setIsClassChanged(true);
     setTimeout(function () {
@@ -65,7 +63,7 @@ export const CruciblePrice = () => {
                     {/* {item.price_percentage}% */}
                   </FTypo>
                 </FItem>
-                <div ref={ref} className={`zoom-out ${isClassChanged && 'zoom-out-in'}`}>
+                <div className={`zoom-out ${isClassChanged && 'zoom-out-in'}`}>
                   <FTypo size={25} weight={600} align={"end"} display="flex" alignY={"end"} className={`f-mt--5`}>
                     {isCrucibleValue ? item.cruciblePrice : item.price}
                     <FTypo size={12} weight={600} color="#DAB46E" className={"f-pl--2 f-pb--1"}>
@@ -73,7 +71,7 @@ export const CruciblePrice = () => {
                     </FTypo>
                   </FTypo>
                 </div>
-                <div ref={refRepeat} className={`zoom-in ${isClassChanged && 'zoom-out-in'}`}>
+                <div className={`zoom-in ${isClassChanged && 'zoom-out-in'}`}>
                   <FTypo size={15} weight={400} align={"end"} display="flex" alignY={"end"} className={`f-mt--5`}>
                     {isCrucibleValue ? item.price : item.cruciblePrice}
                     <FTypo size={8} weight={700} color="#DAB46E" className={"f-pl--2 f-pb--1"}>
