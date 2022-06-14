@@ -1,4 +1,4 @@
-import { FGrid, FGridItem, FItem, FTooltip, FTypo } from 'ferrum-design-system';
+import { FGrid, FGridItem, FItem, FTypo } from 'ferrum-design-system';
 import MintedIcon from "../../../assets/img/plus.svg";
 import RemovedIcon from "../../../assets/img/minus.svg";
 import React from 'react'
@@ -10,7 +10,8 @@ const TokenSupply = () => {
 
 
     const getCrucibleTokenSupply = (isMinted: any, tokens: any) => {
-        return <div>
+
+        return <>
             <FGrid className="info-bar">
                 <FGridItem size={[3, 3, 3]}>
                     <FItem display={"flex"} alignY={"center"} >
@@ -49,12 +50,9 @@ const TokenSupply = () => {
                     </FItem>
                 </FGridItem>
             </FGrid>
-        </div>
+        </>
     }
 
-    const getBaseTokenSupply = () => {
-        return `removed 1234543 frm 1234r frmx`
-    }
 
     return (
         <>
