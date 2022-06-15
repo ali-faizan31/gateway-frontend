@@ -10,6 +10,7 @@ import {
   // FItem,
   FTypo,
 } from "ferrum-design-system";
+import { WalletConnector } from "foundry";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CrucibleClient } from "../../../container-components/web3Client/crucibleClient";
@@ -26,7 +27,6 @@ import { crucibleSlice } from "../redux/CrucibleSlice";
 import { cFRMTokenContractAddress, Ferrum_Tokens, tokenFRMBSCMainnet, tokenFRMxBSCMainnet, cFRMxTokenContractAddress } from "../../../utils/const.utils";
 import { Crucible_Farm_Address_Details } from "../common/utils";
 import { getAPRInformationForPublicUser } from "../../../_apis/APRCrud";
-import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { getCrucibleDetail } from "../common/Helper";
 import { getErrorMessage, TruncateWithoutRounding } from "../../../utils/global.utils";
@@ -174,10 +174,9 @@ const CrucibleDashboardPage = () => {
             <>
               <FCard className="card-apr f-mt-2 f-mb-2 f-pb-2">
                 <FTypo className="card-title f-pl-1">Connect your wallet to access Crucible Dashboard</FTypo>
-                <MetaMaskConnector.WalletConnector
+                <WalletConnector.WalletConnector
                   WalletConnectView={FButton}
                   WalletConnectModal={ConnectWalletDialog}
-                  isAuthenticationNeeded={true}
                   WalletConnectViewProps={{ className: "w-100" }}
                 />
               </FCard>

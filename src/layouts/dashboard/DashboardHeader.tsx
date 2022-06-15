@@ -4,7 +4,7 @@ import { RiLogoutCircleRLine } from "react-icons/ri";
 import { FaUserCircle } from "react-icons/fa";
 import { useHistory, Link, useLocation } from "react-router-dom";
 import { PATH_AUTH, PATH_DASHBOARD } from "../../routes/paths";
-import { MetaMaskConnector } from "../../container-components";
+import { WalletConnector } from "foundry";
 import { ConnectWalletDialog } from "../../utils/connect-wallet/ConnectWalletDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
@@ -161,7 +161,7 @@ const DashboardHeader = ({ title }: any) => {
                   </FCard>
                 </>
               )}
-              <MetaMaskConnector.WalletConnector
+              <WalletConnector.WalletConnector
                 WalletConnectView={FButton}
                 WalletConnectModal={ConnectWalletDialog}
                 WalletConnectViewProps={{
