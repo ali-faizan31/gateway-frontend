@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./switch.scss";
 
 interface Props {
-  isChecked: boolean;
+  isChecked: any;
   setIsChecked: any;
 }
 export const FToggle = ({ isChecked, setIsChecked }: Props) => {
