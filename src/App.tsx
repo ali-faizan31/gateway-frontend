@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { WalletAuthencationOnSignIn } from "./components/common/wallet-authentication/WalletAuthenticationSignIn";
 import { RootState } from "./redux/rootReducer";
 import { cFRMBNBModule } from "./components/crucible/farms";
+import VestingDashboardPage from "./components/vesting/user/VestingDashboardPage";
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -221,6 +222,7 @@ function App() {
           <UnGuardedRoute path={PATH_DASHBOARD.general.profile} component={ProfileSettings} auth={isAuthenticated} layout={DashboardLayout} headerTitle="My Profile" />
           {/* <UnGuardedRoute path={PATH_DASHBOARD.crucible.deployer} component={CrucibleDeployer} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" /> */}
           <UnGuardedRoute path={PATH_DASHBOARD.crucible.index} component={CrucibleDashboardPage} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.vesting.index} component={VestingDashboardPage} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Vesting" />
 
           <Route path="*" component={Page404}></Route>
         </Switch>
