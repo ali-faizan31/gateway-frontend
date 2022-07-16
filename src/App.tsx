@@ -20,6 +20,9 @@ import { WalletAuthencationOnSignIn } from "./components/common/wallet-authentic
 import { RootState } from "./redux/rootReducer";
 import { cFRMBNBModule } from "./components/crucible/farms";
 import VestingDashboardPage from "./components/vesting/user/VestingDashboardPage";
+import VestingAdminDashboard from "./components/vesting/admin";
+import VestingForm from "./components/vesting/vesting-information/vesting-forms";
+import VestingCards from "./components/vesting/vesting-information/vesting-card";
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -194,6 +197,34 @@ function App() {
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Crucible"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.vesting.adminDashboard}
+            component={VestingAdminDashboard}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Vesting"
+          />
+          {/* <GuardedRoute
+            path={PATH_DASHBOARD.vesting.general}
+            component={VestingContainer}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Vesting"
+          /> */}
+          <GuardedRoute
+            path={PATH_DASHBOARD.vesting.form}
+            component={VestingForm}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Vesting"
+          />
+          <GuardedRoute
+            path={PATH_DASHBOARD.vesting.card}
+            component={VestingCards}
+            auth={isAuthenticated}
+            layout={DashboardLayout}
+            headerTitle="Vesting"
           />
           {/* <UnGuardedRoute path={PATH_DASHBOARD.crucible.public} component={CruciblePublic} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" /> */}
 
