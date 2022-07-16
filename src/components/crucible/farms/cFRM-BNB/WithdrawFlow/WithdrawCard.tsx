@@ -30,7 +30,7 @@ import {
 } from "../../../common/Helper";
 import { useHistory, useLocation, useParams } from "react-router";
 import { ClipLoader } from "react-spinners";
-import { MetaMaskConnector } from "../../../../../container-components";
+import { WalletConnector } from "foundry";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { getErrorMessage } from "../../../../../utils/global.utils";
 
@@ -232,10 +232,9 @@ export const Withdraw = () => {
               />
             </div>
           ) : (
-            <MetaMaskConnector.WalletConnector
+            <WalletConnector.WalletConnector
               WalletConnectView={FButton}
               WalletConnectModal={ConnectWalletDialog}
-              isAuthenticationNeeded={true}
               WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
             />
           )}

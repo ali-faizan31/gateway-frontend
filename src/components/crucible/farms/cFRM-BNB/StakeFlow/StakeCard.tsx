@@ -28,7 +28,7 @@ import {
 import * as CrucibleActions from "../../../redux/CrucibleActions";
 import * as SFSH_API from "../../../../../_apis/StepFlowStepHistory";
 import toast from "react-hot-toast";
-import { MetaMaskConnector } from "../../../../../container-components";
+import { WalletConnector } from "foundry";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { ClipLoader } from "react-spinners";
 import { getErrorMessage, TruncateWithoutRounding } from "../../../../../utils/global.utils";
@@ -137,7 +137,7 @@ export const Stake = () => {
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
-        response = await client.stakeLPToken(dispatch, currency, userAddress, stakingAddress, network, amount,setTransitionStatusDialog);
+        response = await client.stakeLPToken(dispatch, currency, userAddress, stakingAddress, network, amount, setTransitionStatusDialog);
       } else if (isSingleTokenFarm(farm)) {
         stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
         currency = crucible[farm!].currency;
@@ -145,7 +145,7 @@ export const Stake = () => {
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
-        response = await client.StakeCrucible(dispatch, currency, amount, stakingAddress, userAddress, network,setTransitionStatusDialog);
+        response = await client.StakeCrucible(dispatch, currency, amount, stakingAddress, userAddress, network, setTransitionStatusDialog);
       }
       if (response) {
         dispatch(CrucibleActions.transactionProcessed())
@@ -270,10 +270,9 @@ export const Stake = () => {
               amount={"0.0001"}
             />
           ) : (
-            <MetaMaskConnector.WalletConnector
+            <WalletConnector.WalletConnector
               WalletConnectView={FButton}
               WalletConnectModal={ConnectWalletDialog}
-              isAuthenticationNeeded={true}
               WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
             />
           )}

@@ -51,8 +51,6 @@ const CompetitionInformation = () => {
   useEffect(() => {
     if (leaderboardData && Object.keys(leaderboardData).length) {
       getCompetitionParticipants();
-    } else {
-      setIsLoading(false);
     }
   }, [leaderboardData]);
 

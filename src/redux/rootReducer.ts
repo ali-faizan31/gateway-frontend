@@ -2,10 +2,8 @@ import { combineReducers } from 'redux';
 import persistReducer from "redux-persist/es/persistReducer";
 import storageSession from "redux-persist/lib/storage/session";
 import localStorage from "redux-persist/es/storage";
-import {
-  MetaMaskConnector,
-  WalletApplicationWrapper 
-} from "../container-components";
+import { WalletApplicationWrapper } from "../container-components";
+import { WalletConnector } from "foundry";
 import { walletConnectorSlice } from "../components/common/wallet-authentication/redux/walletAuthenticationSlice";
 import { crucibleSlice } from '../components/crucible/redux/CrucibleSlice';
 // slices
@@ -44,7 +42,7 @@ const walletAutheticatorPersistConfig = {
 const rootReducer = combineReducers({
   walletConnector: persistReducer(
     walletConnectorPersistConfig,
-    MetaMaskConnector.walletConnectorSlice.reducer
+    WalletConnector.walletConnectorSlice.reducer
   ),
   // walletApplicationWrapper: persistReducer(
   //   walletApplicationWrapperPersistConfig,

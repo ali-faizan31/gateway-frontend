@@ -22,7 +22,7 @@ import {
   //  getNextStepFlowStepId
 } from "../../../common/Helper";
 import { ClipLoader } from "react-spinners";
-import { MetaMaskConnector } from "../../../../../container-components";
+import { WalletConnector } from "foundry";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { changeExponentToPoints, getErrorMessage, TruncateWithoutRounding } from "../../../../../utils/global.utils";
 import Big from "big.js";
@@ -82,7 +82,7 @@ export const UnWrap = () => {
       const web3Helper = new Web3Helper(networkClient as any);
       const client = new CrucibleClient(web3Helper);
 
-      const response = await client.unwrapCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress,setTransitionStatusDialog);
+      const response = await client.unwrapCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress, setTransitionStatusDialog);
       if (response) {
         let transactionId = response.split("|");
         setTransactionId(transactionId[0]);
@@ -206,10 +206,9 @@ export const UnWrap = () => {
               amount={"0.0001"}
             />
           ) : (
-            <MetaMaskConnector.WalletConnector
+            <WalletConnector.WalletConnector
               WalletConnectView={FButton}
               WalletConnectModal={ConnectWalletDialog}
-              isAuthenticationNeeded={true}
               WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
             />
           )}

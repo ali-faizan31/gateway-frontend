@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAPRValueAgainstFarm, getLatestStepToRender } from "./Helper";
 import { ClipLoader } from "react-spinners";
 import { RootState } from "../../../redux/rootReducer";
-import { MetaMaskConnector } from "../../../container-components";
+import { WalletConnector } from "foundry";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { TruncateWithoutRounding } from "../../../utils/global.utils";
 import { MultipleAPR } from "./multipleAPR";
@@ -195,10 +195,9 @@ export const CardAPR = () => {
               ></FButton>
             </>
           ) : (
-            <MetaMaskConnector.WalletConnector
+            <WalletConnector.WalletConnector
               WalletConnectView={FButton}
               WalletConnectModal={ConnectWalletDialog}
-              isAuthenticationNeeded={true}
               WalletConnectViewProps={{ className: "w-100" }}
             />
           )}
@@ -248,10 +247,9 @@ export const CardAPR = () => {
       )}
 
       <FDialog show={showConnectDialog} size={"medium"} onHide={() => setShowConnectDialog(false)} title={"Connect to Metamask"} className="connect-wallet-dialog ">
-        <MetaMaskConnector.WalletConnector
+        <WalletConnector.WalletConnector
           WalletConnectView={FButton}
           WalletConnectModal={ConnectWalletDialog}
-          isAuthenticationNeeded={true}
           WalletConnectViewProps={{ className: "w-100" }}
         />
       </FDialog>
