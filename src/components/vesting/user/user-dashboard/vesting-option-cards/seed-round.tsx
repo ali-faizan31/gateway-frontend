@@ -17,7 +17,7 @@ const SeedRoundCard = ({ isConnected }: Props) => {
                 </FTypo>
                 <FGrid className={'f-mt--3'}>
                     <FGridItem size={[6, 6, 6]} alignX="left">
-                        <FTypo size={16} weight={400} color="white" className={"f-pb--2"}>
+                        <FTypo size={16} weight={400} color="#6F767E" className={"f-pb--2"}>
                             Allocation
                         </FTypo>
                         <FTypo size={22} weight={600} color="white" align={"end"} display="flex" alignY={"end"} className="f-mt--5">
@@ -28,7 +28,7 @@ const SeedRoundCard = ({ isConnected }: Props) => {
                         </FTypo>
                     </FGridItem>
                     <FGridItem size={[6, 6, 6]} alignX="left">
-                        <FTypo size={16} weight={400} color="white" className={"f-pb--2"}>
+                        <FTypo size={16} weight={400} color="#6F767E" className={"f-pb--2"}>
                             Claimable
                         </FTypo>
                         <FTypo size={22} weight={600} color="white" align={"end"} display="flex" alignY={"end"} className="f-mt--5">
@@ -41,7 +41,7 @@ const SeedRoundCard = ({ isConnected }: Props) => {
                 </FGrid>
                 <FGrid className={'f-mt-2'}>
                     <FGridItem size={[6, 6, 6]} alignX="left">
-                        <FTypo size={16} weight={400} color="white" className={"f-pb--2"}>
+                        <FTypo size={16} weight={400} color="#6F767E" className={"f-pb--2"}>
                             Total Claimed
                         </FTypo>
                         <FTypo size={22} weight={600} color="white" align={"end"} display="flex" alignY={"end"} className="f-mt--5">
@@ -52,7 +52,7 @@ const SeedRoundCard = ({ isConnected }: Props) => {
                         </FTypo>
                     </FGridItem>
                     <FGridItem size={[6, 6, 6]} alignX="left">
-                        <FTypo size={16} weight={400} color="white" className={"f-pb--2"}>
+                        <FTypo size={16} weight={400} color="#6F767E" className={"f-pb--2"}>
                             Networks
                         </FTypo>
                         <div style={{ display: "flex" }}>
@@ -66,7 +66,7 @@ const SeedRoundCard = ({ isConnected }: Props) => {
                     </FGridItem>
                 </FGrid>
                 <div>
-                    <FTypo size={20} weight={400} color="white" className={"f-mt-2"}>
+                    <FTypo size={20} weight={400} color="#6F767E" className={"f-mt-2"}>
                         Vesting
                     </FTypo>
                     <FTypo size={16} weight={400} color="white" className={"f-mt--8"}>

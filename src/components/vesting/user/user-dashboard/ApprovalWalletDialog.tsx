@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FButton, FCard, FDialog, FItem, FList, FListItem, FTypo } from "ferrum-design-system";
 import { ClipLoader } from "react-spinners";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/rootReducer";
 
 export const ApprovalWalletDialog = ({
   show,
@@ -11,6 +13,7 @@ export const ApprovalWalletDialog = ({
   const [isApproving, setIsApproving] = useState(true);
   const [isInProgress, setIsInProgress] = useState(false);
   const [isApprovalDone, setIsApprovalDone] = useState(false);
+  const { walletAddress } = useSelector((state: RootState) => state.walletConnector);
   useEffect(() => {
     if (isApproving) {
       setTimeout(function () {
@@ -55,7 +58,7 @@ export const ApprovalWalletDialog = ({
                   Transaction ID
                 </FTypo>
                 <FTypo size={16} weight={400} color="white" className={'f-mt--5'}>
-                  0x66giu393.....883343434
+                  {walletAddress}
                 </FTypo>
               </>
               : isApprovalDone ?
@@ -64,15 +67,6 @@ export const ApprovalWalletDialog = ({
                 null
           }
         </FTypo>
-        {/* <FTypo size={24} weight={700} color="white">
-        Transaction in progress.
-        <FTypo size={16} weight={400} color="white" className={'f-mt-1'}>
-          Transaction ID
-        </FTypo>
-        <FTypo size={16} weight={400} color="white" className={'f-mt--5'}>
-          0x66giu393.....883343434
-        </FTypo>
-      </FTypo> */}
         {isApprovalDone &&
           <div className={'d_flex justify_center align_center f-mt-2'}>
             <FButton
