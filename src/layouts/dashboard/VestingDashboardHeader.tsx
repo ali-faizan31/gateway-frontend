@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
 import { FToggle } from "../../components/global/switch";
 import { ConnectWalletDialog } from "../../components/vesting/connect-wallet/ConnectWalletDialog";
+import bnbIcon from "../../assets/img/yellow-bnb.svg";
 
 const VestingDashboardHeader = ({ title }: any) => {
   const { isConnected, isConnecting, walletAddress } = useSelector((state: RootState) => state.walletConnector);
@@ -22,13 +23,13 @@ const VestingDashboardHeader = ({ title }: any) => {
         {isConnected &&
           <>
             <div className={'f-mr-1 d-flex align-item-center justify_start'}>
-              <FTypo size={12} weight={700} color="white" className={"f-mr--7"}>
+              <FTypo size={12} weight={700} color="white" className={"f-pr--7"}>
                 My claims
               </FTypo>
-              <FToggle isChecked={myClaims} setIsChecked={setMyClaims} />
+              <FToggle isChecked={myClaims} setIsChecked={setMyClaims} isVesting={true} />
             </div>
             <div className={'wallet_address_card d-flex align-item-center justify_start'}>
-              <div style={{ width: 28, height: 28, backgroundColor: '#fff' }}>f</div>
+              <img src={bnbIcon} alt={bnbIcon} style={{ width: 28, height: 28 }} />
               <FTypo size={12} width={145} weight={700} color="white" className={"f-pl--2"} truncate={{ truncateLength: 7, truncatePosition: "center" }}>
                 {walletAddress}
               </FTypo>
@@ -47,7 +48,7 @@ const VestingDashboardHeader = ({ title }: any) => {
           WalletConnectView={FButton}
           WalletConnectModal={ConnectWalletDialog}
           WalletConnectViewProps={{
-            className: "custom-font-size-14 font-700 connectBtn",
+            className: "custom-font-size-14 font-700 connectBtn clr_black font-face-mod",
             variant: "primary"
           }}
         />

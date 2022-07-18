@@ -82,7 +82,7 @@ export const PATH_DASHBOARD = {
   // home: "/home",
   vesting: {
     index: path(ROOTS_DASHBOARD, "/vesting/user"),
-    adminDashboard: path(ROOTS_DASHBOARD, "/vesting/admin/dashboard"),
+    adminDashboard: path(ROOTS_DASHBOARD, "/vesting/admin"),
     general: path("vesting"),
     form: path("vesting/vesting-form"),
     card: path("vesting/vesting-card"),

@@ -1,6 +1,7 @@
 $secondaryColor: #495057;
 body {
   line-height: 1.3 !important;
+  font-family: "ModAberMano" !important;
 }
 
 body > div {
@@ -582,6 +583,9 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 .clr_black {
   color: #000000 !important;
 }
+.clr_white {
+  color: #fff !important;
+}
 .bg_black {
   background-color: #000000 !important;
 }
@@ -634,7 +638,6 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   width: 160px;
   height: 40px;
   border: none;
-  color: #000 !important;
 }
 .user_dashboard_cards {
   height: 140px;
@@ -664,4 +667,10 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   100% {
     transform: rotate(360deg);
   }
+}
+.font-face-mod {
+  font-family: "ModAberMano";
+}
+.bg-transparent {
+  background-color: transparent !important;
 }

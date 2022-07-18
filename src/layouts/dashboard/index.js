@@ -9,13 +9,14 @@ const DashboardLayout = ({ headerTitle, children }) => {
   const location = useLocation();
   let layoutCrucible = location.pathname.includes("crucible");
   let layoutVesting = location.pathname.includes("vesting");
+  console.log("location:", location.pathname);
   return (
     <FLayout themeBuilder={false} className={layoutCrucible ? "layout-crucible" : ""}>
       <DashboardSidebar />
       <FMain>
         {layoutVesting ? (
           <>
-            <VestingDashboardHeader title={headerTitle} />
+            {location.pathname === "/dashboard/vesting/user" && <VestingDashboardHeader title={headerTitle} />}
             <div>{children}</div>
           </>
         ) : (

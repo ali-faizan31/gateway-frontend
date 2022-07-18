@@ -92,7 +92,7 @@ const PrivateRoundCard = ({ isConnected }: Props) => {
                 <div className={`d_flex justify_end align_center ${isApproved ? 'f-mt-1' : 'f-mt-4'}`}>
                     {isConnected ?
                         <FButton
-                            className={`custom-font-size-14 font-700 ${!isApproved && 'connectBtn'}`}
+                            className={`custom-font-size-14 clr_black font-700 font-face-mod ${!isApproved && 'connectBtn bg-transparent clr_white'}`}
                             onClick={() => { setApprovalModal(true) }}
                             title={`${isApproved ? 'Claim' : 'Approve to Claim'}`}
                             variant={`${isApproved && 'primary'}`} />
@@ -101,7 +101,7 @@ const PrivateRoundCard = ({ isConnected }: Props) => {
                             WalletConnectView={FButton}
                             WalletConnectModal={ConnectWalletDialog}
                             WalletConnectViewProps={{
-                                className: "custom-font-size-14 font-700 connectBtn",
+                                className: "custom-font-size-14 font-700 connectBtn clr_black font-face-mod",
                                 variant: "primary"
                             }}
                         />

@@ -95,7 +95,7 @@ const StrategicRoundCard = ({ isConnected }: Props) => {
                 <div className={`d_flex justify_end align_center ${isInvest ? 'f-mt-1' : 'f-mt-4'}`}>
                     {isConnected ?
                         <FButton
-                            className={'custom-font-size-14 font-700'}
+                            className={'custom-font-size-14 font-700 clr_black font-face-mod'}
                             variant={'primary'}
                             style={{ width: 160, height: 40 }}
                             title={`${isInvest ? 'Approve' : 'Invest'}`}
@@ -105,7 +105,7 @@ const StrategicRoundCard = ({ isConnected }: Props) => {
                             WalletConnectView={FButton}
                             WalletConnectModal={ConnectWalletDialog}
                             WalletConnectViewProps={{
-                                className: "custom-font-size-14 font-700 connectBtn",
+                                className: "custom-font-size-14 font-700 connectBtn clr_black font-face-mod",
                                 variant: "primary"
                             }}
                         />
