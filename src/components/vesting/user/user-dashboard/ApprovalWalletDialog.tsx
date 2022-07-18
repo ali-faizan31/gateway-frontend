@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { FButton, FCard, FDialog, FItem, FList, FListItem, FTypo } from "ferrum-design-system";
+import { FButton, FCard, FItem, FList, FListItem, FTypo } from "ferrum-design-system";
 import { ClipLoader } from "react-spinners";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/rootReducer";
+import { FDialog } from "../../ferrum-design-system/Fdialog/Fdialog";
 
 export const ApprovalWalletDialog = ({
   show,
@@ -37,7 +38,7 @@ export const ApprovalWalletDialog = ({
       onHide={onHide}
       size="medium"
       showClose={false}
-      variant={'whiteLabeled'}
+      variant={'crucibleApprovalModal'}
       className="dialog-connect-wallet text-center"
     >
       <div className="f-pb-2">
@@ -57,7 +58,7 @@ export const ApprovalWalletDialog = ({
                 <FTypo size={16} weight={400} color="white" className={'f-mt-1'}>
                   Transaction ID
                 </FTypo>
-                <FTypo size={16} weight={400} color="white" className={'f-mt--5'}>
+                <FTypo size={16} weight={400} color="white" className={'f-mt--5'} truncate={{ truncateLength: 7, truncatePosition: "center" }}>
                   {walletAddress}
                 </FTypo>
               </>

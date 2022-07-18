@@ -86,6 +86,11 @@
         border-bottom-left-radius: 30px !important;
         border-bottom-right-radius: 10px !important;
       }
+      &.bg-crucibleApprovalModal {
+        background: url("./img/approvalModalImg.svg") !important;
+        color: white;
+        min-height: 420px;
+      }
       &.bg-light {
         background: white;
         color: #212b36;
