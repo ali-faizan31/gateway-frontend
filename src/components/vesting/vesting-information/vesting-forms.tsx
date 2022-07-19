@@ -6,9 +6,11 @@ import { FInputCheckbox } from '../ferrum-design-system/Fform/FinputCheckbox/Fin
 import { FInputText } from '../ferrum-design-system/Fform/FinputText/FinputText';
 import { FSelect } from '../ferrum-design-system/Fform/Fselect/Fselect';
 import leftIcon from '../ferrum-design-system/assets/img/f-icons/icon-arrow-dark.svg';
-import { Link, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 const VestingForm = () => {
     const location: any = useLocation();
+    const history = useHistory();
     const { isEditedForm } = location.state;
     const [titleRound, setTitleRound] = useState('');
     const [vestingInfo, setVestingInfo] = useState('');
@@ -28,13 +30,12 @@ const VestingForm = () => {
     };
     return (
         <>
-            <FContainer type="fluid">
+            <FContainer type="fluid" className={'bg_black h-100'}>
                 <div className="f-mt-2 f-mb-2 d_flex justify_start align_center">
-                    <Link to={'/dashboard'}>
-                        <div className={'round img_29 bg_white d_flex justify_center align_center f-mr-1'}>
-                            <img src={leftIcon} style={{ width: 14, height: 14 }} />
-                        </div>
-                    </Link>
+                    <div className={'round img_29 bg_white d_flex justify_center align_center f-mr-1'}
+                        onClick={() => history.push(PATH_DASHBOARD.vesting.adminDashboard)}>
+                        <img src={leftIcon} alt={leftIcon} style={{ width: 14, height: 14 }} />
+                    </div>
                     <p className={'primaryColor custom-font-size-18 font-700'}>
                         {isEditedForm ? 'Edit' : 'Add New'} Vesting</p>
                 </div>

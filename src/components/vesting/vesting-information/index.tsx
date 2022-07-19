@@ -1,10 +1,10 @@
 import React from "react";
 import Datatable from "react-bs-datatable";
 import { FCard, FItem, FTypo } from "ferrum-design-system";
-import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 import { FTable } from "../ferrum-design-system/Ftable/Ftable";
 import { FButton } from "../ferrum-design-system/Fbutton/Fbutton";
+import { PATH_DASHBOARD } from "../../../routes/paths";
 export const VestingInformation = () => {
     const history = useHistory();
     const tableHeads: any[] = [
@@ -15,15 +15,13 @@ export const VestingInformation = () => {
         { prop: "action", title: <></> },
     ];
     const getNetworks = (networks: any) => {
-        {
-            return <div style={{ display: "flex" }}>
-                {networks.map((element: any) => {
-                    return <div className={'white-small-box'}>
-                        <span className={'custom-font-size-14 font-400'}>{element}</span>
-                    </div >
-                })}
-            </div>
-        }
+        return <div style={{ display: "flex" }}>
+            {networks.map((element: any) => {
+                return <div className={'white-small-box'}>
+                    <span className={'custom-font-size-14 font-400'}>{element}</span>
+                </div >
+            })}
+        </div>
     }
     const vestingInfo = [
         { titleRound: "Seed Round", allocation: "9,999.90 Token", status: "Ready to be implemented", network: ['BEP20', 'ERC20'], id: "1" },
@@ -45,7 +43,7 @@ export const VestingInformation = () => {
                         style={{ width: '201px', height: '40px' }}
                         title={`${vesting.status === "Implemented" ? "Edit" : "View"} Vesting`}
                         onClick={() => history.push({
-                            pathname: `${vesting.status === "Implemented" ? '/vesting/vesting-form' : '/vesting/vesting-card'}`,
+                            pathname: `${vesting.status === "Implemented" ? PATH_DASHBOARD.vesting.form : PATH_DASHBOARD.vesting.card}`,
                             state: {
                                 isEditedForm: true
                             }
@@ -64,7 +62,7 @@ export const VestingInformation = () => {
                         title={"Add New Vesting"}
                         style={{ width: "max-content" }}
                         onClick={() => history.push({
-                            pathname: '/vesting/vesting-form',
+                            pathname: PATH_DASHBOARD.vesting.form,
                             state: {
                                 isEditedForm: false
                             }

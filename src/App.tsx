@@ -23,6 +23,8 @@ import VestingDashboardPage from "./components/vesting/user/VestingDashboardPage
 import VestingAdminDashboard from "./components/vesting/admin";
 import VestingForm from "./components/vesting/vesting-information/vesting-forms";
 import VestingCards from "./components/vesting/vesting-information/vesting-card";
+import VestingContainer from "./components/vesting/admin/vesting-container";
+import VestingInformationTable from "./components/vesting/vesting-information/vesting-information-table";
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -205,13 +207,13 @@ function App() {
             layout={DashboardLayout}
             headerTitle="Vesting"
           />
-          {/* <GuardedRoute
+          <GuardedRoute
             path={PATH_DASHBOARD.vesting.general}
             component={VestingContainer}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Vesting"
-          /> */}
+          />
           <GuardedRoute
             path={PATH_DASHBOARD.vesting.form}
             component={VestingForm}
@@ -221,7 +223,7 @@ function App() {
           />
           <GuardedRoute
             path={PATH_DASHBOARD.vesting.card}
-            component={VestingCards}
+            component={VestingInformationTable}
             auth={isAuthenticated}
             layout={DashboardLayout}
             headerTitle="Vesting"
