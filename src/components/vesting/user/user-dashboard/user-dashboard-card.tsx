@@ -1,5 +1,6 @@
-import { FCard, FGrid, FGridItem, FTypo } from 'ferrum-design-system'
+import { FGrid, FGridItem, FTypo } from 'ferrum-design-system'
 import React from 'react';
+import { FCard } from '../../ferrum-design-system/Fcard/Fcard';
 const DashboardCards = () => {
     return (
         <>
