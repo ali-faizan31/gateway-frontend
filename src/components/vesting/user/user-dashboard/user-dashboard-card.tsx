@@ -1,13 +1,11 @@
 import { FGrid, FGridItem, FTypo } from 'ferrum-design-system'
 import React from 'react';
-import cardImg from '../../../../assets/img/Group278.svg';
-import { FCard } from '../../ferrum-design-system/Fcard/Fcard';
 const DashboardCards = () => {
     return (
         <>
             <FGrid className={'f-mt-1 f-mb-2'}>
                 <FGridItem size={[3, 3, 3]}>
-                    <div className={'new_trickCard'}>
+                    <div className={'small-vesting-card'}>
                         <div>
                             <FTypo size={20} weight={400} color="white" className={"f-pb-1"}>
                                 Allocation
@@ -22,7 +20,7 @@ const DashboardCards = () => {
                     </div>
                 </FGridItem>
                 <FGridItem size={[3, 3, 3]}>
-                    <div className={'new_trickCard'}>
+                    <div className={'small-vesting-card'}>
                         <div>
                             <FTypo size={20} weight={400} color="white" className={"f-pb-1"}>
                                 Claimable
@@ -37,7 +35,7 @@ const DashboardCards = () => {
                     </div>
                 </FGridItem>
                 <FGridItem size={[3, 3, 3]}>
-                    <div className={'new_trickCard'}>
+                    <div className={'small-vesting-card'}>
                         <div>
                             <FTypo size={20} weight={400} color="white" className={"f-pb-1"}>
                                 Total Claimed
@@ -52,7 +50,7 @@ const DashboardCards = () => {
                     </div>
                 </FGridItem>
                 <FGridItem size={[3, 3, 3]}>
-                    <div className={'new_trickCard'}>
+                    <div className={'small-vesting-card'}>
                         <div>
                             <FTypo size={20} weight={400} color="white" className={"f-pb-1"}>
                                 Price

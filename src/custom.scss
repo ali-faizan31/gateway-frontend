@@ -680,7 +680,7 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   border-radius: 5px;
   border: 1px solid rgb(255, 255, 255);
 }
-.new_trickCard {
+.small-vesting-card {
   // background-image: url("./assets/img/smallCardImg.svg");
   background-image: url("./assets/img/smallVestingCard.png");
   height: 100%;
@@ -688,11 +688,17 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   background-repeat: round;
   padding: 1.5rem;
 }
-.vestingOptionCard {
+.vesting-option-card {
   // background-image: url("./assets/img/vestingOptionCard2.svg");
   background-image: url("./assets/img/vestingOptionCard.png");
   height: 100%;
   width: 100%;
   background-repeat: round;
   padding: 1.5rem;
+}
+.bg_purple {
+  background-color: #33383f !important;
+}
+.border_none {
+  border: none !important;
 }

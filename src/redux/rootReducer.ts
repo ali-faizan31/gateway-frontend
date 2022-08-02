@@ -6,6 +6,7 @@ import { WalletApplicationWrapper } from "../container-components";
 import { WalletConnector } from "foundry";
 import { walletConnectorSlice } from "../components/common/wallet-authentication/redux/walletAuthenticationSlice";
 import { crucibleSlice } from '../components/crucible/redux/CrucibleSlice';
+import { vestingSlice } from '../components/vesting/redux/VestingSlice'
 // slices
 import competitionReducer from './slices/competition';
 import leaderboardReducer from './slices/leaderboard';
@@ -33,6 +34,11 @@ const cruciblePersistConfig = {
   // whitelist: [ "stepFlowStepHistory", "currentStep", "currentStepIndex"] 
 };
 
+const vestingPersistConfig = {
+  key: "vesting",
+  storage: localStorage,
+};
+
 const walletAutheticatorPersistConfig = {
     key: "walletAutheticator",
     storage: storageSession,
@@ -57,6 +63,7 @@ const rootReducer = combineReducers({
   approval: approvableButtonSlice.reducer,
   watchEvents: chainEventsSlice.reducer,
   crucible: persistReducer(cruciblePersistConfig, crucibleSlice.reducer),
+  vesting: persistReducer(vestingPersistConfig, vestingSlice.reducer),
   competition: competitionReducer,
   leaderboard: leaderboardReducer,
   phrase: phraseReducer, 

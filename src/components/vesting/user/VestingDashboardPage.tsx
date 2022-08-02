@@ -9,8 +9,7 @@ import StrategicRoundCard from "./user-dashboard/vesting-option-cards/strategic-
 
 const VestingDashboardPage = () => {
   const { isConnected } = useSelector((state: RootState) => state.walletConnector);
-
-
+  const vestingClaim = useSelector((state: RootState) => state.vesting.vestingClaim);
 
   return (
     <div className="container f-ml-0 f-pl-2 f-pr-2">
@@ -24,9 +23,11 @@ const VestingDashboardPage = () => {
           <FGridItem size={[4, 4, 4]} alignX="left">
             <PrivateRoundCard isConnected={isConnected} />
           </FGridItem>
-          <FGridItem size={[4, 4, 4]} alignX="left">
-            <StrategicRoundCard isConnected={isConnected} />
-          </FGridItem>
+          {!vestingClaim &&
+            <FGridItem size={[4, 4, 4]} alignX="left">
+              <StrategicRoundCard isConnected={isConnected} />
+            </FGridItem>
+          }
         </FGrid>
       </div>
     </div>

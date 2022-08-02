@@ -14,7 +14,7 @@ const StrategicRoundCard = ({ isConnected }: Props) => {
     }
     return (
         <>
-            <div className={'ml_0 vestingOptionCard'}>
+            <div className={'ml_0 vesting-option-card'}>
                 <FTypo size={25} weight={400} color="#DAB46E" className={"f-pb-1"}>
                     Strategic Round
                 </FTypo>

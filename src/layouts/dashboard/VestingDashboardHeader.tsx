@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { FButton, FGrid, FGridItem, FTypo } from "ferrum-design-system";
 import { WalletConnector } from "foundry";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
 import { FToggle } from "../../components/global/switch";
 import { ConnectWalletDialog } from "../../components/vesting/connect-wallet/ConnectWalletDialog";
 import bnbIcon from "../../assets/img/yellow-bnb.svg";
+import * as VestingActions from "../../components/vesting/redux/VestingActions";
+import { vestingSlice } from "../../components/vesting/redux/VestingSlice";
 
 const VestingDashboardHeader = ({ title }: any) => {
-  const { isConnected, isConnecting, walletAddress } = useSelector((state: RootState) => state.walletConnector);
-  const [myClaims, setMyClaims] = useState(false);
+  const actions = vestingSlice.actions;
+  const dispatch = useDispatch();
+  const { isConnected, walletAddress } = useSelector((state: RootState) => state.walletConnector);
+  const vestingClaim = useSelector((state: RootState) => state.vesting.vestingClaim);
+  const [myClaims, setMyClaims] = useState(vestingClaim);
+
+  useEffect(() => {
+    dispatch(VestingActions.vestingClaimValue(myClaims));
+  }, [myClaims]);
 
   return (
     <FGrid className={'w-100 bg_black_new justify-content-space-between align-item-center header_layout ml-mr-0'}>
@@ -48,7 +57,7 @@ const VestingDashboardHeader = ({ title }: any) => {
           WalletConnectView={FButton}
           WalletConnectModal={ConnectWalletDialog}
           WalletConnectViewProps={{
-            className: "custom-font-size-14 font-700 connectBtn clr_black font-face-mod",
+            className: `custom-font-size-14 font-700 connectBtn clr_black font-face-mod ${isConnected && 'bg_purple border_none clr_white'}`,
             variant: "primary"
           }}
         />
