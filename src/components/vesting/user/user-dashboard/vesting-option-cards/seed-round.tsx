@@ -11,7 +11,7 @@ const SeedRoundCard = ({ isConnected }: Props) => {
     const [isApproved, setIsApproved] = useState(false);
     return (
         <>
-            <FCard className={'vesting_option_cards ml_0'}>
+            <div className={'ml_0 vestingOptionCard'}>
                 <FTypo size={25} weight={400} color="#DAB46E" className={"f-pb-1"}>
                     Seed Round
                 </FTypo>
@@ -114,7 +114,7 @@ const SeedRoundCard = ({ isConnected }: Props) => {
                         setApprovalModal={setApprovalModal}
                         setIsApproved={setIsApproved} />
                 }
-            </FCard>
+            </div>
         </>
     )
 }
