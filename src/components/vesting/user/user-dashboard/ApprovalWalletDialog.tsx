@@ -4,6 +4,7 @@ import { ClipLoader } from "react-spinners";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/rootReducer";
 import { FDialog } from "../../ferrum-design-system/Fdialog/Fdialog";
+import transactionUpdatedImg from '../../../../assets/img/transaction-updated.svg';
 
 export const ApprovalWalletDialog = ({
   show,
@@ -44,7 +45,11 @@ export const ApprovalWalletDialog = ({
       <div className="f-pb-2">
         <div className={'d_flex justify_center align_center f-mb-2 f-mt-2'}>
           {/* <ClipLoader color="#fff" size={70} speedMultiplier={0.6} /> */}
-          <div className="loader"></div>
+          {isApprovalDone ?
+            <img src={transactionUpdatedImg} alt={transactionUpdatedImg} />
+            :
+            <div className="loader"></div>
+          }
         </div>
         <FTypo size={24} weight={700} color="white">
           {isApproving ?
