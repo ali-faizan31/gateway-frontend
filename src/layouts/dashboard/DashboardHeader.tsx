@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { FHeader, FButton, FItem, FCard } from "ferrum-design-system";
+import { FHeader, FButton, FItem, FCard, FTypo } from "ferrum-design-system";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { FaUserCircle } from "react-icons/fa";
 import { useHistory, Link, useLocation } from "react-router-dom";
@@ -155,7 +155,9 @@ const DashboardHeader = ({ title }: any) => {
                         {getFormattedWalletAddress(walletAddress)}
                       </FCard>
                       <FCard className={"no-left-margin custom-padding-10 d-flex custom-border-radius-4"} variant={"primary"}>
-                        {TruncateWithoutRounding(getFormattedBalance(walletBalance), 3)} {currentNetworkInformation && currentNetworkInformation?.networkCurrencySymbol}
+                        <FTypo size={14} weight={400} color={'white'}>
+                          {TruncateWithoutRounding(getFormattedBalance(walletBalance), 3)} {currentNetworkInformation && currentNetworkInformation?.networkCurrencySymbol}
+                        </FTypo>
                       </FCard>
                     </FItem>
                   </FCard>

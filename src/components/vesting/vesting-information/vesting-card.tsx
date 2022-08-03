@@ -1,6 +1,5 @@
 import { FGrid, FGridItem, FItem, FTypo } from 'ferrum-design-system'
-import React from 'react'
-import { FCard } from '../ferrum-design-system/Fcard/Fcard';
+import React from 'react';
 const VestingCards = () => {
     return (
         <>

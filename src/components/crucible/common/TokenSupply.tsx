@@ -25,9 +25,9 @@ const TokenSupply = () => {
                 </FGridItem>
                 <FGridItem size={[5, 5, 5]}>
                     <FItem align={"center"}>
-                        <FTypo size={12} weight={400} align={"end"} display="flex" alignY={"end"} className="tooltip f-mt--5 cursor-default">
+                        <FTypo size={11} weight={400} align={"end"} display="flex" alignY={"end"} className="tooltip f-mt--5 cursor-default">
                             {Number(tokenSupplyData["cFRM"]?.supply).toLocaleString('en-US')}
-                            <FTypo size={10} display="flex" weight={400} color="#DAB46E" className={"f-pl--4"}>
+                            <FTypo size={10} display="flex" weight={400} color="#DAB46E" className={"f-pl--1"}>
                                 {tokens.first}
                             </FTypo>
                             <span className="tooltiptext custom-font-size-10">
@@ -38,9 +38,9 @@ const TokenSupply = () => {
                 </FGridItem>
                 <FGridItem size={[4, 4, 4]}>
                     <FItem align={"center"}>
-                        <FTypo size={12} weight={400} align={"end"} display="flex" alignY={"end"} className="tooltip f-mt--5 cursor-default">
+                        <FTypo size={11} weight={400} align={"end"} display="flex" alignY={"end"} className="tooltip f-mt--5 cursor-default">
                             {Number(tokenSupplyData["cFRMx"]?.supply).toLocaleString('en-US')}
-                            <FTypo size={10} display="flex" weight={400} color="#DAB46E" className={"f-pl--4"}>
+                            <FTypo size={10} display="flex" weight={400} color="#DAB46E" className={"f-pl--1"}>
                                 {tokens.second}
                             </FTypo>
                             <span className="tooltiptext custom-font-size-10">

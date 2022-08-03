@@ -37,12 +37,12 @@
     position: relative;
     z-index: 1;
   }
-  &.f-card-primary {
-    background: $cardColor;
-  }
-  &.f-card-secondary {
-    background: lighten($cardColor, 10);
-  }
+  // &.f-card-primary {
+  //   background: $cardColor;
+  // }
+  // &.f-card-secondary {
+  //   background: lighten($cardColor, 10);
+  // }
   &.f-card-whiteLabeled {
     background: $whiteLabeledCardColor;
     border-top-left-radius: 10px !important;
