@@ -4,10 +4,10 @@ import { WalletConnector } from "foundry";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
 import { FToggle } from "../../components/global/switch";
-import { ConnectWalletDialog } from "../../components/vesting/connect-wallet/ConnectWalletDialog";
 import bnbIcon from "../../assets/img/yellow-bnb.svg";
 import * as VestingActions from "../../components/vesting/redux/VestingActions";
 import { vestingSlice } from "../../components/vesting/redux/VestingSlice";
+import { ConnectWalletDialog } from "../../utils/connect-wallet/ConnectWalletDialog";
 
 const VestingDashboardHeader = ({ title }: any) => {
   const actions = vestingSlice.actions;

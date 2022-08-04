@@ -1,7 +1,7 @@
 import { FButton, FCard, FGrid, FGridItem, FItem, FTypo } from 'ferrum-design-system'
 import { WalletConnector } from 'foundry';
 import React, { useState } from 'react';
-import { ConnectWalletDialog } from '../../../connect-wallet/ConnectWalletDialog';
+import { ConnectWalletDialog } from '../../../../../utils/connect-wallet/ConnectWalletDialog';
 interface Props {
     isConnected: any;
 }
