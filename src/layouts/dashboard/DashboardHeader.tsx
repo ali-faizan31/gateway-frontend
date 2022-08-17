@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
-import { FHeader, FButton, FItem, FCard } from "ferrum-design-system";
+import { FHeader, FButton, FItem, FCard, FTypo } from "ferrum-design-system";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { FaUserCircle } from "react-icons/fa";
 import { useHistory, Link, useLocation } from "react-router-dom";
 import { PATH_AUTH, PATH_DASHBOARD } from "../../routes/paths";
-import { MetaMaskConnector } from "../../container-components";
+import { WalletConnector } from "foundry";
 import { ConnectWalletDialog } from "../../utils/connect-wallet/ConnectWalletDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
+import bnbIcon from "../..//assets/img/BNB-icon-white.svg"
 import { getCABNInformation, getTokenInformationFromWeb3, localStorageHelper, TruncateWithoutRounding } from "../../utils/global.utils";
 import {
   COMMUNITY_ROLE_TAG,
@@ -117,7 +118,7 @@ const DashboardHeader = ({ title }: any) => {
 
   return (
     <>
-      <FHeader showLogo={false} titleText={title}>
+      <FHeader showLogo={false} titleText={title} className={'new-bg-header'}>
         {localStorageHelper.load(ME_TAG)?.role === ORG_ROLE_TAG && !isPublic && (
           <FItem align="right" display={"flex"}>
             <FButton title="Logout" postfix={<RiLogoutCircleRLine />} onClick={handleLogout}></FButton>
@@ -128,44 +129,47 @@ const DashboardHeader = ({ title }: any) => {
             <>
               {walletAddress && (
                 <>
-                  <FCard variant={"primary"} className={"no-left-margin custom-padding-0 custom-border-radius-4 custom-min-width-270"}>
+                  <FCard variant={"primary"} className={"no-left-margin custom-padding-0 custom-border-radius-4 custom-min-width-270 new-bg-body"}>
                     <FItem display={"flex"} alignY="center">
-                      <FCard variant={"primary"} className={"d-flex custom-padding-10 overflow-visible"}>
+                      <FCard variant={"primary"} className={"d-flex custom-padding-10 overflow-visible new-bg-body"}>
                         <img src={tokenData["FRMBSC"]?.logo} height="22px" width="22px" style={{ marginRight: "3px" }} alt="" />
                         {tokenData["FRMBSC"] && TruncateWithoutRounding(tokenData["FRMBSC"]?.balance, 3)}
                         <p className="primary-color f-pl--4"> {tokenData["FRMBSC"]?.symbol ? tokenData["FRMBSC"]?.symbol : tokenData["FRMBSC"]?.tokenSymbol}</p>
                       </FCard>
-                      <FCard variant={"primary"} className={"d-flex custom-padding-10 overflow-visible"}>
+                      <FCard variant={"primary"} className={"d-flex custom-padding-10 overflow-visible new-bg-body"}>
                         {tokenData["FRMxBSC"]?.logo && <img src={tokenData["FRMxBSC"]?.logo} height="22px" width="22px" alt="" style={{ marginRight: "3px" }} />}
                         {tokenData["FRMxBSC"] && TruncateWithoutRounding(tokenData["FRMxBSC"]?.balance, 3)}
                         <p className="primary-color f-pl--4"> {tokenData["FRMxBSC"]?.symbol ? tokenData["FRMxBSC"]?.symbol : tokenData["FRMxBSC"]?.tokenSymbol}</p>
                       </FCard>
                     </FItem>
                   </FCard>
-                  <FCard variant={"secondary"} className={"no-left-margin custom-padding-1 custom-border-radius-4 custom-min-width-270"}>
+                  <FCard variant={"secondary"} className={"no-left-margin custom-padding-1 custom-border-radius-4 custom-min-width-270 bg-wallet-address"}>
                     <FItem display={"flex"} alignY="center">
-                      <FCard variant={"secondary"} className={"d-flex custom-padding-10 overflow-visible"}>
-                        <img
-                          src={currentNetworkInformation && currentNetworkInformation?.networkCurrencyAddressByNetwork?.currency?.logo}
-                          height="22px"
-                          width="22px"
-                          style={{ marginRight: "3px" }}
-                          alt=""
-                        />
-                        {getFormattedWalletAddress(walletAddress)}
+                      <FCard variant={"secondary"} className={"d-flex custom-padding-10 overflow-visible bg-wallet-address"}>
+                        <div className={'round bg-orange justify-content-center align_center'} style={{ width: 24, height: 24 }}>
+                          <img
+                            src={bnbIcon}
+                            height="16px"
+                            width="16px"
+                            alt=""
+                          />
+                        </div>
+                        <span className={'f-pl--2'}>{getFormattedWalletAddress(walletAddress)}</span>
                       </FCard>
-                      <FCard className={"no-left-margin custom-padding-10 d-flex custom-border-radius-4"} variant={"primary"}>
-                        {TruncateWithoutRounding(getFormattedBalance(walletBalance), 3)} {currentNetworkInformation && currentNetworkInformation?.networkCurrencySymbol}
+                      <FCard className={"no-left-margin custom-padding-10 d-flex custom-border-radius-4 new-bg-body"} variant={"primary"}>
+                        <FTypo size={14} weight={400} color={'white'}>
+                          {TruncateWithoutRounding(getFormattedBalance(walletBalance), 3)} {currentNetworkInformation && currentNetworkInformation?.networkCurrencySymbol}
+                        </FTypo>
                       </FCard>
                     </FItem>
                   </FCard>
                 </>
               )}
-              <MetaMaskConnector.WalletConnector
+              <WalletConnector.WalletConnector
                 WalletConnectView={FButton}
                 WalletConnectModal={ConnectWalletDialog}
                 WalletConnectViewProps={{
-                  className: isConnected ? "no-left-margin connect-button-left-borders" : "no-left-margin",
+                  className: isConnected ? "no-left-margin connect-button-left-borders new-connect-btn" : "no-left-margin",
                 }}
               />
               <Link

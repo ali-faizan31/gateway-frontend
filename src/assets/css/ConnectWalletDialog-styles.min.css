@@ -1,8 +1,14 @@
-.f-dialog-connect-wallet {
-  z-index: 1000 !important;
+.dialog-connect-wallet .f-dialog-header {
+  display: none !important;
 }
 
-.f-dialog-connect-wallet .f-list-connect-wallet .f-list-item {
+.dialog-connect-wallet .f-dialog .f-dialog-content {
+  background: #1b1b1b !important;
+  height: 240px;
+  width: 440px;
+}
+
+.dialog-connect-wallet .f-list-connect-wallet .f-list-item {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
@@ -10,22 +16,28 @@
       -ms-flex-align: center;
           align-items: center;
   width: 100%;
-  min-height: 70px;
-  padding: 0.75rem;
-  border: 1px solid white;
+  height: 60px;
+  padding: 1.5rem;
+  font-size: 1.5rem;
+  background: #fff;
+  color: #000;
   margin-bottom: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
 }
 
-.f-dialog-connect-wallet .f-list-connect-wallet .f-list-item img {
-  max-width: 40px;
+.dialog-connect-wallet .f-list-connect-wallet .f-list-item:last-child {
+  margin-bottom: 0;
 }
 
-.f-dialog-connect-wallet .f-list-connect-wallet .f-list-item:hover {
-  -webkit-transform: scale(1.1);
-          transform: scale(1.1);
+.dialog-connect-wallet .f-list-connect-wallet .f-list-item img {
+  max-width: 50px;
 }
 
-.f-dialog-content {
-  z-index: 1000 !important;
+.dialog-connect-wallet .f-list-connect-wallet .f-list-item:hover {
+  -webkit-transform: none !important;
+          transform: none !important;
+  background-color: #dab46e;
+  color: #fff;
 }
 /*# sourceMappingURL=ConnectWalletDialog-styles.min.css.map */

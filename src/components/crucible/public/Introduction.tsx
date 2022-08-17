@@ -9,7 +9,7 @@ import {
 import { ReactComponent as IconArrow } from "../../../assets/img/icon-arrow-square.svg";
 import { useHistory, useLocation } from "react-router";
 import { useSelector } from "react-redux";
-import { MetaMaskConnector } from "../../../container-components";
+import { WalletConnector } from "foundry";
 import { RootState } from "../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../routes/paths";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
@@ -133,10 +133,9 @@ const Introduction = () => {
             onClick={() => onGetStartedClick()}
           />
         ) : (
-          <MetaMaskConnector.WalletConnector
+          <WalletConnector.WalletConnector
             WalletConnectView={FButton}
             WalletConnectModal={ConnectWalletDialog}
-            isAuthenticationNeeded={true}
             WalletConnectViewProps={{ className: "w-100" }}
           />
         )}

@@ -37,7 +37,7 @@ export const CruciblePrice = () => {
   return (
     <>
       <TokenSupply />
-      <FCard className="card-prices">
+      <FCard className="card-prices f-mb-2">
         <FItem display={"flex"} alignX="between" alignY={"center"}>
           <FItem display={"flex"} alignY={"center"} className="w-100">
             <FTypo className="card-title f-pl-1" size={16} weight={700}>Price</FTypo>

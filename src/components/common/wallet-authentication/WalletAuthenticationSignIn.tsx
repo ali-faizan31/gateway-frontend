@@ -9,7 +9,7 @@ import {
   verifySignatureAndUpdateProfile,
 } from "../../../_apis/WalletAuthencation";
 import * as walletAuthenticatorActions from "./redux/walletAuthenticationActions";
-import { walletConnectorActions } from "../../../container-components/wallet-connector";
+import { WalletConnector } from "foundry";
 import toast from "react-hot-toast";
 import { getErrorMessage, GetPhraseString, localStorageHelper } from "../../../utils/global.utils";
 import { ME_TAG, ORG_ROLE_TAG, TOKEN_TAG } from "../../../utils/const.utils";
@@ -117,7 +117,7 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
           if (err) {
             // setIsValidated(false);
             err.message && toast.error(err.message);
-            dispatch(walletConnectorActions.resetWalletConnector());
+            dispatch(WalletConnector.walletConnectorActions.resetWalletConnector());
             dispatch(
               walletAuthenticatorActions.resetWalletAuthentication({
                 userToken: applicationUserToken,
@@ -316,7 +316,7 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
   };
 
   const onSwitchNetworkClose = () => {
-    dispatch(walletConnectorActions.resetWalletConnector());
+    dispatch(WalletConnector.walletConnectorActions.resetWalletConnector());
     dispatch(
       walletAuthenticatorActions.resetWalletAuthentication({
         userToken: applicationUserToken,

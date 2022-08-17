@@ -222,7 +222,9 @@ const LeaderboardManagement = () => {
       title: "Contract Address",
       cell: (params) => (
         <FTypo data-label="Contract Address" truncate={{ truncateLength: 10, truncatePosition: "center" }}>
-          {params?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.tokenContractAddress}
+          {params?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork
+            ? params?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork.tokenContractAddress
+            : ""}
         </FTypo>
       ),
     },

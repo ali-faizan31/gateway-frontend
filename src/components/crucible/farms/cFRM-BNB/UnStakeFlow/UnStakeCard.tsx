@@ -23,7 +23,7 @@ import {
   // getNextStepFlowStepId
 } from "../../../common/Helper";
 import { ClipLoader } from "react-spinners";
-import { MetaMaskConnector } from "../../../../../container-components";
+import { WalletConnector } from "foundry";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { getErrorMessage, TruncateWithoutRounding } from "../../../../../utils/global.utils";
 
@@ -99,7 +99,7 @@ export const UnStake = () => {
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
-        response = await client.unstakeLPToken(dispatch, currency, userAddress, stakeAmount, stakingAddress, network,setTransitionStatusDialog);
+        response = await client.unstakeLPToken(dispatch, currency, userAddress, stakeAmount, stakingAddress, network, setTransitionStatusDialog);
       } else if (isSingleTokenFarm(farm)) {
         currency = crucible[farm!]?.currency;
         stakingAddress = (crucible[farm!]?.staking || [])[0]?.address || "";
@@ -107,7 +107,7 @@ export const UnStake = () => {
         network = crucible[farm!]?.network;
         userAddress = walletAddress as string;
 
-        response = await client.UnStakeCrucible(dispatch, currency, stakeAmount, stakingAddress, userAddress, network,setTransitionStatusDialog);
+        response = await client.UnStakeCrucible(dispatch, currency, stakeAmount, stakingAddress, userAddress, network, setTransitionStatusDialog);
       }
       if (response) {
         dispatch(CrucibleActions.transactionProcessed())
@@ -228,10 +228,9 @@ export const UnStake = () => {
               />
             </div>
           ) : (
-            <MetaMaskConnector.WalletConnector
+            <WalletConnector.WalletConnector
               WalletConnectView={FButton}
               WalletConnectModal={ConnectWalletDialog}
-              isAuthenticationNeeded={true}
               WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
             />
           )}

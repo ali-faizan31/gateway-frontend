@@ -80,6 +80,13 @@ export const PATH_DASHBOARD = {
   },
   bridge: "https://bridge.ferrum.network/",
   // home: "/home",
+  vesting: {
+    index: path(ROOTS_DASHBOARD, "/vesting/user"),
+    adminDashboard: path(ROOTS_DASHBOARD, "/vesting/admin"),
+    general: path("/vesting"),
+    form: path("/vesting/vesting-form"),
+    card: path("/vesting/vesting-card"),
+  },
   crucible: {
     index: path(ROOTS_DASHBOARD, "/crucible"),
     getStarted: path(ROOTS_DASHBOARD, "/crucible/get-started"),

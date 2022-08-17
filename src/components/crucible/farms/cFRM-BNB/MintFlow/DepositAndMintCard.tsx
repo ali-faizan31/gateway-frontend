@@ -21,7 +21,7 @@ import {
   getLatestStepToRender,
   getObjectReadableFarmName
 } from "../../../common/Helper";
-import { MetaMaskConnector } from "../../../../../container-components";
+import { WalletConnector } from "foundry";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { ClipLoader } from "react-spinners";
 import { getCrucibleMaxMintCap } from "../../../../../_apis/CrucibleCapCrud";
@@ -300,10 +300,9 @@ export const CrucibleDeposit = () => {
               amount={"0.0001"}
             />
           ) : (
-            <MetaMaskConnector.WalletConnector
+            <WalletConnector.WalletConnector
               WalletConnectView={FButton}
               WalletConnectModal={ConnectWalletDialog}
-              isAuthenticationNeeded={true}
               WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
             />
           )}
