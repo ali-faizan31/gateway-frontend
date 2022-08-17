@@ -68,5 +68,5 @@ export function isGateWaySite() {
   if (window.origin.includes(CRUCIBLE_ALPHA_V4) || window.origin.includes(CRUCIBLE_BETA)) {
     return false;
   }
-  return true;
+  return false;
 }
