@@ -11,7 +11,7 @@ const DashboardLayout = ({ headerTitle, children }) => {
   let layoutVesting = location.pathname.includes("vesting");
   console.log("location:", location.pathname);
   return (
-    <FLayout themeBuilder={false} className={layoutCrucible ? "layout-crucible" : ""}>
+    <FLayout themeBuilder={false} className={layoutCrucible ? "layout-crucible scroll-container" : ""}>
       <DashboardSidebar />
       <FMain>
         {layoutVesting ? (
@@ -22,7 +22,9 @@ const DashboardLayout = ({ headerTitle, children }) => {
         ) : (
           <>
             <DashboardHeader title={headerTitle} />
-            <FContainer type="fluid">{children}</FContainer>
+            <FContainer type="fluid" className={"new-bg-body min-100vh scroll-container"}>
+              {children}
+            </FContainer>
           </>
         )}
       </FMain>

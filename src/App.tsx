@@ -254,7 +254,7 @@ function App() {
           <GuardedRoute path="/dashboard/leaderboard/:id" component={LeaderboardById} auth={isAuthenticated} layout={DashboardLayout} />
           <UnGuardedRoute path={PATH_DASHBOARD.general.profile} component={ProfileSettings} auth={isAuthenticated} layout={DashboardLayout} headerTitle="My Profile" />
           {/* <UnGuardedRoute path={PATH_DASHBOARD.crucible.deployer} component={CrucibleDeployer} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" /> */}
-          <UnGuardedRoute path={PATH_DASHBOARD.crucible.index} component={CrucibleDashboardPage} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Crucible" />
+          <UnGuardedRoute path={PATH_DASHBOARD.crucible.index} component={CrucibleDashboardPage} auth={isAuthenticated} layout={DashboardLayout} headerTitle="CRUCIBLE" />
           <UnGuardedRoute path={PATH_DASHBOARD.vesting.index} component={VestingDashboardPage} auth={isAuthenticated} layout={DashboardLayout} headerTitle="Vesting" />
 
           <Route path="*" component={Page404}></Route>

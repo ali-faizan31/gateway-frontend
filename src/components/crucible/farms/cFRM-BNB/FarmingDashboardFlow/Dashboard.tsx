@@ -215,6 +215,7 @@ export const Manage = () => {
                           src={activeAPRIndex === 0 ? IconInactiveLeft : IconActiveLeft}
                           onClick={() => { activeAPRIndex !== 0 && setActiveAPRIndex(activeAPRIndex - 1) }}
                           style={{ height: 9, width: 10, marginRight: 22 }}
+                          alt=""
                         />
                         <div className="custom-width-117">
                           <p className="medium-text-400 text-center">{aprData[activeAPRIndex].label}</p>
@@ -224,7 +225,8 @@ export const Manage = () => {
                           className="cursor-pointer"
                           src={activeAPRIndex < aprData.length - 1 ? IconActiveRight : IconInactiveRight}
                           onClick={() => { activeAPRIndex < aprData.length - 1 && setActiveAPRIndex(activeAPRIndex + 1) }}
-                          style={{ height: 9, width: 10, marginLeft: 22 }} />
+                          style={{ height: 9, width: 10, marginLeft: 22 }}
+                          alt="" />
                       </div>
                     </FItem>
                   </FGridItem>

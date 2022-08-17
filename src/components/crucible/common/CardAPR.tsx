@@ -13,6 +13,8 @@ import { WalletConnector } from "foundry";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { TruncateWithoutRounding } from "../../../utils/global.utils";
 import { MultipleAPR } from "./multipleAPR";
+import IconActiveRight from "../../../assets/img/apr-right-yellow.svg";
+import IconActiveLeft from "../../../assets/img/apr-left-yellow.svg";
 
 export const CardAPR = () => {
   const history = useHistory();
@@ -23,9 +25,11 @@ export const CardAPR = () => {
   const { currentStep, currentStepIndex, stepFlowStepHistory, aprInformation, selectedCrucible, userCrucibleDetails, userLpStakingDetails } = useSelector(
     (state: RootState) => state.crucible
   );
+  const [activeAPRIndex, setActiveAPRIndex] = useState(0);
 
   const { isConnected, networkClient } = useSelector((state: RootState) => state.walletConnector);
   // console.log(selectedCrucible, userLpStakingDetails)
+  const aprHeaderLabels = ['Daily Apr', 'Weekly Apr', 'Monthly Apr', 'Lifetime Apr'];
 
   useEffect(() => {
     setIsLoading(true);
@@ -46,9 +50,20 @@ export const CardAPR = () => {
     {
       prop: "apr",
       title: (
-        <FTypo color="#DAB46E" align={"center"}>
-          APR
-        </FTypo>
+        <div className="justify-content-center align_center">
+          <img
+            src={IconActiveLeft}
+            onClick={() => { activeAPRIndex !== 0 && setActiveAPRIndex(activeAPRIndex - 1) }}
+            alt="" />
+          <FTypo color="#DAB46E" align={"center"} size={12} weight={500}>
+            {aprHeaderLabels[activeAPRIndex]}
+          </FTypo>
+          <img
+            src={IconActiveRight}
+            onClick={() => { activeAPRIndex < aprHeaderLabels.length - 1 && setActiveAPRIndex(activeAPRIndex + 1) }}
+            alt="" />
+        </div>
+
       ),
     },
     { prop: "action", title: <></> },
@@ -111,7 +126,7 @@ export const CardAPR = () => {
       apr: Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, 'cFRM'),
       logo: (
         <>
-          <img src={IconNetworkCFrmStr} height="22px" width="22px" />
+          <img src={IconNetworkCFrmStr} height="22px" width="22px" alt="" />
         </>
       ),
       id: "6238386bd292da2db05524f9",
@@ -150,7 +165,7 @@ export const CardAPR = () => {
       apr: Object.keys(aprInformation).length && getAPRValueAgainstFarm(aprInformation, 'cFRMx'),
       logo: (
         <>
-          <img src={IconNetworkCFrmxStr} height="22px" width="22px" />{" "}
+          <img src={IconNetworkCFrmxStr} height="22px" width="22px" alt="" />{" "}
         </>
       ),
       id: "62383865d292da2db05524f6",
@@ -175,7 +190,8 @@ export const CardAPR = () => {
       yourDeposit: <FTypo className={"col-amount"}>{stepFlow.yourDeposit}</FTypo>,
       yourRewards: <FTypo className={"col-amount"}>{stepFlow.yourRewards || '0'}</FTypo>,
       apr: (
-        <MultipleAPR apr={stepFlow.apr} />
+        // <MultipleAPR apr={stepFlow.apr} />
+        <p className="medium-text-700 text-center default-text-color">{stepFlow.apr[activeAPRIndex]?.value}</p>
       ),
       action: (
         <div className="col-action">
@@ -229,15 +245,15 @@ export const CardAPR = () => {
   return (
     <>
       {isLoading ? (
-        <FCard>
+        <FCard className={'new-bg-body'}>
           <FItem align={"center"}>
             <ClipLoader color="#cba461" loading={true} size={150} />
           </FItem>
         </FCard>
       ) : (
-        <FCard className="card-apr f-mt-2">
+        <FCard className="card-apr f-mt-2 new-bg-body">
           <FItem display={"flex"} alignX="between" alignY={"center"} className="f-pb-1 f-m-0">
-            <FTypo className="card-title f-pl-1">Crucible by Ferrum Network</FTypo>
+            <FTypo className="card-title f-pl-1" size={20} weight={700}>Crucible by Ferrum Network</FTypo>
             <FInputText type={"text"} placeholder="Search by Farm Name, Token Name, Token Contract Address" disabled />
           </FItem>
           <FTable>

@@ -31,6 +31,8 @@ import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWallet
 import { getCrucibleDetail } from "../common/Helper";
 import { getErrorMessage, TruncateWithoutRounding } from "../../../utils/global.utils";
 import { getTokenSupplyByContractAddressBSC } from "../../../_apis/TokenCrud";
+import CrucibleDashboardCards from "./crucible-dashboard-card";
+import CrucibleDashboardIndex from "./card-index";
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
@@ -165,9 +167,10 @@ const CrucibleDashboardPage = () => {
 
           {isConnected && tokenV2 ? (
             <>
-              <CrucibleMyBalance />
-              <FTypo className="page-title">Dashboard</FTypo>
-              <CruciblePrice />
+              {/* <CrucibleMyBalance /> */}
+              {/* <FTypo className="page-title">Dashboard</FTypo> */}
+              <CrucibleDashboardIndex />
+              {/* <CruciblePrice /> */}
               <CardAPR />
             </>
           ) : (
