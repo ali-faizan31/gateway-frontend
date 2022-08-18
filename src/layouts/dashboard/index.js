@@ -22,7 +22,7 @@ const DashboardLayout = ({ headerTitle, children }) => {
         ) : (
           <>
             <DashboardHeader title={headerTitle} />
-            <FContainer type="fluid" className={"new-bg-body min-100vh scroll-container"}>
+            <FContainer type="fluid" className={"new-bg-body min-100vh scroll-container min-100vw"} style={{ paddingRight: "21rem !important", paddingLeft: "2rem" }}>
               {children}
             </FContainer>
           </>

@@ -8,6 +8,9 @@ body {
 body > div {
   height: auto;
 }
+.min-100vw {
+  min-width: 100vw;
+}
 .new-bg-header {
   background: $newCrucibleBackground !important;
   margin-bottom: 0px !important;
@@ -542,6 +545,9 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 .align_center {
   align-items: center;
 }
+.align_start {
+  align-items: flex-start;
+}
 .d_flex {
   display: flex !important;
 }
@@ -745,4 +751,15 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 }
 .card-apr {
   background: transparent !important;
+}
+.crucible-welcome-card {
+  background-image: url("./assets/img/welcome-card.png");
+  // height: 100%;
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.new-design-container-paddings-lr {
+  padding-right: 21rem;
+  padding-left: 1rem;
 }
