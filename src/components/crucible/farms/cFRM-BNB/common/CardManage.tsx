@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { FButton, FCard, FGrid, FGridItem, FItem, FSelect, FTypo } from "ferrum-design-system";
-import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
+import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-back-white.svg";
 // import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
 // import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { useDispatch, useSelector } from "react-redux";
@@ -130,27 +130,36 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
           </FItem>
         </FCard>
       ) : (
-        <FCard variant={"secondary"} className="card-manage-crucible card-shadow">
+        <div className={'crucible-farm-dashboard-card'}>
           <div className="card-title f-mb-2">
             <FItem display={"flex"} alignY="center">
               <Link to="/dashboard/crucible" className="btn-back">
                 <IconGoBack />
               </Link>
-              <FTypo size={24} weight={700}>
-                Crucible Farms Dashboard - {getHumanReadableFarmName(farm)}
+              <FTypo size={20} weight={700}>
+                Crucible Farms Dashboard
               </FTypo>
+              <div className="flex-center-aligned-center">
+                <span className="icon-wrap" style={{ marginRight: 12, marginLeft: 24 }}>
+                  <img src={farm?.includes("cFRMx") ? IconNetworkCFrmxStr : IconNetworkCFrmStr} alt="network-cfrm" />
+                  {farm?.includes("BNB") && <IconNetworkBnb />}
+                </span>
+                <FTypo size={24} weight={700}>
+                  {getHumanReadableFarmName(farm)}
+                </FTypo>
+              </div>
             </FItem>
-            <div className="network-icon-wrapper">
+            {/* <div className="network-icon-wrapper">
               <span className="icon-wrap">
                 <img src={farm?.includes("cFRMx") ? IconNetworkCFrmxStr : IconNetworkCFrmStr} alt="network-cfrm" />
                 {farm?.includes("BNB") && <IconNetworkBnb />}
               </span>
-            </div>
+            </div> */}
           </div>
           <FGrid>
             <FGridItem size={[6, 6, 6]}>
-              <FItem bgColor="#1C2229" className={"f-p-2"}>
-                <FTypo size={20} className="f-mb-1">
+              <FItem bgColor="#1A1D1F" className={"f-p-2"}>
+                <FTypo size={18} color={'#6F767E'} className="f-mb-1">
                   {getBaseTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
@@ -159,8 +168,8 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
               </FItem>
             </FGridItem>
             <FGridItem size={[6, 6, 6]}>
-              <FItem bgColor="#1C2229" className={"f-p-2"}>
-                <FTypo size={20} className="f-mb-1">
+              <FItem bgColor="#1A1D1F" className={"f-p-2"}>
+                <FTypo size={18} color={'#6F767E'} className="f-mb-1">
                   {getCrucibleTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
@@ -169,28 +178,97 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
               </FItem>
             </FGridItem>
           </FGrid>
-          <FGrid className="btn-wrap f-mt-1" spacing={5}>
-            <FGridItem size={[4, 4, 4]}>
+          <FGrid className="btn-wrap f-mt-1 f-mb-2" spacing={5}>
+            <FGridItem size={[6, 6]}>
               <FSelect
                 name={"selectOptions"}
-                placeholder="Buy Token"
+                placeholder="BUY TOKEN"
                 options={selectTokens}
                 value={selectedToken}
                 onChange={(option: any) => handleSelectedToken(option)}
               />
             </FGridItem>
 
-            <FGridItem size={[4, 4, 4]}>
-              <FButton
-                title={farm?.includes("cFRM-") ? "Mint cFRM" : farm?.includes("cFRMx-") ? "Mint cFRMx" : "Mint"}
-                className={"w-100 f-btn-gradiant"}
-                onClick={() => onMintcFRMClick()}></FButton>
+            <FGridItem size={[6, 6]}>
+              <div className={'justify-content-end w-100'}>
+                <FButton
+                  variant={"secondary"}
+                  title={"UNWRAP"}
+                  outlined
+                  className={'custom-mr-16 custom-font-size-16 font-700'}
+                  style={{ width: 114, borderColor: '#D9B373', borderRadius: 8 }}
+                  onClick={() => onWrapClick()}></FButton>
+                <FButton
+                  title={farm?.includes("cFRM-") ? "MINT cFRM" : farm?.includes("cFRMx-") ? "MINT cFRMx" : "MINT"}
+                  style={{ width: 242 }}
+                  className={"f-btn-gradiant clr_new_black custom-font-size-16 font-700"}
+                  onClick={() => onMintcFRMClick()}></FButton>
+              </div>
             </FGridItem>
-            <FGridItem size={[4, 4, 4]}>
-              <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"} onClick={() => onWrapClick()}></FButton>
-            </FGridItem>
+
           </FGrid>
-        </FCard>
+        </div>
+        // <FCard variant={"secondary"} className="card-manage-crucible card-shadow">
+        // <div className="card-title f-mb-2">
+        //   <FItem display={"flex"} alignY="center">
+        //     <Link to="/dashboard/crucible" className="btn-back">
+        //       <IconGoBack />
+        //     </Link>
+        //     <FTypo size={24} weight={700}>
+        //       Crucible Farms Dashboard - {getHumanReadableFarmName(farm)}
+        //     </FTypo>
+        //   </FItem>
+        //   <div className="network-icon-wrapper">
+        //     <span className="icon-wrap">
+        //       <img src={farm?.includes("cFRMx") ? IconNetworkCFrmxStr : IconNetworkCFrmStr} alt="network-cfrm" />
+        //       {farm?.includes("BNB") && <IconNetworkBnb />}
+        //     </span>
+        //   </div>
+        // </div>
+        // <FGrid>
+        //   <FGridItem size={[6, 6, 6]}>
+        //     <FItem bgColor="#1C2229" className={"f-p-2"}>
+        //       <FTypo size={20} className="f-mb-1">
+        //         {getBaseTokenName(farm)} Price (USD)
+        //       </FTypo>
+        //       <FTypo size={30} weight={500}>
+        //         ${tokenPrices[getBaseTokenName(farm)!] || 0}
+        //       </FTypo>
+        //     </FItem>
+        //   </FGridItem>
+        //   <FGridItem size={[6, 6, 6]}>
+        //     <FItem bgColor="#1C2229" className={"f-p-2"}>
+        //       <FTypo size={20} className="f-mb-1">
+        //         {getCrucibleTokenName(farm)} Price (USD)
+        //       </FTypo>
+        //       <FTypo size={30} weight={500}>
+        //         ${tokenPrices[getCrucibleTokenName(farm)!] || 0}
+        //       </FTypo>
+        //     </FItem>
+        //   </FGridItem>
+        // </FGrid>
+        // <FGrid className="btn-wrap f-mt-1" spacing={5}>
+        //   <FGridItem size={[4, 4, 4]}>
+        //     <FSelect
+        //       name={"selectOptions"}
+        //       placeholder="Buy Token"
+        //       options={selectTokens}
+        //       value={selectedToken}
+        //       onChange={(option: any) => handleSelectedToken(option)}
+        //     />
+        //   </FGridItem>
+
+        //   <FGridItem size={[4, 4, 4]}>
+        //     <FButton
+        //       title={farm?.includes("cFRM-") ? "Mint cFRM" : farm?.includes("cFRMx-") ? "Mint cFRMx" : "Mint"}
+        //       className={"w-100 f-btn-gradiant"}
+        //       onClick={() => onMintcFRMClick()}></FButton>
+        //   </FGridItem>
+        //   <FGridItem size={[4, 4, 4]}>
+        //     <FButton variant={"secondary"} title={"Unwrap"} outlined className={"w-100"} onClick={() => onWrapClick()}></FButton>
+        //   </FGridItem>
+        // </FGrid>
+        // </FCard>
       )}
     </>
   );

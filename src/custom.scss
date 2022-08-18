@@ -27,6 +27,9 @@ body > div {
   background: $newCrucibleBackground !important;
   border: 1px solid rgb(145, 145, 145) !important;
 }
+.clr_new_black {
+  color: $newCrucibleBackground !important;
+}
 .bg-wallet-address {
   background: #1a1d1f !important;
 }
@@ -274,6 +277,11 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
     font-size: #{$i}px !important;
   }
 }
+@for $i from 0 through 50 {
+  .custom-mr-#{$i} {
+    margin-right: #{$i}px !important;
+  }
+}
 
 @for $i from 0 through 1000 {
   .custom-font-weight-#{$i} {
@@ -519,6 +527,12 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 .font-400 {
   font-weight: 400;
 }
+.font-500 {
+  font-weight: 500;
+}
+.font-600 {
+  font-weight: 600;
+}
 .font-700 {
   font-weight: 700;
 }
@@ -547,6 +561,9 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 }
 .align_start {
   align-items: flex-start;
+}
+.align_end {
+  align-items: flex-end;
 }
 .d_flex {
   display: flex !important;
@@ -589,6 +606,9 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 }
 .bg_black_new {
   background-color: #1b1b1b !important;
+}
+.clr_black_light {
+  color: #6f767e !important;
 }
 .primaryColor {
   color: #dab46e;
@@ -742,6 +762,9 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 .border_none {
   border: none !important;
 }
+.border_white {
+  border: white !important;
+}
 .crucible-dashboard-card {
   background-image: url("./assets/img/crucible-dashboard-card.png");
   // height: 100%;
@@ -754,7 +777,6 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 }
 .crucible-welcome-card {
   background-image: url("./assets/img/welcome-card.png");
-  // height: 100%;
   width: 100%;
   background-repeat: round;
   padding: 1.5rem;
@@ -762,4 +784,22 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 .new-design-container-paddings-lr {
   padding-right: 21rem;
   padding-left: 1rem;
+}
+.crucible-farm-dashboard-card {
+  background-image: url("./assets/img/farm-dashboard-card.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.crucible-farm-dashboard-card-2 {
+  background-image: url("./assets/img/farm-dashboard-card-2.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.unwrap-farm-card {
+  background: #1a1d1f;
+  border-radius: 12px;
+  padding: 19px 32px;
+  margin: 24px 0px;
 }
