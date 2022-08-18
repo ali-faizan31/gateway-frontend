@@ -154,11 +154,11 @@ const CrucibleDashboardPage = () => {
   };
 
   return (
-    <FContainer className="f-ml-0 crucible-dashboard">
+    <FContainer className="f-ml-0 crucible-dashboard min-100vw new-design-container-paddings-lr">
       {isLoading ? (
         <FCard>
           <FItem align={"center"}>
-            <img src={Loader} />
+            <img alt="" src={Loader} />
             {/* <ClipLoader color="#cba461" loading={true} size={150} /> */}
           </FItem>
         </FCard>
@@ -171,7 +171,9 @@ const CrucibleDashboardPage = () => {
               {/* <FTypo className="page-title">Dashboard</FTypo> */}
               <CrucibleDashboardIndex />
               {/* <CruciblePrice /> */}
-              <CardAPR />
+              <div className={'f-mt-4'}>
+                <CardAPR />
+              </div>
             </>
           ) : (
             <>

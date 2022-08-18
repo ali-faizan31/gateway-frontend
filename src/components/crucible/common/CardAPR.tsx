@@ -251,9 +251,9 @@ export const CardAPR = () => {
           </FItem>
         </FCard>
       ) : (
-        <FCard className="card-apr f-mt-2 new-bg-body">
-          <FItem display={"flex"} alignX="between" alignY={"center"} className="f-pb-1 f-m-0">
-            <FTypo className="card-title f-pl-1" size={20} weight={700}>Crucible by Ferrum Network</FTypo>
+        <FCard className="card-apr new-bg-body padding_0">
+          <FItem display={"flex"} alignX="center" alignY={"center"} className="f-pb-1 f-m-0">
+            <FTypo className="card-title" size={20} weight={700}>Crucible by Ferrum Network</FTypo>
             <FInputText type={"text"} placeholder="Search by Farm Name, Token Name, Token Contract Address" disabled />
           </FItem>
           <FTable>

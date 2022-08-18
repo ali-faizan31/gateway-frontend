@@ -138,7 +138,8 @@ $cardSecondary: #242b35;
 .card-apr {
   position: relative;
   padding-bottom: 0;
-  max-width: 880px;
+  // max-width: 880px;
+  max-width: 100%;
   margin: 2rem auto;
   .scrollbar-container {
     max-height: max-content !important;
