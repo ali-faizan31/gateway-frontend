@@ -164,10 +164,10 @@ export const UnWrap = () => {
         value={
           Number(amount) -
           Number(amount) *
-            (Number(
-              BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0").times(100)
-            ) /
-              100)
+          (Number(
+            BigUtils.safeParse(crucible?.feeOnWithdrawRate || "0").times(100)
+          ) /
+            100)
         }
         postfix={
           <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
@@ -186,14 +186,14 @@ export const UnWrap = () => {
                   ownProps.isApprovalMode
                     ? () => ownProps.onApproveClick()
                     : () =>
-                        onUnWrapClick(
-                          crucible!.baseCurrency,
-                          crucible?.currency || "",
-                          amount.toString(),
-                          true,
-                          crucible?.network,
-                          walletAddress as string
-                        )
+                      onUnWrapClick(
+                        crucible!.baseCurrency,
+                        crucible?.currency || "",
+                        amount.toString(),
+                        true,
+                        crucible?.network,
+                        walletAddress as string
+                      )
                 }
               ></FButton>
             </div>

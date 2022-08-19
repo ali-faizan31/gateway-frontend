@@ -235,7 +235,7 @@ export const CrucibleDeposit = () => {
               </FItem>
             </FGridItem>
           </FGrid>
-          <div className="f-mt-1 f-mb-2 flex-center-aligned-center ">
+          <div className="f-mt-1 f-mb-2 align_start justify_start d-flex ">
             <div className="custom-mr-16 w-100">
               <div>
                 <FTypo size={18} weight={700}>
@@ -280,7 +280,7 @@ export const CrucibleDeposit = () => {
                 }
               />
               <FTypo size={12} weight={500} color={'#6F767E'}>
-                Amount cFRM you will receive
+                Amount {crucible[farm!]?.baseSymbol} you will receive
               </FTypo>
             </div>
           </div>
