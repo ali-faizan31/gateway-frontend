@@ -340,11 +340,10 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   display: flex;
   justify-content: end;
   max-width: 350px;
-  border-radius: 10px 10px 0px 0px;
-  font-size: 14px;
-  font-weight: 700;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
   color: #ffffff;
-  margin: 0px 10px 0px 0px !important;
 }
 
 .green-cap {
@@ -610,6 +609,9 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 .clr_black_light {
   color: #6f767e !important;
 }
+.primary-border {
+  border: 1px solid #dab46e !important;
+}
 .primaryColor {
   color: #dab46e;
 }
@@ -797,9 +799,22 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   background-repeat: round;
   padding: 1.5rem;
 }
+.mybalance-card {
+  background-image: url("./assets/img/mybalance-card.png");
+  width: 221px;
+  background-repeat: round;
+  padding: 1.5rem;
+  height: 431px;
+  margin-left: 25px;
+}
 .unwrap-farm-card {
   background: #1a1d1f;
   border-radius: 12px;
   padding: 19px 32px;
   margin: 24px 0px;
+}
+@media screen and (min-width: 1200) {
+  .screen-width-after-200-for-crucible-farm-card {
+    min-width: 60vw;
+  }
 }

@@ -18,23 +18,23 @@ export const CrucibleMyBalance = () => {
       <FList>
         {DATA_MY_BAL?.length
           ? DATA_MY_BAL.map((item, index) => {
-              return (
-                <FListItem>
-                  <FItem display={"flex"} alignY={"center"} className="w-100">
-                    <span className="icon-network f-pr--5">
-                      <IconFerrum />
-                    </span>
-                    <FTypo>{item.network}</FTypo>
-                  </FItem>
-                  <FTypo size={25} weight={600} align={"end"} display="flex" alignY={"end"}>
-                    {item.price}
-                    <FTypo size={12} weight={600} color="#DAB46E" className={"f-pl--7 f-pb--1"}>
-                      USD
-                    </FTypo>
+            return (
+              <FListItem>
+                <FItem display={"flex"} alignY={"center"} className="w-100">
+                  <span className="icon-network f-pr--5">
+                    <IconFerrum />
+                  </span>
+                  <FTypo>{item.network}</FTypo>
+                </FItem>
+                <FTypo size={25} weight={600} align={"end"} display="flex" alignY={"end"}>
+                  {item.price}
+                  <FTypo size={12} weight={600} color="#DAB46E" className={"f-pl--7 f-pb--1"}>
+                    USD
                   </FTypo>
-                </FListItem>
-              );
-            })
+                </FTypo>
+              </FListItem>
+            );
+          })
           : null}
       </FList>
     </FCard>

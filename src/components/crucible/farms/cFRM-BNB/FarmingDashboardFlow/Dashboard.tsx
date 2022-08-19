@@ -149,7 +149,7 @@ export const Manage = () => {
   };
 
   return (
-    <FContainer className="card-manage">
+    <FContainer className="card-manage min-100vw new-design-container-paddings-lr">
       {isLoading ? (
         <FCard>
           <FItem align={"center"}>
@@ -158,90 +158,90 @@ export const Manage = () => {
         </FCard>
       ) : (
         <>
-          <CrucibleMyBalance />
-          {/* <FResponseBar variant="success" title={"Withdraw Transaction Successful. [ 0x06167934...5bvf645949c ]"} /> */}
-          <CrucibleManage dashboardAction={dashboardAction} setDashboardAction={setDashboardAction} />
-          <FContainer>
-            <div className="crucible-farm-dashboard-card-2">
-              <div className={'f-mt-1 f-mb-1'}>
-                <div className="flex-center-aligned-center">
-                  <span className="icon-wrap custom-mr-12" style={{ marginLeft: 24 }}>
-                    <img src={farm?.includes("cFRMx") ? IconNetworkCFrmxStr : IconNetworkCFrmStr} alt="network-cfrm" />
-                    {farm?.includes("BNB") && <IconNetworkBnb />}
-                  </span>
-                  <p className="custom-font-size-20 font-700 custom-mr-24">{getHumanReadableFarmName(farm)}</p>
-                  <FTypo size={16} weight={700}>Crucible Token</FTypo>
-                </div>
-                <div className={'justify-content-space-between align_center unwrap-farm-card'}>
-                  <div className="flex-center-aligned-center w-100">
-                    <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Buy Fee</p>
-                    <p className={'custom-font-size-18 font-600 clr_white'}>4%</p>
-                  </div>
-                  <div className="flex-center-aligned-center w-100">
-                    <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Sell Fee</p>
-                    <p className={'custom-font-size-18 font-600 clr_white'}>4%</p>
-                  </div>
-                  <div className="flex-center-aligned-center w-100">
-                    <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Unwrap Fee</p>
-                    <p className={'custom-font-size-18 font-600 clr_white'}>
-                      {`${BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0")
-                        .times(100)
-                        .toString()}%`}
-                    </p>
-                  </div>
-                  <div className="flex-center-aligned-center w-100">
-                    <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Stake/Unstake Fee</p>
-                    <p className={'custom-font-size-18 font-600 clr_white'}>
-                      {`${BigUtils.safeParse(crucible[farm!]?.feeOnTransferRate || "0")
-                        .times(100)
-                        .toString()}%`}
-                    </p>
-                  </div>
-                </div>
-                <div className="justify-content-space-between align_center">
-                  <div>
-                    <FTypo size={12} weight={500} color="#6F767E">
-                      Your Crucible {farm?.includes("BNB") ? "LP" : ""} Farm Stake
-                    </FTypo>
-                    <div className="justify_start d-flex align_end f-mt-1">
-                      <p className={'custom-font-size-20 font-600 clr_white custom-mr-10'}>
-                        {farm?.includes("BNB") ? TruncateWithoutRounding((LPStakingDetails[farm!]?.stake || "0"), 3) : TruncateWithoutRounding((userStake?.stakeOf || "0"), 3)}
-                      </p>
-                      <p className={'custom-font-size-12 font-700 clr_white'}>
-                        {farm?.includes("BNB") ? `CAKE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
-                      </p>
+          <div className="justify_start align_start d-flex">
+            <div className={'custom-mr-50'}>
+              <CrucibleManage dashboardAction={dashboardAction} setDashboardAction={setDashboardAction} />
+              <FContainer>
+                <div className="crucible-farm-dashboard-card-2">
+                  <div className={'f-mt-1 f-mb-1'}>
+                    <div className="flex-center-aligned-center">
+                      <span className="icon-wrap custom-mr-12" style={{ marginLeft: 24 }}>
+                        <img src={farm?.includes("cFRMx") ? IconNetworkCFrmxStr : IconNetworkCFrmStr} alt="network-cfrm" />
+                        {farm?.includes("BNB") && <IconNetworkBnb />}
+                      </span>
+                      <p className="custom-font-size-20 font-700 custom-mr-24">{getHumanReadableFarmName(farm)}</p>
+                      <FTypo size={16} weight={700}>Crucible Token</FTypo>
                     </div>
-                  </div>
-                  <div>
-                    <div className="justify_start d-flex align_center">
-                      <img
-                        src={IconActiveLeft}
-                        onClick={() => { activeAPRIndex !== 0 && setActiveAPRIndex(activeAPRIndex - 1) }}
-                        alt="" />
-                      <FTypo size={12} weight={500} color="#6F767E">
-                        {aprData[activeAPRIndex].label}
-                      </FTypo>
-                      <img
-                        src={IconActiveRight}
-                        onClick={() => { activeAPRIndex < aprData.length - 1 && setActiveAPRIndex(activeAPRIndex + 1) }}
-                        alt="" />
+                    <div className={'justify-content-space-between align_center unwrap-farm-card'}>
+                      <div className="flex-center-aligned-center w-100">
+                        <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Buy Fee</p>
+                        <p className={'custom-font-size-18 font-600 clr_white'}>4%</p>
+                      </div>
+                      <div className="flex-center-aligned-center w-100">
+                        <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Sell Fee</p>
+                        <p className={'custom-font-size-18 font-600 clr_white'}>4%</p>
+                      </div>
+                      <div className="flex-center-aligned-center w-100">
+                        <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Unwrap Fee</p>
+                        <p className={'custom-font-size-18 font-600 clr_white'}>
+                          {`${BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0")
+                            .times(100)
+                            .toString()}%`}
+                        </p>
+                      </div>
+                      <div className="flex-center-aligned-center w-100">
+                        <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Stake/Unstake Fee</p>
+                        <p className={'custom-font-size-18 font-600 clr_white'}>
+                          {`${BigUtils.safeParse(crucible[farm!]?.feeOnTransferRate || "0")
+                            .times(100)
+                            .toString()}%`}
+                        </p>
+                      </div>
                     </div>
-                    <FTypo size={20} weight={700} color="#FFFFFF" className={'f-mt-1 f-pl--9'}>
-                      {aprData[activeAPRIndex].value}
-                    </FTypo>
-                  </div>
-                  <div>
-                    <FTypo size={12} weight={500} color="#6F767E">
-                      Your unclaimed Rewards
-                    </FTypo>
-                    <FTypo size={20} weight={600} color="#dab46e" className={'f-mt-1'}>
-                      {getRewardAmount()} {getRewardSymbol()}
-                    </FTypo>
-                  </div>
-                  <FButton title={"CLAIM"} style={{ width: 144, height: 44 }} className={'clr_new_black custom-font-size-16 font-700'} onClick={onClaimRewardsClick}></FButton>
+                    <div className="justify-content-space-between align_center">
+                      <div>
+                        <FTypo size={12} weight={500} color="#6F767E">
+                          Your Crucible {farm?.includes("BNB") ? "LP" : ""} Farm Stake
+                        </FTypo>
+                        <div className="justify_start d-flex align_end f-mt-1">
+                          <p className={'custom-font-size-20 font-600 clr_white custom-mr-10'}>
+                            {farm?.includes("BNB") ? TruncateWithoutRounding((LPStakingDetails[farm!]?.stake || "0"), 3) : TruncateWithoutRounding((userStake?.stakeOf || "0"), 3)}
+                          </p>
+                          <p className={'custom-font-size-12 font-700 clr_white'}>
+                            {farm?.includes("BNB") ? `CAKE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="justify_start d-flex align_center">
+                          <img
+                            src={IconActiveLeft}
+                            onClick={() => { activeAPRIndex !== 0 && setActiveAPRIndex(activeAPRIndex - 1) }}
+                            alt="" />
+                          <FTypo size={12} weight={500} color="#6F767E">
+                            {aprData[activeAPRIndex].label}
+                          </FTypo>
+                          <img
+                            src={IconActiveRight}
+                            onClick={() => { activeAPRIndex < aprData.length - 1 && setActiveAPRIndex(activeAPRIndex + 1) }}
+                            alt="" />
+                        </div>
+                        <FTypo size={20} weight={700} color="#FFFFFF" className={'f-mt-1 f-pl--9'}>
+                          {aprData[activeAPRIndex].value}
+                        </FTypo>
+                      </div>
+                      <div>
+                        <FTypo size={12} weight={500} color="#6F767E">
+                          Your unclaimed Rewards
+                        </FTypo>
+                        <FTypo size={20} weight={600} color="#dab46e" className={'f-mt-1'}>
+                          {getRewardAmount()} {getRewardSymbol()}
+                        </FTypo>
+                      </div>
+                      <FButton title={"CLAIM"} style={{ width: 144, height: 44 }} className={'clr_new_black custom-font-size-16 font-700'} onClick={onClaimRewardsClick}></FButton>
 
-                </div>
-                {/* <FGrid className="info-bar">
+                    </div>
+                    {/* <FGrid className="info-bar">
                   <FGridItem size={[4, 4, 4]}>
                     <FItem align={"center"}>
                       <FTypo color="#DAB46E" size={20} weight={700} className="f-pb--2">
@@ -271,7 +271,7 @@ export const Manage = () => {
                     </FItem>
                   </FGridItem>
                 </FGrid> */}
-                {/* <FCard className={"styled-card align-v your-crucible"}>
+                    {/* <FCard className={"styled-card align-v your-crucible"}>
                   <FGrid>
                     <FGridItem size={[6, 6, 6]} dir="column">
                       <FTypo className="f-pb--2">Your Crucible {farm?.includes("BNB") ? "LP" : ""} Farm Stake </FTypo>
@@ -308,7 +308,7 @@ export const Manage = () => {
                     </FGridItem>
                   </FGrid>
                 </FCard> */}
-                {/* <FCard className={"your-claimed-rewards"}>
+                    {/* <FCard className={"your-claimed-rewards"}>
                   <FGrid alignY={"center"}>
                     <FGridItem size={[6]} dir="column">
                       <FTypo className="f-pb--2">Your unclaimed Rewards</FTypo>
@@ -322,24 +322,33 @@ export const Manage = () => {
                   </FGrid>
                 </FCard> */}
 
-              </div>
-            </div>
-          </FContainer>
-          <FContainer>
-            <div className="btn-wrap f-mt-2 f-mb-2 justify-content-end align_center">
-              <FButton variant={"secondary"} title={"UNSTAKE"}
-                outlined
-                className={'custom-mr-16 custom-font-size-16 font-700'}
-                style={{ width: 124, borderColor: '#D9B373', borderRadius: 8 }}
-                onClick={() => onUnStakeClick()}></FButton>
-              <FButton title={"STAKE"} className={"clr_new_black custom-font-size-16 font-700"} style={{ width: 266 }} onClick={() => onStakeClick()}></FButton>
+                  </div>
+                </div>
+              </FContainer>
+              <FContainer>
+                <div className="btn-wrap f-mt-2 f-mb-2 justify-content-end align_center">
+                  <FButton variant={"secondary"} title={"UNSTAKE"}
+                    outlined
+                    className={'custom-mr-16 custom-font-size-16 font-700'}
+                    style={{ width: 124, borderColor: '#D9B373', borderRadius: 8 }}
+                    onClick={() => onUnStakeClick()}></FButton>
+                  <FButton title={"STAKE"} className={"clr_new_black custom-font-size-16 font-700"} style={{ width: 266 }} onClick={() => onStakeClick()}></FButton>
 
-              {(farm === "cFRM-BNB" || farm === "cFRMx-BNB") && (
-                <FButton variant={"secondary"} title={"ADD LIQUIDITY"} outlined style={{ width: 266 }} onClick={() => onAddLiquidityClick()}></FButton>
+                  {(farm === "cFRM-BNB" || farm === "cFRMx-BNB") && (
+                    <FButton variant={"secondary"} title={"ADD LIQUIDITY"} outlined style={{ width: 266 }} onClick={() => onAddLiquidityClick()}></FButton>
 
-              )}
+                  )}
+                </div>
+              </FContainer>
             </div>
-          </FContainer>
+            <div>
+              <CrucibleMyBalance />
+            </div>
+          </div>
+
+          {/* <FResponseBar variant="success" title={"Withdraw Transaction Successful. [ 0x06167934...5bvf645949c ]"} /> */}
+
+
         </>
       )}
     </FContainer>

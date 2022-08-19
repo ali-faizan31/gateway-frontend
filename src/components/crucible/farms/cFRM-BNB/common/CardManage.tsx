@@ -133,11 +133,11 @@ export const CrucibleManage = ({ dashboardAction, setDashboardAction, setFlowTyp
         <div className={'crucible-farm-dashboard-card'}>
           <div className="card-title f-mb-2">
             <FItem display={"flex"} alignY="center">
-              <Link to="/dashboard/crucible" className="btn-back">
+              <Link to="/dashboard/crucible" className="btn-back custom-mr-14">
                 <IconGoBack />
               </Link>
               <FTypo size={20} weight={700}>
-                Crucible Farms Dashboard
+                Crucible Farm Dashboard
               </FTypo>
               <div className="flex-center-aligned-center">
                 <span className="icon-wrap" style={{ marginRight: 12, marginLeft: 24 }}>
