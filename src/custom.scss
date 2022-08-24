@@ -810,6 +810,19 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   height: 431px;
   margin-left: 25px;
 }
+.congrats-card-1 {
+  background-image: url("./assets/img/congrats-card-1.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.congrats-subcards {
+  background-image: url("./assets/img/congrats-subcards.png");
+  width: 100%;
+  height: 170px;
+  background-repeat: round;
+  padding: 1.5rem;
+}
 .unwrap-farm-card {
   background: #1a1d1f;
   border-radius: 12px;
