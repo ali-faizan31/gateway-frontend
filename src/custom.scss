@@ -823,11 +823,34 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   background-repeat: round;
   padding: 1.5rem;
 }
+.congrats-step1-card {
+  background-image: url("./assets/img/congrats-step1-card.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.congrats-step2-card {
+  background-image: url("./assets/img/congrats-step2-card.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.congrats-step3-card {
+  background-image: url("./assets/img/congrats-step3-card.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
 .unwrap-farm-card {
   background: #1a1d1f;
   border-radius: 12px;
   padding: 19px 32px;
   margin: 24px 0px;
+}
+.congrats-disabled-btn {
+  background-color: #6f767e !important;
+  color: #efefef !important;
+  border: none !important;
 }
 @media screen and (min-width: 1200) {
   .screen-width-after-200-for-crucible-farm-card {
