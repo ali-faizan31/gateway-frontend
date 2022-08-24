@@ -214,7 +214,7 @@ export const Success = () => {
                 </FTypo>
               </div>
               <FTypo size={14} weight={600} className={'f-mt-1'}>
-                You can always mint more cFRM to increase your pool share.
+                You can always mint more {farm?.includes("cFRMx") ? "cFRM" : "cFRMx"} to increase your pool share.
               </FTypo>
             </div>
             <div className="congrats-subcards w-100">
@@ -236,11 +236,13 @@ export const Success = () => {
             </div>
           </div>
           <div className="d-flex justify_end align_end f-mt-2" style={{ width: '50%', float: 'right' }}>
-            <FButton
-              variant="primary"
-              className={"w-100 custom-font-size-16 font-600 clr_new_black"}
-              title={"Go To Crucible Dashboard"}
-            ></FButton>
+            <Link to="/dashboard/crucible" className="go-back text-decoration-none">
+              <FButton
+                variant="primary"
+                className={"w-100 custom-font-size-16 font-600 clr_new_black"}
+                title={"GO TO CRUCIBLE DASHBOARD"}
+              ></FButton>
+            </Link>
           </div>
         </div>
         // <FContainer width={700}>
