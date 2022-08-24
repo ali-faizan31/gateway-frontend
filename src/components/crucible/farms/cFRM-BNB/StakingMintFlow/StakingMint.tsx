@@ -99,68 +99,121 @@ export const StakingMintSteps = () => {
           </FItem>
         </FCard>
       ) : (
-        <FContainer width={700}>
-          <CrucibleMyBalance />
-          <FCard variant={"secondary"} className="card-crucible-steps">
-            <FTypo size={20} className={"card-title w-100"} display="flex">
+        <div className="justify_start align_start d-flex min-100vw new-design-container-paddings-lr f-mb-3">
+          <div className="custom-mr-50 f-mt-2">
+            <FTypo size={20} weight={700} className={"card-title w-100"} display="flex">
               Crucible Token Sustainable Farming
             </FTypo>
-            <ul>
-              <li className="step step-success">
-                <span className="step-info">
-                  <FTypo className={"f-mb-1"}>Step 1</FTypo>
-                  <FTypo>
-                    Congratulations! You have successfully minted your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens! Please proceed to step 2.
-                  </FTypo>
-                </span>
-              </li>
-              <li>
-                <span className="step-info">
-                  <FTypo className={"f-mb-1"}>Step 2</FTypo>
-                  <FTypo>You are now able to stake your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens to start earning rewards!</FTypo>
-                  <br></br>
-                  <FInputCheckbox
-                    onClick={() => setStepTwoCheck(!stepTwoCheck)}
-                    name="step2Check"
-                    className="f-mb-1 f-mt-1"
-                    label={`I understand that I have to stake my ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens to earn ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
-                      } rewards.`}
-                  />
-                  <FInputCheckbox
-                    onClick={() => setStepThreeCheck(!stepThreeCheck)}
-                    name="step3Check"
-                    className="f-mb-1 f-mt-1"
-                    label={`I understand that rewards are generated from ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
-                      } trading volume. To participate in generating rewards for my staked tokens, it is recommended that some of the ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
-                      } tokens should be staked, while others should be used to create trading volume which generates rewards.`}
-                  />
-                </span>
-              </li>
-              <li className="step-last">
-                <FItem>
-                  <FButton
-                    title={`Stake ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}`}
-                    postfix={<IconArrow />}
-                    className="w-100"
-                    disabled={disableCheck()}
-                    style={{ marginLeft: "-4px" }}
-                    onClick={() => onStakeClick()}
-                  />
-                </FItem>
-                <FItem >
-                  <FButton
-                    title="What Else Can I Do?"
-                    style={{ marginLeft: "4px" }}
-                    postfix={<IconArrow />}
-                    className="w-100"
-                    disabled={disableCheck()}
-                    onClick={() => onWhatElseClick()}
-                  />
-                </FItem>
-              </li>
-            </ul>
-          </FCard>
-        </FContainer>
+            <div className={'congrats-step1-card f-mt-2'}>
+              <FTypo className={"f-mb-1"} size={25} weight={700} color="#D9B373">
+                Step 1
+              </FTypo>
+              <FTypo className={"f-mb-2"} size={16} weight={700} color="#FCFCFC">
+                Congratulations! You have successfully minted your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens! Please proceed to step 2.</FTypo>
+            </div>
+            <div className={'congrats-step3-card'}>
+              <FTypo className={"f-mb-1"} size={25} weight={700} color="#D9B373">
+                Step 2
+              </FTypo>
+              <FTypo className={"f-mb-1"} size={16} weight={700} color="#FCFCFC">
+                You are now able to stake your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens to start earning rewards!
+              </FTypo>
+              <br></br>
+              <FInputCheckbox
+                onClick={() => setStepTwoCheck(!stepTwoCheck)}
+                name="step2Check"
+                className="f-mb-1 f-mt-1"
+                label={`I understand that I have to stake my ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens to earn ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
+                  } rewards.`}
+              />
+              <FInputCheckbox
+                onClick={() => setStepThreeCheck(!stepThreeCheck)}
+                name="step3Check"
+                className="f-mb-1 f-mt-1"
+                label={`I understand that rewards are generated from ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
+                  } trading volume. To participate in generating rewards for my staked tokens, it is recommended that some of the ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
+                  } tokens should be staked, while others should be used to create trading volume which generates rewards.`}
+              />
+              <div className={'d-flex justify_center align_center w-100 f-mb-1'}>
+                <FButton
+                  title={`Stake ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}`}
+                  className={`w-100 ${!stepTwoCheck || !stepThreeCheck ? 'congrats-disabled-btn' : 'clr_new_black'}`}
+                  disabled={disableCheck()}
+                  onClick={() => onStakeClick()} />
+                <FButton
+                  title="What Else Can I Do?"
+                  className={`w-100 f-mb-1 ${!stepTwoCheck || !stepThreeCheck ? 'congrats-disabled-btn' : 'clr_new_black'}`}
+                  disabled={disableCheck()}
+                  onClick={() => onWhatElseClick()} />
+              </div>
+            </div>
+          </div>
+          <div>
+            <CrucibleMyBalance />
+          </div>
+        </div>
+        // <FContainer width={700}>
+        //   <CrucibleMyBalance />
+        //   <FCard variant={"secondary"} className="card-crucible-steps">
+        //     <FTypo size={20} className={"card-title w-100"} display="flex">
+        //       Crucible Token Sustainable Farming
+        //     </FTypo>
+        //     <ul>
+        //       <li className="step step-success">
+        //         <span className="step-info">
+        //           <FTypo className={"f-mb-1"}>Step 1</FTypo>
+        //           <FTypo>
+        //             Congratulations! You have successfully minted your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens! Please proceed to step 2.
+        //           </FTypo>
+        //         </span>
+        //       </li>
+        //       <li>
+        //         <span className="step-info">
+        //           <FTypo className={"f-mb-1"}>Step 2</FTypo>
+        //           <FTypo>You are now able to stake your {farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens to start earning rewards!</FTypo>
+        //           <br></br>
+        //           <FInputCheckbox
+        //             onClick={() => setStepTwoCheck(!stepTwoCheck)}
+        //             name="step2Check"
+        //             className="f-mb-1 f-mt-1"
+        //             label={`I understand that I have to stake my ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"} tokens to earn ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
+        //               } rewards.`}
+        //           />
+        //           <FInputCheckbox
+        //             onClick={() => setStepThreeCheck(!stepThreeCheck)}
+        //             name="step3Check"
+        //             className="f-mb-1 f-mt-1"
+        //             label={`I understand that rewards are generated from ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
+        //               } trading volume. To participate in generating rewards for my staked tokens, it is recommended that some of the ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"
+        //               } tokens should be staked, while others should be used to create trading volume which generates rewards.`}
+        //           />
+        //         </span>
+        //       </li>
+        //       <li className="step-last">
+        //         <FItem>
+        //           <FButton
+        //             title={`Stake ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}`}
+        //             postfix={<IconArrow />}
+        //             className="w-100"
+        //             disabled={disableCheck()}
+        //             style={{ marginLeft: "-4px" }}
+        //             onClick={() => onStakeClick()}
+        //           />
+        //         </FItem>
+        //         <FItem >
+        //           <FButton
+        //             title="What Else Can I Do?"
+        //             style={{ marginLeft: "4px" }}
+        //             postfix={<IconArrow />}
+        //             className="w-100"
+        //             disabled={disableCheck()}
+        //             onClick={() => onWhatElseClick()}
+        //           />
+        //         </FItem>
+        //       </li>
+        //     </ul>
+        //   </FCard>
+        // </FContainer>
       )}
     </>
   );

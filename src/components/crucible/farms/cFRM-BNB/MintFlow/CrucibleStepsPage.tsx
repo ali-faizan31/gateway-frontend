@@ -89,11 +89,9 @@ export const CrucibleStepsPage = () => {
                 onClick={() => setStepThreeCheck(!stepThreeCheck)}
                 name="step3Check"
                 className="f-mb-1 f-mt-1"
-                label={`I have added liquidity of ${farm?.includes("BNB") ? "CAKE-LP" : ""} ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}${
-                  farm?.includes("BNB") ? "-BNB" : "/BNB"
-                } pair and have the LP tokens. I’m ready to stake my ${farm?.includes("BNB") ? "CAKE-LP" : ""} ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}${
-                  farm?.includes("BNB") ? "-BNB" : "/BNB"
-                } tokens now.`}
+                label={`I have added liquidity of ${farm?.includes("BNB") ? "CAKE-LP" : ""} ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}${farm?.includes("BNB") ? "-BNB" : "/BNB"
+                  } pair and have the LP tokens. I’m ready to stake my ${farm?.includes("BNB") ? "CAKE-LP" : ""} ${farm?.includes("cFRMx") ? "cFRMx" : "cFRM"}${farm?.includes("BNB") ? "-BNB" : "/BNB"
+                  } tokens now.`}
               />
               {/* <FButton title="Add Liquidity" postfix={<IconArrow />} className="w-100" disabled={!stepThreeCheck} /> */}
             </span>
