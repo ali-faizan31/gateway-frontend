@@ -19,12 +19,14 @@ export const Mint = () => {
   // const [flowType, setFlowType] = useState("");
 
   return (
-    <FContainer className="card-manage">
-      <CrucibleMyBalance />
-
-      <DepositAndMint />
-
-      <CrucibleFeeCard />
-    </FContainer>
+    <div className="justify_start align_start d-flex min-100vw new-design-container-paddings-lr">
+      <div className="custom-mr-50">
+        <DepositAndMint />
+        <CrucibleFeeCard />
+      </div>
+      <div>
+        <CrucibleMyBalance />
+      </div>
+    </div>
   );
 };

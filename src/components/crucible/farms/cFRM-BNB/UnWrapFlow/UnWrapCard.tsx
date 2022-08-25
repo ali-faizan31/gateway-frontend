@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FButton, FCard, FGrid, FGridItem, FInputText, FItem, FTypo } from "ferrum-design-system";
-import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
+import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-back-white.svg";
 // import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
 // import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
@@ -118,88 +118,105 @@ export const UnWrap = () => {
           </FItem>
         </FCard>
       ) : (
-        <FCard variant={"secondary"} className="card-deposit  card-shadow">
-          <div className="card-title">
+        <div className={'crucible-farm-dashboard-card'}>
+          <div className="card-title f-mb-2">
             <FItem display={"flex"} alignY="center">
-              <Link to={`/dashboard/crucible/${farm}/manage`} className="btn-back">
+              <Link to="/dashboard/crucible" className="btn-back custom-mr-14">
                 <IconGoBack />
               </Link>
-              <FTypo size={24} weight={700}>
+              <FTypo size={20} weight={700}>
                 Unwrap Crucible Token
               </FTypo>
             </FItem>
           </div>
           <FGrid>
             <FGridItem size={[6, 6, 6]}>
-              <FItem bgColor="#1C2229" className={"f-p-2"}>
-                <FTypo size={20} className="f-mb-1">
+              <FItem bgColor="#1A1D1F" className={"f-p-2"}>
+                <FTypo size={18} color={'#6F767E'} className="f-mb-1">
                   {getBaseTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
-                  ${tokenPrices[getBaseTokenName(farm)!]}
+                  ${tokenPrices[getBaseTokenName(farm)!] || 0}
                 </FTypo>
               </FItem>
             </FGridItem>
             <FGridItem size={[6, 6, 6]}>
-              <FItem bgColor="#1C2229" className={"f-p-2"}>
-                <FTypo size={20} className="f-mb-1">
+              <FItem bgColor="#1A1D1F" className={"f-p-2"}>
+                <FTypo size={18} color={'#6F767E'} className="f-mb-1">
                   {getCrucibleTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
-                  ${tokenPrices[getCrucibleTokenName(farm)!]}
+                  ${tokenPrices[getCrucibleTokenName(farm)!] || 0}
                 </FTypo>
               </FItem>
             </FGridItem>
           </FGrid>
-          <FInputText
-            className={"f-mt-1"}
-            inputSize="input-lg"
-            type={"text"}
-            placeholder="0"
-            value={amount === 0 ? "" : amount}
-            onChange={(e: any) => setAmount(e.target.value)}
-            postfix={
-              <FTypo color="#DAB46E" className={"f-pr-1"}>
-                <span onClick={() => setAmount(userCrucibleData[farm!]?.balance || "0")}>Max</span>
+          <div className="f-mt-1 f-mb-2 align_start justify_start d-flex">
+            <div className="custom-mr-16 w-100">
+              <div>
+                <FTypo size={18} weight={700}>
+                  Deposit
+                </FTypo>
+                <FInputText
+                  className={"f-mt-1 w-100 f-mb--7"}
+                  inputSize="input-lg"
+                  type={"text"}
+                  placeholder="0"
+                  value={amount === 0 ? "" : amount}
+                  onChange={(e: any) => setAmount(e.target.value)}
+                  postfix={
+                    <FTypo color="#DAB46E" className={"f-pr-1"}>
+                      <span onClick={() => setAmount(userCrucibleData[farm!]?.balance || "0")}>Max</span>
+                    </FTypo>
+                  }
+                />
+                <FTypo size={12} weight={500} color={'#6F767E'}>
+                  You have {TruncateWithoutRounding(userCrucibleData[farm!]?.balance || "0", 3)} available in Token {userCrucibleData[farm!]?.symbol}.
+                </FTypo>
+              </div>
+
+            </div>
+            <div className={'w-100'}>
+              <FTypo size={18} weight={700}>
+                Receive
               </FTypo>
-            }
-          />
-          <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {TruncateWithoutRounding(userCrucibleData[farm!]?.balance || "0", 3)} available in Token {userCrucibleData[farm!]?.symbol}.
-          </FTypo>
-          <FTypo size={15} className={"f-mt-2 f-pl--5"}>
-            Amount you will receive
-          </FTypo>
-          <FInputText
-            className={"f-mt-1"}
-            inputSize="input-lg"
-            type={"text"}
-            placeholder="0"
-            disabled={true}
-            // value={changeExponentToPoints(Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100))}
-            value={changeExponentToPoints(Big(amount || "0").minus(Big(amount || "0").times(crucible[farm!]?.feeOnWithdrawRate || "0")).toString())}
-            postfix={
-              <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-                {crucible[farm!]?.baseSymbol}
+              <FInputText
+                inputSize="input-lg"
+                className={'f-mt-1 w-100 f-mb--7'}
+                type={"text"}
+                placeholder="0"
+                disabled={true}
+                value={changeExponentToPoints(Big(amount || "0").minus(Big(amount || "0").times(crucible[farm!]?.feeOnWithdrawRate || "0")).toString())}
+                postfix={
+                  <FTypo color="#DAB46E" className={"f-pr-1"}>
+                    {crucible[farm!]?.baseSymbol}
+                  </FTypo>
+                }
+              />
+              <FTypo size={12} weight={500} color={'#6F767E'}>
+                Amount {crucible[farm!]?.baseSymbol} you will receive
               </FTypo>
-            }
-          />
+            </div>
+          </div>
           {meV2._id && isConnected ? (
             <ApprovableButtonWrapper
-              View={(ownProps) => (
-                <div className="btn-wrap f-mt-2">
-                  <FButton
-                    title={"Unwrap"}
-                    className={"w-100"}
-                    disabled={getDisabledCheck()}
-                    onClick={
-                      ownProps.isApprovalMode
-                        ? () => ownProps.onApproveClick()
-                        : () => onUnWrapClick(crucible[farm!]?.baseCurrency, crucible[farm!]?.currency || "", amount.toString(), true, crucible[farm!]?.network, walletAddress as string)
-                    }
-                  ></FButton>
-                </div>
-              )}
+              View={(ownProps) => {
+                // onPropChange(ownProps);
+                return (
+                  <div className="btn-wrap f-mt-2 f-mb-2">
+                    <FButton
+                      title={'UNWRAP'}
+                      className={"w-100 clr_new_black custom-font-size-16 font-700"}
+                      disabled={getDisabledCheck()}
+                      onClick={
+                        ownProps.isApprovalMode
+                          ? () => ownProps.onApproveClick()
+                          : () => onUnWrapClick(crucible[farm!]?.baseCurrency, crucible[farm!]?.currency || "", amount.toString(), true, crucible[farm!]?.network, walletAddress as string)
+                      }
+                    ></FButton>
+                  </div>
+                );
+              }}
               currency={crucible[farm!]?.currency}
               contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
               userAddress={walletAddress as string}
@@ -209,10 +226,9 @@ export const UnWrap = () => {
             <WalletConnector.WalletConnector
               WalletConnectView={FButton}
               WalletConnectModal={ConnectWalletDialog}
-              WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
+              WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100 f-mb-2" }}
             />
           )}
-
           <DialogTransitionStatus
             transitionStatusDialog={transitionStatusDialog}
             setTransitionStatusDialog={setTransitionStatusDialog}
@@ -225,7 +241,115 @@ export const UnWrap = () => {
             crucible={crucible[farm!]}
             onContinueToNextStepClick={() => onContinueToNextStepClick()}
           />
-        </FCard>
+        </div>
+        // <FCard variant={"secondary"} className="card-deposit  card-shadow">
+        //   <div className="card-title">
+        //     <FItem display={"flex"} alignY="center">
+        //       <Link to={`/dashboard/crucible/${farm}/manage`} className="btn-back">
+        //         <IconGoBack />
+        //       </Link>
+        //       <FTypo size={24} weight={700}>
+        //         Unwrap Crucible Token 1111111
+        //       </FTypo>
+        //     </FItem>
+        //   </div>
+        //   <FGrid>
+        //     <FGridItem size={[6, 6, 6]}>
+        //       <FItem bgColor="#1C2229" className={"f-p-2"}>
+        //         <FTypo size={20} className="f-mb-1">
+        //           {getBaseTokenName(farm)} Price (USD)
+        //         </FTypo>
+        //         <FTypo size={30} weight={500}>
+        //           ${tokenPrices[getBaseTokenName(farm)!]}
+        //         </FTypo>
+        //       </FItem>
+        //     </FGridItem>
+        //     <FGridItem size={[6, 6, 6]}>
+        //       <FItem bgColor="#1C2229" className={"f-p-2"}>
+        //         <FTypo size={20} className="f-mb-1">
+        //           {getCrucibleTokenName(farm)} Price (USD)
+        //         </FTypo>
+        //         <FTypo size={30} weight={500}>
+        //           ${tokenPrices[getCrucibleTokenName(farm)!]}
+        //         </FTypo>
+        //       </FItem>
+        //     </FGridItem>
+        //   </FGrid>
+        //   <FInputText
+        //     className={"f-mt-1"}
+        //     inputSize="input-lg"
+        //     type={"text"}
+        //     placeholder="0"
+        //     value={amount === 0 ? "" : amount}
+        //     onChange={(e: any) => setAmount(e.target.value)}
+        //     postfix={
+        //       <FTypo color="#DAB46E" className={"f-pr-1"}>
+        //         <span onClick={() => setAmount(userCrucibleData[farm!]?.balance || "0")}>Max</span>
+        //       </FTypo>
+        //     }
+        //   />
+        //   <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
+        //     You have {TruncateWithoutRounding(userCrucibleData[farm!]?.balance || "0", 3)} available in Token {userCrucibleData[farm!]?.symbol}.
+        //   </FTypo>
+        //   <FTypo size={15} className={"f-mt-2 f-pl--5"}>
+        //     Amount you will receive
+        //   </FTypo>
+        //   <FInputText
+        //     className={"f-mt-1"}
+        //     inputSize="input-lg"
+        //     type={"text"}
+        //     placeholder="0"
+        //     disabled={true}
+        //     // value={changeExponentToPoints(Number(amount) - Number(amount) * (Number(BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0").times(100)) / 100))}
+        //     value={changeExponentToPoints(Big(amount || "0").minus(Big(amount || "0").times(crucible[farm!]?.feeOnWithdrawRate || "0")).toString())}
+        //     postfix={
+        //       <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
+        //         {crucible[farm!]?.baseSymbol}
+        //       </FTypo>
+        //     }
+        //   />
+        //   {meV2._id && isConnected ? (
+        //     <ApprovableButtonWrapper
+        //       View={(ownProps) => (
+        //         <div className="btn-wrap f-mt-2">
+        //           <FButton
+        //             title={"Unwrap"}
+        //             className={"w-100"}
+        //             disabled={getDisabledCheck()}
+        // onClick={
+        //   ownProps.isApprovalMode
+        //     ? () => ownProps.onApproveClick()
+        //     : () => onUnWrapClick(crucible[farm!]?.baseCurrency, crucible[farm!]?.currency || "", amount.toString(), true, crucible[farm!]?.network, walletAddress as string)
+        // }
+        //           ></FButton>
+        //         </div>
+        //       )}
+        // currency={crucible[farm!]?.currency}
+        // contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
+        // userAddress={walletAddress as string}
+        // amount={"0.0001"}
+        //     />
+        //   ) : (
+        //     <WalletConnector.WalletConnector
+        //       WalletConnectView={FButton}
+        //       WalletConnectModal={ConnectWalletDialog}
+        //       WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
+        //     />
+        //   )}
+
+        // <DialogTransitionStatus
+        //   transitionStatusDialog={transitionStatusDialog}
+        //   setTransitionStatusDialog={setTransitionStatusDialog}
+        //   isProcessing={isProcessing}
+        //   setIsProcessing={setIsProcessing}
+        //   setapprovedDone={false}
+        //   transactionId={transactionId}
+        //   isSubmitted={false}
+        //   isProcessed={isProcessed}
+        //   crucible={crucible[farm!]}
+        //   onContinueToNextStepClick={() => onContinueToNextStepClick()}
+        // />
+        // </FCard>
       )}
     </>
   );

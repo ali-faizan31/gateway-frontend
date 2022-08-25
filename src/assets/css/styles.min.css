@@ -19,7 +19,7 @@
 }
 
 .f-layout.layout-crucible .f-main .f-container.fluid .f-container {
-  max-width: 700px;
+  /* max-width: 700px; */
 }
 
 .f-layout.layout-crucible .f-main .f-container.crucible-dashboard {
@@ -191,7 +191,8 @@
 .card-apr {
   position: relative;
   padding-bottom: 0;
-  max-width: 880px;
+  /* max-width: 880px; */
+  max-width: 100%;
   margin: 2rem auto;
 }
 
@@ -334,7 +335,7 @@
 }
 
 .card-manage {
-  max-width: 650px !important;
+  /* max-width: 650px !important; */
   margin: 0 auto;
 }
 

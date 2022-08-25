@@ -8,6 +8,9 @@ body {
 body > div {
   height: auto;
 }
+.min-100vw {
+  min-width: 100vw;
+}
 .new-bg-header {
   background: $newCrucibleBackground !important;
   margin-bottom: 0px !important;
@@ -23,6 +26,9 @@ body > div {
 .new-connect-btn {
   background: $newCrucibleBackground !important;
   border: 1px solid rgb(145, 145, 145) !important;
+}
+.clr_new_black {
+  color: $newCrucibleBackground !important;
 }
 .bg-wallet-address {
   background: #1a1d1f !important;
@@ -271,6 +277,11 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
     font-size: #{$i}px !important;
   }
 }
+@for $i from 0 through 50 {
+  .custom-mr-#{$i} {
+    margin-right: #{$i}px !important;
+  }
+}
 
 @for $i from 0 through 1000 {
   .custom-font-weight-#{$i} {
@@ -329,11 +340,10 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   display: flex;
   justify-content: end;
   max-width: 350px;
-  border-radius: 10px 10px 0px 0px;
-  font-size: 14px;
-  font-weight: 700;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
   color: #ffffff;
-  margin: 0px 10px 0px 0px !important;
 }
 
 .green-cap {
@@ -516,6 +526,12 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 .font-400 {
   font-weight: 400;
 }
+.font-500 {
+  font-weight: 500;
+}
+.font-600 {
+  font-weight: 600;
+}
 .font-700 {
   font-weight: 700;
 }
@@ -541,6 +557,12 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 }
 .align_center {
   align-items: center;
+}
+.align_start {
+  align-items: flex-start;
+}
+.align_end {
+  align-items: flex-end;
 }
 .d_flex {
   display: flex !important;
@@ -583,6 +605,12 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 }
 .bg_black_new {
   background-color: #1b1b1b !important;
+}
+.clr_black_light {
+  color: #6f767e !important;
+}
+.primary-border {
+  border: 1px solid #dab46e !important;
 }
 .primaryColor {
   color: #dab46e;
@@ -736,6 +764,12 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 .border_none {
   border: none !important;
 }
+.border_white {
+  border: white !important;
+}
+.border_primary {
+  border: 1px solid#d9b373 !important;
+}
 .crucible-dashboard-card {
   background-image: url("./assets/img/crucible-dashboard-card.png");
   // height: 100%;
@@ -745,4 +779,88 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
 }
 .card-apr {
   background: transparent !important;
+}
+.crucible-welcome-card {
+  background-image: url("./assets/img/welcome-card.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.new-design-container-paddings-lr {
+  padding-right: 21rem;
+  padding-left: 1rem;
+}
+.crucible-farm-dashboard-card {
+  background-image: url("./assets/img/farm-dashboard-card.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.crucible-farm-dashboard-card-2 {
+  background-image: url("./assets/img/farm-dashboard-card-2.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.mybalance-card {
+  background-image: url("./assets/img/mybalance-card.png");
+  width: 221px;
+  background-repeat: round;
+  padding: 1.5rem;
+  height: 431px;
+  margin-left: 25px;
+}
+.congrats-card-1 {
+  background-image: url("./assets/img/congrats-card-1.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.congrats-subcards {
+  background-image: url("./assets/img/congrats-subcards.png");
+  width: 100%;
+  height: 170px;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.congrats-step1-card {
+  background-image: url("./assets/img/congrats-step1-card.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.congrats-step2-card {
+  background-image: url("./assets/img/congrats-step2-card.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.congrats-step3-card {
+  background-image: url("./assets/img/congrats-step3-card.png");
+  width: 100%;
+  background-repeat: round;
+  padding: 1.5rem;
+}
+.unwrap-farm-card {
+  background: #1a1d1f;
+  border-radius: 12px;
+  padding: 19px 32px;
+  margin: 24px 0px;
+}
+.congrats-disabled-btn {
+  background-color: #6f767e !important;
+  color: #efefef !important;
+  border: none !important;
+}
+.popup-card {
+  background-image: url("./assets/img/new-popup-card.png") !important;
+  background-repeat: round;
+}
+.btn-44-h {
+  height: 44px !important;
+}
+@media screen and (min-width: 1200) {
+  .screen-width-after-200-for-crucible-farm-card {
+    min-width: 60vw;
+  }
 }
