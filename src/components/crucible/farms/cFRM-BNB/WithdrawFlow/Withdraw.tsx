@@ -19,12 +19,22 @@ export const Withdraw = () => {
   // const [flowType, setFlowType] = useState("");
 
   return (
-    <FContainer className="card-manage">
-      <CrucibleMyBalance />
+    <div className="justify_start align_start d-flex min-100vw new-design-container-paddings-lr">
+      <div className="custom-mr-50">
+        <CrucibleWithdraw />
 
-      <CrucibleWithdraw />
+        <CrucibleWithdrawFeeCard />
+      </div>
+      <div>
+        <CrucibleMyBalance />
+      </div>
+    </div>
+    // <FContainer className="card-manage">
+    //   <CrucibleMyBalance />
 
-      <CrucibleWithdrawFeeCard />
-    </FContainer>
+    //   <CrucibleWithdraw />
+
+    //   <CrucibleWithdrawFeeCard />
+    // </FContainer>
   );
 };

@@ -22,7 +22,7 @@ import {
   getAccessTokenForApplicationUser,
 } from "../../../../_apis/WalletAuthencation";
 import { ME_TAG, TOKEN_TAG } from "../../../../utils/const.utils";
-import { walletConnectorActions } from "../../../../container-components/wallet-connector";
+import { WalletConnector } from "foundry";
 import * as walletAuthenticatorActions from "../../../common/wallet-authentication/redux/walletAuthenticationActions";
 import { useDispatch, useSelector } from "react-redux";
 import { getErrorMessage } from "../../../../utils/global.utils";
@@ -109,7 +109,7 @@ const LoginForm = () => {
   const removeOldSession = () => {
     localStorage.removeItem(TOKEN_TAG);
     localStorage.removeItem(ME_TAG);
-    dispatch(walletConnectorActions.resetWalletConnector());
+    dispatch(WalletConnector.walletConnectorActions.resetWalletConnector());
     dispatch(
       walletAuthenticatorActions.resetWalletAuthentication({
         userToken: applicationUserToken,

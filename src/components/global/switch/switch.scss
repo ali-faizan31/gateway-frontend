@@ -34,6 +34,12 @@
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
+.vesting-slider {
+  background-color: #000 !important;
+}
+.vesting-slider:before {
+  background-color: #fff;
+}
 
 input:checked + .slider {
   background-color: #232c37;
@@ -50,6 +56,9 @@ input:checked + .slider:before {
   background-color: #dab46e;
 }
 
+input:checked + .vesting-slider {
+  background-color: #000;
+}
 /* Rounded sliders */
 .slider.round {
   border-radius: 20px;
@@ -57,4 +66,12 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 20px;
+}
+
+.vesting-slider.round {
+  border-radius: 7px;
+}
+
+.vesting-slider.round:before {
+  border-radius: 7px;
 }

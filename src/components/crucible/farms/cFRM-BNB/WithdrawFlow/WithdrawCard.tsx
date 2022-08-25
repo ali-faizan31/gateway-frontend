@@ -9,7 +9,7 @@ import {
   FItem,
   FTypo,
 } from "ferrum-design-system";
-import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
+import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-back-white.svg";
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
 import { CrucibleClient } from "./../../../../../container-components/web3Client/crucibleClient";
 import { Web3Helper } from "./../../../../../container-components/web3Client/web3Helper";
@@ -30,7 +30,7 @@ import {
 } from "../../../common/Helper";
 import { useHistory, useLocation, useParams } from "react-router";
 import { ClipLoader } from "react-spinners";
-import { MetaMaskConnector } from "../../../../../container-components";
+import { WalletConnector } from "foundry";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { getErrorMessage } from "../../../../../utils/global.utils";
 
@@ -158,88 +158,77 @@ export const Withdraw = () => {
           </FItem>
         </FCard>
       ) : (
-        <FCard variant={"secondary"} className="card-deposit  card-shadow">
+        <div className={'crucible-farm-dashboard-card'}>
           <div className="card-title f-mb-2">
             <FItem display={"flex"} alignY="center">
-              <Link to={`/dashboard/crucible/${farm}/manage`} className="btn-back">
+              <Link to={`/dashboard/crucible/${farm}/manage`} className="btn-back custom-mr-14">
                 <IconGoBack />
               </Link>
-              <FTypo size={24} weight={700}>
+              <FTypo size={20} weight={700}>
                 Withdraw Crucible Stake Rewards
               </FTypo>
             </FItem>
           </div>
-          <FGrid className={"f-mb-1"}>
+          <FGrid>
             <FGridItem size={[6, 6, 6]}>
-              <FItem bgColor="#1C2229" className={"f-p-2"}>
-                <FTypo size={20} className="f-mb-1">
+              <FItem bgColor="#1A1D1F" className={"f-p-2"}>
+                <FTypo size={18} color={'#6F767E'} className="f-mb-1">
                   {getBaseTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
-                  ${tokenPrices[getBaseTokenName(farm)!]}
+                  ${tokenPrices[getBaseTokenName(farm)!] || 0}
                 </FTypo>
               </FItem>
             </FGridItem>
             <FGridItem size={[6, 6, 6]}>
-              <FItem bgColor="#1C2229" className={"f-p-2"}>
-                <FTypo size={24} className="f-mb-1">
+              <FItem bgColor="#1A1D1F" className={"f-p-2"}>
+                <FTypo size={18} color={'#6F767E'} className="f-mb-1">
                   {getCrucibleTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
-                  ${tokenPrices[getCrucibleTokenName(farm)!]}
+                  ${tokenPrices[getCrucibleTokenName(farm)!] || 0}
                 </FTypo>
               </FItem>
             </FGridItem>
           </FGrid>
-
-          <FGrid>
-            <FGridItem size={[12, 12, 12]}>
-              <FItem bgColor="#1C2229" className={"f-p-2"}>
-                <FTypo size={20} className="f-mb-1" align={"center"}>
-                  Your unclaimed Rewards
-                </FTypo>
-                <FTypo size={36} weight={500} className="primary-color" align={"center"}>
-                  {getRewardAmount()} {getRewardSymbol()}
-                  {/* {userStake?.rewardOf || 0} {crucible.symbol} */}
-                </FTypo>
-              </FItem>
-            </FGridItem>
-          </FGrid>
+          <div className="w-100 f-mt-1 f-mb-2 border_primary custom-padding-18" style={{ borderRadius: 8, backgroundColor: '#272B30' }}>
+            <FTypo size={18} weight={700} align={"center"}>
+              Your unclaimed Rewards
+            </FTypo>
+            <FTypo size={36} weight={600} className="primary-color" align={"center"}>
+              {getRewardAmount()} {getRewardSymbol()}
+            </FTypo>
+          </div>
           {meV2._id && isConnected ? (
-            <div className="btn-wrap f-mt-2">
-              <ApprovableButtonWrapper
-                View={(ownProps) => (
-                  <FButton
-                    title={"Withdraw Rewards"}
-                    className={"w-100"}
-                    disabled={Number(getRewardAmount()) === 0}
-                    onClick={
-                      ownProps.isApprovalMode ? () => ownProps.onApproveClick() : () => onWithdrawClick()
-                      // crucible!.currency,
-                      // (crucible?.staking || [])[0]?.address || "",
-                      // userStake?.rewardOf || 0,
-                      // true,
-                      // crucible?.network,
-                      // walletAddress as string
-                    }
-                  ></FButton>
-                )}
-                // currency={crucible!.currency}
-                currency={isSingleTokenFarm(farm) ? crucible[farm!]?.currency : isLPFarm(farm) && `${crucible[farm!]?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
-                contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
-                userAddress={walletAddress as string}
-                amount={"0.0001"}
-              />
-            </div>
+            <ApprovableButtonWrapper
+              View={(ownProps) => {
+                // onPropChange(ownProps);
+                return (
+                  <div className="btn-wrap f-mt-2 f-mb-2">
+                    <FButton
+                      title={"WITHDRAW REWARDS"}
+                      className={"w-100 clr_new_black custom-font-size-16 font-700"}
+                      disabled={Number(getRewardAmount()) === 0}
+                      onClick={
+                        ownProps.isApprovalMode ? () => ownProps.onApproveClick() : () => onWithdrawClick()
+                        // crucible+ddress as string
+                      }
+                    ></FButton>
+                  </div>
+                );
+              }}
+              currency={isSingleTokenFarm(farm) ? crucible[farm!]?.currency : isLPFarm(farm) && `${crucible[farm!]?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
+              contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
+              userAddress={walletAddress as string}
+              amount={"0.0001"}
+            />
           ) : (
-            <MetaMaskConnector.WalletConnector
+            <WalletConnector.WalletConnector
               WalletConnectView={FButton}
               WalletConnectModal={ConnectWalletDialog}
-              isAuthenticationNeeded={true}
               WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
             />
           )}
-
           <DialogTransitionStatus
             transitionStatusDialog={transitionStatusDialog}
             setTransitionStatusDialog={setTransitionStatusDialog}
@@ -252,7 +241,101 @@ export const Withdraw = () => {
             crucible={crucible[farm!]}
             onContinueToNextStepClick={() => onContinueToNextStepClick()}
           />
-        </FCard>
+        </div>
+        // <FCard variant={"secondary"} className="card-deposit  card-shadow">
+        //   <div className="card-title f-mb-2">
+        //     <FItem display={"flex"} alignY="center">
+        //       <Link to={`/dashboard/crucible/${farm}/manage`} className="btn-back">
+        //         <IconGoBack />
+        //       </Link>
+        //       <FTypo size={24} weight={700}>
+        //         Withdraw Crucible Stake Rewards 1111111
+        //       </FTypo>
+        //     </FItem>
+        //   </div>
+        //   <FGrid className={"f-mb-1"}>
+        //     <FGridItem size={[6, 6, 6]}>
+        //       <FItem bgColor="#1C2229" className={"f-p-2"}>
+        //         <FTypo size={20} className="f-mb-1">
+        //           {getBaseTokenName(farm)} Price (USD)
+        //         </FTypo>
+        //         <FTypo size={30} weight={500}>
+        //           ${tokenPrices[getBaseTokenName(farm)!]}
+        //         </FTypo>
+        //       </FItem>
+        //     </FGridItem>
+        //     <FGridItem size={[6, 6, 6]}>
+        //       <FItem bgColor="#1C2229" className={"f-p-2"}>
+        //         <FTypo size={24} className="f-mb-1">
+        //           {getCrucibleTokenName(farm)} Price (USD)
+        //         </FTypo>
+        //         <FTypo size={30} weight={500}>
+        //           ${tokenPrices[getCrucibleTokenName(farm)!]}
+        //         </FTypo>
+        //       </FItem>
+        //     </FGridItem>
+        //   </FGrid>
+
+        //   <FGrid>
+        //     <FGridItem size={[12, 12, 12]}>
+        //       <FItem bgColor="#1C2229" className={"f-p-2"}>
+        //         <FTypo size={20} className="f-mb-1" align={"center"}>
+        //           Your unclaimed Rewards
+        //         </FTypo>
+        //         <FTypo size={36} weight={500} className="primary-color" align={"center"}>
+        //           {getRewardAmount()} {getRewardSymbol()}
+        //           {/* {userStake?.rewardOf || 0} {crucible.symbol} */}
+        //         </FTypo>
+        //       </FItem>
+        //     </FGridItem>
+        //   </FGrid>
+        //   {meV2._id && isConnected ? (
+        //     <div className="btn-wrap f-mt-2">
+        //       <ApprovableButtonWrapper
+        //         View={(ownProps) => (
+        //           <FButton
+        //             title={"Withdraw Rewards"}
+        //             className={"w-100"}
+        //             disabled={Number(getRewardAmount()) === 0}
+        //             onClick={
+        //               ownProps.isApprovalMode ? () => ownProps.onApproveClick() : () => onWithdrawClick()
+        //               // crucible!.currency,
+        //               // (crucible?.staking || [])[0]?.address || "",
+        //               // userStake?.rewardOf || 0,
+        //               // true,
+        //               // crucible?.network,
+        //               // walletAddress as string
+        //             }
+        //           ></FButton>
+        //         )}
+        //         // currency={crucible!.currency}
+        //         currency={isSingleTokenFarm(farm) ? crucible[farm!]?.currency : isLPFarm(farm) && `${crucible[farm!]?.network}:${LPStakingDetails[farm!]?.LPaddress}`}
+        //         contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
+        //         userAddress={walletAddress as string}
+        //         amount={"0.0001"}
+        //       />
+        //     </div>
+        //   ) : (
+        //     <WalletConnector.WalletConnector
+        //       WalletConnectView={FButton}
+        //       WalletConnectModal={ConnectWalletDialog}
+        //       WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
+        //     />
+        //   )}
+
+        //   <DialogTransitionStatus
+        //     transitionStatusDialog={transitionStatusDialog}
+        //     setTransitionStatusDialog={setTransitionStatusDialog}
+        //     isProcessing={isProcessing}
+        //     setIsProcessing={setIsProcessing}
+        //     transactionId={transactionId}
+        //     setapprovedDone={false}
+        //     isSubmitted={false}
+        //     isProcessed={isProcessed}
+        //     crucible={crucible[farm!]}
+        //     onContinueToNextStepClick={() => onContinueToNextStepClick()}
+        //   />
+        // </FCard>
       )}
     </>
   );

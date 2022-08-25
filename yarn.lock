@@ -1838,6 +1838,16 @@
   dependencies:
     "@babel/runtime" "^7.6.2"
 
+"@reduxjs/toolkit@^1.6.2":
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-1.8.2.tgz#352fd17bc858af51d21ce8d28183a930cab9e638"
+  integrity sha512-CtPw5TkN1pHRigMFCOS/0qg3b/yfPV5qGCsltVnIz7bx4PKTJlGHYfIxm97qskLknMzuGfjExaYdXJ77QTL0vg==
+  dependencies:
+    immer "^9.0.7"
+    redux "^4.1.2"
+    redux-thunk "^2.4.1"
+    reselect "^4.1.5"
+
 "@reduxjs/toolkit@^1.7.1":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-1.8.1.tgz#94ee1981b8cf9227cda40163a04704a9544c9a9f"
@@ -2073,7 +2083,7 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/big.js@^6.1.2":
+"@types/big.js@^6.1.2", "@types/big.js@^6.1.3":
   version "6.1.3"
   resolved "https://registry.yarnpkg.com/@types/big.js/-/big.js-6.1.3.tgz#c008dec4dae24c7a338ebb4521c46e9609020807"
   integrity sha512-fHh2h1cFlvGP0kFCqoAsnuQoM0n3xHB6HxgZvELt7dji+BtK/j938MRL0nG5AA45EgibuFcPjgLlkqfUPCyoKw==
@@ -2235,6 +2245,16 @@
   integrity sha512-1T430E+usndUjymkXB8k/zGpWehggircq/QaQMuFLMJceccAcD9vcmbUXF1LjeVP/+P4wI/bad6BF1E+7IGlqA==
   dependencies:
     "@types/react" "*"
+
+"@types/react-datepicker@^4.3.4":
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/@types/react-datepicker/-/react-datepicker-4.4.2.tgz#13ab25a5fff7f3da4c5380c471efd8b38f53010e"
+  integrity sha512-g8DhWvYmaIMLzVrIEVLXncylyImyBaoPsEUr3yR13JDaaHoebhDorqnVv4tLkNGa8SjBB8SAOQvxD5jaPNBX8A==
+  dependencies:
+    "@popperjs/core" "^2.9.2"
+    "@types/react" "*"
+    date-fns "^2.0.1"
+    react-popper "^2.2.5"
 
 "@types/react-dom@^17.0.0":
   version "17.0.14"
@@ -3700,6 +3720,11 @@ big.js@^5.2.2:
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-5.2.2.tgz#65f0af382f578bcdc742bd9c281e9cb2d7768328"
   integrity sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==
 
+big.js@^6.1.1:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/big.js/-/big.js-6.2.0.tgz#39c60822aecb0f34a1d79a90fe9908a0ddf45e1d"
+  integrity sha512-paIKvJiAaOYdLt6MfnvxkDo64lTOV257XYJyX3oJnJQocIclUn+48k6ZerH/c5FxWE6DGJu1TKDYis7tqHg9kg==
+
 bignumber.js@^8.0.1:
   version "8.1.1"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-8.1.1.tgz#4b072ae5aea9c20f6730e4e5d529df1271c4d885"
@@ -4773,7 +4798,7 @@ cross-fetch@^2.1.0:
     node-fetch "2.6.1"
     whatwg-fetch "2.0.4"
 
-cross-fetch@^3.1.4:
+cross-fetch@^3.0.4, cross-fetch@^3.1.4:
   version "3.1.5"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.5.tgz#e1389f44d9e7ba767907f7af8454787952ab534f"
   integrity sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==
@@ -5097,7 +5122,7 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-date-fns@2.28.0, date-fns@2.x, date-fns@^2.24.0:
+date-fns@2.28.0, date-fns@2.x, date-fns@^2.0.1, date-fns@^2.24.0:
   version "2.28.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.28.0.tgz#9570d656f5fc13143e50c975a3b6bbeb46cd08b2"
   integrity sha512-8d35hViGYx/QH0icHYCeLmsLmMUheMmTyV9Fcm6gvNwdw31yXXH+O85sOBJ+OLnLQMKZowvpKb6FgMIQjcpvQw==
@@ -6574,6 +6599,12 @@ ferrum-design-system@1.0.65:
     webpack "^4.5.0"
     webpack-cli "^3.2.1"
 
+"ferrum-plumbing@git+https://github.com/ferrumnet/ferrum-plumbing.git":
+  version "1.0.0"
+  resolved "git+https://github.com/ferrumnet/ferrum-plumbing.git#cc36954d9f54e795e1c7ff750a235ae752724015"
+  dependencies:
+    cross-fetch "^3.0.4"
+
 figgy-pudding@^3.5.1:
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/figgy-pudding/-/figgy-pudding-3.5.2.tgz#b4eee8148abb01dcf1d1ac34367d59e12fa61d6e"
@@ -6775,6 +6806,38 @@ forwarded@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.2.0.tgz#2269936428aad4c15c7ebe9779a84bf0b2a81811"
   integrity sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==
+
+"foundry@https://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@github.com/AbdulAhadArain/foundry.git":
+  version "1.0.0"
+  resolved "https://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@github.com/AbdulAhadArain/foundry.git#4e79170b5a6d3c332ba8f685abb583677ff5e8ac"
+  dependencies:
+    "@babel/cli" "^7.16.0"
+    "@babel/core" "^7.16.0"
+    "@babel/polyfill" "^7.12.1"
+    "@babel/preset-env" "^7.16.4"
+    "@babel/preset-react" "^7.16.0"
+    "@babel/preset-typescript" "^7.3.3"
+    "@reduxjs/toolkit" "^1.6.2"
+    "@types/big.js" "^6.1.3"
+    "@web3-react/core" "^6.1.9"
+    "@web3-react/frame-connector" "^6.0.9"
+    "@web3-react/injected-connector" "^6.0.7"
+    "@web3-react/walletconnect-connector" "^6.2.8"
+    axios "^0.24.0"
+    big.js "^6.1.1"
+    ferrum-plumbing "git+https://github.com/ferrumnet/ferrum-plumbing.git"
+    path "^0.12.7"
+    prop-types "^15.6.0"
+    react "^17.0.2"
+    react-hot-toast "^2.1.1"
+    react-icons "^4.3.1"
+    react-redux "^7.2.6"
+    sass "^1.43.4"
+    styled-components "^5.3.3"
+    typescript "^4.4.4"
+    web3 "^1.6.1"
+    webpack "^4.5.0"
+    webpack-cli "^3.2.1"
 
 fragment-cache@^0.2.1:
   version "0.2.1"
