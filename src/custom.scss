@@ -852,6 +852,13 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   color: #efefef !important;
   border: none !important;
 }
+.popup-card {
+  background-image: url("./assets/img/new-popup-card.png") !important;
+  background-repeat: round;
+}
+.btn-44-h {
+  height: 44px !important;
+}
 @media screen and (min-width: 1200) {
   .screen-width-after-200-for-crucible-farm-card {
     min-width: 60vw;

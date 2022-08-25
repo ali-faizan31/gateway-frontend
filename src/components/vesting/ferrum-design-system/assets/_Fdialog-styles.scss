@@ -77,6 +77,11 @@
         background: #212b36;
         color: white;
       }
+      &.bg-new-popup {
+        background-image: url("../../../../assets/img/new-popup-card.png") !important;
+        background-repeat: round !important;
+        background-color: transparent !important;
+      }
       &.bg-whiteLabeled {
         background: #1b1b1b;
         color: white;
