@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem } from "ferrum-design-system";
+import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FDialog, FItem } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
 import { useParams, useLocation } from "react-router-dom";
 import eitherConverter from "ether-converter";
@@ -9,9 +9,10 @@ import { CSVLink } from "react-csv";
 import moment from "moment";
 import { getLeaderboardById, getLeaderboardByIdForPublicUser, getStakingBalancesByCABNBSC, getTokenHolderlistByContractAddressBSC } from "../../_apis/LeaderboardCrud";
 import { arraySortByKeyDescending, getErrorMessage } from "../../utils/global.utils";
-import { stakingContractAddressListFerrum, stakingContractAddressListFOMO, TOKEN_TAG } from "../../utils/const.utils";
+import { cFRMTokenContractAddress, cFRMxTokenContractAddress, tokenFRMxBSCMainnet, tokenFRMBSCMainnet, TOKEN_TAG } from "../../utils/const.utils";
 import { filterList } from "../leaderboard/LeaderboardHelper";
 import { useSelector } from "react-redux";
+import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 
 const LeaderboardInformation = () => {
   const { id } = useParams();
@@ -29,18 +30,20 @@ const LeaderboardInformation = () => {
   const [stakingTokenHolderList, setStakingTokenHolderList] = useState([]);
   const [stakingCount, setStakingCount] = useState(0);
   const { activeTranslation } = useSelector((state) => state.phrase);
+  const [showExportModal, setShowExportModal] = useState(false);
 
   let finalstakingList = [];
   let finalWithdrawlList = [];
 
   useEffect(() => {
     setIsLoading(true);
+    setFilteredTokenHolderList([]);
     if (isPublicUser) {
       getPublicLeaderboard();
       return;
     }
     getLeaderboard();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (isQueryChange) {
@@ -66,6 +69,7 @@ const LeaderboardInformation = () => {
               dexUrl: cabn1?.currencyAddressesByNetwork?.networkDex?.dex?.url,
               chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
             },
+            stakingContractAddresses: leaderboard?.stakingContractAddresses,
           };
           getTokenHolderlist(tempObj);
           setLeaderboardData(tempObj);
@@ -91,6 +95,7 @@ const LeaderboardInformation = () => {
               dexUrl: cabn1?.currencyAddressesByNetwork?.networkDex?.dex?.url,
               chainId: cabn1?.currencyAddressesByNetwork?.network?.chainId,
             },
+            stakingContractAddresses: leaderboard?.stakingContractAddresses,
           };
           getTokenHolderlist(tempObj);
           setLeaderboardData(tempObj);
@@ -105,7 +110,7 @@ const LeaderboardInformation = () => {
   const getTokenHolderlist = (leaderboard) => {
     getTokenHolderlistByContractAddressBSC(leaderboard.cabn.tokenContractAddress)
       .then((res) => {
-        const filteredList = filterList(res.data.result, leaderboard?.exclusionWalletAddressList);
+        const filteredList = filterList(res?.data?.result, leaderboard?.exclusionWalletAddressList);
         setLeaderboardTokenHolderList(filteredList);
         let count = 0;
         getDynamicStakingBalances(leaderboard, filteredList, count);
@@ -116,8 +121,8 @@ const LeaderboardInformation = () => {
   };
 
   const getDynamicStakingBalances = async (leaderboard, leaderboardHoldersList, count) => {
-    if (count < stakingContractAddressListFerrum.length) {
-      getStakingBalances(leaderboard, stakingContractAddressListFOMO[count], count, leaderboardHoldersList);
+    if (count < leaderboard?.stakingContractAddresses.length) {
+      getStakingBalances(leaderboard, leaderboard?.stakingContractAddresses[count], count, leaderboardHoldersList);
     } else {
       mapTokenHolderData(leaderboardHoldersList, leaderboard);
     }
@@ -201,12 +206,22 @@ const LeaderboardInformation = () => {
     return updatedList;
   };
 
+  const getInputCurrency = (tokenContractAddress) => {
+    if (tokenContractAddress.toLowerCase() === cFRMTokenContractAddress.toLowerCase()) {
+      return tokenFRMBSCMainnet;
+    } else if (tokenContractAddress.toLowerCase() === cFRMxTokenContractAddress.toLowerCase()) {
+      return tokenFRMxBSCMainnet;
+    } else {
+      return "BNB";
+    }
+  };
+
   const mapTokenHolderData = (leaderboardHoldersList, leaderboard) => {
     const finalList = mapHoldersBalances(leaderboardHoldersList, finalstakingList);
     const filteredList = filterList(finalList, leaderboard.exclusionWalletAddressList);
     const list = arraySortByKeyDescending(filteredList, "balance");
-
-    const levelUpSwapUrl = `${leaderboard?.cabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`;
+    let inputCurrencyToken = getInputCurrency(leaderboard?.cabn?.tokenContractAddress);
+    const levelUpSwapUrl = `${leaderboard?.cabn?.dexUrl}swap?inputCurrency=${inputCurrencyToken}&outputCurrency=${leaderboard?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`;
     for (let i = 0; i < list.length; i += 1) {
       list[i].rank = i + 1;
       list[i].formattedAddress = `${list[i].address.substr(0, 6)}...${list[i].address.substr(list[i].address.length - 4)}`;
@@ -300,6 +315,7 @@ const LeaderboardInformation = () => {
   const csvHeaders = [
     { label: "Rank", key: "rank" },
     { label: "Wallet Address", key: "address" },
+    { label: "Email", key: "email" },
     { label: "Balance", key: "formattedBalance" },
     { label: "Level Up Amount", key: "formattedLevelUpAmount" },
     { label: "Get Token", key: "levelUpUrl" },
@@ -314,10 +330,29 @@ const LeaderboardInformation = () => {
     }
   };
 
+  const getUsersAndMapData = async () => {
+    try {
+      let res = await getAllRoleBasedUsers("communityMember", true, 0, 10, false, token);
+      let userList = res.data.body.users;
+      filteredTokenHolderList.forEach((holder) => {
+        userList.forEach((user) => {
+          if (user.addresses.find((x) => x.address === holder.address)) {
+            holder.email = user.email;
+          }
+        });
+      });
+      setShowExportModal(false);
+      setTimeout(() => {
+        exportRef?.current?.link?.click();
+      }, 3000);
+    } catch (e) {
+      getErrorMessage(e, activeTranslation);
+    }
+  };
+
   const onExportClick = () => {
-    setTimeout(() => {
-      exportRef?.current?.link?.click();
-    }, 3000);
+    setShowExportModal(true);
+    getUsersAndMapData();
   };
 
   const columns = [
@@ -399,6 +434,10 @@ const LeaderboardInformation = () => {
           )}
         </FContainer>
       </FContainer>
+      <FDialog show={showExportModal} size={"medium"} onHide={() => setShowExportModal(false)} title={"Export"} className="connect-wallet-dialog ">
+        <FItem className={"f-mt-2 f-mb-2"}>Loading Export Data</FItem>
+        Please wait ...
+      </FDialog>
     </>
   );
 };

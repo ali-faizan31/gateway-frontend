@@ -35,9 +35,9 @@ export const APELPCFRMBNBTokenContractAddress = "0x9aa0AB73409311984ED84f3Edef96
 export const APELPCFRMxBNBTokenContractAddress = "0xb76b11410A506495418D20c58F9452c17CF285c1";
 
 export const Start_Competition_Buy_Button_Link =
-  "https://pancakeswap.finance/swap?inputCurrency=0xa719b8ab7ea7af0ddb4358719a34631bb79d15dc&outputCurrency=0xaf329a957653675613d0d98f49fc93326aeb36fc&exactField=output&exactAmount=1";
+  "https://pancakeswap.finance/swap?inputCurrency=0x8523518001ad5d24b2a04e8729743c0643a316c0&outputCurrency=0x1fC45F358D5292bEE1e055BA7CebE4d4100972AE&exactField=output&exactAmount=1";
 
-export const Pricing_Tokens = [
+export const Ferrum_Tokens = [
   {
     token: "FRM",
     currency: tokenFRMBSCMainnet,
@@ -68,5 +68,5 @@ export function isGateWaySite() {
   if (window.origin.includes(CRUCIBLE_ALPHA_V4) || window.origin.includes(CRUCIBLE_BETA)) {
     return false;
   }
-  return true;
+  return false;
 }

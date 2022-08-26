@@ -12,7 +12,7 @@ export function getAllCompetitions(offset, limit, token) {
 }
 
 export function getCompetitionById(id, token) {
-  return axios.get(`${defaultEndPointDetails.baseUrl}/api/v1/competitions/${id}`, {
+  return axios.get(`${defaultEndPointDetails.baseUrl}/api/v1/admin/competitions/${id}`, {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Content-type": "Application/json",

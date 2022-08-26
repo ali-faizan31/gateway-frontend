@@ -48,12 +48,10 @@ export const getSignatureFromMetamask = (walletAuthenticator: any) => (dispatch:
 };
 
 export const saveME = (walletAuthenticator: any) => (dispatch: any) => {
-    console.log('dis', walletAuthenticator)
     dispatch(actions.saveME({ walletAuthenticator }));
 };
 
 export const saveToken = (walletAuthenticator: any) => (dispatch: any) => {
-    console.log('dispp', walletAuthenticator)
     dispatch(actions.saveToken({ walletAuthenticator }));
 };
 

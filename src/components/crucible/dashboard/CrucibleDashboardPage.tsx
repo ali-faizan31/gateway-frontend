@@ -10,6 +10,7 @@ import {
   // FItem,
   FTypo,
 } from "ferrum-design-system";
+import { WalletConnector } from "foundry";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CrucibleClient } from "../../../container-components/web3Client/crucibleClient";
@@ -23,14 +24,15 @@ import { CruciblePrice } from "../common/CardPrice";
 // import { useHistory, useLocation } from "react-router";
 import * as CrucibleActions from "../redux/CrucibleActions";
 import { crucibleSlice } from "../redux/CrucibleSlice";
-import { cFRMTokenContractAddress, Pricing_Tokens, tokenFRMBSCMainnet } from "../../../utils/const.utils";
+import { cFRMTokenContractAddress, Ferrum_Tokens, tokenFRMBSCMainnet, tokenFRMxBSCMainnet, cFRMxTokenContractAddress } from "../../../utils/const.utils";
 import { Crucible_Farm_Address_Details } from "../common/utils";
 import { getAPRInformationForPublicUser } from "../../../_apis/APRCrud";
-import { MetaMaskConnector } from "../../../container-components";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { getCrucibleDetail } from "../common/Helper";
 import { getErrorMessage, TruncateWithoutRounding } from "../../../utils/global.utils";
-import { isTypeNode } from "typescript";
+import { getTokenSupplyByContractAddressBSC } from "../../../_apis/TokenCrud";
+import CrucibleDashboardCards from "./crucible-dashboard-card";
+import CrucibleDashboardIndex from "./card-index";
 
 const CrucibleDashboardPage = () => {
   const dispatch = useDispatch();
@@ -62,13 +64,38 @@ const CrucibleDashboardPage = () => {
     }
   }, [networkClient]);
 
+  const getTokenSupply = async (item: any, actions: any) => {
+    let supplyDetails: any = await getTokenSupplyByContractAddressBSC(item.currency);
+    supplyDetails = supplyDetails && supplyDetails.data && supplyDetails.data.result;
+
+    if (!!supplyDetails) {
+      dispatch(
+        actions.tokenSupplyDataLoaded({
+          data: {
+            token: item.token,
+            supply: TruncateWithoutRounding(networkClient?.utils.fromWei(supplyDetails), 3),
+          },
+        })
+      );
+    }
+  }
+
   const loadPricingInfo = createAsyncThunk("crucible/loadUserInfo", async () => {
     const actions = crucibleSlice.actions;
     const web3Helper = new Web3Helper(networkClient as any);
     const client = new CrucibleClient(web3Helper);
 
-    for (let item of Pricing_Tokens) {
+    for (let item of Ferrum_Tokens) {
+
+      if (item.token === 'FRM' || item.token === 'cFRM' || item.token === 'FRMx' || item.token === 'cFRMx') {
+        exchangeToken(item);
+      }
       const priceDetails = await web3Helper.getTokenPriceFromRouter(item.currency);
+
+      if (item.token === 'cFRM' || item.token === 'cFRMx') {
+        getTokenSupply(item, actions)
+      }
+
       let truncuateDecimal = 3;
       if (item.currency === tokenFRMBSCMainnet || item.currency === cFRMTokenContractAddress) {
         truncuateDecimal = 5;
@@ -86,6 +113,32 @@ const CrucibleDashboardPage = () => {
     }
   });
 
+  const exchangeToken = async (item: any) => {
+    const actions = crucibleSlice.actions;
+    const web3Helper = new Web3Helper(networkClient as any);
+    let truncuateDecimal = 5;
+    let tokenConversion: any = {};
+    if (item.token === 'FRM') {
+      tokenConversion = await web3Helper.getExchangeTokenFromRouter(tokenFRMBSCMainnet, cFRMTokenContractAddress);
+    } else if (item.token === 'cFRM') {
+      tokenConversion = await web3Helper.getExchangeTokenFromRouter(cFRMTokenContractAddress, tokenFRMBSCMainnet);
+    } else if (item.token === 'FRMx') {
+      tokenConversion = await web3Helper.getExchangeTokenFromRouter(tokenFRMxBSCMainnet, cFRMxTokenContractAddress);
+    } else if (item.token === 'cFRMx') {
+      tokenConversion = await web3Helper.getExchangeTokenFromRouter(cFRMxTokenContractAddress, tokenFRMxBSCMainnet);
+    }
+    if (!!tokenConversion) {
+      dispatch(
+        actions.tokenConversionLoaded({
+          data: {
+            token: item.token,
+            exhangePrice: TruncateWithoutRounding((tokenConversion), truncuateDecimal),
+          },
+        })
+      );
+    }
+  };
+
   const getAPRInformation = async () => {
     try {
       let aprResponse: any = await getAPRInformationForPublicUser();
@@ -101,11 +154,11 @@ const CrucibleDashboardPage = () => {
   };
 
   return (
-    <FContainer className="f-ml-0 crucible-dashboard">
+    <FContainer className="f-ml-0 crucible-dashboard min-100vw new-design-container-paddings-lr">
       {isLoading ? (
         <FCard>
           <FItem align={"center"}>
-            <img src={Loader} />
+            <img alt="" src={Loader} />
             {/* <ClipLoader color="#cba461" loading={true} size={150} /> */}
           </FItem>
         </FCard>
@@ -114,19 +167,21 @@ const CrucibleDashboardPage = () => {
 
           {isConnected && tokenV2 ? (
             <>
-              <CrucibleMyBalance />
-              <FTypo className="page-title">Dashboard</FTypo>
-              <CruciblePrice />
-              <CardAPR />
+              {/* <CrucibleMyBalance /> */}
+              {/* <FTypo className="page-title">Dashboard</FTypo> */}
+              <CrucibleDashboardIndex />
+              {/* <CruciblePrice /> */}
+              <div className={'f-mt-4'}>
+                <CardAPR />
+              </div>
             </>
           ) : (
             <>
               <FCard className="card-apr f-mt-2 f-mb-2 f-pb-2">
                 <FTypo className="card-title f-pl-1">Connect your wallet to access Crucible Dashboard</FTypo>
-                <MetaMaskConnector.WalletConnector
+                <WalletConnector.WalletConnector
                   WalletConnectView={FButton}
                   WalletConnectModal={ConnectWalletDialog}
-                  isAuthenticationNeeded={true}
                   WalletConnectViewProps={{ className: "w-100" }}
                 />
               </FCard>

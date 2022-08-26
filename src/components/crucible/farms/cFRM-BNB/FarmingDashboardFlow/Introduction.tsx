@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { FButton, FCard, FContainer, FInputCheckbox, FItem, FTypo } from "ferrum-design-system";
-import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-square.svg";
+import { FButton, FCard, FContainer, FGrid, FGridItem, FInputCheckbox, FItem, FTypo } from "ferrum-design-system";
+import { ReactComponent as IconArrow } from "../../../../../assets/img/icon-arrow-black-get-started.svg";
 import { useHistory, useLocation, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { MetaMaskConnector } from "../../../../../container-components";
+import { WalletConnector } from "foundry";
 import { RootState } from "../../../../../redux/rootReducer";
 import { PATH_DASHBOARD } from "../../../../../routes/paths";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
@@ -20,6 +20,7 @@ import { useWeb3React } from "@web3-react/core";
 import toast, { Toaster } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import { getErrorMessage } from "../../../../../utils/global.utils";
+import polygonIcon from '../../../../../assets/img/polygon-yellow.svg'
 
 export const Introduction = () => {
   const history = useHistory();
@@ -85,7 +86,7 @@ export const Introduction = () => {
   return (
     <>
       <Toaster />
-      <FContainer width={800} className="f-mb-2">
+      <FContainer className="f-mb-2 min-100vw new-design-container-paddings-lr">
         {isLoading ? (
           <FCard>
             <FItem align={"center"}>
@@ -93,61 +94,140 @@ export const Introduction = () => {
             </FItem>
           </FCard>
         ) : (
-          <div className="card-get-started">
-            <FCard variant={"secondary"}>
-              <FTypo className="card-title" size={25} weight={700} color="#DAB46E">
-                Welcome To The Crucible by Ferrum Network
-              </FTypo>
-              <FTypo size={18}>
-                Watch the explainer video below for a step-by-step tutorial on how to mint, add liquidity, farm, trade, and earn rewards through the
-                Crucible!
-              </FTypo>
-              <div className="video-wrapper f-mt-1 f-mb-1">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/S2m-UV7F89o"
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  frameBorder="0"
-                  allowFullScreen></iframe>
-              </div>
-              <FTypo size={22} weight={500} className="f-mb-1">
-                Crucible Benefits
-              </FTypo>
-              <FTypo size={18} className="f-mb-2">
-                Below are just a few of the incredible features of The Crucible.
-              </FTypo>
-              <ul>
-                <li>Ecosystem of Autonomous Sustainable Farming Pools</li>
-                <li>Sustainable Rewards Economy</li>
-                <li>Built-in Token Burn</li>
-                <li>Mint, Add Liquidity, Farm, Trade, and Earn Rewards</li>
-              </ul>
-              {meV2._id && isConnected ? (
-                <FButton
-                  title={"Get Started"}
-                  postfix={<IconArrow />}
-                  // disabled={isLoading}
-                  className="w-100 f-mt-2"
-                  onClick={() => onGetStartedClick()}
+          <div className="crucible-welcome-card custom-padding-40">
+            <FGrid>
+              <FGridItem size={[6, 6]}>
+
+                <FTypo className="card-title" size={25} weight={700} color="#DAB46E">
+                  Welcome To The Crucible by Ferrum Network
+                </FTypo>
+                <FTypo size={18} weight={600} className={'f-mt-1'}>
+                  Watch the explainer video below for a step-by-step tutorial on how to mint, add liquidity, farm, trade, and earn rewards through the
+                  Crucible!
+                </FTypo>
+                <div className="video-wrapper f-mt-1 f-mb-1" style={{ width: '100%', height: 212 }}>
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src="https://www.youtube.com/embed/S2m-UV7F89o"
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    frameBorder="0"
+                    allowFullScreen></iframe>
+                </div>
+                {meV2._id && isConnected ? (
+                  <FButton
+                    title={"Get Started"}
+                    postfix={<IconArrow />}
+                    // disabled={isLoading}
+                    className="w-100 f-mt-2 clr_black_new"
+                    onClick={() => onGetStartedClick()}
+                  />
+                ) : (
+                  <WalletConnector.WalletConnector
+                    WalletConnectView={FButton}
+                    WalletConnectModal={ConnectWalletDialog}
+                    WalletConnectViewProps={{ className: "w-100" }}
+                  />
+                )}
+                <FInputCheckbox
+                  onClick={() => onNeverShowClick(!neverShowAgain)}
+                  name="neverShowAgain"
+                  className="f-mb-1 f-mt-2"
+                  label={"Don’t show the intro guide again."}
                 />
-              ) : (
-                <MetaMaskConnector.WalletConnector
-                  WalletConnectView={FButton}
-                  WalletConnectModal={ConnectWalletDialog}
-                  isAuthenticationNeeded={true}
-                  WalletConnectViewProps={{ className: "w-100" }}
-                />
-              )}
-            </FCard>
-            <FInputCheckbox
-              onClick={() => onNeverShowClick(!neverShowAgain)}
-              name="neverShowAgain"
-              className="f-mb-1 f-mt-2"
-              label={"Don’t show the intro guide again."}
-            />
+              </FGridItem>
+              <FGridItem size={[6, 6]}>
+                <div style={{ borderLeft: '1px solid #DAB46E', marginLeft: 20, paddingLeft: 20, height: '100%' }}>
+                  <FTypo size={25} weight={700} className="f-mb-1" color="#DAB46E">
+                    Crucible Benefits
+                  </FTypo>
+                  <FTypo size={18} weight={600} className="f-mb-2">
+                    Below are just a few of the incredible features of The Crucible.
+                  </FTypo>
+                  <div className={'justify_start align_start d-flex'}>
+                    <img alt="" src={polygonIcon} style={{ width: 16, height: 16, marginRight: 8 }} />
+                    <FTypo size={14} weight={600} className="f-mb-2">
+                      Below are just a few of the incredible features of The Crucible.
+                    </FTypo>
+                  </div>
+                  <div className={'justify_start align_start d-flex'}>
+                    <img alt="" src={polygonIcon} style={{ width: 16, height: 16, marginRight: 8 }} />
+                    <FTypo size={14} weight={600} className="f-mb-2">
+                      Sustainable Rewards Economy
+                    </FTypo>
+                  </div>
+                  <div className={'justify_start align_start d-flex'}>
+                    <img alt="" src={polygonIcon} style={{ width: 16, height: 16, marginRight: 8 }} />
+                    <FTypo size={14} weight={600} className="f-mb-2">
+                      Built-in Token Burn
+                    </FTypo>
+                  </div>
+                  <div className={'justify_start align_start d-flex'}>
+                    <img alt="" src={polygonIcon} style={{ width: 16, height: 16, marginRight: 8 }} />
+                    <FTypo size={14} weight={600} className="f-mb-2">
+                      Mint, Add Liquidity, Farm, Trade, and Earn Rewar
+                    </FTypo>
+                  </div>
+                </div>
+              </FGridItem>
+            </FGrid>
+
           </div>
+          // <div className="card-get-started">
+          //   <FCard variant={"secondary"}>
+          //     <FTypo className="card-title" size={25} weight={700} color="#DAB46E">
+          //       Welcome To The Crucible by Ferrum Network
+          //     </FTypo>
+          // <FTypo size={18}>
+          //   Watch the explainer video below for a step-by-step tutorial on how to mint, add liquidity, farm, trade, and earn rewards through the
+          //   Crucible!
+          // </FTypo>
+          // <div className="video-wrapper f-mt-1 f-mb-1">
+          //   <iframe
+          //     width="100%"
+          //     height="100%"
+          //     src="https://www.youtube.com/embed/S2m-UV7F89o"
+          //     title="YouTube video player"
+          //     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          //     frameBorder="0"
+          //     allowFullScreen></iframe>
+          // </div>
+          // <FTypo size={22} weight={500} className="f-mb-1">
+          //   Crucible Benefits
+          // </FTypo>
+          // <FTypo size={18} className="f-mb-2">
+          //   Below are just a few of the incredible features of The Crucible.
+          // </FTypo>
+          // <ul>
+          //   <li>Ecosystem of Autonomous Sustainable Farming Pools</li>
+          //   <li>Sustainable Rewards Economy</li>
+          //   <li>Built-in Token Burn</li>
+          //   <li>Mint, Add Liquidity, Farm, Trade, and Earn Rewards</li>
+          // </ul>
+          // {meV2._id && isConnected ? (
+          //   <FButton
+          //     title={"Get Started"}
+          //     postfix={<IconArrow />}
+          //     // disabled={isLoading}
+          //     className="w-100 f-mt-2"
+          //     onClick={() => onGetStartedClick()}
+          //   />
+          // ) : (
+          //   <WalletConnector.WalletConnector
+          //     WalletConnectView={FButton}
+          //     WalletConnectModal={ConnectWalletDialog}
+          //     WalletConnectViewProps={{ className: "w-100" }}
+          //   />
+          // )}
+          //   </FCard>
+          // <FInputCheckbox
+          //   onClick={() => onNeverShowClick(!neverShowAgain)}
+          //   name="neverShowAgain"
+          //   className="f-mb-1 f-mt-2"
+          //   label={"Don’t show the intro guide again."}
+          // />
+          // </div>
         )}
       </FContainer>
     </>

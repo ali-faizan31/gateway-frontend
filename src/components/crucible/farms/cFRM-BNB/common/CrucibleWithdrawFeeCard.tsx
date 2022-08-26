@@ -13,12 +13,12 @@ import { useLocation, useParams } from "react-router";
 import { BigUtils } from "../../../../../container-components/web3Client/types";
 import { RootState } from "../../../../../redux/rootReducer";
 import { TruncateWithoutRounding } from "../../../../../utils/global.utils";
-import { getAPRValueAgainstFarm } from "../../../common/Helper";
-import { MultipleAPR } from "../../../common/multipleAPR";
-import IconActiveRight from "../../../../../assets/img/active-right-yellow.svg";
-import IconActiveLeft from "../../../../../assets/img/active-left-yellow.svg";
-import IconInactiveLeft from "../../../../../assets/img/inactive-left-yellow.svg";
-import IconInactiveRight from "../../../../../assets/img/inactive-right-yellow.svg";
+import { getAPRValueAgainstFarm, getHumanReadableFarmName } from "../../../common/Helper";
+import IconActiveRight from "../../../../../assets/img/right-icon-light-grey.svg";
+import IconActiveLeft from "../../../../../assets/img/left-icon-light-grey.svg";
+import { ReactComponent as IconNetworkBnb } from "../../../../../assets/img/icon-network-bnb.svg";
+import IconNetworkCFrmStr from "../../../../../assets/img/icon-network-cfrm.svg";
+import IconNetworkCFrmxStr from "../../../../../assets/img/icon-network-cfrmx.svg";
 
 const CrucibleWithdrawFeeCard = () => {
   const { farm } = useParams<{ farm?: string }>();
@@ -34,7 +34,79 @@ const CrucibleWithdrawFeeCard = () => {
   return (
     <>
       <FContainer>
-        <FCard className="card-crucible-token-info">
+        <div className="crucible-farm-dashboard-card-2">
+          <div className={'f-mt-1 f-mb-1'}>
+            <div className="flex-center-aligned-center">
+              <span className="icon-wrap custom-mr-12" style={{ marginLeft: 24 }}>
+                <img src={farm?.includes("cFRMx") ? IconNetworkCFrmxStr : IconNetworkCFrmStr} alt="network-cfrm" />
+                {farm?.includes("BNB") && <IconNetworkBnb />}
+              </span>
+              <p className="custom-font-size-20 font-700 custom-mr-24">{getHumanReadableFarmName(farm)}</p>
+              <FTypo size={16} weight={700}>Crucible Token</FTypo>
+            </div>
+            <div className={'d-flex align_center justify_start unwrap-farm-card'}>
+              <div className="d-flex align_center justify_start w-100 custom-mr-10">
+                <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Buy Fee</p>
+                <p className={'custom-font-size-18 font-600 clr_white'}>4%</p>
+              </div>
+              <div className="d-flex align_center justify_start w-100 custom-mr-10">
+                <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Sell Fee</p>
+                <p className={'custom-font-size-18 font-600 clr_white'}>4%</p>
+              </div>
+              <div className="d-flex align_center justify_start w-100 custom-mr-10">
+                <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Unwrap Fee</p>
+                <p className={'custom-font-size-18 font-600 clr_white'}>
+                  {`${BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0")
+                    .times(100)
+                    .toString()}%`}
+                </p>
+              </div>
+              <div className="d-flex align_center justify_start w-100">
+                <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Stake/Unstake Fee</p>
+                <p className={'custom-font-size-18 font-600 clr_white'}>
+                  {`${BigUtils.safeParse(crucible[farm!]?.feeOnTransferRate || "0")
+                    .times(100)
+                    .toString()}%`}
+                </p>
+              </div>
+            </div>
+            <div className="d-flex justify_start align_center">
+              <div className="custom-mr-50">
+                <FTypo size={12} weight={500} color="#6F767E">
+                  Your Crucible {farm?.includes("BNB") ? "LP" : ""} Farm Stake
+                </FTypo>
+                <div className="justify_start d-flex align_end f-mt-1">
+                  <p className={'custom-font-size-20 font-600 clr_white custom-mr-10'}>
+                    {farm?.includes("BNB") ? TruncateWithoutRounding((LPStakingDetails[farm!]?.stake || "0"), 3) : TruncateWithoutRounding((userStake?.stakeOf || "0"), 3)}
+                  </p>
+                  <p className={'custom-font-size-12 font-700 clr_white'}>
+                    {farm?.includes("BNB") ? `CAKE-LP ${crucible[farm!]?.symbol}-BNB` : crucible[farm!]?.symbol}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <div className="justify_start d-flex align_center">
+                  <img
+                    src={IconActiveLeft}
+                    onClick={() => { activeAPRIndex !== 0 && setActiveAPRIndex(activeAPRIndex - 1) }}
+                    alt="" />
+                  <FTypo size={12} weight={500} color="#6F767E">
+                    {aprData[activeAPRIndex].label}
+                  </FTypo>
+                  <img
+                    src={IconActiveRight}
+                    onClick={() => { activeAPRIndex < aprData.length - 1 && setActiveAPRIndex(activeAPRIndex + 1) }}
+                    alt="" />
+                </div>
+                <FTypo size={20} weight={700} color="#FFFFFF" className={'f-mt-1 f-pl--9'}>
+                  {aprData[activeAPRIndex].value}
+                </FTypo>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        {/* <FCard className="card-crucible-token-info">
           <FTypo size={20}>Crucible Token Info</FTypo>
           <FGrid className="info-bar">
             <FGridItem size={[4, 4, 4]}>
@@ -87,7 +159,7 @@ const CrucibleWithdrawFeeCard = () => {
                       onClick={() => { activeAPRIndex !== 0 && setActiveAPRIndex(activeAPRIndex - 1) }}
                       style={{ height: 9, width: 10, marginRight: 22 }}
                     />
-                    <div>
+                    <div className="custom-width-117">
                       <p className="medium-text-400 text-center">{aprData[activeAPRIndex].label}</p>
                       <p className="text-35 text-center default-text-color">{aprData[activeAPRIndex].value}</p>
                     </div>
@@ -101,7 +173,7 @@ const CrucibleWithdrawFeeCard = () => {
               </FGridItem>
             </FGrid>
           </FCard>
-        </FCard>
+        </FCard> */}
       </FContainer>
     </>
   );

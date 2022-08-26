@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // import Web3 from "web3";
 import { useDispatch, useSelector } from "react-redux";
 import { FButton, FCard, FGrid, FGridItem, FInputText, FItem, FTypo, FLabel } from "ferrum-design-system";
-import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-go-back.svg";
+import { ReactComponent as IconGoBack } from "../../../../../assets/img/icon-back-white.svg";
 // import { ReactComponent as IconNetworkCFrm } from "../../../../../assets/img/icon-network-cfrm.svg";
 // import { ReactComponent as IconNetworkBsc } from "../../../../../assets/img/icon-network-bnb.svg";
 import { DialogTransitionStatus } from "./DialogTransitionStatus";
@@ -21,7 +21,7 @@ import {
   getLatestStepToRender,
   getObjectReadableFarmName
 } from "../../../common/Helper";
-import { MetaMaskConnector } from "../../../../../container-components";
+import { WalletConnector } from "foundry";
 import { ConnectWalletDialog } from "../../../../../utils/connect-wallet/ConnectWalletDialog";
 import { ClipLoader } from "react-spinners";
 import { getCrucibleMaxMintCap } from "../../../../../_apis/CrucibleCapCrud";
@@ -123,7 +123,7 @@ export const CrucibleDeposit = () => {
         const web3Helper = new Web3Helper(networkClient as any);
         const client = new CrucibleClient(web3Helper);
 
-        const response = await client.mintCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress);
+        const response = await client.mintCrucible(dispatch, currency, crucibleAddress, amount, isPublic, network, userAddress, setTransitionStatusDialog);
         if (response) {
           dispatch(CrucibleActions.transactionProcessed())
           let transactionId = response.split("|");
@@ -193,89 +193,106 @@ export const CrucibleDeposit = () => {
     <>
       <Toaster />
       {isLoading ? (
-        <FCard>
+        <div>
           <FItem align={"center"}>
             <ClipLoader color="#cba461" loading={true} size={150} />
           </FItem>
-        </FCard>
+        </div>
       ) : (
-        <FCard variant={"secondary"} className="card-deposit  card-shadow">
+        <div className={'crucible-farm-dashboard-card'}>
           <div className="card-title f-mb-2">
             <FItem display={"flex"} alignY="center">
-              <Link to={`/dashboard/crucible/${farm}/manage`} className="btn-back">
+              <Link to="/dashboard/crucible" className="btn-back custom-mr-14">
                 <IconGoBack />
               </Link>
-              <FTypo size={24} weight={700}>
+              <FTypo size={20} weight={700}>
                 Deposit and Mint Crucible Token
               </FTypo>
+              <div className="justify-content-end">
+                <FLabel className={getOpenCapClass()} text={getOpenCapInfo()}></FLabel>
+              </div>
             </FItem>
           </div>
           <FGrid>
             <FGridItem size={[6, 6, 6]}>
-              <FItem bgColor="#1C2229" className={"f-p-2"}>
-                <FTypo size={20} className="f-mb-1">
+              <FItem bgColor="#1A1D1F" className={"f-p-2"}>
+                <FTypo size={18} color={'#6F767E'} className="f-mb-1">
                   {getBaseTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
-                  ${tokenPrices[getBaseTokenName(farm)!]}
+                  ${tokenPrices[getBaseTokenName(farm)!] || 0}
                 </FTypo>
               </FItem>
             </FGridItem>
             <FGridItem size={[6, 6, 6]}>
-              <FItem bgColor="#1C2229" className={"f-p-2"}>
-                <FTypo size={20} className="f-mb-1">
+              <FItem bgColor="#1A1D1F" className={"f-p-2"}>
+                <FTypo size={18} color={'#6F767E'} className="f-mb-1">
                   {getCrucibleTokenName(farm)} Price (USD)
                 </FTypo>
                 <FTypo size={30} weight={500}>
-                  ${tokenPrices[getCrucibleTokenName(farm)!]}
+                  ${tokenPrices[getCrucibleTokenName(farm)!] || 0}
                 </FTypo>
               </FItem>
             </FGridItem>
           </FGrid>
-          <FInputText
-            className={"f-mt-1"}
-            inputSize="input-lg"
-            type={"text"}
-            placeholder="0"
-            value={mintAmount === 0 ? "" : mintAmount}
-            onChange={(e: any) => setMintAmount(e.target.value)}
-            postfix={
-              <FTypo color="#DAB46E" className={"f-pr-1"}>
-                <span onClick={() => setMaxAmount()}>Max</span>
+          <div className="f-mt-1 f-mb-2 align_start justify_start d-flex ">
+            <div className="custom-mr-16 w-100">
+              <div>
+                <FTypo size={18} weight={700}>
+                  Deposit
+                </FTypo>
+                <FInputText
+                  className={"f-mt-1 w-100 f-mb--7"}
+                  inputSize="input-lg"
+                  type={"text"}
+                  placeholder="0"
+                  value={mintAmount === 0 ? "" : mintAmount}
+                  onChange={(e: any) => setMintAmount(e.target.value)}
+                  postfix={
+                    <FTypo color="#DAB46E" className={"f-pr-1"}>
+                      <span onClick={() => setMaxAmount()}>Max</span>
+                    </FTypo>
+                  }
+                />
+                <FTypo size={12} weight={500} color={'#6F767E'}>
+                  You have {TruncateWithoutRounding((userCrucibleData[farm!]?.baseBalance || "0"), 3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
+                </FTypo>
+              </div>
+
+            </div>
+            <div className={'w-100'}>
+              <FTypo size={18} weight={700}>
+                Receive
               </FTypo>
-            }
-          />
-          <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
-            You have {TruncateWithoutRounding((userCrucibleData[farm!]?.baseBalance || "0"), 3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
-            {maxCap && `You can mint maximum ${maxCap} ${userCrucibleData[farm!]?.baseSymbol}.`}
-          </FTypo>
-          <FTypo size={15} className={"f-mt-2 f-pl--5 justify-content-space-between"}>
-            Amount you will receive
-            <FLabel className={getOpenCapClass()} text={getOpenCapInfo()}></FLabel>
-          </FTypo>
-          <FInputText
-            inputSize="input-lg"
-            type={"text"}
-            placeholder="0"
-            disabled={true}
-            value={mintAmount}
-            postfix={
-              <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
-                {/* <span onClick={() => setMintAmount(userCrucibleData[farm!]?.baseBalance)}> */}
-                {crucible[farm!]?.symbol}
-                {/* </span> */}
+              <FInputText
+                inputSize="input-lg"
+                className={'f-mt-1 w-100 f-mb--7'}
+                type={"text"}
+                placeholder="0"
+                disabled={true}
+                value={mintAmount}
+                postfix={
+                  <FTypo color="#DAB46E" className={"f-pr-1"}>
+                    {/* <span onClick={() => setMintAmount(userCrucibleData[farm!]?.baseBalance)}> */}
+                    {crucible[farm!]?.symbol}
+                    {/* </span> */}
+                  </FTypo>
+                }
+              />
+              <FTypo size={12} weight={500} color={'#6F767E'}>
+                Amount {crucible[farm!]?.baseSymbol} you will receive
               </FTypo>
-            }
-          />
+            </div>
+          </div>
           {meV2._id && isConnected ? (
             <ApprovableButtonWrapper
               View={(ownProps) => {
                 // onPropChange(ownProps);
                 return (
-                  <div className="btn-wrap f-mt-2">
+                  <div className="btn-wrap f-mt-2 f-mb-2">
                     <FButton
-                      title={ownProps.isApprovalMode ? "Approve" : "Mint"}
-                      className={"w-100"}
+                      title={ownProps.isApprovalMode ? "APPROVE" : "MINT"}
+                      className={"w-100 clr_new_black custom-font-size-16 font-700"}
                       disabled={getDisabledCheck(ownProps.isApprovalMode)}
                       onClick={
                         ownProps.isApprovalMode
@@ -300,14 +317,12 @@ export const CrucibleDeposit = () => {
               amount={"0.0001"}
             />
           ) : (
-            <MetaMaskConnector.WalletConnector
+            <WalletConnector.WalletConnector
               WalletConnectView={FButton}
               WalletConnectModal={ConnectWalletDialog}
-              isAuthenticationNeeded={true}
-              WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
+              WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100 f-mb-2" }}
             />
           )}
-
           <DialogTransitionStatus
             transitionStatusDialog={transitionStatusDialog}
             setTransitionStatusDialog={setTransitionStatusDialog}
@@ -320,7 +335,128 @@ export const CrucibleDeposit = () => {
             crucible={crucible[farm!]}
             onContinueToNextStepClick={() => onContinueToNextStepClick()}
           />
-        </FCard>
+        </div>
+        // <FCard variant={"secondary"} className="card-deposit  card-shadow">
+        //   <div className="card-title f-mb-2">
+        //     <FItem display={"flex"} alignY="center">
+        //       <Link to={`/dashboard/crucible/${farm}/manage`} className="btn-back">
+        //         <IconGoBack />
+        //       </Link>
+        //       <FTypo size={24} weight={700}>
+        //         Deposit and Mint Crucible Token
+        //       </FTypo>
+        //     </FItem>
+        //   </div>
+        //   <FGrid>
+        //     <FGridItem size={[6, 6, 6]}>
+        //       <FItem bgColor="#1C2229" className={"f-p-2"}>
+        //         <FTypo size={20} className="f-mb-1">
+        //           {getBaseTokenName(farm)} Price (USD)
+        //         </FTypo>
+        //         <FTypo size={30} weight={500}>
+        //           ${tokenPrices[getBaseTokenName(farm)!]}
+        //         </FTypo>
+        //       </FItem>
+        //     </FGridItem>
+        //     <FGridItem size={[6, 6, 6]}>
+        //       <FItem bgColor="#1C2229" className={"f-p-2"}>
+        //         <FTypo size={20} className="f-mb-1">
+        //           {getCrucibleTokenName(farm)} Price (USD)
+        //         </FTypo>
+        //         <FTypo size={30} weight={500}>
+        //           ${tokenPrices[getCrucibleTokenName(farm)!]}
+        //         </FTypo>
+        //       </FItem>
+        //     </FGridItem>
+        //   </FGrid>
+        // <FInputText
+        //   className={"f-mt-1"}
+        //   inputSize="input-lg"
+        //   type={"text"}
+        //   placeholder="0"
+        //   value={mintAmount === 0 ? "" : mintAmount}
+        //   onChange={(e: any) => setMintAmount(e.target.value)}
+        //   postfix={
+        //     <FTypo color="#DAB46E" className={"f-pr-1"}>
+        //       <span onClick={() => setMaxAmount()}>Max</span>
+        //     </FTypo>
+        //   }
+        // />
+        //   <FTypo color="#DAB46E" size={15} className={"f-mt-1 f-pl--5"}>
+        //     You have {TruncateWithoutRounding((userCrucibleData[farm!]?.baseBalance || "0"), 3)} available in the Base Token {userCrucibleData[farm!]?.baseSymbol}.
+        //     {maxCap && `You can mint maximum ${maxCap} ${userCrucibleData[farm!]?.baseSymbol}.`}
+        //   </FTypo>
+        //   <FTypo size={15} className={"f-mt-2 f-pl--5 justify-content-space-between"}>
+        //     Amount you will receive
+        //     <FLabel className={getOpenCapClass()} text={getOpenCapInfo()}></FLabel>
+        //   </FTypo>
+        // <FInputText
+        //   inputSize="input-lg"
+        //   type={"text"}
+        //   placeholder="0"
+        //   disabled={true}
+        //   value={mintAmount}
+        //   postfix={
+        //     <FTypo color="#DAB46E" className={"f-pr-1 f-mt-1"}>
+        //       {/* <span onClick={() => setMintAmount(userCrucibleData[farm!]?.baseBalance)}> */}
+        //       {crucible[farm!]?.symbol}
+        //       {/* </span> */}
+        //     </FTypo>
+        //   }
+        // />
+        // {meV2._id && isConnected ? (
+        //   <ApprovableButtonWrapper
+        //     View={(ownProps) => {
+        //       // onPropChange(ownProps);
+        //       return (
+        //         <div className="btn-wrap f-mt-2">
+        //           <FButton
+        //             title={ownProps.isApprovalMode ? "Approve" : "Mint"}
+        //             className={"w-100"}
+        //             disabled={getDisabledCheck(ownProps.isApprovalMode)}
+        //             onClick={
+        //               ownProps.isApprovalMode
+        //                 ? () => ownProps.onApproveClick()
+        //                 : () =>
+        //                   onMintClick(
+        //                     crucible[farm!]?.baseCurrency,
+        //                     crucible[farm!]?.currency || "",
+        //                     mintAmount.toString(),
+        //                     true,
+        //                     crucible[farm!]?.network,
+        //                     walletAddress as string
+        //                   )
+        //             }
+        //           ></FButton>
+        //         </div>
+        //       );
+        //     }}
+        //     currency={crucible[farm!]?.baseCurrency}
+        //     contractAddress={CRUCIBLE_CONTRACTS_V_0_1["BSC"].router}
+        //     userAddress={walletAddress as string}
+        //     amount={"0.0001"}
+        //   />
+        // ) : (
+        //   <WalletConnector.WalletConnector
+        //     WalletConnectView={FButton}
+        //     WalletConnectModal={ConnectWalletDialog}
+        //     WalletConnectViewProps={{ className: "btn-wrap f-mt-2 w-100" }}
+        //   />
+        // )}
+
+        // <DialogTransitionStatus
+        //   transitionStatusDialog={transitionStatusDialog}
+        //   setTransitionStatusDialog={setTransitionStatusDialog}
+        //   isProcessing={isProcessing}
+        //   setIsProcessing={setIsProcessing}
+        //   setapprovedDone={false}
+        //   isSubmitted={false}
+        //   transactionId={transactionId}
+        //   isProcessed={isProcessed}
+        //   crucible={crucible[farm!]}
+        //   onContinueToNextStepClick={() => onContinueToNextStepClick()}
+        // />
+        // </FCard>
       )}
     </>
   );

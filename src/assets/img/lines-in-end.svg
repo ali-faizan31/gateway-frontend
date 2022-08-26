@@ -1,0 +1,28 @@
+<svg width="99" height="2" viewBox="0 0 99 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+<line x1="0.75" y1="1.25" x2="56.25" y2="1.25" stroke="url(#paint0_angular_2387_44947)" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="64.75" y1="1.25" x2="77.25" y2="1.25" stroke="url(#paint1_angular_2387_44947)" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="85.75" y1="1.25" x2="98.25" y2="1.25" stroke="url(#paint2_angular_2387_44947)" stroke-width="1.5" stroke-linecap="round"/>
+<defs>
+<radialGradient id="paint0_angular_2387_44947" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(28.5 2.5) rotate(90) scale(0.5 28.5)">
+<stop offset="0.166667" stop-color="#FFF1D6"/>
+<stop offset="0.395833" stop-color="#AE8625"/>
+<stop offset="0.635417" stop-color="#FFF1D5"/>
+<stop offset="0.895833" stop-color="#AE8625"/>
+<stop offset="1" stop-color="#D9B373"/>
+</radialGradient>
+<radialGradient id="paint1_angular_2387_44947" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(71 2.5) rotate(90) scale(0.5 7)">
+<stop offset="0.166667" stop-color="#FFF1D6"/>
+<stop offset="0.395833" stop-color="#AE8625"/>
+<stop offset="0.635417" stop-color="#FFF1D5"/>
+<stop offset="0.895833" stop-color="#AE8625"/>
+<stop offset="1" stop-color="#D9B373"/>
+</radialGradient>
+<radialGradient id="paint2_angular_2387_44947" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(92 2.5) rotate(90) scale(0.5 7)">
+<stop offset="0.166667" stop-color="#FFF1D6"/>
+<stop offset="0.395833" stop-color="#AE8625"/>
+<stop offset="0.635417" stop-color="#FFF1D5"/>
+<stop offset="0.895833" stop-color="#AE8625"/>
+<stop offset="1" stop-color="#D9B373"/>
+</radialGradient>
+</defs>
+</svg>

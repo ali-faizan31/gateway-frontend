@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem } from "ferrum-design-system";
+import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FDialog, FItem } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
 import { useParams, useLocation } from "react-router-dom";
 import eitherConverter from "ether-converter";
@@ -10,8 +10,9 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import { getLeaderboardById, getLeaderboardByIdForPublicUser, getTokenHolderlistByCABNId } from "../../_apis/LeaderboardCrud";
 import { arraySortByKeyDescending, getErrorMessage, getFormattedWalletAddress } from "../../utils/global.utils";
-import { PUBLIC_TAG, TOKEN_TAG } from "../../utils/const.utils";
+import { PUBLIC_TAG, TOKEN_TAG, cFRMTokenContractAddress, cFRMxTokenContractAddress, tokenFRMxBSCMainnet, tokenFRMBSCMainnet } from "../../utils/const.utils";
 import { filterList } from "./LeaderboardHelper";
+import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 
 const LeaderboardInformation = () => {
   const { id } = useParams();
@@ -26,6 +27,7 @@ const LeaderboardInformation = () => {
   const [tokenHolderList, setTokenHolderList] = useState([]);
   const [filteredTokenHolderList, setFilteredTokenHolderList] = useState([]);
   const { activeTranslation } = useSelector((state) => state.phrase);
+  const [showExportModal, setShowExportModal] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -120,12 +122,23 @@ const LeaderboardInformation = () => {
       });
   };
 
+  const getInputCurrency = (tokenContractAddress) => {
+    if (tokenContractAddress.toLowerCase() === cFRMTokenContractAddress.toLowerCase()) {
+      return tokenFRMBSCMainnet;
+    } else if (tokenContractAddress.toLowerCase() === cFRMxTokenContractAddress.toLowerCase()) {
+      return tokenFRMxBSCMainnet;
+    } else {
+      return "BNB";
+    }
+  };
+
   const mapTokenHolderData = (leaderboardHoldersList, leaderboard) => {
     let mergedList = getFormattedBalanceHoldersList(leaderboardHoldersList);
 
     const list = arraySortByKeyDescending(mergedList, "balance");
 
-    const levelUpSwapUrl = `${leaderboard?.cabn?.dexUrl}swap?inputCurrency=BNB&outputCurrency=${leaderboard?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`;
+    let inputCurrencyToken = getInputCurrency(leaderboard?.cabn?.tokenContractAddress);
+    const levelUpSwapUrl = `${leaderboard?.cabn?.dexUrl}swap?inputCurrency=${inputCurrencyToken}&outputCurrency=${leaderboard?.cabn?.tokenContractAddress}&exactField=output&exactAmount=`;
     for (let i = 0; i < list.length; i += 1) {
       if (list[i].tokenHolderAddress) {
         list[i].rank = i + 1;
@@ -180,6 +193,7 @@ const LeaderboardInformation = () => {
   const csvHeaders = [
     { label: "Rank", key: "rank" },
     { label: "Wallet Address", key: "tokenHolderAddress" },
+    { label: "Email", key: "email" },
     { label: "Balance", key: "formattedBalance" },
     { label: "Level Up Amount", key: "formattedLevelUpAmount" },
     { label: "Get Token", key: "levelUpUrl" },
@@ -194,10 +208,31 @@ const LeaderboardInformation = () => {
     }
   };
 
+  const getUsersAndMapData = async () => {
+    try {
+      let res = await getAllRoleBasedUsers("communityMember", true, 0, 10, false, token);
+      let userList = res.data.body.users;
+      console.log(filteredTokenHolderList);
+      filteredTokenHolderList.forEach((holder) => {
+        userList.forEach((user) => {
+          if (user.addresses.find((x) => x.address === holder.tokenHolderAddress)) {
+            holder.email = user.email;
+            console.log(user.email);
+          }
+        });
+      });
+      setShowExportModal(false);
+      setTimeout(() => {
+        exportRef?.current?.link?.click();
+      }, 3000);
+    } catch (e) {
+      getErrorMessage(e, activeTranslation);
+    }
+  };
+
   const onExportClick = () => {
-    setTimeout(() => {
-      exportRef?.current?.link?.click();
-    }, 3000);
+    setShowExportModal(true);
+    getUsersAndMapData();
   };
 
   const columns = [
@@ -270,6 +305,10 @@ const LeaderboardInformation = () => {
           )}
         </FContainer>
       </FContainer>
+      <FDialog show={showExportModal} size={"medium"} onHide={() => setShowExportModal(false)} title={"Export"} className="connect-wallet-dialog ">
+        <FItem className={"f-mt-2 f-mb-2"}>Loading Export Data</FItem>
+        Please wait ...
+      </FDialog>
     </>
   );
 };

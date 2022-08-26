@@ -71,7 +71,8 @@ export const Withdraw = () => {
         currency,
         userAddress,
         stakingAddress,
-        network
+        network,
+        setTransitionStatusDialog
       );
       if (response) {
         setIsProcessing(false);
@@ -148,14 +149,14 @@ export const Withdraw = () => {
                 ownProps.isApprovalMode
                   ? () => ownProps.onApproveClick()
                   : () =>
-                      onWithdrawClick(
-                        LPStakingDetails["cFRMx_BNB_LP"]?.stakeId,
-                        LPStakingDetails["cFRMx_BNB_LP"]?.stakingAddress || "",
-                        "0",
-                        true,
-                        crucible?.network,
-                        walletAddress as string
-                      )
+                    onWithdrawClick(
+                      LPStakingDetails["cFRMx_BNB_LP"]?.stakeId,
+                      LPStakingDetails["cFRMx_BNB_LP"]?.stakingAddress || "",
+                      "0",
+                      true,
+                      crucible?.network,
+                      walletAddress as string
+                    )
               }
             ></FButton>
           )}

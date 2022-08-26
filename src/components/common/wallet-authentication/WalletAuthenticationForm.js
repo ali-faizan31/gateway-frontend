@@ -15,7 +15,7 @@ import {
 } from "../../../_apis/WalletAuthencation";
 import { FDialog, FItem, FList, FContainer, FButton, FGridItem } from "ferrum-design-system";
 // import { chainData } from "../../../utils/constants";
-import { MetaMaskConnector } from "../../../container-components";
+import { WalletConnector } from "foundry";
 import { ConnectWalletDialog } from "../../../utils/connect-wallet/ConnectWalletDialog";
 import { useSelector } from "react-redux";
 import { TOKEN_TAG } from "../../../utils/const.utils";
@@ -220,7 +220,7 @@ export function Web3AuthWrapper(props) {
             text={isConnected ? "Validate Address" : "Connect Wallet to Validate"}
           />
         ) : (
-          <MetaMaskConnector.WalletConnector WalletConnectView={FButton} WalletConnectModal={ConnectWalletDialog} WalletConnectViewProps={{ className: "w-100" }} />
+          <WalletConnector.WalletConnector WalletConnectView={FButton} WalletConnectModal={ConnectWalletDialog} WalletConnectViewProps={{ className: "w-100" }} />
         )}
 
         <FDialog show={networkModal} size={"medium"} onHide={() => setNetworkModal(false)} title={"Allowed Networks on Gateway"} className="connect-wallet-dialog ">

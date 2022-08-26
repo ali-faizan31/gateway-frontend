@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FItem, FTypo, FTooltip } from "ferrum-design-system";
+import { FTable, FContainer, FButton, FGrid, FInputText, FGridItem, FDialog, FItem, FTypo, FTooltip } from "ferrum-design-system";
 import Datatable from "react-bs-datatable";
 import { useParams, useLocation } from "react-router-dom";
 import { CSVLink } from "react-csv";
 import moment from "moment";
 import eitherConverter from "ether-converter";
-import { getCompetitionById, getCompetitionsParticipantsRanks } from "../../_apis/CompetitionCrud";
+import { getCompetitionById, getCompetitionByIdForPublicUser, getCompetitionsParticipantsRanks } from "../../_apis/CompetitionCrud";
 import { useSelector } from "react-redux";
 import { getErrorMessage } from "../../utils/global.utils";
 
@@ -17,14 +17,16 @@ import {
   tokenFRMBSCMainnet,
   TOKEN_TAG,
   Start_Competition_Buy_Button_Link,
+  PUBLIC_TAG,
 } from "../../utils/const.utils";
+import { getAllRoleBasedUsers } from "../../_apis/UserCrud";
 
 const CompetitionInformation = () => {
   const { id } = useParams();
   const exportRef = useRef();
   let token = localStorage.getItem(TOKEN_TAG);
   const { pathname } = useLocation();
-  const isPublicUser = pathname.includes("/pub");
+  const isPublicUser = pathname.includes(PUBLIC_TAG);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isQueryChange, setIsQueryChange] = useState(false);
@@ -34,14 +36,20 @@ const CompetitionInformation = () => {
   const [competitionParticipantsFiltered, setCompetitionParticipantsFiltered] = useState([]);
   const [showWallets, setShowWallets] = useState(false);
   const { activeTranslation } = useSelector((state) => state.phrase);
+  const [showExportModal, setShowExportModal] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
+
+    if (isPublicUser) {
+      getPublicCompetition();
+      return;
+    }
     getCompetition();
   }, [id]);
 
   useEffect(() => {
-    if (Object.keys(leaderboardData).length) {
+    if (leaderboardData && Object.keys(leaderboardData).length) {
       getCompetitionParticipants();
     }
   }, [leaderboardData]);
@@ -89,6 +97,7 @@ const CompetitionInformation = () => {
                   data: p?.humanReadableGrowth,
                   color,
                 },
+                address: p.tokenHolderAddress,
                 tokenHolderQuantity: p?.tokenHolderQuantity ? TruncateWithoutRounding(eitherConverter(p?.tokenHolderQuantity, "wei").ether, 2)?.toLocaleString("en-US") : 0,
                 levelUpUrl: `${leaderboardDexUrl}swap?inputCurrency=${getInputCurrency(
                   tokenContractAddress
@@ -112,6 +121,22 @@ const CompetitionInformation = () => {
 
   const getCompetition = () => {
     getCompetitionById(id, token)
+      .then((res) => {
+        if (res) {
+          setCompetitionData(res?.data?.body?.competition);
+          setLeaderboardData(res?.data?.body?.competition?.leaderboard);
+        } else {
+          setIsLoading(false);
+        }
+      })
+      .catch((e) => {
+        setIsLoading(false);
+        getErrorMessage(e, activeTranslation);
+      });
+  };
+
+  const getPublicCompetition = () => {
+    getCompetitionByIdForPublicUser(id)
       .then((res) => {
         if (res) {
           setCompetitionData(res?.data?.body?.competition);
@@ -139,13 +164,24 @@ const CompetitionInformation = () => {
     }
   };
 
-  const levelUpFormatter = (params) => (
-    <div data-label="Get Token">
-      <a href={params.levelUpUrl} target="_blank" rel="noreferrer" className="f-btn f-btn-primary text-decoration-none">
-        LEVEL UP
-      </a>
-    </div>
-  );
+  const levelUpFormatter = (params) => {
+    return (
+      <div data-label="Get Token">
+        <a href={params.levelUpUrl} target="_blank" rel="noreferrer" className="f-btn f-btn-primary text-decoration-none">
+          LEVEL UP
+        </a>
+      </div>
+    );
+  };
+
+  const levelUpAmount = (params) => {
+    return (
+      <div data-label="Level Up Amount">
+        {params?.levelUpAmount ? TruncateWithoutRounding(params?.levelUpAmount, 2).toLocaleString("en-US") : 0}{" "}
+        {leaderboardData?.leaderboardCurrencyAddressesByNetwork[0]?.currencyAddressesByNetwork?.currency?.symbol}
+      </div>
+    );
+  };
 
   const getTitle = () => (
     <>
@@ -209,7 +245,7 @@ const CompetitionInformation = () => {
     {
       prop: "levelUpAmount",
       title: "Level Up Amount",
-      cell: (params) => <div data-label="Level Up Amount">{params?.levelUpAmount ? TruncateWithoutRounding(params?.levelUpAmount, 2).toLocaleString("en-US") : 0} FRM</div>,
+      cell: levelUpAmount,
     },
     {
       prop: "levelUpUrl",
@@ -231,6 +267,7 @@ const CompetitionInformation = () => {
   const csvHeaders = [
     { label: "Rank", key: "rank" },
     { label: "Wallet Address", key: "tokenHolderAddress" },
+    { label: "Email", key: "email" },
     { label: "Balance", key: "tokenHolderQuantity" },
     { label: "Growth / Reduction", key: "humanReadableGrowth.data" },
     { label: "Level Up Amount", key: "formattedLevelUpAmount" },
@@ -245,17 +282,36 @@ const CompetitionInformation = () => {
     }
   };
 
+  const getUsersAndMapData = async () => {
+    try {
+      let res = await getAllRoleBasedUsers("communityMember", true, 0, 10, false, token);
+      let userList = res.data.body.users;
+      competitionParticipantsFiltered.forEach((holder) => {
+        userList.forEach((user) => {
+          if (user.addresses.find((x) => x.address === holder.address)) {
+            holder.email = user.email;
+          }
+        });
+      });
+      setShowExportModal(false);
+      setTimeout(() => {
+        exportRef?.current?.link?.click();
+      }, 3000);
+    } catch (e) {
+      getErrorMessage(e, activeTranslation);
+    }
+  };
+
   const onExportClick = () => {
-    setTimeout(() => {
-      exportRef?.current?.link?.click();
-    }, 3000);
+    setShowExportModal(true);
+    getUsersAndMapData();
   };
 
   return (
     <>
       <Toaster />
       <CSVLink
-        data={competitionParticipants}
+        data={competitionParticipantsFiltered}
         headers={csvHeaders}
         filename={`${competitionData?.name}-${moment(new Date()).format("DD-MMM-YYYY")}.csv`}
         ref={exportRef}
@@ -318,6 +374,10 @@ const CompetitionInformation = () => {
           )}
         </FContainer>
       </FContainer>
+      <FDialog show={showExportModal} size={"medium"} onHide={() => setShowExportModal(false)} title={"Export"} className="connect-wallet-dialog ">
+        <FItem className={"f-mt-2 f-mb-2"}>Loading Export Data</FItem>
+        Please wait ...
+      </FDialog>
     </>
   );
 };

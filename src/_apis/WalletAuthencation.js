@@ -127,3 +127,14 @@ export function verifySignatureAndSignin(values, applicationUserToken) {
         },
     });
 }
+
+export function connectToWalletAddress(values, applicationUserToken) {
+    const url = `${defaultEndPointDetails.baseUrl}/api/v1/application-user/addresses/connect/to/address`;
+    return axios.post(url, values, {
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${applicationUserToken}`,
+        },
+    });
+}
