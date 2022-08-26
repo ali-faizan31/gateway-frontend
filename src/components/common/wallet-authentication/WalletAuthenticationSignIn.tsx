@@ -3,10 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../redux/rootReducer";
 import {
   getAccessTokenForApplicationUser,
-  generateNonceByABN,
-  verifySignatureAndSignin,
   isFerrumNetworkIdentifierAllowedonGateway,
   verifySignatureAndUpdateProfile,
+  connectToWalletAddress
 } from "../../../_apis/WalletAuthencation";
 import * as walletAuthenticatorActions from "./redux/walletAuthenticationActions";
 import { WalletConnector } from "foundry";
@@ -73,19 +72,10 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
   };
 
   useEffect(() => {
-    if (isConnected && isAllowedonGateway === true) {
-      getNonce(currentWalletNetwork, walletAddress, applicationUserToken);
+    if(isConnected && isAllowedonGateway && currentWalletNetwork && walletAddress && applicationUserToken){
+      connectToWallet(currentWalletNetwork, walletAddress, applicationUserToken) 
     }
-    // eslint-disable-next-line
-  }, [isAllowedonGateway, isConnected]);
-
-  useEffect(() => {
-    if (currentWalletNetwork && walletAddress && applicationUserToken && signature && isForSigninFlow) {
-      // signin
-      verifySignatureToSignin(currentWalletNetwork.toString(), walletAddress, signature, applicationUserToken);
-    }
-    // eslint-disable-next-line
-  }, [currentWalletNetwork, walletAddress, signature, applicationUserToken, isForSigninFlow]);
+  },[isConnected, isAllowedonGateway, currentWalletNetwork, walletAddress, applicationUserToken])
 
   useEffect(() => {
     if (tokenV2 && signature && getSignatureFromMetamask) {
@@ -184,37 +174,15 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
       });
   };
 
-  const getNonce = async (currentWalletNetwork: any, walletAddress: any, applicationUserToken: any) => {
+  const connectToWallet = (currentWalletNetwork: number, walletAddress: any, applicationUserToken: any) => {
     let data = {
       address: walletAddress,
       ferrumNetworkIdentifier: currentWalletNetwork.toString(),
-    };
-    generateNonceByABN(data, applicationUserToken)
-      .then((res: any) => {
-        if (res && res.data && res.data.body && res.data.body.nonce) {
-          dispatch(walletAuthenticatorActions.saveNonce({ nonce: res.data.body.nonce }));
-          setGetSignatureForSignin(true);
-          setIsForSigninFlow(true);
-        }
-      })
-      .catch((e) => {
-        refreshAuthenticationVariables();
-        getErrorMessage(e, activeTranslation)
-      });
-  };
-
-  const verifySignatureToSignin = (currentWalletNetwork: any, walletAddress: any, signature: any, applicationUserToken: any) => {
-    let data = {
-      address: walletAddress,
-      ferrumNetworkIdentifier: currentWalletNetwork.toString(),
-      signature: signature,
       role: "communityMember",
     };
-    verifySignatureAndSignin(data, applicationUserToken)
+    connectToWalletAddress(data, applicationUserToken)
       .then((res: any) => {
-        if (res && res.data && res.data.body && res.data.body) {
-          // setIsValidationCompleted(true);
-          // account && setConnectedAndVerifiedWallet(account);
+        if (res && res.data && res.data.body) {
           dispatch(walletAuthenticatorActions.saveME({ meV2: res.data.body.user }));
           dispatch(
             walletAuthenticatorActions.saveToken({
@@ -233,7 +201,6 @@ export const WalletAuthencationOnSignIn = ({ account, networkClient, isAuthentic
       })
       .catch((e) => {
         refreshAuthenticationVariables();
-        setGetSignatureForSignin(false);
         getErrorMessage(e, activeTranslation)
       });
   };
