@@ -790,6 +790,11 @@ aside.collapsed .has-child.f-sider-item.submenu-open .f-sider-submenu-item {
   padding-right: 21rem;
   padding-left: 1rem;
 }
+@media screen and (min-width: 1350px) {
+  .crucible-farm-dashboard-card {
+    width: 750px !important;
+  }
+}
 .crucible-farm-dashboard-card {
   background-image: url("./assets/img/farm-dashboard-card.png");
   width: 100%;

@@ -67,15 +67,17 @@ const CrucibleFeeCard = () => {
               <FTypo size={16} weight={700}>Crucible Token</FTypo>
             </div>
             <div className={'justify-content-space-between align_center unwrap-farm-card'}>
-              <div className="flex-center-aligned-center w-100">
-                <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Buy Fee</p>
-                <p className={'custom-font-size-18 font-600 clr_white'}>4%</p>
+              <div className="d-flex justify_start align_center w-100">
+                <FTypo size={12} weight={500} color={'#6F767E'} family="inter">Buy Fee</FTypo>
+                <FTypo size={18} weight={600} color={'#FFFFFF'} family="inter">4%</FTypo>
+                {/* <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Buy Fee</p>
+                <p className={'custom-font-size-18 font-600 clr_white'}>4%</p> */}
               </div>
-              <div className="flex-center-aligned-center w-100">
+              <div className="d-flex justify_start align_center w-100">
                 <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Sell Fee</p>
                 <p className={'custom-font-size-18 font-600 clr_white'}>4%</p>
               </div>
-              <div className="flex-center-aligned-center w-100">
+              <div className="d-flex justify_start align_center w-100">
                 <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Unwrap Fee</p>
                 <p className={'custom-font-size-18 font-600 clr_white'}>
                   {`${BigUtils.safeParse(crucible[farm!]?.feeOnWithdrawRate || "0")
@@ -83,7 +85,7 @@ const CrucibleFeeCard = () => {
                     .toString()}%`}
                 </p>
               </div>
-              <div className="flex-center-aligned-center w-100">
+              <div className="d-flex justify_start align_center w-100">
                 <p className={'custom-font-size-12 font-500 clr_black_light custom-mr-8'}>Stake/Unstake Fee</p>
                 <p className={'custom-font-size-18 font-600 clr_white'}>
                   {`${BigUtils.safeParse(crucible[farm!]?.feeOnTransferRate || "0")

@@ -199,12 +199,16 @@ export const CardAPR = () => {
             <>
               <FButton
                 title={"Manage"}
+                style={{ width: 124, height: 44 }}
+                className={'clr_new_black'}
                 onClick={() =>
                   getStepToRender(stepFlow.id, stepFlow.stepFlowName, stepFlow.contract, stepFlow.network, stepFlow.LpCurrency, stepFlow.LPstakingAddress, stepFlow.internalName)
                 }
               />
               <FButton
                 title={"Deposit"}
+                style={{ width: 124, height: 44 }}
+                className={'clr_new_black'}
                 onClick={() =>
                   getStepToRender(stepFlow.id, stepFlow.stepFlowName, stepFlow.contract, stepFlow.network, stepFlow.LpCurrency, stepFlow.LPstakingAddress, stepFlow.internalName)
                 }

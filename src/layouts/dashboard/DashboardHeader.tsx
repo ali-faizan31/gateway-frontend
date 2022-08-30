@@ -115,7 +115,6 @@ const DashboardHeader = ({ title }: any) => {
       }
     }
   };
-
   return (
     <>
       <FHeader showLogo={false} titleText={title} className={'new-bg-header'}>
@@ -154,7 +153,7 @@ const DashboardHeader = ({ title }: any) => {
                             alt=""
                           />
                         </div>
-                        <span className={'f-pl--2'}>{getFormattedWalletAddress(walletAddress)}</span>
+                        <FTypo className={'f-pl--2'} color={'#6F767E'} size={14} weight={500}>{getFormattedWalletAddress(walletAddress)}</FTypo>
                       </FCard>
                       <FCard className={"no-left-margin custom-padding-10 d-flex custom-border-radius-4 new-bg-body"} variant={"primary"}>
                         <FTypo size={14} weight={400} color={'white'}>
